@@ -1,0 +1,31 @@
+{
+    "name": "Deriv",
+    "short_name": "Deriv",
+    "description": "Deriv gives everyone an easy way to participate in the financial markets.",
+    "start_url": "/br_deriv-app-7test/",
+    "display": "standalone",
+    "orientation": "portrait",
+
+    "icons": [
+        {
+            "src": "/br_deriv-app-7test/public/images/common/logos/platform_logos/ic_platform_deriv_512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/br_deriv-app-7test/public/images/favicons/favicon.ico",
+            "type": "image/x-icon",
+            "sizes": "64x64 32x32 24x24 16x16"
+        },
+        {
+            "src": "/br_deriv-app-7test/public/images/favicons/favicon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "background_color": "#2a3052",
+    "theme_color": "#2a3052",
+    "prefer_related_applications": false,
+    "gcm_user_visible_only": true,
+    "gcm_sender_id": "370236002280"
+}

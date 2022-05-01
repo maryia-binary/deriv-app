@@ -6,7 +6,14 @@ const { IS_RELEASE } = require('./constants');
 const generateSWConfig = () => ({
     importWorkboxFrom: 'local',
     cleanupOutdatedCaches: true,
-    exclude: [/CNAME$/, /index\.html$/, /404\.html$/, /^public\/images\/favicons\//, /^favicon\.ico$/],
+    exclude: [
+        /CNAME$/,
+        /index\.html$/,
+        /404\.html$/,
+        /manifest\.json$/,
+        /^public\/images\/favicons\//,
+        /^favicon\.ico$/,
+    ],
     skipWaiting: true,
     clientsClaim: true,
 });

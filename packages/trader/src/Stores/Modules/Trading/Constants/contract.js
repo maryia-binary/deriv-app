@@ -4,6 +4,7 @@ import { shouldShowCancellation, shouldShowExpiration } from '@deriv/shared';
 export const getLocalizedBasis = () => ({
     payout: localize('Payout'),
     stake: localize('Stake'),
+    growth_frequency: localize('Accumulator'),
     multiplier: localize('Multiplier'),
 });
 
@@ -103,6 +104,14 @@ export const getContractTypesConfig = symbol => ({
         basis: [],
         components: [],
     },
+    accumulator: {
+        title: localize('Accumulators'),
+        trade_types: ['ACC'],
+        basis: ['stake', 'growth_frequency'],
+        components: ['take_profit', 'barrier'],
+        barrier_count: 2,
+        config: { hide_duration: true },
+    },
     multiplier: {
         title: localize('Multipliers'),
         trade_types: ['MULTUP', 'MULTDOWN'],
@@ -119,6 +128,7 @@ export const getContractTypesConfig = symbol => ({
 
 export const getContractCategoriesConfig = () => ({
     [localize('Multipliers')]: ['multiplier'],
+    [localize('Accumulators')]: ['accumulator'],
     [localize('Ups & Downs')]: ['rise_fall', 'rise_fall_equal', 'run_high_low', 'reset', 'asian', 'callputspread'],
     [localize('Highs & Lows')]: ['high_low', 'touch', 'tick_high_low'],
     [localize('Ins & Outs')]: ['end', 'stay'],

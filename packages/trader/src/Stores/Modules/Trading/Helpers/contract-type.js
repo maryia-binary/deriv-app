@@ -43,15 +43,15 @@ const ContractType = (() => {
 
             const dummy_accumulator = {
                 barrier_category: 'american',
-                high_barrier: '+169.19',
-                low_barrier: '-169.02',
+                high_barrier: '+60',
+                low_barrier: '-60',
                 barriers: 2,
                 contract_category: 'accumulator',
                 contract_category_display: 'Accumulators',
                 contract_display: 'Accumulators',
                 contract_type: 'ACC',
                 exchange_name: 'RANDOM',
-                expiry_type: 'no_expiry',
+                expiry_type: 'intraday',
                 market: 'synthetic_index',
                 max_contract_duration: '1d',
                 min_contract_duration: '1m',

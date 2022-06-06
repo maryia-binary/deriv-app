@@ -569,7 +569,7 @@ export default class TradeStore extends BaseStore {
         if (!proposal_info) {
             return;
         }
-        const { contract_type, barrier, high_barrier, low_barrier } = proposal_info;
+        const { contract_type = 'ACC', barrier, high_barrier = '+60', low_barrier = '-60' } = proposal_info;
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;

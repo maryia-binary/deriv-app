@@ -1,39 +1,33 @@
 import React from 'react';
-import { Icon, Text } from '@deriv/components';
-import { PoaStatusCodes } from '@deriv/account';
+import { Checkbox, Icon, Text, StaticUrl } from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import classNames from 'classnames';
 import RootStore from 'Stores/index';
 import { connect } from 'Stores/connect';
+import { TTradingPlatformAvailableAccount } from './jurisdiction-modal';
 
 type TJurisdictionModalContent = {
     account_type: string;
+    is_tnc_consent_checked: boolean;
     jurisdiction_selected_card: string | undefined;
     selectTypeOfCard: (card_type: string | undefined) => string | undefined;
-    synthetic_available_accounts: any[];
-    financial_available_accounts: any[];
+    available_accounts: TTradingPlatformAvailableAccount[];
     poa_status: string;
     poi_status: string;
+    setIsTncConsentChecked: (is_tnc_consent_checked: boolean) => void;
 };
 
 const JurisdictionModalContent = ({
+    is_tnc_consent_checked,
     jurisdiction_selected_card,
-    account_type,
     selectTypeOfCard,
-    synthetic_available_accounts,
-    financial_available_accounts,
+    available_accounts,
     poa_status,
     poi_status,
+    setIsTncConsentChecked,
 }: TJurisdictionModalContent) => {
-    const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts.length;
-    const number_of_financial_accounts_to_be_shown = financial_available_accounts.length;
-
+    const number_of_cards_to_be_shown = available_accounts.length;
     const [unselect_card, setUnselectCard] = React.useState<boolean>(false);
-    const [number_of_cards] = React.useState(
-        account_type === 'Synthetic'
-            ? number_of_synthetic_accounts_to_be_shown
-            : number_of_financial_accounts_to_be_shown
-    );
 
     const poa_pending = poa_status === 'pending';
     const poa_verified = poa_status === 'verified';
@@ -51,7 +45,7 @@ const JurisdictionModalContent = ({
         <Icon icon='IcCheckmark' className='cfd-jurisdiction-card__bullet-wrapper--checkmark' color='green' size={16} />
     );
 
-    const OneOrTwoCards = number_of_cards === 1 || number_of_cards === 2;
+    const OneOrTwoCards = number_of_cards_to_be_shown === 1 || number_of_cards_to_be_shown === 2;
 
     const Verification_statuses = () => {
         return (
@@ -98,7 +92,7 @@ const JurisdictionModalContent = ({
     return (
         <>
             <div className='cfd-jurisdiction-card__wrapper'>
-                {number_of_cards >= 1 && (
+                {number_of_cards_to_be_shown >= 1 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'BVI',
@@ -137,7 +131,7 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
 
-                {number_of_cards >= 2 && (
+                {number_of_cards_to_be_shown >= 2 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'Vanuatu',
@@ -174,7 +168,7 @@ const JurisdictionModalContent = ({
                         {Verification_statuses()}
                     </div>
                 )}
-                {number_of_cards >= 3 && (
+                {number_of_cards_to_be_shown >= 3 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'Labuan',
@@ -215,7 +209,7 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
 
-                {number_of_cards >= 4 && (
+                {number_of_cards_to_be_shown >= 4 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'SVG',
@@ -253,9 +247,27 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
             </div>
-            <Text as='p' align='center' size='xs' line_height='xs' className='cfd-jurisdiction-card__footnote'>
+            <Text as='p' bold align='center' size='xs' line_height='xs' className='cfd-jurisdiction-card__footnote'>
                 <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
             </Text>
+            {poi_status === 'verified' && poa_status === 'verified' && (
+                <Checkbox
+                    value={is_tnc_consent_checked}
+                    className='cfd-jurisdiction-card__tnc-checkbox'
+                    onChange={() => setIsTncConsentChecked(!is_tnc_consent_checked)}
+                    label={
+                        <Localize
+                            i18n_default_text="I confirm and accept {{legal_entity}} 's <0>Terms and Conditions</0>"
+                            values={{
+                                legal_entity: available_accounts.find(
+                                    account => account.shortcode === jurisdiction_selected_card
+                                )?.name,
+                            }}
+                            components={[<StaticUrl key={0} className='link' href='/terms-and-conditions' />]}
+                        />
+                    }
+                />
+            )}
         </>
     );
 };

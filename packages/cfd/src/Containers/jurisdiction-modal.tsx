@@ -1,5 +1,14 @@
 import React from 'react';
-import { Button, Modal, DesktopWrapper, MobileDialog, MobileWrapper, UILoader } from '@deriv/components';
+import {
+    Button,
+    Checkbox,
+    Modal,
+    DesktopWrapper,
+    MobileDialog,
+    MobileWrapper,
+    StaticUrl,
+    UILoader,
+} from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import RootStore from 'Stores/index';
@@ -7,7 +16,7 @@ import { CFD_PLATFORMS } from '@deriv/shared';
 import { LandingCompany } from '@deriv/api-types';
 import JurisdictionModalContent from './jurisdiction-modal-content';
 
-type TTradingPlatformAvailableAccount = {
+export type TTradingPlatformAvailableAccount = {
     market_type: 'financial' | 'gaming';
     name: string;
     requirements: {
@@ -32,19 +41,24 @@ type TCompareAccountsReusedProps = {
 };
 
 type TJurisdictionModalProps = TCompareAccountsReusedProps & {
-    account_type: string;
+    account_type: {
+        category: string;
+        type: string;
+    };
     authentication_status: {
         document_status: string;
         identity_status: string;
     };
+    enableCFDPasswordModal: () => void;
     disableApp: () => void;
     enableApp: () => void;
+    beginRealSignupForMt5: () => void;
     is_jurisdiction_modal_visible: boolean;
-    is_loading: boolean;
     is_eu: boolean;
     is_eu_country: boolean;
+    is_loading: boolean;
     residence: string;
-    jurisdiction_selected_card: boolean;
+    jurisdiction_selected_card: string;
     toggleJurisdictionModal: () => void;
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
 };
@@ -52,32 +66,49 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
 const JurisdictionModal = ({
     account_type,
     authentication_status,
+    enableCFDPasswordModal,
+    beginRealSignupForMt5,
     disableApp,
     enableApp,
     is_jurisdiction_modal_visible,
-    is_loading,
     platform,
     is_eu,
     jurisdiction_selected_card,
     toggleJurisdictionModal,
     trading_platform_available_accounts,
 }: TJurisdictionModalProps) => {
-    const financial_available_accounts = trading_platform_available_accounts.filter(
-        available_account => available_account.market_type === 'financial'
-    );
-
-    const synthetic_available_accounts = trading_platform_available_accounts.filter(
-        available_account => available_account.market_type === 'gaming'
-    );
+    const [is_tnc_consent_checked, setIsTncConsentChecked] = React.useState(false);
+    const { type } = account_type;
+    let available_accounts;
+    if (type === 'synthetic') {
+        available_accounts = trading_platform_available_accounts.filter(
+            available_account => available_account.market_type === 'gaming'
+        );
+    } else if (type === 'financial') {
+        available_accounts = trading_platform_available_accounts.filter(
+            available_account => available_account.market_type === 'financial'
+        );
+    }
 
     const modal_title = is_eu
         ? localize('Jurisdiction for your DMT5 CFDs account')
         : localize('Choose a jurisdiction for your DMT5 {{account_type}} account', {
-              account_type: account_type === 'synthetic' ? 'Synthetic' : 'Financial',
+              account_type: type === 'synthetic' ? 'Synthetic' : 'Financial',
           });
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
+
+    const handleNextButtonClick = () => {
+        if (is_eu) {
+            toggleJurisdictionModal();
+            if (poi_status === 'verified' && poa_status === 'verified' && is_tnc_consent_checked) {
+                enableCFDPasswordModal();
+            } else {
+                beginRealSignupForMt5();
+            }
+        }
+    };
 
     return (
         <>
@@ -99,17 +130,21 @@ const JurisdictionModal = ({
                             width='1200px'
                         >
                             <JurisdictionModalContent
-                                financial_available_accounts={financial_available_accounts}
-                                synthetic_available_accounts={synthetic_available_accounts}
-                                account_type={account_type}
+                                available_accounts={available_accounts}
+                                account_type={type}
                                 authentication_status={authentication_status}
                                 poa_status={poa_status}
                                 poi_status={poi_status}
+                                is_tnc_consent_checked={is_tnc_consent_checked}
+                                setIsTncConsentChecked={setIsTncConsentChecked}
                             />
                             <Modal.Footer>
-                                <Button disabled={jurisdiction_selected_card === undefined} primary>
-                                    Next
-                                </Button>
+                                <Button
+                                    disabled={jurisdiction_selected_card === undefined}
+                                    primary
+                                    onClick={handleNextButtonClick}
+                                    text={localize('Next')}
+                                />
                             </Modal.Footer>
                         </Modal>
                     </DesktopWrapper>
@@ -122,12 +157,13 @@ const JurisdictionModal = ({
                             onClose={toggleJurisdictionModal}
                         >
                             <JurisdictionModalContent
-                                financial_available_accounts={financial_available_accounts}
-                                synthetic_available_accounts={synthetic_available_accounts}
-                                account_type={account_type}
+                                available_accounts={available_accounts}
+                                account_type={type}
                                 authentication_status={authentication_status}
                                 poa_status={poa_status}
                                 poi_status={poi_status}
+                                is_tnc_consent_checked={is_tnc_consent_checked}
+                                setIsTncConsentChecked={setIsTncConsentChecked}
                             />
                         </MobileDialog>
                     </MobileWrapper>
@@ -138,8 +174,10 @@ const JurisdictionModal = ({
 };
 
 export default connect(({ modules, ui, client }: RootStore) => ({
-    account_type: modules.cfd.account_type.type,
+    account_type: modules.cfd.account_type,
     authentication_status: client.authentication_status,
+    enableCFDPasswordModal: modules.cfd.enableCFDPasswordModal,
+    beginRealSignupForMt5: modules.cfd.beginRealSignupForMt5,
     disableApp: ui.disableApp,
     enableApp: ui.enableApp,
     is_jurisdiction_modal_visible: modules.cfd.is_jurisdiction_modal_visible,

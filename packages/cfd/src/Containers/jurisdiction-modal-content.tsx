@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Text } from '@deriv/components';
+import { Icon, Text, Checkbox } from '@deriv/components';
 import { PoaStatusCodes } from '@deriv/account';
 import { Localize } from '@deriv/translations';
 import classNames from 'classnames';
@@ -14,6 +14,10 @@ type TJurisdictionModalContent = {
     financial_available_accounts: any[];
     poa_status: string;
     poi_status: string;
+    is_eu: boolean;
+    is_fully_authenticated: boolean;
+    checked: boolean;
+    setChecked: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const JurisdictionModalContent = ({
@@ -24,6 +28,10 @@ const JurisdictionModalContent = ({
     financial_available_accounts,
     poa_status,
     poi_status,
+    is_eu,
+    is_fully_authenticated,
+    checked,
+    setChecked,
 }: TJurisdictionModalContent) => {
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts.length;
     const number_of_financial_accounts_to_be_shown = financial_available_accounts.length;
@@ -95,10 +103,39 @@ const JurisdictionModalContent = ({
         );
     };
 
+    const ModalFootNote = () => {
+        return (
+            <>
+                {poa_none && poi_none && jurisdiction_selected_card === 'BVI' && (
+                    <Text as='p' align='center' size='xs' line_height='xs' className='cfd-jurisdiction-card__footnote'>
+                        <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
+                    </Text>
+                )}
+                {poa_none && poi_none && jurisdiction_selected_card === 'SVG' && (
+                    <Text as='p' align='center' size='xs' line_height='xs' className='cfd-jurisdiction-card__footnote'>
+                        <Localize i18n_default_text='Add your DMT5 Synthetics account under Deriv (SVG) LLC (company no. 273 LLC 2020).' />
+                    </Text>
+                )}
+                {poa_pending ||
+                    (poi_pending && (
+                        <Text
+                            as='p'
+                            align='center'
+                            size='xs'
+                            line_height='xs'
+                            className='cfd-jurisdiction-card__footnote--pending'
+                        >
+                            <Localize i18n_default_text='Your documents are being reviewed, we will notify you once this account is ready for you to create.' />
+                        </Text>
+                    ))}
+            </>
+        );
+    };
+
     return (
         <>
             <div className='cfd-jurisdiction-card__wrapper'>
-                {number_of_cards >= 1 && (
+                {!is_eu && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'BVI',
@@ -132,6 +169,45 @@ const JurisdictionModalContent = ({
                         <div className='cfd-jurisdiction-card__bullet-wrapper'>
                             <Checkmark />
                             <Localize i18n_default_text='Leverage up to 1:1000' />
+                        </div>
+                        <Verification_statuses />
+                    </div>
+                )}
+
+                {is_eu && (
+                    <div
+                        className={classNames('cfd-jurisdiction-card', {
+                            'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'Malta',
+                        })}
+                        onClick={() => cardSelection('Malta')}
+                        style={{ width: '32em' }}
+                    >
+                        <div className='cfd-jurisdiction-card__over-header'>
+                            <p>
+                                <Localize i18n_default_text='Better leverage and spreads' />
+                            </p>
+                        </div>
+                        <h1>
+                            <Localize i18n_default_text='Malta Financial' />
+                        </h1>
+                        <div className='cfd-jurisdiction-card__bullet-wrapper'>
+                            <Checkmark />
+                            <Localize i18n_default_text='Regulated by the Malta Financial Services Authority (MFSA) (licence no. IS/70156)' />
+                        </div>
+
+                        <div className='cfd-jurisdiction-card__bullet-wrapper'>
+                            <Checkmark />
+                            <Localize i18n_default_text='Registered with the Financial Commission' />
+                        </div>
+
+                        <div className='cfd-jurisdiction-card__bullet-wrapper'>
+                            <Checkmark />
+                            <Localize i18n_default_text='50+ assets: forex, stocks, stock indices, synthetics indices, and cryptocurrencies.' />
+                        </div>
+
+                        <div className='cfd-jurisdiction-card__bullet-wrapper'>
+                            <Checkmark />
+                            <Localize i18n_default_text='Leverage up to 1:30' />
                         </div>
                         <Verification_statuses />
                     </div>
@@ -253,9 +329,21 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
             </div>
-            <Text as='p' align='center' size='xs' line_height='xs' className='cfd-jurisdiction-card__footnote'>
-                <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
-            </Text>
+            <ModalFootNote />
+            {is_eu && (
+                <div className='cfd-jurisdiction-card__jurisdiction-checkbox'>
+                    <Checkbox onChange={() => setChecked(!checked)} />
+                    <Text
+                        as='p'
+                        align='center'
+                        size='xs'
+                        line_height='xs'
+                        className='cfd-jurisdiction-card____jurisdiction-checkbox--description'
+                    >
+                        I confirm and accept Deriv Investments (Europe) Limited 's Terms and Conditions
+                    </Text>
+                </div>
+            )}
         </>
     );
 };

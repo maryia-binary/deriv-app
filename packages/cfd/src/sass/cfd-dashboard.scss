@@ -513,6 +513,21 @@
     &__footnote {
         margin-top: 2.4rem;
         color: #333333;
+        font-weight: bold;
+
+        &--pending {
+            color: #ffad3a;
+        }
+    }
+
+    &__jurisdiction-checkbox {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.6rem;
+
+        &--desciption {
+            color: #333333;
+        }
     }
 
     &__over-header {

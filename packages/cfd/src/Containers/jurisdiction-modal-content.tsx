@@ -33,12 +33,12 @@ const JurisdictionModalContent = ({
     checked,
     setChecked,
 }: TJurisdictionModalContent) => {
+    console.log(jurisdiction_selected_card);
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts.length;
     const number_of_financial_accounts_to_be_shown = financial_available_accounts.length;
 
-    const [unselect_card, setUnselectCard] = React.useState<boolean>(false);
     const [number_of_cards] = React.useState(
-        account_type === 'Synthetic'
+        account_type === 'synthetic'
             ? number_of_synthetic_accounts_to_be_shown
             : number_of_financial_accounts_to_be_shown
     );
@@ -51,8 +51,11 @@ const JurisdictionModalContent = ({
     const poi_none = poi_status === 'none';
 
     const cardSelection = (cardType: string) => {
-        setUnselectCard(!unselect_card);
-        return !unselect_card ? selectTypeOfCard(cardType) : selectTypeOfCard(undefined);
+        if (jurisdiction_selected_card === cardType) {
+            selectTypeOfCard(undefined);
+        } else {
+            selectTypeOfCard(cardType);
+        }
     };
 
     const Checkmark = () => (
@@ -135,7 +138,7 @@ const JurisdictionModalContent = ({
     return (
         <>
             <div className='cfd-jurisdiction-card__wrapper'>
-                {!is_eu && (
+                {!is_eu && number_of_cards >= 1 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'BVI',
@@ -213,7 +216,7 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
 
-                {number_of_cards >= 2 && (
+                {number_of_cards >= 3 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'Vanuatu',
@@ -250,7 +253,7 @@ const JurisdictionModalContent = ({
                         {Verification_statuses()}
                     </div>
                 )}
-                {number_of_cards >= 3 && (
+                {number_of_cards >= 4 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'Labuan',
@@ -291,7 +294,7 @@ const JurisdictionModalContent = ({
                     </div>
                 )}
 
-                {number_of_cards >= 4 && (
+                {number_of_cards >= 2 && (
                     <div
                         className={classNames('cfd-jurisdiction-card', {
                             'cfd-jurisdiction-card--selected': jurisdiction_selected_card === 'SVG',
@@ -330,7 +333,7 @@ const JurisdictionModalContent = ({
                 )}
             </div>
             <ModalFootNote />
-            {is_eu && (
+            {is_eu && is_fully_authenticated && jurisdiction_selected_card === 'Malta' && (
                 <div className='cfd-jurisdiction-card__jurisdiction-checkbox'>
                     <Checkbox onChange={() => setChecked(!checked)} />
                     <Text
@@ -340,7 +343,7 @@ const JurisdictionModalContent = ({
                         line_height='xs'
                         className='cfd-jurisdiction-card____jurisdiction-checkbox--description'
                     >
-                        I confirm and accept Deriv Investments (Europe) Limited 's Terms and Conditions
+                        I confirm and accept Deriv Investments (Europe) Limited's Terms and Conditions
                     </Text>
                 </div>
             )}

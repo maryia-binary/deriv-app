@@ -49,7 +49,7 @@ type TCFDFinancialStpRealAccountSignupProps = {
     toggleModal: () => void;
 };
 
-type TSetSubmiting = (isSubmitting: boolean) => void;
+export type TSetSubmiting = (isSubmitting: boolean) => void;
 
 type TNextStep = (submitting: TSetSubmiting) => void;
 

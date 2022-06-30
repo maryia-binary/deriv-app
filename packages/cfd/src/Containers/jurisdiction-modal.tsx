@@ -37,19 +37,24 @@ type TOpenAccountTransferMeta = {
 };
 
 type TJurisdictionModalProps = TCompareAccountsReusedProps & {
-    account_type: string;
+    account_type: {
+        type: string;
+        category: string;
+    };
     authentication_status: {
         document_status: string;
         identity_status: string;
     };
     disableApp: () => void;
     enableApp: () => void;
+    has_real_mt5_login: boolean;
     is_jurisdiction_modal_visible: boolean;
     is_loading: boolean;
     is_eu: boolean;
     is_eu_country: boolean;
     residence: string;
     jurisdiction_selected_card: string;
+    toggleBVIPersonalDetailsModal: () => void;
     toggleJurisdictionModal: () => void;
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
     is_fully_authenticated: boolean;
@@ -61,10 +66,12 @@ const JurisdictionModal = ({
     authentication_status,
     disableApp,
     enableApp,
+    has_real_mt5_login,
     is_jurisdiction_modal_visible,
     platform,
     is_eu,
     jurisdiction_selected_card,
+    toggleBVIPersonalDetailsModal,
     toggleJurisdictionModal,
     trading_platform_available_accounts,
     is_fully_authenticated,
@@ -83,7 +90,7 @@ const JurisdictionModal = ({
     const modal_title = is_eu
         ? localize('Jurisdiction for your DMT5 CFDs account')
         : localize('Choose a jurisdiction for your DMT5 {{account_type}} account', {
-              account_type: account_type === 'synthetic' ? 'Synthetic' : 'Financial',
+              account_type: account_type.type === 'synthetic' ? 'Synthetic' : 'Financial',
           });
 
     const poa_status = authentication_status?.document_status;
@@ -91,11 +98,17 @@ const JurisdictionModal = ({
 
     const onSelectRealAccount = () => {
         toggleJurisdictionModal();
-        const type_of_account = {
-            category: 'real',
-            type: `${account_type}`,
-        };
-        openPasswordModal(type_of_account);
+        if (poi_status === 'verified' && poa_status === 'verified' && checked) {
+            if (!has_real_mt5_login) {
+                toggleBVIPersonalDetailsModal();
+            }
+        } else if (jurisdiction_selected_card === 'SVG') {
+            const type_of_account = {
+                category: account_type.category,
+                type: account_type.type,
+            };
+            openPasswordModal(type_of_account);
+        }
     };
 
     return (
@@ -120,7 +133,7 @@ const JurisdictionModal = ({
                             <JurisdictionModalContent
                                 financial_available_accounts={financial_available_accounts}
                                 synthetic_available_accounts={synthetic_available_accounts}
-                                account_type={account_type}
+                                account_type={account_type.type}
                                 authentication_status={authentication_status}
                                 poa_status={poa_status}
                                 poi_status={poi_status}
@@ -137,12 +150,12 @@ const JurisdictionModal = ({
                                     }
                                     primary
                                     onClick={() => {
-                                        if (jurisdiction_selected_card === 'SVG') {
+                                        if (account_type.category === 'real') {
                                             onSelectRealAccount();
                                         }
                                     }}
                                 >
-                                    Next
+                                    {localize('Next')}
                                 </Button>
                             </Modal.Footer>
                         </Modal>
@@ -158,7 +171,7 @@ const JurisdictionModal = ({
                             <JurisdictionModalContent
                                 financial_available_accounts={financial_available_accounts}
                                 synthetic_available_accounts={synthetic_available_accounts}
-                                account_type={account_type}
+                                account_type={account_type.type}
                                 authentication_status={authentication_status}
                                 poa_status={poa_status}
                                 poi_status={poi_status}
@@ -176,10 +189,11 @@ const JurisdictionModal = ({
 };
 
 export default connect(({ modules, ui, client }: RootStore) => ({
-    account_type: modules.cfd.account_type.type,
+    account_type: modules.cfd.account_type,
     authentication_status: client.authentication_status,
     disableApp: ui.disableApp,
     enableApp: ui.enableApp,
+    has_real_mt5_login: client.has_real_mt5_login,
     is_jurisdiction_modal_visible: modules.cfd.is_jurisdiction_modal_visible,
     trading_platform_available_accounts: client.trading_platform_available_accounts,
     is_loading: client.is_populating_mt5_account_list,

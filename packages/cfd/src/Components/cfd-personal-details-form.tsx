@@ -135,9 +135,8 @@ const validatePersonalDetails = ({
     const [tin_format] = tax_residence_obj?.tin_format ?? [];
     const tin_regex = tin_format || '^[A-Za-z0-9./s-]{0,25}$'; // fallback to API's default rule check
 
-    const validations = {
+    const validations: { [key: string]: ((v: string) => boolean | RegExpMatchArray | null)[] } = {
         citizen: [(v: string) => !!v, (v: string) => residence_list.map(i => i.text).includes(v)],
-        place_of_birth: [(v: string) => !!v, (v: string) => residence_list.map(i => i.text).includes(v)],
         tax_residence: [(v: string) => !!v, (v: string) => residence_list.map(i => i.text).includes(v)],
         tax_identification_number: [
             (v: string) => ((!values.tax_residence && is_tin_required) || tin_format ? !!v : true),
@@ -151,11 +150,15 @@ const validatePersonalDetails = ({
 
     const mappedKey: { [key: string]: string } = {
         citizen: localize('Citizenship'),
-        place_of_birth: localize('Place of birth'),
         tax_residence: localize('Tax residence'),
         tax_identification_number: localize('Tax identification number'),
         account_opening_reason: localize('Account opening reason'),
     };
+
+    if (values.place_of_birth) {
+        validations.place_of_birth = [(v: string) => !!v, (v: string) => residence_list.map(i => i.text).includes(v)];
+        mappedKey.place_of_birth = localize('Place of birth');
+    }
 
     const field_error_messages = (field_name: string): string[] => [
         localize('{{field_name}} is required', { field_name }),

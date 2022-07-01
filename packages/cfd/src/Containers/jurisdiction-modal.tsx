@@ -54,7 +54,7 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     is_eu_country: boolean;
     residence: string;
     jurisdiction_selected_card: string;
-    toggleBVIPersonalDetailsModal: () => void;
+    toggleCFDPersonalDetailsModal: () => void;
     toggleJurisdictionModal: () => void;
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
     is_fully_authenticated: boolean;
@@ -71,7 +71,7 @@ const JurisdictionModal = ({
     platform,
     is_eu,
     jurisdiction_selected_card,
-    toggleBVIPersonalDetailsModal,
+    toggleCFDPersonalDetailsModal,
     toggleJurisdictionModal,
     trading_platform_available_accounts,
     is_fully_authenticated,
@@ -96,11 +96,13 @@ const JurisdictionModal = ({
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
 
+    const poi_poa_verified = poi_status === 'verified' && poa_status === 'verified';
+
     const onSelectRealAccount = () => {
         toggleJurisdictionModal();
-        if (poi_status === 'verified' && poa_status === 'verified' && checked) {
+        if (poi_poa_verified) {
             if (!has_real_mt5_login) {
-                toggleBVIPersonalDetailsModal();
+                toggleCFDPersonalDetailsModal();
             }
         } else if (jurisdiction_selected_card === 'SVG') {
             const type_of_account = {
@@ -144,10 +146,7 @@ const JurisdictionModal = ({
                             />
                             <Modal.Footer>
                                 <Button
-                                    disabled={
-                                        jurisdiction_selected_card === undefined ||
-                                        (is_eu && is_fully_authenticated && !checked)
-                                    }
+                                    disabled={!jurisdiction_selected_card || (poi_poa_verified && !checked)}
                                     primary
                                     onClick={() => {
                                         if (account_type.category === 'real') {

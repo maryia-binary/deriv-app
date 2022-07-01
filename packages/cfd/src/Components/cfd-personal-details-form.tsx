@@ -66,13 +66,7 @@ type TCFDInputFieldProps = {
     onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 
-type TFormValues = {
-    citizen: string;
-    place_of_birth?: string;
-    tax_residence: string;
-    tax_identification_number: string;
-    account_opening_reason: string;
-};
+type TFormValues = { [key: string]: string };
 
 type TOnSubmit = (
     index: number,

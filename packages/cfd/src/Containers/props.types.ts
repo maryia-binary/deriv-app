@@ -3,13 +3,13 @@ import { DetailsOfEachMT5Loginid, LandingCompany, ResidenceList, VerifyEmailResp
 import { FormikHelpers as FormikActions } from 'formik';
 import { TCFDPasswordFormValues } from './cfd-password-modal';
 
-export type TCFDBVIPersonalDetailsModalProps = {
+export type TCFDPersonalDetailsModalProps = {
     enableApp: () => void;
     client_email: string;
     disableApp: () => void;
     is_open: boolean;
     openPasswordModal: () => void;
-    toggleBVIPersonalDetailsModal: () => void;
+    toggleCFDPersonalDetailsModal: () => void;
     toggleJurisdictionModal: () => void;
     is_fully_authenticated: boolean;
     landing_company: LandingCompany;

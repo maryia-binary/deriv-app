@@ -3,31 +3,25 @@ import { Modal, MobileDialog, DesktopWrapper, MobileWrapper, Div100vhContainer, 
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import RootStore from 'Stores/index';
-import { TCFDBVIPersonalDetailsModalProps } from './props.types';
+import { TCFDPersonalDetailsModalProps } from './props.types';
 import CFDPersonalDetailsForm from '../Components/cfd-personal-details-form';
 import { getPropertyValue, isDesktop, WS } from '@deriv/shared';
-import { TSetSubmiting } from './cfd-financial-stp-real-account-signup';
 
-type TFormValues = {
-    citizen: string;
-    place_of_birth?: string;
-    tax_residence: string;
-    tax_identification_number: string;
-    account_opening_reason: string;
-};
+type TFormValues = { [key: string]: string };
+type TSetSubmiting = (isSubmitting: boolean) => void;
 
-const CFDBVIPersonalDetailsModal = ({
+const CFDPersonalDetailsModal = ({
     disableApp,
     client_email,
     is_open,
     enableApp,
     openPasswordModal,
-    toggleBVIPersonalDetailsModal,
+    toggleCFDPersonalDetailsModal,
     toggleJurisdictionModal,
     residence_list,
     is_fully_authenticated,
     landing_company,
-}: TCFDBVIPersonalDetailsModalProps) => {
+}: TCFDPersonalDetailsModalProps) => {
     const [form_error, setFormError] = React.useState<string>('');
     const [is_loading, setIsLoading] = React.useState<boolean>(false);
     const [form_values, setFormValues] = React.useState<TFormValues>({
@@ -83,16 +77,17 @@ const CFDBVIPersonalDetailsModal = ({
     };
 
     const saveFormData = (_index: number, value: TFormValues) => {
-        const cloned = value;
-        cloned.citizen = transform(value.citizen);
-        cloned.place_of_birth = transform(value.place_of_birth);
-        cloned.tax_residence = transform(value.tax_residence);
-        setFormValues(cloned);
+        setFormValues({
+            ...value,
+            citizen: transform(value.citizen),
+            place_of_birth: transform(value.place_of_birth),
+            tax_residence: transform(value.tax_residence),
+        });
     };
 
     const prevStep = () => {
         setFormError('');
-        toggleBVIPersonalDetailsModal();
+        toggleCFDPersonalDetailsModal();
         toggleJurisdictionModal();
     };
 
@@ -109,7 +104,7 @@ const CFDBVIPersonalDetailsModal = ({
         }
         if (index === 0) await WS.triggerMt5DryRun({ email: client_email });
         saveFormData(index, value);
-        toggleBVIPersonalDetailsModal();
+        toggleCFDPersonalDetailsModal();
         openPasswordModal();
     };
 
@@ -162,7 +157,7 @@ const CFDBVIPersonalDetailsModal = ({
                     is_open={is_open}
                     has_close_icon={true}
                     height='688px'
-                    toggleModal={toggleBVIPersonalDetailsModal}
+                    toggleModal={toggleCFDPersonalDetailsModal}
                 >
                     {getPersonalDetailsForm()}
                 </Modal>
@@ -173,7 +168,7 @@ const CFDBVIPersonalDetailsModal = ({
                     wrapper_classname='mt5-financial-stp-signup-modal'
                     title={localize('Add a real MT5 account')}
                     visible={is_open}
-                    onClose={toggleBVIPersonalDetailsModal}
+                    onClose={toggleCFDPersonalDetailsModal}
                 >
                     {getPersonalDetailsForm()}
                 </MobileDialog>
@@ -186,11 +181,11 @@ export default connect(({ ui, modules, client }: RootStore) => ({
     disableApp: ui.disableApp,
     client_email: client.email,
     openPasswordModal: modules.cfd.enableCFDPasswordModal,
-    is_open: modules.cfd.is_bvi_personal_details_modal_visible,
-    toggleBVIPersonalDetailsModal: modules.cfd.toggleBVIPersonalDetailsModal,
+    is_open: modules.cfd.is_cfd_personal_details_modal_visible,
+    toggleCFDPersonalDetailsModal: modules.cfd.toggleCFDPersonalDetailsModal,
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
     enableApp: ui.enableApp,
     is_fully_authenticated: client.is_fully_authenticated,
     landing_company: client.landing_company,
     residence_list: client.residence_list,
-}))(CFDBVIPersonalDetailsModal);
+}))(CFDPersonalDetailsModal);

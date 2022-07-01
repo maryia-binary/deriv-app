@@ -16,7 +16,7 @@ import { ResetTradingPasswordModal } from '@deriv/account';
 import { connect } from 'Stores/connect';
 import MissingRealAccount from './missing-real-account';
 import LoadingCFDRealAccountDisplay from './loading-cfd-real-account-display';
-import BVIPersonalDetailsModal from './cfd-bvi-personal-details-modal';
+import BVIPersonalDetailsModal from './cfd-personal-details-modal';
 import MT5AccountOpeningRealFinancialStpModal from './mt5-account-opening-real-financial-stp-modal';
 import CompareAccountsModal from './compare-accounts-modal';
 import JurisdictionModal from './jurisdiction-modal';
@@ -136,7 +136,7 @@ type TCFDDashboardProps = {
     standpoint: TStandPoint;
     toggleAccountsDialog: () => void;
     toggleShouldShowRealAccountsList: () => void;
-    toggleBVIPersonalDetailsModal: () => void;
+    toggleCFDPersonalDetailsModal: () => void;
     can_have_more_real_synthetic_mt5: boolean;
     upgradeable_landing_companies: unknown[];
     is_reset_trading_password_modal_visible: boolean;
@@ -369,7 +369,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
         NotificationMessages,
         platform,
         openAccountNeededModal,
-        toggleBVIPersonalDetailsModal,
+        toggleCFDPersonalDetailsModal,
         residence,
         residence_list,
         standpoint,
@@ -562,7 +562,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                             <JurisdictionModal
                                 platform={platform}
                                 openPasswordModal={openRealPasswordModal}
-                                toggleBVIPersonalDetailsModal={toggleBVIPersonalDetailsModal}
+                                toggleCFDPersonalDetailsModal={toggleCFDPersonalDetailsModal}
                             />
                             <div className='cfd-dashboard__maintenance'>
                                 <Icon
@@ -724,7 +724,7 @@ export default withRouter(
         is_fully_authenticated: client.is_fully_authenticated,
         openPasswordModal: modules.cfd.enableCFDPasswordModal,
         openAccountNeededModal: ui.openAccountNeededModal,
-        toggleBVIPersonalDetailsModal: modules.cfd.toggleBVIPersonalDetailsModal,
+        toggleCFDPersonalDetailsModal: modules.cfd.toggleCFDPersonalDetailsModal,
         is_loading: client.is_populating_mt5_account_list,
         residence: client.residence,
         residence_list: client.residence_list,

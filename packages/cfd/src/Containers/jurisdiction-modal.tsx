@@ -95,13 +95,12 @@ const JurisdictionModal = ({
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
-
     const poi_poa_verified = poi_status === 'verified' && poa_status === 'verified';
 
     const onSelectRealAccount = () => {
         toggleJurisdictionModal();
         if (poi_poa_verified) {
-            if (!has_real_mt5_login) {
+            if (!has_real_mt5_login && !is_eu) {
                 toggleCFDPersonalDetailsModal();
             }
         } else if (jurisdiction_selected_card === 'SVG') {
@@ -146,7 +145,7 @@ const JurisdictionModal = ({
                             />
                             <Modal.Footer>
                                 <Button
-                                    disabled={!jurisdiction_selected_card || (poi_poa_verified && !checked)}
+                                    disabled={(poi_poa_verified && !checked) || !jurisdiction_selected_card}
                                     primary
                                     onClick={() => {
                                         if (account_type.category === 'real') {

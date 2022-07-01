@@ -22,6 +22,7 @@ import { isDeepEqual, isDesktop, isMobile } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 
 type TCFDPersonalDetailsFormProps = {
+    className?: string;
     has_place_of_birth?: boolean;
     has_previous_button?: boolean;
     is_fully_authenticated: boolean;
@@ -222,6 +223,7 @@ const submitForm: TSubmitForm = (values, actions, idx, onSubmitFn, is_dirty, res
 };
 
 const CFDPersonalDetailsForm = ({
+    className,
     has_place_of_birth,
     has_previous_button,
     is_fully_authenticated,
@@ -298,7 +300,7 @@ const CFDPersonalDetailsForm = ({
                             setRef: (instance: HTMLFormElement | null) => void;
                         }) => (
                             <form
-                                className='cfd-financial-stp-modal__form'
+                                className={has_place_of_birth ? `${className}__form` : 'cfd-financial-stp-modal__form'}
                                 ref={setRef}
                                 onSubmit={handleSubmit}
                                 autoComplete='off'
@@ -310,7 +312,7 @@ const CFDPersonalDetailsForm = ({
                                 >
                                     <Text
                                         as='p'
-                                        size='xxxs'
+                                        size={has_place_of_birth ? 'xxs' : 'xxxs'}
                                         align='center'
                                         className='details-form__description'
                                         data-testid='dt_cfd_details_form_description'
@@ -503,7 +505,7 @@ const CFDPersonalDetailsForm = ({
                                         </div>
                                     </ThemedScrollbars>
                                 </Div100vhContainer>
-                                <Modal.Footer is_bypassed={isMobile()}>
+                                <Modal.Footer is_bypassed={isMobile()} has_separator={has_place_of_birth}>
                                     {form_error && <FormSubmitErrorMessage message={form_error} />}
                                     <FormSubmitButton
                                         cancel_label={localize('Previous')}

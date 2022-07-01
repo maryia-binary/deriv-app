@@ -110,22 +110,18 @@ const CFDPersonalDetailsModal = ({
 
     const getPersonalDetailsForm = () => (
         <Div100vhContainer
-            className='cfd-financial-stp-modal'
-            id='bvi_personal_details_form'
+            className='cfd-personal-details-modal'
+            id='cfd-personal-details-modal'
             is_disabled={isDesktop()}
             height_offset='40px'
         >
-            <div className='set-currency-modal__heading-container'>
-                <Text
-                    as='p'
-                    weight='bold'
-                    align='center'
-                    className='set-currency-modal__heading-container__sub-heading'
-                >
+            <div className='cfd-personal-details-modal__heading-container'>
+                <Text as='p' weight='bold' align='center'>
                     {localize('Complete your personal details')}
                 </Text>
             </div>
-            <div className='cfd-financial-stp-modal__body'>
+
+            <div className='cfd-personal-details-modal__body'>
                 <CFDPersonalDetailsForm
                     value={form_values}
                     index={0}
@@ -139,6 +135,7 @@ const CFDPersonalDetailsModal = ({
                     landing_company={landing_company}
                     has_place_of_birth
                     has_previous_button
+                    className='cfd-personal-details-modal'
                 />
             </div>
         </Div100vhContainer>
@@ -148,8 +145,8 @@ const CFDPersonalDetailsModal = ({
         <React.Fragment>
             <DesktopWrapper>
                 <Modal
-                    id='mt5_financial_stp_signup_modal'
-                    className='mt5-financial-stp-signup-modal'
+                    id='cfd-personal-details-modal'
+                    className='real-account-signup-modal'
                     disableApp={disableApp}
                     width='904px'
                     title={localize('Add a real MT5 account')}
@@ -165,7 +162,7 @@ const CFDPersonalDetailsModal = ({
             <MobileWrapper>
                 <MobileDialog
                     portal_element_id='modal_root'
-                    wrapper_classname='mt5-financial-stp-signup-modal'
+                    wrapper_classname='account-signup-mobile-dialog'
                     title={localize('Add a real MT5 account')}
                     visible={is_open}
                     onClose={toggleCFDPersonalDetailsModal}

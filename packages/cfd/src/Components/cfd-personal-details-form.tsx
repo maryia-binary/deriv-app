@@ -22,11 +22,10 @@ import { isDeepEqual, isDesktop, isMobile } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 
 type TCFDPersonalDetailsFormProps = {
-    className?: string;
-    has_place_of_birth?: boolean;
+    changeable_fields?: string[];
     has_previous_button?: boolean;
-    has_subheaders?: boolean;
     is_fully_authenticated: boolean;
+    is_in_personal_details_modal?: boolean;
     is_loading: boolean;
     landing_company: LandingCompany;
     residence_list: ResidenceList;
@@ -43,14 +42,15 @@ type TValidatePersonalDetailsParams = {
     residence_list: ResidenceList;
     account_opening_reason: TAccountOpeningReasonList;
     is_tin_required: boolean;
+    has_place_of_birth?: boolean;
 };
 
-type TFindDefaultValuesInResidenceList = (
-    residence_list: ResidenceList,
-    citizen_text: string,
-    tax_residence_text: string,
-    place_of_birth_text?: string
-) => {
+type TFindDefaultValuesInResidenceList = (params: {
+    residence_list: ResidenceList;
+    citizen_text: string;
+    tax_residence_text: string;
+    place_of_birth_text?: string;
+}) => {
     citizen?: ResidenceList[0];
     place_of_birth?: ResidenceList[0];
     tax_residence?: ResidenceList[0];
@@ -132,6 +132,7 @@ const validatePersonalDetails = ({
     residence_list,
     account_opening_reason,
     is_tin_required,
+    has_place_of_birth,
 }: TValidatePersonalDetailsParams) => {
     const [tax_residence_obj] = residence_list.filter(res => res.text === values.tax_residence && res.tin_format);
     const [tin_format] = tax_residence_obj?.tin_format ?? [];
@@ -149,7 +150,6 @@ const validatePersonalDetails = ({
             (v: string) => account_opening_reason.map(i => i.value).includes(v),
         ],
     };
-
     const mappedKey: { [key: string]: string } = {
         citizen: localize('Citizenship'),
         tax_residence: localize('Tax residence'),
@@ -157,7 +157,7 @@ const validatePersonalDetails = ({
         account_opening_reason: localize('Account opening reason'),
     };
 
-    if (values.place_of_birth) {
+    if (has_place_of_birth) {
         validations.place_of_birth = [(v: string) => !!v, (v: string) => residence_list.map(i => i.text).includes(v)];
         mappedKey.place_of_birth = localize('Place of birth');
     }
@@ -179,18 +179,18 @@ const validatePersonalDetails = ({
     return errors;
 };
 
-const findDefaultValuesInResidenceList: TFindDefaultValuesInResidenceList = (
+const findDefaultValuesInResidenceList: TFindDefaultValuesInResidenceList = ({
     residence_list,
     citizen_text,
     tax_residence_text,
-    place_of_birth_text
-) => {
+    place_of_birth_text,
+}) => {
     let citizen, tax_residence, place_of_birth;
     residence_list.forEach((item: ResidenceList[0]) => {
         if (item.text === citizen_text) {
             citizen = item;
         }
-        if (place_of_birth_text && item.text === place_of_birth_text) {
+        if (item.text === place_of_birth_text) {
             place_of_birth = item;
         }
         if (item.text === tax_residence_text) {
@@ -201,34 +201,27 @@ const findDefaultValuesInResidenceList: TFindDefaultValuesInResidenceList = (
 };
 
 const submitForm: TSubmitForm = (values, actions, idx, onSubmitFn, is_dirty, residence_list) => {
-    const {
-        citizen: citizen_text,
-        place_of_birth: place_of_birth_text,
-        tax_residence: tax_residence_text,
-        ...restOfValues
-    } = values;
-    const { citizen, place_of_birth, tax_residence } = findDefaultValuesInResidenceList(
+    const { citizen, place_of_birth, tax_residence } = findDefaultValuesInResidenceList({
         residence_list,
-        citizen_text,
-        tax_residence_text,
-        place_of_birth_text
-    );
+        citizen_text: values.citizen,
+        tax_residence_text: values.tax_residence,
+        place_of_birth_text: values.place_of_birth,
+    });
 
     const payload = {
-        citizen: citizen && citizen.value ? citizen.value : '',
-        place_of_birth: place_of_birth && place_of_birth.value ? place_of_birth.value : '',
-        tax_residence: tax_residence && tax_residence.value ? tax_residence.value : '',
-        ...restOfValues,
+        ...values,
+        citizen: citizen?.value || '',
+        place_of_birth: place_of_birth?.value || '',
+        tax_residence: tax_residence?.value || '',
     };
     onSubmitFn(idx, payload, actions.setSubmitting, is_dirty);
 };
 
 const CFDPersonalDetailsForm = ({
-    className,
-    has_place_of_birth,
+    changeable_fields,
     has_previous_button,
-    has_subheaders = true,
     is_fully_authenticated,
+    is_in_personal_details_modal,
     is_loading,
     landing_company,
     residence_list,
@@ -265,6 +258,7 @@ const CFDPersonalDetailsForm = ({
                     residence_list,
                     account_opening_reason,
                     is_tin_required,
+                    has_place_of_birth: is_in_personal_details_modal,
                 })
             }
             onSubmit={onSubmitForm}
@@ -281,11 +275,14 @@ const CFDPersonalDetailsForm = ({
                 isValid,
             }: FormikProps<TFormValues>) => {
                 const citizenship_error = touched.citizen && errors.citizen;
-                const place_of_birth_error = has_place_of_birth && touched.place_of_birth && errors.place_of_birth;
+                const place_of_birth_error =
+                    is_in_personal_details_modal && touched.place_of_birth && errors.place_of_birth;
                 const tax_residence_error = touched.tax_residence && errors.tax_residence;
                 const account_opening_reason_error = touched.account_opening_reason && errors.account_opening_reason;
                 const is_citizenship_disabled = !!(value.citizen && is_fully_authenticated);
-                const is_place_of_birth_disabled = !!(value.place_of_birth && is_fully_authenticated);
+                const is_place_of_birth_disabled =
+                    !!(value.place_of_birth && is_fully_authenticated) ||
+                    changeable_fields?.every(field => field !== 'place_of_birth');
                 const is_tax_residence_disabled = !!(value.tax_residence && is_fully_authenticated);
                 const handleItemSelection = (item: ResidenceList[0], _field: string) => {
                     const item_value = item.value ? item.text : '';
@@ -302,7 +299,11 @@ const CFDPersonalDetailsForm = ({
                             setRef: (instance: HTMLFormElement | null) => void;
                         }) => (
                             <form
-                                className={className || 'cfd-financial-stp-modal__form'}
+                                className={
+                                    is_in_personal_details_modal
+                                        ? 'cfd-personal-details-modal__form'
+                                        : 'cfd-financial-stp-modal__form'
+                                }
                                 ref={setRef}
                                 onSubmit={handleSubmit}
                                 autoComplete='off'
@@ -314,7 +315,7 @@ const CFDPersonalDetailsForm = ({
                                 >
                                     <Text
                                         as='p'
-                                        size={!has_subheaders ? 'xxs' : 'xxxs'}
+                                        size={is_in_personal_details_modal ? 'xxs' : 'xxxs'}
                                         align='center'
                                         className='details-form__description'
                                         data-testid='dt_cfd_details_form_description'
@@ -327,7 +328,9 @@ const CFDPersonalDetailsForm = ({
                                     </Text>
                                     <ThemedScrollbars height={height} is_bypassed={isMobile()}>
                                         <div className='details-form__elements'>
-                                            {has_subheaders && <FormSubHeader title={localize('Details')} />}
+                                            {!is_in_personal_details_modal && (
+                                                <FormSubHeader title={localize('Details')} />
+                                            )}
                                             <fieldset className='account-form__fieldset'>
                                                 <DesktopWrapper>
                                                     <Field name='citizen'>
@@ -368,7 +371,7 @@ const CFDPersonalDetailsForm = ({
                                                     />
                                                 </MobileWrapper>
                                             </fieldset>
-                                            {has_place_of_birth && (
+                                            {is_in_personal_details_modal && (
                                                 <fieldset className='account-form__fieldset'>
                                                     <DesktopWrapper>
                                                         <Field name='place_of_birth'>
@@ -410,7 +413,9 @@ const CFDPersonalDetailsForm = ({
                                                     </MobileWrapper>
                                                 </fieldset>
                                             )}
-                                            {has_subheaders && <FormSubHeader title={localize('Tax information')} />}
+                                            {!is_in_personal_details_modal && (
+                                                <FormSubHeader title={localize('Tax information')} />
+                                            )}
                                             <fieldset className='account-form__fieldset'>
                                                 <DesktopWrapper>
                                                     <Field name='tax_residence'>
@@ -460,7 +465,7 @@ const CFDPersonalDetailsForm = ({
                                                     optional
                                                 />
                                             </fieldset>
-                                            {has_subheaders && (
+                                            {!is_in_personal_details_modal && (
                                                 <FormSubHeader title={localize('Account opening reason')} />
                                             )}
                                             <Field name='account_opening_reason'>
@@ -505,7 +510,7 @@ const CFDPersonalDetailsForm = ({
                                         </div>
                                     </ThemedScrollbars>
                                 </Div100vhContainer>
-                                <Modal.Footer is_bypassed={isMobile()} has_separator={has_place_of_birth}>
+                                <Modal.Footer is_bypassed={isMobile()} has_separator={is_in_personal_details_modal}>
                                     {form_error && <FormSubmitErrorMessage message={form_error} />}
                                     <FormSubmitButton
                                         cancel_label={localize('Previous')}

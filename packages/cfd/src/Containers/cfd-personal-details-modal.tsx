@@ -11,19 +11,20 @@ type TFormValues = { [key: string]: string };
 type TSetSubmiting = (isSubmitting: boolean) => void;
 
 const CFDPersonalDetailsModal = ({
-    disableApp,
     client_email,
-    is_open,
+    disableApp,
     enableApp,
+    is_fully_authenticated,
+    is_open,
+    landing_company,
     openPasswordModal,
     toggleCFDPersonalDetailsModal,
     toggleJurisdictionModal,
     residence_list,
-    is_fully_authenticated,
-    landing_company,
 }: TCFDPersonalDetailsModalProps) => {
-    const [form_error, setFormError] = React.useState<string>('');
-    const [is_loading, setIsLoading] = React.useState<boolean>(false);
+    const [form_error, setFormError] = React.useState('');
+    const [is_loading, setIsLoading] = React.useState(false);
+    const [changeable_fields, setChangeableFields] = React.useState<string[]>([]);
     const [form_values, setFormValues] = React.useState<TFormValues>({
         citizen: '',
         place_of_birth: '',
@@ -59,6 +60,9 @@ const CFDPersonalDetailsModal = ({
         }
         if (response.get_settings.account_opening_reason) {
             cloned.account_opening_reason = response.get_settings.account_opening_reason;
+        }
+        if (response.get_settings.changeable_fields) {
+            setChangeableFields(response.get_settings.changeable_fields);
         }
         setFormValues(cloned);
     };
@@ -120,23 +124,21 @@ const CFDPersonalDetailsModal = ({
                     {localize('Complete your personal details')}
                 </Text>
             </div>
-
             <div className='cfd-personal-details-modal__body'>
                 <CFDPersonalDetailsForm
-                    className='cfd-personal-details-modal__form'
-                    has_place_of_birth
+                    changeable_fields={changeable_fields}
+                    form_error={form_error}
                     has_previous_button
-                    has_subheaders={false}
-                    value={form_values}
                     index={0}
-                    onSubmit={updateValue}
+                    is_fully_authenticated={is_fully_authenticated}
+                    is_in_personal_details_modal
                     is_loading={is_loading}
+                    landing_company={landing_company}
                     onCancel={prevStep}
                     onSave={saveFormData}
-                    form_error={form_error}
+                    onSubmit={updateValue}
                     residence_list={residence_list}
-                    is_fully_authenticated={is_fully_authenticated}
-                    landing_company={landing_company}
+                    value={form_values}
                 />
             </div>
         </Div100vhContainer>
@@ -146,27 +148,27 @@ const CFDPersonalDetailsModal = ({
         <React.Fragment>
             <DesktopWrapper>
                 <Modal
-                    id='cfd-personal-details-modal'
                     className='real-account-signup-modal'
                     disableApp={disableApp}
-                    width='904px'
-                    title={localize('Add a real MT5 account')}
                     enableApp={enableApp}
-                    is_open={is_open}
                     has_close_icon={true}
                     height='688px'
+                    id='cfd-personal-details-modal'
+                    is_open={is_open}
+                    title={localize('Add a real MT5 account')}
                     toggleModal={toggleCFDPersonalDetailsModal}
+                    width='904px'
                 >
                     {getPersonalDetailsForm()}
                 </Modal>
             </DesktopWrapper>
             <MobileWrapper>
                 <MobileDialog
+                    onClose={toggleCFDPersonalDetailsModal}
                     portal_element_id='modal_root'
-                    wrapper_classname='account-signup-mobile-dialog'
                     title={localize('Add a real MT5 account')}
                     visible={is_open}
-                    onClose={toggleCFDPersonalDetailsModal}
+                    wrapper_classname='account-signup-mobile-dialog'
                 >
                     {getPersonalDetailsForm()}
                 </MobileDialog>
@@ -175,15 +177,15 @@ const CFDPersonalDetailsModal = ({
     );
 };
 
-export default connect(({ ui, modules, client }: RootStore) => ({
-    disableApp: ui.disableApp,
+export default connect(({ client, modules, ui }: RootStore) => ({
     client_email: client.email,
-    openPasswordModal: modules.cfd.enableCFDPasswordModal,
-    is_open: modules.cfd.is_cfd_personal_details_modal_visible,
-    toggleCFDPersonalDetailsModal: modules.cfd.toggleCFDPersonalDetailsModal,
-    toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
+    disableApp: ui.disableApp,
     enableApp: ui.enableApp,
     is_fully_authenticated: client.is_fully_authenticated,
+    is_open: modules.cfd.is_cfd_personal_details_modal_visible,
     landing_company: client.landing_company,
+    openPasswordModal: modules.cfd.enableCFDPasswordModal,
+    toggleCFDPersonalDetailsModal: modules.cfd.toggleCFDPersonalDetailsModal,
+    toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
     residence_list: client.residence_list,
 }))(CFDPersonalDetailsModal);

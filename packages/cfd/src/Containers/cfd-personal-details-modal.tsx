@@ -44,27 +44,25 @@ const CFDPersonalDetailsModal = ({
             }
             return;
         }
+        const {
+            citizen,
+            place_of_birth,
+            tax_residence,
+            tax_identification_number,
+            account_opening_reason,
+            changeable_fields: changeable_fields_array,
+        } = response.get_settings;
 
-        const cloned = { ...form_values };
-        if (response.get_settings.citizen) {
-            cloned.citizen = transform(response.get_settings.citizen);
-        }
-        if (response.get_settings.place_of_birth) {
-            cloned.place_of_birth = transform(response.get_settings.place_of_birth);
-        }
-        if (response.get_settings.tax_residence) {
-            cloned.tax_residence = transform(response.get_settings.tax_residence);
-        }
-        if (response.get_settings.tax_identification_number) {
-            cloned.tax_identification_number = response.get_settings.tax_identification_number;
-        }
-        if (response.get_settings.account_opening_reason) {
-            cloned.account_opening_reason = response.get_settings.account_opening_reason;
-        }
-        if (response.get_settings.changeable_fields) {
-            setChangeableFields(response.get_settings.changeable_fields);
-        }
-        setFormValues(cloned);
+        if (changeable_fields_array) setChangeableFields(changeable_fields_array);
+
+        setFormValues({
+            ...form_values,
+            citizen: transform(citizen) || '',
+            place_of_birth: transform(place_of_birth) || '',
+            tax_residence: transform(tax_residence) || '',
+            tax_identification_number: tax_identification_number || '',
+            account_opening_reason: account_opening_reason || '',
+        });
     };
 
     React.useEffect(() => {

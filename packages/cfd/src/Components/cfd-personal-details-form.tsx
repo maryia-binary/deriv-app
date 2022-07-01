@@ -25,6 +25,7 @@ type TCFDPersonalDetailsFormProps = {
     className?: string;
     has_place_of_birth?: boolean;
     has_previous_button?: boolean;
+    has_subheaders?: boolean;
     is_fully_authenticated: boolean;
     is_loading: boolean;
     landing_company: LandingCompany;
@@ -226,6 +227,7 @@ const CFDPersonalDetailsForm = ({
     className,
     has_place_of_birth,
     has_previous_button,
+    has_subheaders = true,
     is_fully_authenticated,
     is_loading,
     landing_company,
@@ -300,7 +302,7 @@ const CFDPersonalDetailsForm = ({
                             setRef: (instance: HTMLFormElement | null) => void;
                         }) => (
                             <form
-                                className={has_place_of_birth ? `${className}__form` : 'cfd-financial-stp-modal__form'}
+                                className={className || 'cfd-financial-stp-modal__form'}
                                 ref={setRef}
                                 onSubmit={handleSubmit}
                                 autoComplete='off'
@@ -312,7 +314,7 @@ const CFDPersonalDetailsForm = ({
                                 >
                                     <Text
                                         as='p'
-                                        size={has_place_of_birth ? 'xxs' : 'xxxs'}
+                                        size={!has_subheaders ? 'xxs' : 'xxxs'}
                                         align='center'
                                         className='details-form__description'
                                         data-testid='dt_cfd_details_form_description'
@@ -325,7 +327,7 @@ const CFDPersonalDetailsForm = ({
                                     </Text>
                                     <ThemedScrollbars height={height} is_bypassed={isMobile()}>
                                         <div className='details-form__elements'>
-                                            {!has_place_of_birth && <FormSubHeader title={localize('Details')} />}
+                                            {has_subheaders && <FormSubHeader title={localize('Details')} />}
                                             <fieldset className='account-form__fieldset'>
                                                 <DesktopWrapper>
                                                     <Field name='citizen'>
@@ -408,9 +410,7 @@ const CFDPersonalDetailsForm = ({
                                                     </MobileWrapper>
                                                 </fieldset>
                                             )}
-                                            {!has_place_of_birth && (
-                                                <FormSubHeader title={localize('Tax information')} />
-                                            )}
+                                            {has_subheaders && <FormSubHeader title={localize('Tax information')} />}
                                             <fieldset className='account-form__fieldset'>
                                                 <DesktopWrapper>
                                                     <Field name='tax_residence'>
@@ -460,7 +460,7 @@ const CFDPersonalDetailsForm = ({
                                                     optional
                                                 />
                                             </fieldset>
-                                            {!has_place_of_birth && (
+                                            {has_subheaders && (
                                                 <FormSubHeader title={localize('Account opening reason')} />
                                             )}
                                             <Field name='account_opening_reason'>

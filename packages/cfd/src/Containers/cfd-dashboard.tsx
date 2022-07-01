@@ -16,7 +16,7 @@ import { ResetTradingPasswordModal } from '@deriv/account';
 import { connect } from 'Stores/connect';
 import MissingRealAccount from './missing-real-account';
 import LoadingCFDRealAccountDisplay from './loading-cfd-real-account-display';
-import BVIPersonalDetailsModal from './cfd-personal-details-modal';
+import CFDPersonalDetailsModal from './cfd-personal-details-modal';
 import MT5AccountOpeningRealFinancialStpModal from './mt5-account-opening-real-financial-stp-modal';
 import CompareAccountsModal from './compare-accounts-modal';
 import JurisdictionModal from './jurisdiction-modal';
@@ -646,7 +646,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                             <React.Fragment>
                                 <MT5AccountOpeningRealFinancialStpModal />
                                 <CFDFinancialStpPendingDialog />
-                                <BVIPersonalDetailsModal />
+                                <CFDPersonalDetailsModal />
                             </React.Fragment>
                         )}
                         <CFDResetPasswordModal platform={platform} />

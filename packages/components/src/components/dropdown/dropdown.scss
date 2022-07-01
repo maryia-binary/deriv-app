@@ -267,7 +267,7 @@
         min-width: 15rem;
         width: 100%;
 
-        &:not(.cfd-personal-details-modal *) {
+        &:not(.cfd-personal-details-modal__form *) {
             margin-top: unset;
         }
 

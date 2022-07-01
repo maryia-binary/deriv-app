@@ -1054,17 +1054,19 @@
         padding-top: 2.4rem;
     }
 
-    .dc-modal-footer {
-        width: 100%;
-        padding: 1.6rem;
-        bottom: 0;
-        right: 0;
-        display: flex;
-        justify-content: flex-end;
-    }
+    &__form {
+        .dc-modal-footer {
+            width: 100%;
+            padding: 1.6rem 2.4rem;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
 
-    .dc-autocomplete {
-        margin-bottom: 3.2rem;
+        .dc-autocomplete {
+            margin-bottom: 3.2rem;
+        }
     }
 }
 

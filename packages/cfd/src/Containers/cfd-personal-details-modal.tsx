@@ -116,13 +116,17 @@ const CFDPersonalDetailsModal = ({
             height_offset='40px'
         >
             <div className='cfd-personal-details-modal__heading-container'>
-                <Text as='p' weight='bold' align='center'>
+                <Text as='p' weight='bold' align='center' size='s'>
                     {localize('Complete your personal details')}
                 </Text>
             </div>
 
             <div className='cfd-personal-details-modal__body'>
                 <CFDPersonalDetailsForm
+                    className='cfd-personal-details-modal__form'
+                    has_place_of_birth
+                    has_previous_button
+                    has_subheaders={false}
                     value={form_values}
                     index={0}
                     onSubmit={updateValue}
@@ -133,9 +137,6 @@ const CFDPersonalDetailsModal = ({
                     residence_list={residence_list}
                     is_fully_authenticated={is_fully_authenticated}
                     landing_company={landing_company}
-                    has_place_of_birth
-                    has_previous_button
-                    className='cfd-personal-details-modal'
                 />
             </div>
         </Div100vhContainer>

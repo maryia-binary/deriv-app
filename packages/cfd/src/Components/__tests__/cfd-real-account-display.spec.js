@@ -379,14 +379,14 @@ describe('<CFDRealAccountDisplay />', () => {
         expect(screen.queryAllByRole('button', { name: /add real account/i }).length).toBe(0);
     });
 
-    it('should render 1 open account with an enabled "Top up" ("Fund transfer" in Deriv X) & "Trade" buttons', () => {
+    it('should render 1 open account with an enabled "Top up" ("Fund transfer" in Deriv X) & "Trade on web terminal" buttons', () => {
         props.current_list['mt5.real.financial@p01_ts01'] = mt5_real_financial_account;
         const { rerender } = render(<CFDRealAccountDisplay {...props} has_real_account={true} />);
 
         checkAccountCardsRendering(TESTED_CASES.NON_EU_DMT5);
         expect(screen.getAllByRole('button', { name: /add real account/i }).length).toBe(1);
         const dmt5_top_up_button = screen.getByRole('button', { name: /top up/i });
-        const dmt5_trade_button = screen.getByRole('link', { name: /trade/i });
+        const dmt5_trade_button = screen.getByRole('link', { name: /trade on web terminal/i });
         expect(dmt5_trade_button).toHaveAttribute(
             'href',
             'https://trade.mql5.com/trade?servers=Deriv-Server&trade_server=Deriv-Server&login=1927245'

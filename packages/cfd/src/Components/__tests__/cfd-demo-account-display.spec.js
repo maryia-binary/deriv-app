@@ -201,7 +201,7 @@ describe('<CFDDemoAccountDisplay />', () => {
         checkAccountCardsRendering(TESTED_CASES.NON_EU_DMT5);
         expect(screen.getAllByRole('button', { name: /add demo account/i }).length).toBe(1);
         const dmt5_top_up_button = screen.getByRole('button', { name: /top up/i });
-        const dmt5_trade_button = screen.getByRole('link', { name: /trade/i });
+        const dmt5_trade_button = screen.getByRole('link', { name: /trade on web terminal/i });
         expect(dmt5_trade_button).toHaveAttribute(
             'href',
             'https://trade.mql5.com/trade?servers=Deriv-Demo&trade_server=Deriv-Demo&login=20103240'

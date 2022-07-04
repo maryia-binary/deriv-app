@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button, Modal, DesktopWrapper, MobileDialog, MobileWrapper, UILoader } from '@deriv/components';
-import { localize } from '@deriv/translations';
+import { localize, Localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import RootStore from 'Stores/index';
-import { CFD_PLATFORMS } from '@deriv/shared';
 import { LandingCompany } from '@deriv/api-types';
 import JurisdictionModalContent from './jurisdiction-modal-content';
 
@@ -58,6 +57,7 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     toggleJurisdictionModal: () => void;
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
     is_fully_authenticated: boolean;
+    is_pending_authentication: boolean;
     openPasswordModal: (account_type: TOpenAccountTransferMeta) => void;
 };
 
@@ -68,13 +68,13 @@ const JurisdictionModal = ({
     enableApp,
     has_real_mt5_login,
     is_jurisdiction_modal_visible,
-    platform,
     is_eu,
     jurisdiction_selected_card,
     toggleCFDPersonalDetailsModal,
     toggleJurisdictionModal,
     trading_platform_available_accounts,
     is_fully_authenticated,
+    is_pending_authentication,
     openPasswordModal,
 }: TJurisdictionModalProps) => {
     const [checked, setChecked] = React.useState<boolean>(false);
@@ -98,30 +98,26 @@ const JurisdictionModal = ({
     const poi_poa_verified = poi_status === 'verified' && poa_status === 'verified';
 
     const onSelectRealAccount = () => {
+        const type_of_account = {
+            category: account_type.category,
+            type: account_type.type,
+        };
         toggleJurisdictionModal();
         if (poi_poa_verified) {
             if (!has_real_mt5_login && !is_eu) {
                 toggleCFDPersonalDetailsModal();
             }
-        } else if (jurisdiction_selected_card === 'SVG') {
-            const type_of_account = {
-                category: account_type.category,
-                type: account_type.type,
-            };
+        } else if (jurisdiction_selected_card === 'svg') {
             openPasswordModal(type_of_account);
         }
     };
 
     return (
         <>
-            <div
-                className='cfd-compare-accounts-modal__wrapper'
-                style={{ marginTop: platform === CFD_PLATFORMS.DXTRADE ? '5rem' : '2.4rem' }}
-            >
+            <div>
                 <React.Suspense fallback={<UILoader />}>
                     <DesktopWrapper>
                         <Modal
-                            className='cfd-dashboard__compare-accounts'
                             disableApp={disableApp}
                             enableApp={enableApp}
                             is_open={is_jurisdiction_modal_visible}
@@ -140,6 +136,7 @@ const JurisdictionModal = ({
                                 poi_status={poi_status}
                                 is_eu={is_eu}
                                 is_fully_authenticated={is_fully_authenticated}
+                                is_pending_authentication={is_pending_authentication}
                                 checked={checked}
                                 setChecked={setChecked}
                             />
@@ -148,12 +145,10 @@ const JurisdictionModal = ({
                                     disabled={(poi_poa_verified && !checked) || !jurisdiction_selected_card}
                                     primary
                                     onClick={() => {
-                                        if (account_type.category === 'real') {
-                                            onSelectRealAccount();
-                                        }
+                                        onSelectRealAccount();
                                     }}
                                 >
-                                    {localize('Next')}
+                                    <Localize i18n_default_text='Next' />
                                 </Button>
                             </Modal.Footer>
                         </Modal>
@@ -161,10 +156,26 @@ const JurisdictionModal = ({
                     <MobileWrapper>
                         <MobileDialog
                             portal_element_id='deriv_app'
-                            title={localize('Compare accounts')}
-                            wrapper_classname='cfd-dashboard__compare-accounts'
+                            title={modal_title}
                             visible={is_jurisdiction_modal_visible}
                             onClose={toggleJurisdictionModal}
+                            footer={
+                                <Button
+                                    style={{ width: '100%' }}
+                                    disabled={
+                                        jurisdiction_selected_card === undefined ||
+                                        (is_eu && is_fully_authenticated && !checked)
+                                    }
+                                    primary
+                                    onClick={() => {
+                                        if (jurisdiction_selected_card === 'SVG') {
+                                            onSelectRealAccount();
+                                        }
+                                    }}
+                                >
+                                    <Localize i18n_default_text='Next' />
+                                </Button>
+                            }
                         >
                             <JurisdictionModalContent
                                 financial_available_accounts={financial_available_accounts}
@@ -175,6 +186,7 @@ const JurisdictionModal = ({
                                 poi_status={poi_status}
                                 is_eu={is_eu}
                                 is_fully_authenticated={is_fully_authenticated}
+                                is_pending_authentication={is_pending_authentication}
                                 checked={checked}
                                 setChecked={setChecked}
                             />
@@ -196,12 +208,12 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     trading_platform_available_accounts: client.trading_platform_available_accounts,
     is_loading: client.is_populating_mt5_account_list,
     is_eu: client.is_eu,
-    is_uk: client.is_uk,
-    is_eu_country: client.is_eu_country,
     is_logged_in: client.is_logged_in,
+    is_eu_country: client.is_eu_country,
     landing_companies: client.landing_companies,
     is_fully_authenticated: client.is_fully_authenticated,
-    residence: client.residence,
-    jurisdiction_selected_card: modules.cfd.jurisdiction_selected_card,
+    is_pending_authentication: client.is_pending_authentication,
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
+    jurisdiction_selected_card: modules.cfd.jurisdiction_selected_card,
+    residence: client.residence,
 }))(JurisdictionModal);

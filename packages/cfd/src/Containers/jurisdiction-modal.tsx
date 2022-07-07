@@ -59,6 +59,7 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     is_fully_authenticated: boolean;
     is_pending_authentication: boolean;
     openPasswordModal: (account_type: TOpenAccountTransferMeta) => void;
+    toggleCFDVerificationModal: () => void;
 };
 
 const JurisdictionModal = ({
@@ -76,6 +77,7 @@ const JurisdictionModal = ({
     is_fully_authenticated,
     is_pending_authentication,
     openPasswordModal,
+    toggleCFDVerificationModal,
 }: TJurisdictionModalProps) => {
     const [checked, setChecked] = React.useState<boolean>(false);
 
@@ -97,6 +99,12 @@ const JurisdictionModal = ({
     const poi_status = authentication_status?.identity_status;
     const poi_poa_verified = poi_status === 'verified' && poa_status === 'verified';
 
+    const bvi_checks =
+        (poi_status === 'pending' && poa_status !== 'pending') ||
+        (poi_status === 'pending' && poa_status !== 'verified') ||
+        (poa_status === 'pending' && poi_status !== 'pending') ||
+        (poa_status === 'pending' && poi_status !== 'verified');
+
     const onSelectRealAccount = () => {
         const type_of_account = {
             category: account_type.category,
@@ -108,7 +116,7 @@ const JurisdictionModal = ({
             if (poi_poa_verified) {
                 openPasswordModal(type_of_account);
             } else {
-                // open poi/poa modals
+                toggleCFDVerificationModal();
             }
         } else if (jurisdiction_selected_card === 'svg') {
             if (account_type.type === 'financial' && poi_poa_verified && !has_real_mt5_login) {
@@ -124,7 +132,7 @@ const JurisdictionModal = ({
                 openPasswordModal(type_of_account);
             }
         } else {
-            // open poi/poa modals
+            toggleCFDVerificationModal();
         }
     };
 
@@ -159,9 +167,10 @@ const JurisdictionModal = ({
                             <Modal.Footer>
                                 <Button
                                     disabled={
-                                        (poi_poa_verified && !checked) ||
+                                        (poi_poa_verified && !checked && jurisdiction_selected_card !== 'svg') ||
+                                        (jurisdiction_selected_card === 'labuan' && !checked) ||
                                         !jurisdiction_selected_card ||
-                                        (jurisdiction_selected_card !== 'svg' && is_pending_authentication)
+                                        (jurisdiction_selected_card !== 'svg' && bvi_checks)
                                     }
                                     primary
                                     onClick={() => {
@@ -183,8 +192,9 @@ const JurisdictionModal = ({
                                 <Button
                                     style={{ width: '100%' }}
                                     disabled={
-                                        jurisdiction_selected_card === undefined ||
-                                        (is_eu && is_fully_authenticated && !checked) ||
+                                        (poi_poa_verified && !checked && jurisdiction_selected_card !== 'svg') ||
+                                        (jurisdiction_selected_card === 'labuan' && !checked) ||
+                                        !jurisdiction_selected_card ||
                                         (jurisdiction_selected_card !== 'svg' && is_pending_authentication)
                                     }
                                     primary
@@ -235,4 +245,5 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
     jurisdiction_selected_card: modules.cfd.jurisdiction_selected_card,
     residence: client.residence,
+    toggleCFDVerificationModal: modules.cfd.toggleCFDVerificationModal,
 }))(JurisdictionModal);

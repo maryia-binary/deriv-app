@@ -182,10 +182,7 @@ const CFDAccountCardComponent = ({
     toggleAccountsDialog,
     toggleShouldShowRealAccountsList,
 }: TCFDAccountCard) => {
-    const existing_data =
-        type.category === 'real'
-            ? (existing_accounts_data as DetailsOfEachMT5Loginid[])?.[0]
-            : (existing_accounts_data as DetailsOfEachMT5Loginid);
+    const existing_data = type.category === 'real' ? existing_accounts_data?.[0] : existing_accounts_data;
     const platform_icon = is_eu ? 'cfd' : type.type;
     const icon: any = type.type ? <Icon icon={account_icons[type.platform][platform_icon]} size={64} /> : null;
     const has_popular_banner: boolean =

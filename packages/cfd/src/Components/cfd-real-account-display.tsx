@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { localize, Localize } from '@deriv/translations';
+import { localize } from '@deriv/translations';
 import { DesktopWrapper, MobileWrapper, Carousel } from '@deriv/components';
 import { getAccountTypeFields, getAccountListKey, getCFDAccountKey, CFD_PLATFORMS } from '@deriv/shared';
 import specifications, { TSpecifications } from '../Constants/cfd-specifications';

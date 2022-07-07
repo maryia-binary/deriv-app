@@ -45,8 +45,6 @@ export type TCFDAccountCardActionProps = {
     title: string;
 };
 
-export type TExistingData = DetailsOfEachMT5Loginid | TTradingPlatformAccounts;
-
 export type TCFDAccountCard = {
     button_label?: string | JSX.Element;
     commission_message: string;
@@ -56,7 +54,7 @@ export type TCFDAccountCard = {
         real: string;
     };
     is_hovered?: boolean;
-    existing_accounts_data?: Array<TExistingData> | TExistingData;
+    existing_accounts_data?: DetailsOfEachMT5Loginid | DetailsOfEachMT5Loginid[];
     has_banner?: boolean;
     has_cfd_account: boolean;
     has_cfd_account_error?: boolean;

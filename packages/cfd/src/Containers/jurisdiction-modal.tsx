@@ -145,6 +145,18 @@ const JurisdictionModal = ({
         }
     };
 
+    const buttonText = () => {
+        const selected_card = jurisdiction_selected_card !== 'svg' && jurisdiction_selected_card !== undefined;
+        if (poa_failed && selected_card) {
+            return <Localize i18n_default_text='Resubmit proof of address' />;
+        } else if (poi_failed && selected_card) {
+            return <Localize i18n_default_text='Resubmit proof of identity' />;
+        } else if (poa_failed && poi_failed && selected_card) {
+            return <Localize i18n_default_text='Resubmit' />;
+        }
+        return <Localize i18n_default_text='Next' />;
+    };
+
     return (
         <>
             <div>
@@ -172,6 +184,8 @@ const JurisdictionModal = ({
                                 is_pending_authentication={is_pending_authentication}
                                 checked={checked}
                                 setChecked={setChecked}
+                                poi_failed={poi_failed}
+                                poa_failed={poa_failed}
                             />
                             <Modal.Footer>
                                 <Button
@@ -181,7 +195,7 @@ const JurisdictionModal = ({
                                         onSelectRealAccount();
                                     }}
                                 >
-                                    <Localize i18n_default_text='Next' />
+                                    {buttonText()}
                                 </Button>
                             </Modal.Footer>
                         </Modal>
@@ -201,7 +215,7 @@ const JurisdictionModal = ({
                                         onSelectRealAccount();
                                     }}
                                 >
-                                    <Localize i18n_default_text='Next' />
+                                    {buttonText()}
                                 </Button>
                             }
                         >
@@ -217,6 +231,8 @@ const JurisdictionModal = ({
                                 is_pending_authentication={is_pending_authentication}
                                 checked={checked}
                                 setChecked={setChecked}
+                                poi_failed={poi_failed}
+                                poa_failed={poa_failed}
                             />
                         </MobileDialog>
                     </MobileWrapper>

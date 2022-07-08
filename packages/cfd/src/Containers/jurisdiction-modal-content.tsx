@@ -65,8 +65,8 @@ const JurisdictionCard = ({
     type_of_card,
     disabled,
 }: TJurisdictionCard) => {
-    const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts.length;
-    const number_of_financial_accounts_to_be_shown = financial_available_accounts.length;
+    const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts?.length;
+    const number_of_financial_accounts_to_be_shown = financial_available_accounts?.length;
 
     const [number_of_cards] = React.useState(
         account_type === 'synthetic'
@@ -213,20 +213,6 @@ const JurisdictionCard = ({
     );
 };
 
-type ModalCheckboxProps = {
-    setChecked: React.Dispatch<React.SetStateAction<boolean>>;
-    checked: boolean;
-};
-
-const ModalCheckbox = ({ setChecked, checked }: ModalCheckboxProps) => (
-    <div className='cfd-jurisdiction-card__jurisdiction-checkbox'>
-        <Checkbox onChange={() => setChecked(!checked)} value={checked} />
-        <Text as='p' align='center' size='xs' line_height='xs'>
-            {`I confirm and accept Deriv (V) Ltd 's Terms and Conditions`}
-        </Text>
-    </div>
-);
-
 const JurisdictionModalContent = ({
     jurisdiction_selected_card,
     account_type,
@@ -319,6 +305,21 @@ const JurisdictionModalContent = ({
             </>
         );
     };
+
+    const ModalCheckbox = ({
+        _setChecked,
+        _checked,
+    }: {
+        _setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+        _checked: boolean;
+    }) => (
+        <div className='cfd-jurisdiction-card__jurisdiction-checkbox'>
+            <Checkbox onChange={() => _setChecked(!checked)} value={_checked} />
+            <Text as='p' align='center' size='xs' line_height='xs'>
+                I confirm and accept Deriv (V) Ltd &#39;s Terms and Conditions
+            </Text>
+        </div>
+    );
 
     return (
         <>

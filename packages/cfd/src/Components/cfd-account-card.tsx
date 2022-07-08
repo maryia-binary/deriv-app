@@ -32,7 +32,7 @@ const account_icons: { [key: string]: TAccountIconValues } = {
     },
 };
 
-const AddTradeServerButton = React.forwardRef<HTMLDivElement, { onSelectAccount: () => void; is_disabled?: boolean }>(
+const AddAccountButton = React.forwardRef<HTMLDivElement, { onSelectAccount: () => void; is_disabled?: boolean }>(
     ({ onSelectAccount, is_disabled }, ref) => {
         return (
             <div
@@ -49,7 +49,7 @@ const AddTradeServerButton = React.forwardRef<HTMLDivElement, { onSelectAccount:
     }
 );
 
-AddTradeServerButton.displayName = 'AddTradeServerButton';
+AddAccountButton.displayName = 'AddAccountButton';
 
 const SpecBox = ({ value, is_bold }: TSpecBoxProps) => (
     <div className='cfd-account-card__spec-box'>
@@ -183,7 +183,7 @@ const CFDAccountCardComponent = ({
     toggleAccountsDialog,
     toggleShouldShowRealAccountsList,
 }: TCFDAccountCard) => {
-    const should_show_trade_servers =
+    const should_show_extra_add_account_button =
         is_logged_in &&
         !is_eu &&
         has_real_account &&
@@ -511,9 +511,9 @@ const CFDAccountCardComponent = ({
                     </div>
                 </div>
                 <React.Fragment>
-                    {should_show_trade_servers && (
+                    {should_show_extra_add_account_button && (
                         <MobileWrapper>
-                            <AddTradeServerButton
+                            <AddAccountButton
                                 ref={button_ref}
                                 onSelectAccount={onSelectAccount}
                                 is_disabled={has_cfd_account_error}
@@ -524,12 +524,12 @@ const CFDAccountCardComponent = ({
             </div>
             <DesktopWrapper>
                 <CSSTransition
-                    in={should_show_trade_servers}
+                    in={should_show_extra_add_account_button}
                     timeout={0}
                     classNames='cfd-account-card__add-server'
                     unmountOnExit
                 >
-                    <AddTradeServerButton
+                    <AddAccountButton
                         ref={button_ref}
                         onSelectAccount={onSelectAccount}
                         is_disabled={has_cfd_account_error}

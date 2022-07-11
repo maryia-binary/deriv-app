@@ -334,17 +334,6 @@ const CFDAccountCardComponent = ({
                                                     toggleMT5TradeModal();
                                                     setMT5TradeAccount(existing_data);
                                                 }}
-                                                // href={
-                                                //     platform === CFD_PLATFORMS.DXTRADE
-                                                //         ? getDXTradeWebTerminalLink(type.category)
-                                                //         : getMT5WebTerminalLink({
-                                                //               category: type.category,
-                                                //               loginid: (existing_data as TTradingPlatformAccounts)
-                                                //                   .display_login,
-                                                //               server_name: (existing_data as DetailsOfEachMT5Loginid)
-                                                //                   ?.server_info?.environment,
-                                                //           })
-                                                // }
                                                 primary
                                                 large
                                             >
@@ -389,17 +378,6 @@ const CFDAccountCardComponent = ({
                                                     toggleMT5TradeModal();
                                                     setMT5TradeAccount(existing_data);
                                                 }}
-                                                // href={
-                                                //     platform === CFD_PLATFORMS.DXTRADE
-                                                //         ? getDXTradeWebTerminalLink(type.category)
-                                                //         : getMT5WebTerminalLink({
-                                                //               category: type.category,
-                                                //               loginid: (existing_data as TTradingPlatformAccounts)
-                                                //                   .display_login,
-                                                //               server_name: (existing_data as DetailsOfEachMT5Loginid)
-                                                //                   ?.server_info?.environment,
-                                                //           })
-                                                // }
                                                 primary
                                                 large
                                             >

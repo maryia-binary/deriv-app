@@ -294,7 +294,7 @@ const JurisdictionModalContent = ({
                         </Text>
                     </div>
                 )}
-                {jurisdiction_selected_card === 'labuan' && (
+                {is_fully_authenticated && jurisdiction_selected_card === 'labuan' && (
                     <div className='cfd-jurisdiction-card__footnote'>
                         <Text as='p' weight='bold' align='center' size='xs' line_height='xs'>
                             <Localize i18n_default_text='Add your DMT5 Financial STP account under Deriv (FX) Ltd regulated by Labuan Financial Services Authority(licence no. MB/18/0024).' />

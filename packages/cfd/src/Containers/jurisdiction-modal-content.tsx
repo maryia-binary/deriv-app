@@ -270,7 +270,7 @@ const JurisdictionModalContent = ({
                         <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
                     </Text>
                 )}
-                {poi_failed && jurisdiction_selected_card !== 'svg' && (
+                {poi_failed && jurisdiction_selected_card && jurisdiction_selected_card !== 'svg' && (
                     <Text
                         as='p'
                         align='center'
@@ -282,7 +282,7 @@ const JurisdictionModalContent = ({
                         <Localize i18n_default_text='To create this account first we need you to resubmit your proof of identity.' />
                     </Text>
                 )}
-                {poa_failed && jurisdiction_selected_card !== 'svg' && (
+                {poa_failed && jurisdiction_selected_card && jurisdiction_selected_card !== 'svg' && (
                     <Text
                         as='p'
                         align='center'
@@ -294,7 +294,7 @@ const JurisdictionModalContent = ({
                         <Localize i18n_default_text='To create this account first we need you to resubmit your proof of address.' />
                     </Text>
                 )}
-                {poa_failed && poi_failed && jurisdiction_selected_card !== 'svg' && (
+                {poa_failed && poi_failed && jurisdiction_selected_card && jurisdiction_selected_card !== 'svg' && (
                     <Text
                         as='p'
                         align='center'

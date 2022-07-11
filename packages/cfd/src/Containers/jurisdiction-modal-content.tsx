@@ -300,15 +300,13 @@ const JurisdictionModalContent = ({
                         </Text>
                     </div>
                 )}
-                {is_pending_authentication &&
-                    jurisdiction_selected_card !== 'svg' &&
-                    jurisdiction_selected_card !== undefined && (
-                        <div className='cfd-jurisdiction-card__footnote--pending'>
-                            <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
-                                <Localize i18n_default_text='Your documents are being reviewed, we will notify you once this account is ready for you to create.' />
-                            </Text>
-                        </div>
-                    )}
+                {is_pending_authentication && jurisdiction_selected_card !== 'svg' && jurisdiction_selected_card && (
+                    <div className='cfd-jurisdiction-card__footnote--pending'>
+                        <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
+                            <Localize i18n_default_text='Your documents are being reviewed, we will notify you once this account is ready for you to create.' />
+                        </Text>
+                    </div>
+                )}
             </>
         );
     };

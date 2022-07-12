@@ -84,7 +84,7 @@ const JurisdictionModal = ({
     const [has_submitted_personal_details, setHasSubmittedPersonalDetails] = React.useState(false);
 
     React.useEffect(() => {
-        if (is_jurisdiction_modal_visible) {
+        if (is_jurisdiction_modal_visible && !has_submitted_personal_details) {
             WS.authorized.storage.getSettings().then((response: GetAccountSettingsResponse) => {
                 const { citizen, place_of_birth, tax_residence, tax_identification_number, account_opening_reason } =
                     response.get_settings as GetSettings;

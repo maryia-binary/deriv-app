@@ -82,6 +82,7 @@ const JurisdictionCard = ({
 
     const poa_none = poa_status === PoaStatusCodes.none;
     const poi_none = poi_status === PoaStatusCodes.none;
+    const poi_poa_none = poi_none || poa_none;
 
     const cardSelection = (cardType: string) => {
         if (jurisdiction_selected_shortcode === cardType) {
@@ -104,7 +105,7 @@ const JurisdictionCard = ({
 
     const VerificationStatuses = () => (
         <>
-            {!disabled && poa_none && poi_none && (
+            {!disabled && poi_poa_none && (
                 <div className='cfd-jurisdiction-card__footer'>
                     <Text size='xxxs' color={disabled ? 'less-prominent' : 'prominent'}>
                         <Localize i18n_default_text='You will need to submit proof of identity and address' />
@@ -136,7 +137,7 @@ const JurisdictionCard = ({
                     </div>
                 </div>
             )}
-            {!disabled && poi_failed && !poa_failed && type_of_card && type_of_card !== 'svg' && (
+            {!disabled && poi_failed && !poa_failed && !poi_poa_none && type_of_card && type_of_card !== 'svg' && (
                 <div className='cfd-jurisdiction-card__verification-status'>
                     <div className='cfd-jurisdiction-card__verification-status--POA_POI'>
                         <Text size='xxxs' color={disabled ? 'less-prominent' : 'white'}>
@@ -145,7 +146,7 @@ const JurisdictionCard = ({
                     </div>
                 </div>
             )}
-            {!disabled && poa_failed && !poi_failed && type_of_card && type_of_card !== 'svg' && (
+            {!disabled && poa_failed && !poi_failed && !poi_poa_none && type_of_card && type_of_card !== 'svg' && (
                 <div className='cfd-jurisdiction-card__verification-status'>
                     <div className='cfd-jurisdiction-card__verification-status--POA_POI'>
                         <Text size='xxxs' color={disabled ? 'less-prominent' : 'white'}>
@@ -253,7 +254,7 @@ const JurisdictionModalContent = ({
 }: TJurisdictionModalContent) => {
     const poa_none = poa_status === PoaStatusCodes.none;
     const poi_none = poi_status === PoaStatusCodes.none;
-    const poi_poa_none = poa_none || poi_none;
+    const poi_poa_none = poi_none || poa_none;
 
     const poi_poa_verified = poi_status === PoaStatusCodes.verified && poa_status === PoaStatusCodes.verified;
 
@@ -279,22 +280,18 @@ const JurisdictionModalContent = ({
     const ModalFootNote = () => {
         return (
             <>
-                {poi_poa_none &&
-                    !poi_failed &&
-                    !poa_failed &&
-                    jurisdiction_selected_shortcode !== 'svg' &&
-                    jurisdiction_selected_shortcode && (
-                        <Text
-                            as='p'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className='cfd-jurisdiction-card__footnote'
-                        >
-                            <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
-                        </Text>
-                    )}
+                {poi_poa_none && jurisdiction_selected_shortcode !== 'svg' && jurisdiction_selected_shortcode && (
+                    <Text
+                        as='p'
+                        align='center'
+                        size='xs'
+                        weight='bold'
+                        line_height='xs'
+                        className='cfd-jurisdiction-card__footnote'
+                    >
+                        <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
+                    </Text>
+                )}
                 {poi_failed &&
                     !poa_failed &&
                     !poi_poa_none &&

@@ -31,7 +31,7 @@ type TJurisdictionModalContent = {
     poi_status: string;
     is_eu: boolean;
     is_fully_authenticated: boolean;
-    is_pending_authentication: boolean;
+    poi_poa_pending: boolean;
     checked: boolean;
     setChecked: React.Dispatch<React.SetStateAction<boolean>>;
     real_synthetic_accounts_existing_data: TExistingData;
@@ -48,7 +48,7 @@ type TJurisdictionCard = {
     poa_status: string;
     poi_status: string;
     is_fully_authenticated: boolean;
-    is_pending_authentication: boolean;
+    poi_poa_pending: boolean;
     setJurisdictionSelectedShortcode: (card_type: string) => void;
     type_of_card: string;
     disabled: boolean;
@@ -64,7 +64,7 @@ const JurisdictionCard = ({
     poa_status,
     poi_status,
     is_fully_authenticated,
-    is_pending_authentication,
+    poi_poa_pending,
     setJurisdictionSelectedShortcode,
     type_of_card,
     disabled,
@@ -113,7 +113,7 @@ const JurisdictionCard = ({
                     </Text>
                 </div>
             )}
-            {!poa_failed && !poi_failed && is_pending_authentication && type_of_card && type_of_card !== 'svg' && (
+            {poi_poa_pending && type_of_card && type_of_card !== 'svg' && (
                 <div className='cfd-jurisdiction-card__verification-status'>
                     <div className='cfd-jurisdiction-card__verification-status--pending'>
                         <Text size='xxxs' color={disabled ? 'less-prominent' : 'prominent'}>
@@ -122,7 +122,7 @@ const JurisdictionCard = ({
                     </div>
                 </div>
             )}
-            {is_pending_authentication && type_of_card === 'svg' && (
+            {poi_poa_pending && type_of_card === 'svg' && (
                 <div className='cfd-jurisdiction-card__footer'>
                     <Text size='xxxs' color={disabled ? 'less-prominent' : 'prominent'}>
                         <Localize i18n_default_text='You will need to submit proof of identity and address once you reach certain thresholds' />
@@ -234,7 +234,7 @@ const JurisdictionModalContent = ({
     poi_status,
     is_eu,
     is_fully_authenticated,
-    is_pending_authentication,
+    poi_poa_pending,
     checked,
     setChecked,
     real_synthetic_accounts_existing_data,
@@ -244,6 +244,8 @@ const JurisdictionModalContent = ({
 }: TJurisdictionModalContent) => {
     const poa_none = poa_status === PoaStatusCodes.none;
     const poi_none = poi_status === PoaStatusCodes.none;
+    const poi_poa_none = poa_none || poi_none;
+
     const poi_poa_verified = poi_status === PoaStatusCodes.verified && poa_status === PoaStatusCodes.verified;
 
     const cardsToBeShown = (type_of_card: string) => {
@@ -267,20 +269,25 @@ const JurisdictionModalContent = ({
     const ModalFootNote = () => {
         return (
             <>
-                {poa_none && poi_none && jurisdiction_selected_shortcode !== 'svg' && jurisdiction_selected_shortcode && (
-                    <Text
-                        as='p'
-                        align='center'
-                        size='xs'
-                        weight='bold'
-                        line_height='xs'
-                        className='cfd-jurisdiction-card__footnote'
-                    >
-                        <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
-                    </Text>
-                )}
+                {poi_poa_none &&
+                    !poi_failed &&
+                    !poa_failed &&
+                    jurisdiction_selected_shortcode !== 'svg' &&
+                    jurisdiction_selected_shortcode && (
+                        <Text
+                            as='p'
+                            align='center'
+                            size='xs'
+                            weight='bold'
+                            line_height='xs'
+                            className='cfd-jurisdiction-card__footnote'
+                        >
+                            <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
+                        </Text>
+                    )}
                 {poi_failed &&
                     !poa_failed &&
+                    !poi_poa_none &&
                     jurisdiction_selected_shortcode &&
                     jurisdiction_selected_shortcode !== 'svg' && (
                         <Text
@@ -296,6 +303,7 @@ const JurisdictionModalContent = ({
                     )}
                 {poa_failed &&
                     !poi_failed &&
+                    !poi_poa_none &&
                     jurisdiction_selected_shortcode &&
                     jurisdiction_selected_shortcode !== 'svg' && (
                         <Text
@@ -352,17 +360,13 @@ const JurisdictionModalContent = ({
                         </Text>
                     </div>
                 )}
-                {!poa_failed &&
-                    !poi_failed &&
-                    is_pending_authentication &&
-                    jurisdiction_selected_shortcode !== 'svg' &&
-                    jurisdiction_selected_shortcode && (
-                        <div className='cfd-jurisdiction-card__footnote--pending'>
-                            <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
-                                <Localize i18n_default_text='Your documents are being reviewed, we will notify you once this account is ready for you to create.' />
-                            </Text>
-                        </div>
-                    )}
+                {poi_poa_pending && jurisdiction_selected_shortcode !== 'svg' && jurisdiction_selected_shortcode && (
+                    <div className='cfd-jurisdiction-card__footnote--pending'>
+                        <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
+                            <Localize i18n_default_text='Your documents are being reviewed, we will notify you once this account is ready for you to create.' />
+                        </Text>
+                    </div>
+                )}
             </>
         );
     };
@@ -393,7 +397,7 @@ const JurisdictionModalContent = ({
                         financial_available_accounts={financial_available_accounts}
                         account_type={account_type}
                         is_fully_authenticated={is_fully_authenticated}
-                        is_pending_authentication={is_pending_authentication}
+                        poi_poa_pending={poi_poa_pending}
                         poa_status={poa_status}
                         poi_status={poi_status}
                         setJurisdictionSelectedShortcode={setJurisdictionSelectedShortcode}
@@ -410,7 +414,7 @@ const JurisdictionModalContent = ({
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
                         is_fully_authenticated={is_fully_authenticated}
-                        is_pending_authentication={is_pending_authentication}
+                        poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
                         poi_status={poi_status}
@@ -428,7 +432,7 @@ const JurisdictionModalContent = ({
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
                         is_fully_authenticated={is_fully_authenticated}
-                        is_pending_authentication={is_pending_authentication}
+                        poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
                         poi_status={poi_status}
@@ -445,7 +449,7 @@ const JurisdictionModalContent = ({
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
                         is_fully_authenticated={is_fully_authenticated}
-                        is_pending_authentication={is_pending_authentication}
+                        poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
                         poi_status={poi_status}
@@ -463,7 +467,7 @@ const JurisdictionModalContent = ({
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
                         is_fully_authenticated={is_fully_authenticated}
-                        is_pending_authentication={is_pending_authentication}
+                        poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
                         poi_status={poi_status}

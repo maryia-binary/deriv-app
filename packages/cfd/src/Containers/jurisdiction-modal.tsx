@@ -57,7 +57,6 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     toggleJurisdictionModal: () => void;
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
     is_fully_authenticated: boolean;
-    is_pending_authentication: boolean;
     openPasswordModal: (account_type: TOpenAccountTransferMeta) => void;
     setJurisdictionSelectedShortcode: (shortcode: string) => void;
     toggleCFDVerificationModal: () => void;
@@ -76,7 +75,6 @@ const JurisdictionModal = ({
     toggleJurisdictionModal,
     trading_platform_available_accounts,
     is_fully_authenticated,
-    is_pending_authentication,
     openPasswordModal,
     setJurisdictionSelectedShortcode,
     toggleCFDVerificationModal,
@@ -182,7 +180,7 @@ const JurisdictionModal = ({
                                 poi_status={poi_status}
                                 is_eu={is_eu}
                                 is_fully_authenticated={is_fully_authenticated}
-                                is_pending_authentication={is_pending_authentication}
+                                poi_poa_pending={poi_poa_pending}
                                 checked={checked}
                                 setChecked={setChecked}
                                 poi_failed={poi_failed}
@@ -234,7 +232,7 @@ const JurisdictionModal = ({
                                 poi_status={poi_status}
                                 is_eu={is_eu}
                                 is_fully_authenticated={is_fully_authenticated}
-                                is_pending_authentication={is_pending_authentication}
+                                poi_poa_pending={poi_poa_pending}
                                 checked={checked}
                                 setChecked={setChecked}
                                 poi_failed={poi_failed}
@@ -263,7 +261,6 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     is_eu_country: client.is_eu_country,
     landing_companies: client.landing_companies,
     is_fully_authenticated: client.is_fully_authenticated,
-    is_pending_authentication: client.is_pending_authentication,
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
     residence: client.residence,
     toggleCFDVerificationModal: modules.cfd.toggleCFDVerificationModal,

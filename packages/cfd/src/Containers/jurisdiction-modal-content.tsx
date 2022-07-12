@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Text, Checkbox } from '@deriv/components';
+import { Icon, Text, Checkbox, StaticUrl } from '@deriv/components';
 import { PoaStatusCodes } from '@deriv/account';
 import { Localize } from '@deriv/translations';
 import classNames from 'classnames';
@@ -390,6 +390,13 @@ const JurisdictionModalContent = ({
         );
     };
 
+    const dbvi_company_names: { [key: string]: string } = {
+        bvi: 'Deriv (BVI) Ltd',
+        labuan: 'Deriv (FX) Ltd',
+        maltainvest: 'Deriv Investments (Europe) Limited',
+        vanuatu: 'Deriv (V) Ltd',
+    };
+
     const ModalCheckbox = ({
         onCheck,
         is_checked,
@@ -400,7 +407,11 @@ const JurisdictionModalContent = ({
         <div className='cfd-jurisdiction-card__jurisdiction-checkbox'>
             <Checkbox onChange={() => onCheck(!checked)} value={is_checked} />
             <Text as='p' align='center' size='xs' line_height='xs'>
-                I confirm and accept Deriv (V) Ltd &#39;s Terms and Conditions
+                <Localize
+                    i18n_default_text="I confirm and accept {{company}} 's <0>Terms and Conditions</0>"
+                    values={{ company: dbvi_company_names[jurisdiction_selected_shortcode] }}
+                    components={[<StaticUrl key={0} className='link' href='terms-and-conditions' />]}
+                />
             </Text>
         </div>
     );

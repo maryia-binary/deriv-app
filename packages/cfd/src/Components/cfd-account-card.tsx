@@ -163,7 +163,6 @@ const CFDAccountCardComponent = ({
     dxtrade_tokens,
     existing_accounts_data,
     has_banner,
-    has_cfd_account,
     has_cfd_account_error,
     has_real_account,
     is_accounts_switcher_on,
@@ -499,7 +498,7 @@ const CFDAccountCardComponent = ({
                                 <Localize i18n_default_text='Download the app' />
                             </a>
                         )}
-                        {!existing_data && !has_cfd_account && is_logged_in && (
+                        {!existing_data && is_logged_in && (
                             <CFDAccountCardAction
                                 button_label={button_label}
                                 handleClickSwitchAccount={handleClickSwitchAccount}

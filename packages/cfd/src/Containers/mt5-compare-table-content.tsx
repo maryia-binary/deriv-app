@@ -179,7 +179,7 @@ const content: TModalContentProps[] = [
                     localize('Cryptocurrencies'),
                 ],
             },
-            financial_bvi: {
+            financial_vanuatu: {
                 text: [localize('Forex'), localize('Commodities')],
             },
             financial_labuan: { text: [localize('Forex'), localize('Cryptocurrencies')] },
@@ -215,16 +215,33 @@ const DMT5CompareModalContent = ({
     );
 
     const getAvailableAccountsContent = (_content: TModalContentProps[]) => {
-        return _content.map(row_data => ({
-            ...row_data,
-            values: Object.entries(row_data.values).reduce(
+        return _content.map(row_data => {
+            const available_accounts_values = Object.entries(row_data.values).reduce(
                 (acc, [key, value]) =>
                     available_accounts_keys.includes(key)
                         ? { ...acc, [key as keyof Record<string, TRowItem>]: value }
                         : acc,
                 {} as Record<string, TRowItem>
-            ),
-        }));
+            );
+            const content_data = {
+                ...row_data,
+                values: available_accounts_values,
+            };
+            if (available_accounts_keys.length < 6 && !show_eu_related) {
+                if (row_data.id === 'leverage') {
+                    if (available_accounts_keys.includes('financial_svg'))
+                        content_data.values.financial_svg = row_data.values.financial_vanuatu;
+                    if (available_accounts_keys.includes('financial_bvi'))
+                        content_data.values.financial_bvi = row_data.values.financial_vanuatu;
+                } else if (row_data.id === 'instruments') {
+                    if (available_accounts_keys.includes('synthetic_bvi'))
+                        content_data.values.synthetic_bvi = row_data.values.synthetic_svg;
+                    if (available_accounts_keys.includes('financial_bvi'))
+                        content_data.values.financial_bvi = row_data.values.financial_svg;
+                }
+            }
+            return content_data;
+        });
     };
 
     const getAvailableAccountsFooterButtons = (_footer_button_data: TFooterButtonData[]) => {

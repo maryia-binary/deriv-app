@@ -54,7 +54,7 @@ export default class CFDStore extends BaseStore {
 
     @computed
     get has_cfd_account() {
-        return this.current_list.length > 0;
+        return Object.keys(this.current_list).length > 0;
     }
 
     @computed
@@ -66,7 +66,7 @@ export default class CFDStore extends BaseStore {
 
     @computed
     get current_list() {
-        const list = [];
+        const list = {};
 
         this.root_store.client.mt5_login_list.forEach(account => {
             // e.g. mt5.real.financial_stp

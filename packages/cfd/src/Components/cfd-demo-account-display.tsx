@@ -39,9 +39,7 @@ type TCFDDemoAccountDisplayProps = {
         meta: TOpenAccountTransferMeta
     ) => void;
     platform: string;
-    current_list: Array<DetailsOfEachMT5Loginid> & {
-        [key: string]: DetailsOfEachMT5Loginid | TTradingPlatformAccounts;
-    };
+    current_list: Record<string, DetailsOfEachMT5Loginid>;
     has_cfd_account: boolean;
     openPasswordManager: (login?: string, title?: string, group?: string, type?: string, server?: string) => void;
     residence: string;

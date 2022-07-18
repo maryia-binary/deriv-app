@@ -47,9 +47,7 @@ type TCFDRealAccountDisplayProps = {
     isAccountOfTypeDisabled: (
         account: Array<DetailsOfEachMT5Loginid> & { [key: string]: DetailsOfEachMT5Loginid | TTradingPlatformAccounts }
     ) => boolean;
-    current_list: Array<DetailsOfEachMT5Loginid> & {
-        [key: string]: DetailsOfEachMT5Loginid | TTradingPlatformAccounts;
-    };
+    current_list: Record<string, DetailsOfEachMT5Loginid>;
     has_cfd_account: boolean;
     openPasswordManager: (login?: string, title?: string, group?: string, type?: string, server?: string) => void;
     toggleAccountsDialog: (is_accounts_switcher_on?: boolean) => void;

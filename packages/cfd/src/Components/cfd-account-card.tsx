@@ -471,15 +471,6 @@ const CFDAccountCardComponent = ({
                                 </Button>
                             </div>
                         )}
-                        {!existing_data && has_cfd_account && (
-                            <Button
-                                className='cfd-account-card__account-selection'
-                                onClick={onSelectAccount}
-                                type='button'
-                            >
-                                <Localize i18n_default_text='Select' />
-                            </Button>
-                        )}
                         {existing_data &&
                             is_logged_in &&
                             !is_web_terminal_unsupported &&

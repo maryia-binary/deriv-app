@@ -93,11 +93,9 @@ type TCFDDashboardProps = RouteComponentProps & {
     beginRealSignupForMt5: () => void;
     country: string;
     createCFDAccount: (objCFDAccount: TObjectCFDAccount) => void;
-    current_list: Array<DetailsOfEachMT5Loginid> & { [key: string]: DetailsOfEachMT5Loginid };
+    current_list: Record<string, DetailsOfEachMT5Loginid>;
     dxtrade_accounts_list_error: null;
-    isAccountOfTypeDisabled: (
-        account: Array<DetailsOfEachMT5Loginid> & { [key: string]: DetailsOfEachMT5Loginid }
-    ) => boolean;
+    isAccountOfTypeDisabled: (account: Record<string, DetailsOfEachMT5Loginid>) => boolean;
     is_accounts_switcher_on: boolean;
     is_dark_mode_on: boolean;
     is_eu: boolean;

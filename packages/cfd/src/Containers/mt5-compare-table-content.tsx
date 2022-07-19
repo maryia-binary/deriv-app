@@ -221,8 +221,7 @@ const DMT5CompareModalContent = ({
     const getAvailableAccountsContent = (_content: TModalContentProps[]) => {
         return _content.map(row_data => {
             const available_accounts_values = Object.entries(row_data.values).reduce(
-                (acc, [key, value]) =>
-                    available_accounts_keys.includes(key) ? { ...acc, [key as keyof TValues]: value } : acc,
+                (acc, [key, value]) => (available_accounts_keys.includes(key) ? { ...acc, [key]: value } : acc),
                 {} as TValues
             );
             const content_data = { ...row_data, values: {} as TValues };

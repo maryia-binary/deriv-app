@@ -13,15 +13,17 @@ type TRowItem = {
     tooltip_msg?: string;
 };
 
+type TValues = Record<string, TRowItem | undefined>;
+
 type TInstrumentsRowProps = {
     attr: string;
-    val: Record<string, TRowItem>;
+    val: TValues;
 };
 
 type TModalContentProps = {
     id: string;
     attribute: string;
-    values: Record<string, TRowItem>;
+    values: TValues;
 };
 
 type TFooterButtonData = { label: string; action: string };
@@ -123,10 +125,10 @@ const content: TModalContentProps[] = [
         id: 'counterparty',
         attribute: localize('Counterparty company'),
         values: {
-            synthetic_svg: { text: localize('Deriv(SVG) LLC') },
+            synthetic_svg: { text: localize('Deriv (SVG) LLC') },
             synthetic_bvi: { text: localize('Deriv (BVI) Ltd') },
             financial_svg: { text: localize('Deriv (SVG) LLC') },
-            financial_bvi: { text: localize('Deriv (SVG) LLC') },
+            financial_bvi: { text: localize('Deriv (BVI) Ltd') },
             financial_vanuatu: { text: localize('Deriv (V) Ltd') },
             financial_labuan: { text: localize('Deriv (FX) Ltd') },
         },
@@ -213,21 +215,31 @@ const DMT5CompareModalContent = ({
     const available_accounts_keys = trading_platform_available_accounts.map(
         account => `${account.market_type === 'gaming' ? 'synthetic' : account.market_type}_${account.shortcode}`
     );
+    const synthetic_accounts_count = available_accounts_keys.filter(key => key.startsWith('synthetic')).length;
+    const financial_accounts_count = available_accounts_keys.filter(key => key.startsWith('financial')).length;
 
     const getAvailableAccountsContent = (_content: TModalContentProps[]) => {
         return _content.map(row_data => {
             const available_accounts_values = Object.entries(row_data.values).reduce(
                 (acc, [key, value]) =>
-                    available_accounts_keys.includes(key)
-                        ? { ...acc, [key as keyof Record<string, TRowItem>]: value }
-                        : acc,
-                {} as Record<string, TRowItem>
+                    available_accounts_keys.includes(key) ? { ...acc, [key as keyof TValues]: value } : acc,
+                {} as TValues
             );
-            const content_data = {
-                ...row_data,
-                values: available_accounts_values,
-            };
+            const content_data = { ...row_data, values: {} as TValues };
             if (available_accounts_keys.length < 6 && !show_eu_related) {
+                // order of the values matters for data to be correctly displayed in the table
+                const sorted_values = [
+                    'synthetic_svg',
+                    'synthetic_bvi',
+                    'financial_svg',
+                    'financial_bvi',
+                    'financial_vanuatu',
+                    'financial_labuan',
+                ];
+                content_data.values = sorted_values.reduce(
+                    (acc, el) => (available_accounts_keys.includes(el) ? { ...acc, [el]: undefined } : acc),
+                    {}
+                );
                 if (row_data.id === 'leverage') {
                     if (available_accounts_keys.includes('financial_svg'))
                         content_data.values.financial_svg = row_data.values.financial_vanuatu;
@@ -240,7 +252,7 @@ const DMT5CompareModalContent = ({
                         content_data.values.financial_bvi = row_data.values.financial_svg;
                 }
             }
-            return content_data;
+            return { ...content_data, values: { ...content_data.values, ...available_accounts_values } };
         });
     };
 
@@ -320,7 +332,10 @@ const DMT5CompareModalContent = ({
             className={
                 show_eu_related
                     ? 'cfd-real-compare-accounts-row-eu'
-                    : 'cfd-real-compare-accounts__table-row--instruments'
+                    : classNames('cfd-real-compare-accounts__table-row--instruments', {
+                          [`cfd-real-compare-accounts__row-with-columns-count-${available_accounts_keys.length + 1}`]:
+                              available_accounts_keys.length < 6,
+                      })
             }
         >
             <Table.Cell fixed>
@@ -331,15 +346,15 @@ const DMT5CompareModalContent = ({
 
             {Object.keys(val).map(rowKey => (
                 <Table.Cell key={rowKey} className='cfd-real-compare-accounts__table-row-item'>
-                    {Array.isArray(val[rowKey].text) ? (
-                        (val[rowKey].text as []).map((item, index) => (
+                    {Array.isArray(val[rowKey]?.text) ? (
+                        (val[rowKey]?.text as []).map((item, index) => (
                             <Text key={index} as='p' weight=' normal' align='center' color='prominent' size='xxxs'>
                                 {item}
                             </Text>
                         ))
                     ) : (
                         <Text as='p' weight='normal' align='center' color='prominent' size='xxxs'>
-                            {val[rowKey].text}
+                            {val[rowKey]?.text}
                         </Text>
                     )}
                 </Table.Cell>
@@ -359,6 +374,9 @@ const DMT5CompareModalContent = ({
                         ? 'cfd-real-compare-accounts-row-eu'
                         : classNames('cfd-real-compare-accounts__table-row', {
                               'cfd-real-compare-accounts__table-row--leverage': is_leverage,
+                              [`cfd-real-compare-accounts__row-with-columns-count-${
+                                  available_accounts_keys.length + 1
+                              }`]: available_accounts_keys.length < 6,
                           })
                 }
             >
@@ -372,7 +390,7 @@ const DMT5CompareModalContent = ({
                     <Table.Cell
                         key={item}
                         className={classNames('cfd-real-compare-accounts__table-row-item', {
-                            'cfd-real-compare-accounts__table-row-item--tooltip': values[item].tooltip_msg,
+                            'cfd-real-compare-accounts__table-row-item--tooltip': values[item]?.tooltip_msg,
                         })}
                     >
                         <>
@@ -383,9 +401,9 @@ const DMT5CompareModalContent = ({
                                 color='prominent'
                                 size={getContentSize(id)}
                             >
-                                {values[item].text}
+                                {values[item]?.text}
                             </Text>
-                            {values[item].tooltip_msg && (
+                            {values[item]?.tooltip_msg && (
                                 <Popover
                                     alignment='left'
                                     className='cfd-compare-accounts-tooltip'
@@ -393,7 +411,7 @@ const DMT5CompareModalContent = ({
                                     icon='info'
                                     disable_message_icon
                                     is_bubble_hover_enabled
-                                    message={values[item].tooltip_msg}
+                                    message={values[item]?.tooltip_msg}
                                     zIndex={9999}
                                 />
                             )}
@@ -414,7 +432,10 @@ const DMT5CompareModalContent = ({
                                 className={
                                     show_eu_related
                                         ? 'cfd-real-compare-accounts-row-eu'
-                                        : 'cfd-real-compare-accounts__table-header'
+                                        : classNames('cfd-real-compare-accounts__table-header', {
+                                              [`cfd-real-compare-accounts__table-header-for-synthetic-${synthetic_accounts_count}-financial-${financial_accounts_count}`]:
+                                                  available_accounts_keys.length < 6,
+                                          })
                                 }
                             >
                                 <Table.Head fixed className='cfd-real-compare-accounts__table-empty-cell' />
@@ -438,8 +459,12 @@ const DMT5CompareModalContent = ({
                             <Table.Row
                                 className={
                                     show_eu_related
-                                        ? 'cfd-real-compare-accounts-row-eu'
-                                        : 'cfd-real-compare-accounts__table-footer'
+                                        ? 'cfd-real-compare-accounts-row-eu columns-2'
+                                        : classNames('cfd-real-compare-accounts__table-footer', {
+                                              [`cfd-real-compare-accounts__row-with-columns-count-${
+                                                  available_accounts_keys.length + 1
+                                              }`]: available_accounts_keys.length < 6,
+                                          })
                                 }
                             >
                                 <Table.Cell fixed className='cfd-real-compare-accounts__table-empty-cell' />

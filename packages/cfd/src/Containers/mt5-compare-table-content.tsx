@@ -239,17 +239,15 @@ const DMT5CompareModalContent = ({
                     (acc, el) => (available_accounts_keys.includes(el) ? { ...acc, [el]: undefined } : acc),
                     {}
                 );
-                if (row_data.id === 'leverage') {
-                    if (available_accounts_keys.includes('financial_svg'))
-                        content_data.values.financial_svg = row_data.values.financial_vanuatu;
-                    if (available_accounts_keys.includes('financial_bvi'))
-                        content_data.values.financial_bvi = row_data.values.financial_vanuatu;
-                } else if (row_data.id === 'instruments') {
-                    if (available_accounts_keys.includes('synthetic_bvi'))
-                        content_data.values.synthetic_bvi = row_data.values.synthetic_svg;
-                    if (available_accounts_keys.includes('financial_bvi'))
-                        content_data.values.financial_bvi = row_data.values.financial_svg;
-                }
+                available_accounts_keys.forEach(key => {
+                    if (row_data.id === 'leverage' && (key === 'financial_svg' || key === 'financial_bvi')) {
+                        content_data.values[key] = row_data.values.financial_vanuatu;
+                    } else if (row_data.id === 'instruments' && key === 'synthetic_bvi') {
+                        content_data.values[key] = row_data.values.synthetic_svg;
+                    } else if (row_data.id === 'instruments' && key === 'financial_bvi') {
+                        content_data.values[key] = row_data.values.financial_svg;
+                    }
+                });
             }
             return { ...content_data, values: { ...content_data.values, ...available_accounts_values } };
         });
@@ -438,14 +436,16 @@ const DMT5CompareModalContent = ({
                                 }
                             >
                                 <Table.Head fixed className='cfd-real-compare-accounts__table-empty-cell' />
-                                {!show_eu_related && (
+                                {!show_eu_related && synthetic_accounts_count > 0 && (
                                     <Table.Head className='cfd-real-compare-accounts__table-header-item'>
                                         {localize('Synthetic')}
                                     </Table.Head>
                                 )}
-                                <Table.Head className='cfd-real-compare-accounts__table-header-item'>
-                                    {show_eu_related ? localize('CFDs') : localize('Financial')}
-                                </Table.Head>
+                                {financial_accounts_count > 0 && (
+                                    <Table.Head className='cfd-real-compare-accounts__table-header-item'>
+                                        {show_eu_related ? localize('CFDs') : localize('Financial')}
+                                    </Table.Head>
+                                )}
                             </Table.Row>
                         </Table.Header>
 

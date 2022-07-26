@@ -529,7 +529,6 @@ const AccountSwitcher = props => {
                                                 is_dark_mode_on={props.is_dark_mode_on}
                                                 is_eu={props.is_eu}
                                                 key={account.login}
-                                                account_type={account.account_type}
                                                 market_type={account.market_type}
                                                 sub_account_type={account.sub_account_type}
                                                 balance={account.balance}
@@ -739,7 +738,6 @@ const AccountSwitcher = props => {
                                                 is_dark_mode_on={props.is_dark_mode_on}
                                                 is_eu={props.is_eu}
                                                 key={account.login}
-                                                account_type={account.account_type}
                                                 market_type={account.market_type}
                                                 sub_account_type={account.sub_account_type}
                                                 balance={account.balance}

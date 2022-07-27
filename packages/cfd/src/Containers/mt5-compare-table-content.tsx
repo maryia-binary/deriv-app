@@ -226,8 +226,18 @@ const DMT5CompareModalContent = ({
     const available_accounts_keys = trading_platform_available_accounts.map(
         account => `${account.market_type === 'gaming' ? 'synthetic' : account.market_type}_${account.shortcode}`
     );
-    const synthetic_accounts_count = available_accounts_keys.filter(key => key.startsWith('synthetic')).length;
-    const financial_accounts_count = available_accounts_keys.filter(key => key.startsWith('financial')).length;
+    const logged_out_available_accounts_count = show_eu_related ? 1 : 6;
+    const available_accounts_count = is_logged_in
+        ? available_accounts_keys.length
+        : logged_out_available_accounts_count;
+    const synthetic_accounts_count =
+        !is_logged_in && !show_eu_related
+            ? 2
+            : available_accounts_keys.filter(key => key.startsWith('synthetic')).length;
+    const financial_accounts_count =
+        !is_logged_in && !show_eu_related
+            ? 4
+            : available_accounts_keys.filter(key => key.startsWith('financial')).length || 1;
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
@@ -253,6 +263,7 @@ const DMT5CompareModalContent = ({
     }, []);
 
     const getAvailableAccountsContent = (_content: TModalContentProps[]) => {
+        if (!is_logged_in) return _content;
         return _content.map(row_data => {
             const available_accounts_values = Object.entries(row_data.values).reduce(
                 (acc, [key, value]) => (available_accounts_keys.includes(key) ? { ...acc, [key]: value } : acc),
@@ -387,8 +398,8 @@ const DMT5CompareModalContent = ({
                 show_eu_related
                     ? 'cfd-real-compare-accounts-row-eu'
                     : classNames('cfd-real-compare-accounts__table-row--instruments', {
-                          [`cfd-real-compare-accounts__row-with-columns-count-${available_accounts_keys.length + 1}`]:
-                              available_accounts_keys.length < 6,
+                          [`cfd-real-compare-accounts__row-with-columns-count-${available_accounts_count + 1}`]:
+                              available_accounts_count < 6,
                       })
             }
         >
@@ -428,9 +439,8 @@ const DMT5CompareModalContent = ({
                         ? 'cfd-real-compare-accounts-row-eu'
                         : classNames('cfd-real-compare-accounts__table-row', {
                               'cfd-real-compare-accounts__table-row--leverage': is_leverage,
-                              [`cfd-real-compare-accounts__row-with-columns-count-${
-                                  available_accounts_keys.length + 1
-                              }`]: available_accounts_keys.length < 6,
+                              [`cfd-real-compare-accounts__row-with-columns-count-${available_accounts_count + 1}`]:
+                                  available_accounts_count < 6,
                           })
                 }
             >
@@ -499,7 +509,7 @@ const DMT5CompareModalContent = ({
                                         ? 'cfd-real-compare-accounts-row-eu'
                                         : classNames('cfd-real-compare-accounts__table-header', {
                                               [`cfd-real-compare-accounts__table-header-for-synthetic-${synthetic_accounts_count}-financial-${financial_accounts_count}`]:
-                                                  available_accounts_keys.length < 6,
+                                                  available_accounts_count < 6,
                                           })
                                 }
                             >
@@ -522,15 +532,15 @@ const DMT5CompareModalContent = ({
                                 <Row key={row.id} {...row} />
                             ))}
                         </Table.Body>
-                        {is_logged_in && (
+                        {
                             <Table.Row
                                 className={
                                     show_eu_related
                                         ? 'cfd-real-compare-accounts-row-eu columns-2'
                                         : classNames('cfd-real-compare-accounts__table-footer', {
                                               [`cfd-real-compare-accounts__row-with-columns-count-${
-                                                  available_accounts_keys.length + 1
-                                              }`]: available_accounts_keys.length < 6,
+                                                  available_accounts_count + 1
+                                              }`]: available_accounts_count < 6,
                                           })
                                 }
                             >
@@ -568,7 +578,7 @@ const DMT5CompareModalContent = ({
                                         </Table.Cell>
                                     ))}
                             </Table.Row>
-                        )}
+                        }
                     </Table>
                 </div>
             </div>

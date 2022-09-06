@@ -10,12 +10,14 @@ import {
     isRiseFallEqual,
 } from 'Stores/Modules/Trading/Helpers/allow-equals';
 import { MultiplierOptionsWidget } from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets.jsx';
+import AccumulatorsAmountMobile from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-amount-mobile.jsx';
 import RiskManagementInfo from '../Elements/Multiplier/risk-management-info.jsx';
 import MobileWidget from '../Elements/mobile-widget.jsx';
 import ContractType from '../../Containers/contract-type.jsx';
 import { BarrierMobile, LastDigitMobile } from '../../Containers/trade-params-mobile.jsx';
 import Purchase from '../../Containers/purchase.jsx';
 import 'Sass/app/_common/mobile-widget.scss';
+import AccumulatorsInfoDisplay from './TradeParams/Accumulator/accumulators-info-display.jsx';
 
 const CollapsibleTradeParams = ({
     form_components,
@@ -60,11 +62,17 @@ const CollapsibleTradeParams = ({
                     <BarrierMobile />
                 </div>
             )}
-            <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />
+            {is_accumulator && isVisible('amount') && <AccumulatorsAmountMobile />}
+            {!is_accumulator && <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />}
             {has_allow_equals && <AllowEqualsMobile collapsible='true' />}
             {is_multiplier && (
                 <div collapsible='true'>
                     <RiskManagementInfo />
+                </div>
+            )}
+            {is_accumulator && (
+                <div collapsible='true'>
+                    <AccumulatorsInfoDisplay />
                 </div>
             )}
             <div className={`purchase-container${is_accumulator ? '--accumulator' : ''}`}>

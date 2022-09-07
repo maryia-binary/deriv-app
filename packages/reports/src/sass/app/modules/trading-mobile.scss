@@ -24,7 +24,10 @@
         }
     }
     /** @define barrier; weak */
-    .barrier {
+    .barrier,
+    .barrier_1,
+    .barrier_2,
+    .amount {
         .draggable {
             pointer-events: none;
 
@@ -53,6 +56,20 @@
                 align-items: center;
                 justify-content: flex-end;
                 padding-right: 0.8rem;
+            }
+            &:is(.amount__widget) {
+                grid-template-columns: 5fr 1fr;
+            }
+            .trade-container {
+                &__amount {
+                    margin: 0.3rem 0 0;
+
+                    .trade-container__input {
+                        font-weight: bold;
+                        max-width: 100%;
+                        padding: 0 4rem;
+                    }
+                }
             }
         }
         &__fields {

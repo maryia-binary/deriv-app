@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { AMOUNT_MAX_LENGTH, getDecimalPlaces } from '@deriv/shared';
 import { MobileWrapper } from '@deriv/components';
-import { Input } from '../amount.jsx';
-import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { connect } from 'Stores/connect';
 import { localize } from '@deriv/translations';
+import LabeledQuantityInputMobile from '../../LabeledQuantityInputMobile';
 
 const AccumulatorsAmountMobile = ({
     amount,
@@ -18,25 +18,35 @@ const AccumulatorsAmountMobile = ({
 }) => {
     const error_messages = validation_errors.amount;
     return (
-        <React.Fragment>
+        <>
             <MobileWrapper>
-                <div className='barrier__widget'>
-                    <Fieldset className='barrier__fields'>
-                        <Input
-                            amount={amount}
-                            currency={currency}
-                            current_focus={current_focus}
-                            error_messages={error_messages}
-                            is_single_currency={is_single_currency}
-                            is_nativepicker={is_nativepicker}
-                            onChange={onChange}
-                            setCurrentFocus={setCurrentFocus}
-                        />
-                    </Fieldset>
-                    <h2 className='barrier__widget-title'>{localize('Stake')}</h2>
-                </div>
+                <LabeledQuantityInputMobile
+                    input_label={localize('Stake')}
+                    className='trade-container__amount'
+                    classNameInlinePrefix='trade-container__currency'
+                    classNameInput='trade-container__input'
+                    currency={currency}
+                    current_focus={current_focus}
+                    error_messages={error_messages}
+                    fractional_digits={getDecimalPlaces(currency)}
+                    id='dt_amount_input'
+                    inline_prefix={is_single_currency ? currency : null}
+                    is_autocomplete_disabled
+                    is_float
+                    is_hj_whitelisted
+                    is_incrementable
+                    is_nativepicker={is_nativepicker}
+                    is_negative_disabled
+                    max_length={AMOUNT_MAX_LENGTH}
+                    name='amount'
+                    onChange={onChange}
+                    type='tel'
+                    value={amount}
+                    ariaLabel={localize('Amount')}
+                    setCurrentFocus={setCurrentFocus}
+                />
             </MobileWrapper>
-        </React.Fragment>
+        </>
     );
 };
 

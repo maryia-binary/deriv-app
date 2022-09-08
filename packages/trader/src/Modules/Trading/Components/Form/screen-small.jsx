@@ -14,22 +14,27 @@ import {
     MultiplierOptionsWidget,
 } from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets.jsx';
 import AccumulatorsAmountMobile from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-amount-mobile.jsx';
-import RiskManagementInfo from '../Elements/Multiplier/risk-management-info.jsx';
-import MobileWidget from '../Elements/mobile-widget.jsx';
-import ContractType from '../../Containers/contract-type.jsx';
-import { BarrierMobile, LastDigitMobile } from '../../Containers/trade-params-mobile.jsx';
-import Purchase from '../../Containers/purchase.jsx';
+import AccumulatorsInfoDisplay from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-info-display.jsx';
+import { BarrierMobile, LastDigitMobile } from 'Modules/Trading/Containers/trade-params-mobile.jsx';
+import ContractType from 'Modules/Trading/Containers/contract-type.jsx';
+import MobileWidget from 'Modules/Trading/Components/Elements/mobile-widget.jsx';
+import Purchase from 'Modules/Trading/Containers/purchase.jsx';
+import RiskManagementInfo from 'Modules/Trading/Components/Elements/Multiplier/risk-management-info.jsx';
+import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/take-profit.jsx';
 import 'Sass/app/_common/mobile-widget.scss';
-import AccumulatorsInfoDisplay from './TradeParams/Accumulator/accumulators-info-display.jsx';
+import classNames from 'classnames';
 
 const CollapsibleTradeParams = ({
     form_components,
     has_allow_equals,
+    has_take_profit,
     previous_symbol,
     is_allow_equal,
     is_accumulator,
     is_trade_params_expanded,
     is_multiplier,
+    onChange,
+    take_profit,
     setIsTradeParamsExpanded,
 }) => {
     React.useEffect(() => {
@@ -67,6 +72,11 @@ const CollapsibleTradeParams = ({
                 </div>
             )}
             {is_accumulator && isVisible('amount') && <AccumulatorsAmountMobile />}
+            {is_accumulator && isVisible('take_profit') && (
+                <div collapsible='true' className={classNames('take-profit', 'mobile-widget')}>
+                    <TakeProfit take_profit={take_profit} has_take_profit={has_take_profit} onChange={onChange} />
+                </div>
+            )}
             {!is_accumulator && <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />}
             {has_allow_equals && <AllowEqualsMobile collapsible='true' />}
             {is_multiplier && (
@@ -133,7 +143,10 @@ export default connect(({ modules }) => ({
     expiry_type: modules.trade.expiry_type,
     contract_start_type: modules.trade.contract_start_type,
     form_components: modules.trade.form_components,
+    has_take_profit: modules.trade.has_take_profit,
+    onChange: modules.trade.onChange,
     previous_symbol: modules.trade.previous_symbol,
     is_trade_params_expanded: modules.trade.is_trade_params_expanded,
     setIsTradeParamsExpanded: modules.trade.setIsTradeParamsExpanded,
+    take_profit: modules.trade.take_profit,
 }))(ScreenSmall);

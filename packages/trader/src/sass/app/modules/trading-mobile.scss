@@ -315,6 +315,9 @@
                 &--empty {
                     display: none;
                 }
+                &:is(.trade-params__accumulator-radio-group) {
+                    gap: 1.6rem;
+                }
                 .dc-radio-group__item {
                     min-height: 4.8rem;
                     max-height: 4.8rem;
@@ -329,6 +332,9 @@
 
                     &--selected {
                         border: 1px solid var(--brand-secondary);
+                    }
+                    &:is(.trade-params__accumulator-radio-group *) {
+                        margin-bottom: 0;
                     }
                 }
             }

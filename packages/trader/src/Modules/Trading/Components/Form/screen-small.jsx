@@ -9,7 +9,10 @@ import {
     hasDurationForCallPutEqual,
     isRiseFallEqual,
 } from 'Stores/Modules/Trading/Helpers/allow-equals';
-import { MultiplierOptionsWidget } from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets.jsx';
+import {
+    AccumulatorOptionsWidget,
+    MultiplierOptionsWidget,
+} from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets.jsx';
 import AccumulatorsAmountMobile from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-amount-mobile.jsx';
 import RiskManagementInfo from '../Elements/Multiplier/risk-management-info.jsx';
 import MobileWidget from '../Elements/mobile-widget.jsx';
@@ -51,6 +54,7 @@ const CollapsibleTradeParams = ({
             <div className='trade-params__contract-type-container'>
                 <ContractType />
                 {is_multiplier && <MultiplierOptionsWidget />}
+                {is_accumulator && <AccumulatorOptionsWidget />}
             </div>
             {isVisible('last_digit') && (
                 <div collapsible='true'>

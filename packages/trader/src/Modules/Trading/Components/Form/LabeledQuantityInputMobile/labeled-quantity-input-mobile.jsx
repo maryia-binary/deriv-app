@@ -19,4 +19,4 @@ LabeledQuantityInputMobile.propTypes = {
     ...InputField.propTypes,
 };
 
-export default LabeledQuantityInputMobile;
+export default React.memo(LabeledQuantityInputMobile);

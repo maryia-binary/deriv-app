@@ -548,7 +548,8 @@
 }
 
 /** @define purchase-container; weak */
-.purchase-container {
+.purchase-container,
+.purchase-container--accumulator {
     position: relative;
 
     &__option {

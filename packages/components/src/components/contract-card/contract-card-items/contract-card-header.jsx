@@ -42,7 +42,7 @@ const ContractCardHeader = ({
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
                     'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier,
-                    'dc-contract-card__grid-underlying-trade--trader': !isBot() && !growth_rate,
+                    'dc-contract-card__grid-underlying-trade--trader': !isBot(),
                 })}
             >
                 <div id='dc-contract_card_underlying_label' className='dc-contract-card__underlying-name'>

@@ -296,7 +296,7 @@ export const getDummyAllPositionsForACCU = time_now => {
 export const getDummyProposalInfoForACCU = (growth_rate, response) => {
     return {
         tick_size_barrier: response.proposal.tick_size_barrier,
-        maximum_ticks: response.proposal.maximum_ticks,
+        max_ticks_number: response.proposal.max_ticks_number,
         max_payout: response.proposal.max_payout,
         high_barrier: response.proposal.high_barrier,
         low_barrier: response.proposal.low_barrier,
@@ -376,7 +376,7 @@ export const getDummyProposalResponseForACCU = time_now => {
         msg_type: 'proposal',
         proposal: {
             tick_size_barrier,
-            maximum_ticks: 1000,
+            max_ticks_number: 1000,
             max_payout: 20000,
             high_barrier,
             low_barrier,

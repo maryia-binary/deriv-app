@@ -21,6 +21,7 @@ const ContractCardHeader = ({
     is_mobile,
     is_sell_requested,
     is_valid_to_sell,
+    max_ticks_number,
     onClickSell,
     server_time,
 }) => {
@@ -95,10 +96,12 @@ const ContractCardHeader = ({
                 {(!has_progress_slider || !!is_sold) && <div className='dc-progress-slider--completed' />}
                 {has_progress_slider && !is_sold && (
                     <ProgressSlider
+                        contract_info={contract_info}
                         current_tick={current_tick}
                         expiry_time={date_expiry}
                         getCardLabels={getCardLabels}
                         is_loading={false}
+                        max_ticks_number={max_ticks_number}
                         server_time={server_time}
                         start_time={purchase_time}
                         ticks_count={tick_count}
@@ -118,6 +121,7 @@ ContractCardHeader.propTypes = {
     is_mobile: PropTypes.bool,
     is_sell_requested: PropTypes.bool,
     is_valid_to_sell: PropTypes.bool,
+    max_ticks_number: PropTypes.number,
     onClickSell: PropTypes.func,
     server_time: PropTypes.object,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

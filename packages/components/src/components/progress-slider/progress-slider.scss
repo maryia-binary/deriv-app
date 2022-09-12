@@ -1,6 +1,7 @@
 /** @define dc-progress-slider */
 // Progress Slider
-.dc-progress-slider {
+.dc-progress-slider,
+.dc-progress-slider-accumulator {
     position: relative;
     width: 100%;
     padding: unset;
@@ -19,6 +20,20 @@
         height: 6px;
         width: 100%;
         border-radius: #{$BORDER_RADIUS * 2};
+
+        &:is(.dc-progress-slider-accumulator__track) {
+            height: 1.8rem;
+            background: var(--general-section-1);
+            border-radius: #{$BORDER_RADIUS};
+            overflow: hidden;
+
+            .dc-progress-slider-accumulator__text {
+                position: absolute;
+                color: var(--status-success);
+                width: 100%;
+                text-align: center;
+            }
+        }
     }
     &__ticks {
         position: relative;
@@ -86,6 +101,9 @@
         pointer-events: none;
         transition: width 0.3s;
 
+        &:is(.dc-progress-slider-accumulator__line) {
+            border-radius: #{$BORDER_RADIUS};
+        }
         &--ticks {
             height: 2px;
         }

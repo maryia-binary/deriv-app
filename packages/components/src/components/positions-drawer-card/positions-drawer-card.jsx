@@ -26,6 +26,7 @@ const PositionsDrawerCard = ({
     is_sell_requested,
     is_unsupported,
     is_link_disabled,
+    max_ticks_number,
     profit_loss,
     onClickCancel,
     onClickSell,
@@ -46,7 +47,7 @@ const PositionsDrawerCard = ({
     const is_accumulator = isAccumulatorContract(contract_info.contract_type);
     const is_multiplier = isMultiplierContract(contract_info.contract_type);
     const is_crypto = isCryptoContract(contract_info.underlying);
-    const has_progress_slider = (!is_accumulator && !is_multiplier) || (is_crypto && is_multiplier);
+    const has_progress_slider = !is_multiplier || (is_crypto && is_multiplier);
     const has_ended = !!getEndTime(contract_info);
 
     const loader_el = (
@@ -65,6 +66,7 @@ const PositionsDrawerCard = ({
             is_mobile={is_mobile}
             is_positions
             is_sell_requested={is_sell_requested}
+            max_ticks_number={max_ticks_number}
             onClickSell={onClickSell}
             server_time={server_time}
         />
@@ -209,6 +211,7 @@ PositionsDrawerCard.propTypes = {
     is_sell_requested: PropTypes.bool,
     is_unsupported: PropTypes.bool,
     is_valid_to_sell: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+    max_ticks_number: PropTypes.number,
     onClickRemove: PropTypes.func,
     onClickSell: PropTypes.func,
     onClickCancel: PropTypes.func,

@@ -101,9 +101,6 @@
         pointer-events: none;
         transition: width 0.3s;
 
-        &:is(.dc-progress-slider-accumulator__line) {
-            border-radius: #{$BORDER_RADIUS};
-        }
         &--ticks {
             height: 2px;
         }

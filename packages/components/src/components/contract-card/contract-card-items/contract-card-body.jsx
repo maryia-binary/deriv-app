@@ -158,9 +158,7 @@ const AccumulatorCardBody = ({
     getCardLabels,
     getContractById,
     indicative,
-    is_mobile,
     is_sold,
-    has_progress_slider,
     onMouseLeave,
     removeToast,
     setCurrentFocus,
@@ -173,13 +171,7 @@ const AccumulatorCardBody = ({
 
     return (
         <React.Fragment>
-            <div
-                className={classNames({
-                    'dc-contract-card-items-wrapper--mobile': is_mobile,
-                    'dc-contract-card-items-wrapper': !is_mobile,
-                    'dc-contract-card-items-wrapper--has-progress-slider': has_progress_slider && !is_sold,
-                })}
-            >
+            <div className={classNames('dc-contract-card-items-wrapper')}>
                 <ContractCardItem header={getCardLabels().STAKE} className='dc-contract-card__stake'>
                     <Money amount={buy_price} currency={currency} />
                 </ContractCardItem>
@@ -328,8 +320,6 @@ const ContractCardBody = ({
                 error_message_alignment={error_message_alignment}
                 getCardLabels={getCardLabels}
                 getContractById={getContractById}
-                has_progress_slider={has_progress_slider}
-                is_mobile={is_mobile}
                 indicative={indicative}
                 is_sold={is_sold}
                 onMouseLeave={onMouseLeave}

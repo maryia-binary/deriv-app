@@ -20,8 +20,10 @@ const limit_order = {
 };
 const contract_status = 'open'; // 'lost', 'won' or 'open'
 const position_status = 'profit'; // 'profit' or 'loss'
+const result = ''; // 'won' or 'lost'
 const profit_loss = +0.15;
 const profit_percentage = +1.5;
+const is_sold = 0; // 0 || 1
 const tick_size_barrier = 0.000409;
 const stake = '10.00';
 const contract_type = 'ACCU'; // 'ACCU'
@@ -67,10 +69,11 @@ export const getDummyPOCResponseForACCU = time_now => {
             is_intraday: 1,
             is_path_dependent: 0,
             is_settleable: 0,
-            is_sold: 0,
+            is_sold,
             is_valid_to_cancel: 0,
             is_valid_to_sell: 1,
             limit_order,
+            max_ticks_number: 1000,
             longcode: 'Win payout when every tick of your contract is within ± 0.1 % of the previous tick in AUD/JPY.',
             growth_rate: 0.01,
             profit: profit_loss,
@@ -127,6 +130,7 @@ export const getDummyPortfolioContractsForACCU = time_now => {
             currency: 'USD',
             date_start: dummy_start_time,
             expiry_time: dummy_end_time,
+            max_ticks_number: 1000,
             longcode: 'Win payout when every tick of your contract is within ± 0.1 % of the previous tick in AUD/JPY.',
             payout: 27.45,
             purchase_time: dummy_start_time,
@@ -228,10 +232,11 @@ export const getDummyAllPositionsForACCU = time_now => {
                 is_intraday: 1,
                 is_path_dependent: 0,
                 is_settleable: 0,
-                is_sold: 0,
+                is_sold,
                 is_valid_to_cancel: 0,
                 is_valid_to_sell: 1,
                 limit_order,
+                max_ticks_number: 1000,
                 longcode:
                     'Win payout when every tick of your contract is within ± 0.1 % of the previous tick in AUD/JPY.',
                 growth_rate: 0.01,
@@ -289,6 +294,7 @@ export const getDummyAllPositionsForACCU = time_now => {
             duration: 10,
             duration_unit: 'seconds',
             id: 19459,
+            result,
             status: position_status,
         },
     ];

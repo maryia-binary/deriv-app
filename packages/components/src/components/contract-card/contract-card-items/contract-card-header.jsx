@@ -21,7 +21,6 @@ const ContractCardHeader = ({
     is_mobile,
     is_sell_requested,
     is_valid_to_sell,
-    max_ticks_number,
     onClickSell,
     server_time,
 }) => {
@@ -29,6 +28,7 @@ const ContractCardHeader = ({
     const {
         growth_rate,
         underlying,
+        max_ticks_number,
         multiplier,
         contract_type,
         shortcode,
@@ -42,7 +42,7 @@ const ContractCardHeader = ({
         <>
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
-                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier,
+                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier && !growth_rate,
                     'dc-contract-card__grid-underlying-trade--trader': !isBot(),
                 })}
             >
@@ -96,7 +96,6 @@ const ContractCardHeader = ({
                 {(!has_progress_slider || !!is_sold) && <div className='dc-progress-slider--completed' />}
                 {has_progress_slider && !is_sold && (
                     <ProgressSlider
-                        contract_info={contract_info}
                         current_tick={current_tick}
                         expiry_time={date_expiry}
                         getCardLabels={getCardLabels}
@@ -121,7 +120,6 @@ ContractCardHeader.propTypes = {
     is_mobile: PropTypes.bool,
     is_sell_requested: PropTypes.bool,
     is_valid_to_sell: PropTypes.bool,
-    max_ticks_number: PropTypes.number,
     onClickSell: PropTypes.func,
     server_time: PropTypes.object,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

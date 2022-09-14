@@ -10,7 +10,7 @@ import Text from '../../text';
 import ProgressSlider from '../../progress-slider';
 import DesktopWrapper from '../../desktop-wrapper';
 import MobileWrapper from '../../mobile-wrapper';
-import ProgressSliderMobile from '../../progress-slider-mobile/progress-slider-mobile.jsx';
+import TickCounterProgressBar from './tick-counter-progress-bar.jsx';
 
 const ContractCardHeader = ({
     contract_info,
@@ -91,21 +91,20 @@ const ContractCardHeader = ({
                     ) : null}
                 </MobileWrapper>
             </div>
+            {has_progress_slider && !is_sold && is_accumulator && (
+                <TickCounterProgressBar current_tick={current_tick} max_ticks_duration={max_ticks_number} />
+            )}
             <MobileWrapper>
-                {has_progress_slider && !is_sold && is_accumulator && (
-                    <ProgressSliderMobile current_tick={current_tick} max_ticks_duration={max_ticks_number} />
-                )}
                 <div className='dc-progress-slider--completed' />
             </MobileWrapper>
             <DesktopWrapper>
                 {(!has_progress_slider || !!is_sold) && <div className='dc-progress-slider--completed' />}
-                {has_progress_slider && !is_sold && (
+                {has_progress_slider && !is_sold && !is_accumulator && (
                     <ProgressSlider
                         current_tick={current_tick}
                         expiry_time={date_expiry}
                         getCardLabels={getCardLabels}
                         is_loading={false}
-                        max_ticks_duration={is_accumulator ? max_ticks_number : null}
                         server_time={server_time}
                         start_time={purchase_time}
                         ticks_count={tick_count}

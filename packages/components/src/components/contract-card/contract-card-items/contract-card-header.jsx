@@ -10,6 +10,7 @@ import Text from '../../text';
 import ProgressSlider from '../../progress-slider';
 import DesktopWrapper from '../../desktop-wrapper';
 import MobileWrapper from '../../mobile-wrapper';
+import ProgressSliderMobile from '../../progress-slider-mobile/progress-slider-mobile.jsx';
 
 const ContractCardHeader = ({
     contract_info,
@@ -37,12 +38,13 @@ const ContractCardHeader = ({
         tick_count,
         is_sold,
     } = contract_info;
+    const is_accumulator = contract_type === 'ACCU';
 
     return (
         <>
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
-                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier && !growth_rate,
+                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier && !is_accumulator,
                     'dc-contract-card__grid-underlying-trade--trader': !isBot(),
                 })}
             >
@@ -57,7 +59,7 @@ const ContractCardHeader = ({
                         getContractTypeDisplay={getContractTypeDisplay}
                         is_high_low={isHighLow({ shortcode })}
                         multiplier={multiplier}
-                        growth_rate={growth_rate}
+                        growth_rate={is_accumulator ? growth_rate : null}
                         type={contract_type}
                     />
                 </div>
@@ -90,6 +92,9 @@ const ContractCardHeader = ({
                 </MobileWrapper>
             </div>
             <MobileWrapper>
+                {has_progress_slider && !is_sold && is_accumulator && (
+                    <ProgressSliderMobile current_tick={current_tick} max_ticks_duration={max_ticks_number} />
+                )}
                 <div className='dc-progress-slider--completed' />
             </MobileWrapper>
             <DesktopWrapper>
@@ -100,7 +105,7 @@ const ContractCardHeader = ({
                         expiry_time={date_expiry}
                         getCardLabels={getCardLabels}
                         is_loading={false}
-                        max_ticks_number={max_ticks_number}
+                        max_ticks_duration={is_accumulator ? max_ticks_number : null}
                         server_time={server_time}
                         start_time={purchase_time}
                         ticks_count={tick_count}

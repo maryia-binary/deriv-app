@@ -13,7 +13,7 @@ const ProgressSliderMobile = ({
     current_tick,
     getCardLabels,
     is_loading,
-    max_ticks_number,
+    max_ticks_duration,
     start_time,
     expiry_time,
     server_time,
@@ -21,18 +21,18 @@ const ProgressSliderMobile = ({
 }) => {
     let progress_component_mobile;
     const percentage = getTimePercentage(server_time, start_time, expiry_time);
-    if (ticks_count && !max_ticks_number) {
+    if (ticks_count && !max_ticks_duration) {
         progress_component_mobile = (
             <ProgressTicksMobile current_tick={current_tick} getCardLabels={getCardLabels} ticks_count={ticks_count} />
         );
-    } else if (max_ticks_number) {
+    } else if (max_ticks_duration) {
         progress_component_mobile = (
             <React.Fragment>
-                <div className='dc-progress-slider-mobile-accumulator__track'>
+                <div className='dc-progress-slider-accumulator__track'>
                     <Text size='xxs' weight='bold' className='dc-progress-slider-mobile-accumulator__text'>
-                        {localize('{{current_tick}}/{{max_ticks_number}} Ticks', {
+                        {localize('{{current_tick}}/{{max_ticks_duration}} Ticks', {
                             current_tick,
-                            max_ticks_number,
+                            max_ticks_duration,
                         })}
                     </Text>
                 </div>
@@ -69,7 +69,7 @@ ProgressSliderMobile.propTypes = {
     current_tick: PropTypes.number,
     expiry_time: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     is_loading: PropTypes.bool,
-    max_ticks_number: PropTypes.number,
+    max_ticks_duration: PropTypes.number,
     server_time: PropTypes.object,
     start_time: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     ticks_count: PropTypes.number,

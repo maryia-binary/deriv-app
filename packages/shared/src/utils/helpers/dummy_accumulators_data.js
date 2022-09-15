@@ -18,41 +18,41 @@ const limit_order = {
         value: `${take_profit_price}`,
     },
 };
-const contract_status = 'open'; // 'lost', 'won' or 'open'
-const position_status = 'profit'; // 'profit' or 'loss'
-const result = ''; // 'won' or 'lost'
-const profit_loss = +0.15;
-const profit_percentage = +1.5;
-const is_sold = 0; // 0 || 1
-// let first_time;
-// const winLoseAndOpenContractIn10Sec = () => {
-//     setInterval(() => {
-//         setTimeout(() => {
-//             contract_status = 'won'; // 'lost', 'won' or 'open'
-//             position_status = 'profit'; // 'profit' or 'loss'
-//             result = 'won'; // 'won' or 'lost'
-//             profit_loss = +0.15;
-//             profit_percentage = +1.5;
-//             is_sold = 1; // 0 || 1
-//         }, 10000);
-//         setTimeout(() => {
-//             contract_status = 'lost'; // 'lost', 'won' or 'open'
-//             position_status = 'loss'; // 'profit' or 'loss'
-//             result = 'lost'; // 'won' or 'lost'
-//             profit_loss = -0.15;
-//             profit_percentage = -1.5;
-//             is_sold = 1; // 0 || 1
-//         }, 20000);
-//         setTimeout(() => {
-//             contract_status = 'open'; // 'lost', 'won' or 'open'
-//             position_status = 'profit'; // 'profit' or 'loss'
-//             result = ''; // 'won' or 'lost'
-//             profit_loss = +0.15;
-//             profit_percentage = +1.5;
-//             is_sold = 0; // 0 || 1
-//         }, 30000);
-//     }, 30000);
-// };
+let contract_status = 'open'; // 'lost', 'won' or 'open'
+let position_status = 'profit'; // 'profit' or 'loss'
+let result = ''; // 'won' or 'lost'
+let profit_loss = +0.15;
+let profit_percentage = +1.5;
+let is_sold = 0; // 0 || 1
+let first_time;
+const winLoseAndOpenContractIn10Sec = () => {
+    setInterval(() => {
+        setTimeout(() => {
+            contract_status = 'won'; // 'lost', 'won' or 'open'
+            position_status = 'profit'; // 'profit' or 'loss'
+            result = 'won'; // 'won' or 'lost'
+            profit_loss = +0.15;
+            profit_percentage = +1.5;
+            is_sold = 1; // 0 || 1
+        }, 2000);
+        setTimeout(() => {
+            contract_status = 'lost'; // 'lost', 'won' or 'open'
+            position_status = 'loss'; // 'profit' or 'loss'
+            result = 'lost'; // 'won' or 'lost'
+            profit_loss = -0.15;
+            profit_percentage = -1.5;
+            is_sold = 1; // 0 || 1
+        }, 4000);
+        setTimeout(() => {
+            contract_status = 'open'; // 'lost', 'won' or 'open'
+            position_status = 'profit'; // 'profit' or 'loss'
+            result = ''; // 'won' or 'lost'
+            profit_loss = +0.15;
+            profit_percentage = +1.5;
+            is_sold = 0; // 0 || 1
+        }, 6000);
+    }, 6000);
+};
 const tick_size_barrier = 0.000409;
 const stake = '10.00';
 const contract_type = 'ACCU'; // 'ACCU'
@@ -150,10 +150,10 @@ export const getDummyPortfolioContractsForACCU = time_now => {
     const dummy_current_time = Math.round(time_now / 1000); // 10 digit number
     const dummy_start_time = dummy_current_time - 7;
     const dummy_end_time = dummy_current_time + 6;
-    // if (!first_time) {
-    //     winLoseAndOpenContractIn10Sec();
-    //     first_time = true;
-    // }
+    if (!first_time) {
+        winLoseAndOpenContractIn10Sec();
+        first_time = true;
+    }
     return [
         {
             app_id: 17044,

@@ -10,7 +10,7 @@ import Text from '../../text';
 import ProgressSlider from '../../progress-slider';
 import DesktopWrapper from '../../desktop-wrapper';
 import MobileWrapper from '../../mobile-wrapper';
-import TickCounterProgressBar from './tick-counter-progress-bar.jsx';
+import TickCounterBar from './tick-counter-bar.jsx';
 
 const ContractCardHeader = ({
     contract_info,
@@ -92,7 +92,7 @@ const ContractCardHeader = ({
                 </MobileWrapper>
             </div>
             {has_progress_slider && !is_sold && is_accumulator && (
-                <TickCounterProgressBar current_tick={current_tick} max_ticks_duration={max_ticks_number} />
+                <TickCounterBar current_tick={current_tick} max_ticks_duration={max_ticks_number} />
             )}
             <MobileWrapper>
                 <div className='dc-progress-slider--completed' />

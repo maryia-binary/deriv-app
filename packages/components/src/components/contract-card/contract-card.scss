@@ -582,7 +582,7 @@
         width: 100%;
         padding: unset;
         box-sizing: border-box;
-        margin: 0.8rem 0;
+        margin: 0 0 0.8rem;
         border-bottom: 1px solid var(--general-section-1);
 
         @include mobile {
@@ -598,7 +598,7 @@
         background: var(--general-section-1);
         border-radius: #{$BORDER_RADIUS};
         position: relative;
-        margin: 0.2rem 0 0.8rem;
+        margin: 0 0 0.8rem;
         width: 100%;
 
         @include mobile {

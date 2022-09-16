@@ -18,41 +18,41 @@ const limit_order = {
         value: `${take_profit_price}`,
     },
 };
-let contract_status = 'open'; // 'lost', 'won' or 'open'
-let position_status = 'profit'; // 'profit' or 'loss'
-let result = ''; // 'won' or 'lost'
-let profit_loss = +0.15;
-let profit_percentage = +1.5;
-let is_sold = 0; // 0 || 1
-let first_time;
-const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
-    setInterval(() => {
-        setTimeout(() => {
-            contract_status = 'won'; // 'lost', 'won' or 'open'
-            position_status = 'profit'; // 'profit' or 'loss'
-            result = 'won'; // 'won' or 'lost'
-            profit_loss = +0.15;
-            profit_percentage = +1.5;
-            is_sold = 1; // 0 || 1
-        }, ms1);
-        setTimeout(() => {
-            contract_status = 'lost'; // 'lost', 'won' or 'open'
-            position_status = 'loss'; // 'profit' or 'loss'
-            result = 'lost'; // 'won' or 'lost'
-            profit_loss = -0.15;
-            profit_percentage = -1.5;
-            is_sold = 1; // 0 || 1
-        }, ms2);
-        setTimeout(() => {
-            contract_status = 'open'; // 'lost', 'won' or 'open'
-            position_status = 'profit'; // 'profit' or 'loss'
-            result = ''; // 'won' or 'lost'
-            profit_loss = +0.15;
-            profit_percentage = +1.5;
-            is_sold = 0; // 0 || 1
-        }, ms3);
-    }, ms3);
-};
+const contract_status = 'open'; // 'lost', 'won' or 'open'
+const position_status = 'profit'; // 'profit' or 'loss'
+const result = ''; // 'won' or 'lost'
+const profit_loss = +0.15;
+const profit_percentage = +1.5;
+const is_sold = 0; // 0 || 1
+// let first_time;
+// const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
+//     setInterval(() => {
+//         setTimeout(() => {
+//             contract_status = 'won'; // 'lost', 'won' or 'open'
+//             position_status = 'profit'; // 'profit' or 'loss'
+//             result = 'won'; // 'won' or 'lost'
+//             profit_loss = +0.15;
+//             profit_percentage = +1.5;
+//             is_sold = 1; // 0 || 1
+//         }, ms1);
+//         setTimeout(() => {
+//             contract_status = 'lost'; // 'lost', 'won' or 'open'
+//             position_status = 'loss'; // 'profit' or 'loss'
+//             result = 'lost'; // 'won' or 'lost'
+//             profit_loss = -0.15;
+//             profit_percentage = -1.5;
+//             is_sold = 1; // 0 || 1
+//         }, ms2);
+//         setTimeout(() => {
+//             contract_status = 'open'; // 'lost', 'won' or 'open'
+//             position_status = 'profit'; // 'profit' or 'loss'
+//             result = ''; // 'won' or 'lost'
+//             profit_loss = +0.15;
+//             profit_percentage = +1.5;
+//             is_sold = 0; // 0 || 1
+//         }, ms3);
+//     }, ms3);
+// };
 const tick_size_barrier = 0.000409;
 const longcode = `Win payout when every tick of your contract is within ± ${tick_size_barrier} % of the previous tick in AUD/JPY`;
 const stake = '10.00';
@@ -151,11 +151,11 @@ export const getDummyPortfolioContractsForACCU = time_now => {
     const dummy_current_time = Math.round(time_now / 1000); // 10 digit number
     const dummy_start_time = dummy_current_time - 7;
     const dummy_end_time = dummy_current_time + 6;
-    if (!first_time) {
-        const interval = 10000;
-        winLoseAndOpenContractInSec(interval, interval * 2, interval * 3);
-        first_time = true;
-    }
+    // if (!first_time) {
+    //     const interval = 10000;
+    //     winLoseAndOpenContractInSec(interval, interval * 2, interval * 3);
+    //     first_time = true;
+    // }
     return [
         {
             app_id: 17044,

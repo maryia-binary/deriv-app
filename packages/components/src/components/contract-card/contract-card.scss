@@ -456,7 +456,8 @@
         align-items: center;
         justify-content: center;
 
-        .result-icon {
+        .result-icon,
+        &--accumulator-mobile-positions .dc-result__icon {
             margin-left: 0.4rem;
         }
     }

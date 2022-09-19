@@ -23,6 +23,7 @@ import {
     isBarrierSupported,
     removeBarrier,
     getDummyProposalResponseForACCU,
+    isAccumulatorContract,
 } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { getValidationRules, getMultiplierValidationRules } from 'Stores/Modules/Trading/Constants/validation-rules';
@@ -32,6 +33,7 @@ import ServerTime from '_common/base/server_time';
 import { processPurchase } from './Actions/purchase';
 import * as Symbol from './Actions/symbol';
 
+import { getUpdatedTicksHistoryStats } from './Helpers/accumulator';
 import { processTradeParams } from './Helpers/process';
 import { createProposalRequests, getProposalErrorField, getProposalInfo } from './Helpers/proposal';
 import { setLimitOrderBarriers } from './Helpers/limit-orders';
@@ -120,6 +122,7 @@ export default class TradeStore extends BaseStore {
     @observable growth_rate;
     @observable max_payout = 0;
     @observable max_ticks_number = 0;
+    @observable ticks_history_stats = [];
     @observable tick_size_barrier = 0;
 
     // Multiplier trade params
@@ -842,6 +845,11 @@ export default class TradeStore extends BaseStore {
     }
 
     @computed
+    get show_accumulators_stats() {
+        return isAccumulatorContract(this.contract_type);
+    }
+
+    @computed
     get show_digits_stats() {
         return isDigitTradeType(this.contract_type);
     }
@@ -963,8 +971,9 @@ export default class TradeStore extends BaseStore {
         }
 
         if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const { max_ticks_number, tick_size_barrier, max_payout, high_barrier, low_barrier } =
+            const { max_ticks_number, ticks_history_stats, tick_size_barrier, max_payout, high_barrier, low_barrier } =
                 this.proposal_info.ACCU;
+            this.ticks_history_stats = getUpdatedTicksHistoryStats(this.ticks_history_stats, ticks_history_stats);
             this.tick_size_barrier = tick_size_barrier;
             this.max_ticks_number = max_ticks_number;
             this.max_payout = max_payout;

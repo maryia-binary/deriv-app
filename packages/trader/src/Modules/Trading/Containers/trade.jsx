@@ -47,6 +47,7 @@ const Trade = ({
     prepareTradeStore,
     setContractTypes,
     setMobileDigitView,
+    show_accumulators_stats,
     show_digits_stats,
     should_show_multipliers_onboarding,
     symbol,
@@ -60,6 +61,7 @@ const Trade = ({
     const [subcategory, setSubcategory] = React.useState(null);
     const [is_digits_widget_active, setIsDigitsWidgetActive] = React.useState(false);
     const charts_ref = React.useRef();
+    const show_stats = show_accumulators_stats || show_digits_stats;
 
     const open_market = React.useMemo(() => {
         if (try_synthetic_indices) {
@@ -108,9 +110,15 @@ const Trade = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const bottomWidgets = React.useCallback(({ digits: d, tick: t }) => {
-        return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
-    }, []);
+    const bottomWidgets = React.useCallback(
+        ({ digits: d, tick: t }) => {
+            if (show_accumulators_stats) return <ChartBottomWidgets show_accumulators_stats is_trade_page />;
+            else if (show_digits_stats)
+                return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
+            return undefined;
+        },
+        [show_accumulators_stats, show_digits_stats]
+    );
 
     const onChangeSwipeableIndex = index => {
         setMobileDigitView(index === 0);
@@ -160,7 +168,11 @@ const Trade = ({
                     <DesktopWrapper>
                         <div className='chart-container__wrapper'>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <ChartTrade topWidgets={topWidgets} charts_ref={charts_ref} />
+                            <ChartTrade
+                                show_accumulators_stats={show_accumulators_stats}
+                                topWidgets={topWidgets}
+                                charts_ref={charts_ref}
+                            />
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -185,7 +197,7 @@ const Trade = ({
                             <ChartTrade
                                 topWidgets={topWidgets}
                                 charts_ref={charts_ref}
-                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
+                                bottomWidgets={show_stats ? bottomWidgets : undefined}
                             />
                         </SwipeableWrapper>
                     </MobileWrapper>
@@ -226,6 +238,7 @@ export default connect(({ client, common, modules, ui }) => ({
     should_show_active_symbols_loading: modules.trade.should_show_active_symbols_loading,
     is_chart_loading: modules.trade.is_chart_loading,
     is_market_closed: modules.trade.is_market_closed,
+    show_accumulators_stats: modules.trade.show_accumulators_stats,
     show_digits_stats: modules.trade.show_digits_stats,
     is_trade_enabled: modules.trade.is_trade_enabled,
     prepareTradeStore: modules.trade.prepareTradeStore,
@@ -293,6 +306,7 @@ const Chart = props => {
         refToAddTick,
         setChartStatus,
         settings,
+        show_accumulators_stats,
         show_digits_stats,
         symbol,
         wsForget,
@@ -302,7 +316,14 @@ const Chart = props => {
     } = props;
 
     const bottomWidgets = React.useCallback(
-        ({ digits, tick }) => <ChartBottomWidgets digits={digits} tick={tick} />,
+        ({ digits, tick }) => (
+            <ChartBottomWidgets
+                digits={digits}
+                tick={tick}
+                show_accumulators_stats={show_accumulators_stats}
+                is_trade_page
+            />
+        ),
         []
     );
 
@@ -334,7 +355,9 @@ const Chart = props => {
         <SmartChartWithRef
             ref={charts_ref}
             barriers={barriers}
-            bottomWidgets={show_digits_stats && isDesktop() ? bottomWidgets : props.bottomWidgets}
+            bottomWidgets={
+                (show_accumulators_stats || show_digits_stats) && isDesktop() ? bottomWidgets : props.bottomWidgets
+            }
             crosshair={isMobile() ? 0 : undefined}
             crosshairTooltipLeftAllow={560}
             showLastDigitStats={isDesktop() ? show_digits_stats : false}
@@ -401,6 +424,7 @@ Chart.propTypes = {
     refToAddTick: PropTypes.func,
     setChartStatus: PropTypes.func,
     settings: PropTypes.object,
+    show_accumulators_stats: PropTypes.bool,
     symbol: PropTypes.string,
     wsForget: PropTypes.func,
     wsForgetStream: PropTypes.func,

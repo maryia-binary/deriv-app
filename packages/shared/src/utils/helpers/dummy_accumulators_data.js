@@ -24,6 +24,7 @@ const result = ''; // 'won' or 'lost'
 const profit_loss = +0.15;
 const profit_percentage = +1.5;
 const is_sold = 0; // 0 || 1
+const ticks_history_stats = [...new Array(33).fill(157), ...new Array(33).fill(403), ...new Array(33).fill(285), 291];
 // let first_time;
 // const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
 //     setInterval(() => {
@@ -335,6 +336,7 @@ export const getDummyAllPositionsForACCU = time_now => {
 };
 export const getDummyProposalInfoForACCU = (growth_rate, response) => {
     return {
+        ticks_history_stats: response.proposal.ticks_history_stats,
         tick_size_barrier: response.proposal.tick_size_barrier,
         max_ticks_number: response.proposal.max_ticks_number,
         max_payout: response.proposal.max_payout,
@@ -415,6 +417,7 @@ export const getDummyProposalResponseForACCU = time_now => {
         },
         msg_type: 'proposal',
         proposal: {
+            ticks_history_stats,
             tick_size_barrier,
             max_ticks_number: 1000,
             max_payout: 20000,

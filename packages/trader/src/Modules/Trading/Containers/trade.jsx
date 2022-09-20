@@ -324,7 +324,7 @@ const Chart = props => {
                 is_trade_page
             />
         ),
-        []
+        [show_accumulators_stats]
     );
 
     const getMarketsOrder = active_symbols => {

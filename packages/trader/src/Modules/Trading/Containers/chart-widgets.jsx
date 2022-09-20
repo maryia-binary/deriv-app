@@ -1,84 +1,12 @@
 import React from 'react';
-import { isDesktop, isMobile } from '@deriv/shared';
+import { isMobile } from '@deriv/shared';
 import Digits from 'Modules/Contract/Components/Digits';
+import TicksHistoryStats from 'Modules/Contract/Components/TicksHistoryStats';
 import { connect } from 'Stores/connect';
 import BottomWidgets from '../../SmartChart/Components/bottom-widgets.jsx';
 import ControlWidgets from '../../SmartChart/Components/control-widgets.jsx';
 import TopWidgets from '../../SmartChart/Components/top-widgets.jsx';
 import { symbolChange } from '../../SmartChart/Helpers/symbol';
-import { Text } from '@deriv/components';
-import { localize } from '@deriv/translations';
-
-const DIRECTIONS = {
-    UP: 'up',
-    DOWN: 'down',
-};
-
-// draft widget:
-export const TicksHistoryStatsWidget = connect(({ modules }) => ({
-    ticks_history_stats: modules.trade.ticks_history_stats,
-}))(({ ticks_history_stats, is_trade_page }) => {
-    const [is_collapsed, setIsCollapsed] = React.useState(true);
-    const [displayed_row_index, setDisplayedRowIndex] = React.useState(0);
-
-    const rows = ticks_history_stats.reduce((acc, _el, index) => {
-        const contract_replay_row_size = is_collapsed ? 20 : 10;
-        const trade_page_row_size = is_collapsed ? 15 : 10;
-        const desktop_row_size = is_trade_page ? trade_page_row_size : contract_replay_row_size;
-        const mobile_row_size = is_collapsed ? 6 : 5;
-        const row_size = isDesktop() ? desktop_row_size : mobile_row_size;
-        if (index % row_size === 0) {
-            acc.push(ticks_history_stats.slice(index, index + row_size));
-        }
-        return acc;
-    }, []);
-
-    const onScrollHistory = direction => {
-        const next_index = direction === DIRECTIONS.UP ? displayed_row_index - 1 : displayed_row_index + 1;
-        if (next_index >= 0 && rows[next_index]) setDisplayedRowIndex(next_index);
-    };
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex' }}>
-                <Text size='xxs'>(i) Stay in history</Text>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {[
-                        { name: DIRECTIONS.UP, icon: '^' },
-                        { name: DIRECTIONS.DOWN, icon: '˅' },
-                    ].map(({ name, icon }) => (
-                        <button key={name} onClick={is_collapsed && (() => onScrollHistory(name))}>
-                            {icon}
-                        </button>
-                    ))}
-                </div>
-                <div style={{ width: '50%' }}>
-                    {is_collapsed
-                        ? rows[displayed_row_index]?.map((el, i) => (
-                              <Text key={i} size='xxs'>
-                                  {el}{' '}
-                              </Text>
-                          ))
-                        : localize('Number of ticks')}
-                </div>
-                <button onClick={() => setIsCollapsed(!is_collapsed)}>{is_collapsed ? '↑' : '↓'}</button>
-            </div>
-            {!is_collapsed && (
-                <div>
-                    {rows.map((row, i) => (
-                        <div key={i}>
-                            {row.map((el, idx) => (
-                                <Text key={idx} size='xxs'>
-                                    {el}{' '}
-                                </Text>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-});
 
 export const DigitsWidget = connect(({ modules, contract_trade }) => ({
     contract_info: contract_trade.last_contract.contract_info || {},
@@ -145,7 +73,7 @@ export const ChartTopWidgets = connect(({ modules, ui }) => ({
 
 export const ChartBottomWidgets = ({ digits, tick, show_accumulators_stats, is_trade_page }) =>
     show_accumulators_stats ? (
-        <BottomWidgets Widget={<TicksHistoryStatsWidget is_trade_page={is_trade_page} />} />
+        <BottomWidgets Widget={<TicksHistoryStats is_trade_page={is_trade_page} />} />
     ) : (
         <BottomWidgets Widget={<DigitsWidget digits={digits} tick={tick} />} />
     );

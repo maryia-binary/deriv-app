@@ -2,6 +2,7 @@ import debounce from 'lodash.debounce';
 import { action, computed, observable, reaction, runInAction, toJS, when } from 'mobx';
 import {
     cloneObject,
+    dummy_break_out_history,
     extractInfoFromShortcode,
     getMinPayout,
     getPlatformSettings,
@@ -122,7 +123,8 @@ export default class TradeStore extends BaseStore {
     @observable growth_rate;
     @observable max_payout = 0;
     @observable max_ticks_number = 0;
-    @observable ticks_history_stats = [];
+    @observable break_out_history = [];
+    @observable stay_in_history = [];
     @observable tick_size_barrier = 0;
 
     // Multiplier trade params
@@ -970,10 +972,22 @@ export default class TradeStore extends BaseStore {
             this.stop_out = limit_order?.stop_out?.order_amount;
         }
 
-        if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const { max_ticks_number, ticks_history_stats, tick_size_barrier, max_payout, high_barrier, low_barrier } =
-                this.proposal_info.ACCU;
-            this.ticks_history_stats = getUpdatedTicksHistoryStats(this.ticks_history_stats, ticks_history_stats);
+        if (this.is_accumulator && this.proposal_info && (this.proposal_info.ACCU || this.proposal_info.DECCU)) {
+            const {
+                max_ticks_number,
+                ticks_history_stats: stay_in_history,
+                tick_size_barrier,
+                max_payout,
+                high_barrier,
+                low_barrier,
+            } = this.proposal_info.ACCU;
+            if (this.proposal_info.DECCU) {
+                this.break_out_history = getUpdatedTicksHistoryStats(
+                    this.break_out_history,
+                    this.proposal_info.DECCU.ticks_history_stats
+                );
+            } else this.break_out_history = dummy_break_out_history;
+            this.stay_in_history = getUpdatedTicksHistoryStats(this.stay_in_history, stay_in_history);
             this.tick_size_barrier = tick_size_barrier;
             this.max_ticks_number = max_ticks_number;
             this.max_payout = max_payout;

@@ -60,6 +60,13 @@ const stake = '10.00';
 const contract_type = 'ACCU'; // 'ACCU'
 const shortcode = 'ACCU_FRXAUDJPY_10.00_6_0.01_1_0.000409_1653292620'; // 'ACCU_FRXAUDJPY_10.00_6_0.01_1_0.000409_1653292620'
 
+export const dummy_break_out_history = [
+    ...new Array(33).fill(888),
+    ...new Array(33).fill(444),
+    ...new Array(33).fill(555),
+    111,
+];
+
 export const getDummyPOCResponseForACCU = time_now => {
     const dummy_current_time = Math.round(time_now / 1000); // 10 digits number
     const dummy_start_time = dummy_current_time - 7;

@@ -213,6 +213,7 @@ export const icons =
         'IcChevronRightBold',
         'IcChevronRight',
         'IcChevronUpBold',
+        'IcChevronUpNormal',
         'IcChevronUp',
         'IcCircleDynamicColor',
         'IcCircle',

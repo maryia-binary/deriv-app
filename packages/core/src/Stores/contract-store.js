@@ -74,7 +74,7 @@ export default class ContractStore extends BaseStore {
         // TODO: don't update the barriers & markers if they are not changed
         this.updateBarriersArray(contract_info, this.root_store.ui.is_dark_mode_on);
         this.markers_array = createChartMarkers(this.contract_info);
-        this.marker = calculate_marker(this.contract_info);
+        this.marker = calculate_marker(this.contract_info, this.root_store.contract_trade.ticks_history);
 
         this.contract_config = getChartConfig(this.contract_info);
         this.display_status = getDisplayStatus(this.contract_info);
@@ -213,6 +213,12 @@ export default class ContractStore extends BaseStore {
     }
 }
 
+/**
+ *
+ * @param {Object} contract_info
+ * @param {Object} ticks_history - { prices: [], times: [] } can be used to draw markers for ticks instead of teak_stream
+ * @returns {Object | null} marker object
+ */
 function calculate_marker(contract_info) {
     if (!contract_info || isMultiplierContract(contract_info.contract_type)) {
         return null;

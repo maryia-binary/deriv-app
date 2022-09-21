@@ -18,6 +18,7 @@ export default class ContractTradeStore extends BaseStore {
     contracts_map = {};
     @observable has_error = false;
     @observable error_message = '';
+    @observable.ref ticks_history = {};
 
     // Chart specific observables
     @observable granularity = +LocalStore.get('contract_trade.granularity') || 0;

@@ -1243,11 +1243,30 @@ export default class TradeStore extends BaseStore {
         };
     }
 
+    @action.bound
+    setTicksHistory(response) {
+        if (response.history) this.root_store.contract_trade.ticks_history = response.history;
+        if (response.tick) {
+            const { prices, times } = this.root_store.contract_trade.ticks_history;
+            const { quote: price, epoch: time } = response.tick;
+            prices.push(price);
+            times.push(time);
+
+            if (prices.length > 5000) {
+                prices.shift();
+                times.shift();
+            }
+        }
+    }
+
     // ---------- WS ----------
     wsSubscribe = (req, callback) => {
         if (req.subscribe === 1) {
             const key = JSON.stringify(req);
-            const subscriber = WS.subscribeTicksHistory(req, callback);
+            const subscriber = WS.subscribeTicksHistory(req, response => {
+                callback(response);
+                this.setTicksHistory(response);
+            });
             g_subscribers_map[key] = subscriber;
         }
     };

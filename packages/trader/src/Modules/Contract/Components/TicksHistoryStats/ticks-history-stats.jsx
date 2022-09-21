@@ -52,9 +52,9 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                         {localize('{{displayed_contract_name}} history', { displayed_contract_name })}
                     </Text>
                 </div>
-                <div className='ticks-history-stats__nav-buttons'>
+                <div className='ticks-history-stats__nav-buttons' onClick={handleSwitchBetweenContracts}>
                     {['IcChevronUpNormal', 'IcChevronDown'].map(icon => (
-                        <Icon key={icon} icon={icon} onClick={handleSwitchBetweenContracts} />
+                        <Icon key={icon} icon={icon} />
                     ))}
                 </div>
                 <Text size='xxs' className='ticks-history-stats__history'>
@@ -69,7 +69,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
             {!is_collapsed && (
                 <Text size='xxs' className='ticks-history-stats__history--expanded'>
                     {rows.map((row, i) => (
-                        <div key={i}>
+                        <div key={i} className='ticks-history-stats__row'>
                             {row.map((el, idx) => (
                                 <TickHistoryItem key={idx} value={el} />
                             ))}

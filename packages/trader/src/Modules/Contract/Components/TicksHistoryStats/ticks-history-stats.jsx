@@ -75,7 +75,11 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                         <div className='ticks-history-stats__history-heading'>{localize('Number of ticks')}</div>
                     )}
                 </Text>
-                <Icon icon={is_collapsed ? 'IcArrowUp' : 'IcArrowDown'} onClick={() => setIsCollapsed(!is_collapsed)} />
+                <Icon
+                    icon={is_collapsed ? 'IcArrowUp' : 'IcArrowDown'}
+                    onClick={() => setIsCollapsed(!is_collapsed)}
+                    className='ticks-history-stats__accordion-toggle-arrow'
+                />
             </div>
             {!is_collapsed && (
                 <Text size='xxs' className='ticks-history-stats__history--expanded'>

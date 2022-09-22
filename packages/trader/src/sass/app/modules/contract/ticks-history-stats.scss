@@ -27,10 +27,10 @@
     &__container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 1.3rem 0.8rem;
         width: 73.6rem;
         height: 4.8rem;
+        position: relative;
+        padding: 1.3rem 0.8rem;
 
         &--in-contract-replay {
             width: 97.5rem;
@@ -39,6 +39,7 @@
     &__title {
         display: flex;
         align-items: center;
+        width: 11.7rem;
 
         .info {
             margin-right: 0.4rem;
@@ -52,13 +53,15 @@
     &__nav-buttons {
         display: flex;
         flex-direction: column;
+        margin: 0 0.8rem 0 0.4rem;
     }
     &__history {
         display: flex;
         align-items: center;
+        margin-right: 0.5rem;
 
         &-heading {
-            margin-left: auto;
+            margin-left: 46.5rem;
         }
         &-item {
             width: 3.8rem;
@@ -117,8 +120,19 @@
                 align-items: center;
                 gap: 3.8rem;
                 width: 100%;
+
+                &:last-child {
+                    margin-bottom: 1.3rem;
+                }
             }
         }
+    }
+    &__accordion-toggle-arrow {
+        position: absolute;
+        right: 0.8rem;
+        top: 0;
+        bottom: 0;
+        margin: auto;
     }
 
     // @include mobile {

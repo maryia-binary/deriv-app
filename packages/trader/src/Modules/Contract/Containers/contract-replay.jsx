@@ -219,14 +219,18 @@ export default connect(({ common, contract_replay, ui }) => {
 // CHART -----------------------------------------
 
 const Chart = props => {
-    const isBottomWidgetVisible = () => {
-        return isDesktop() && props.is_digit_contract;
-    };
+    const { is_digit_contract, show_accumulators_stats } = props;
+    const is_bottom_widget_visible = isDesktop() && (is_digit_contract || show_accumulators_stats);
+    const bottomWidgets = React.useCallback(() => {
+        if (show_accumulators_stats) return <ChartBottomWidgets show_accumulators_stats />;
+        else if (is_bottom_widget_visible) return <ChartBottomWidgets />;
+        return null;
+    }, [is_bottom_widget_visible, show_accumulators_stats]);
 
     const getChartYAxisMargin = () => {
         const margin = {
             top: isMobile() ? 96 : 148,
-            bottom: isBottomWidgetVisible() ? 128 : 112,
+            bottom: is_bottom_widget_visible ? 128 : 112,
         };
 
         if (isMobile()) {
@@ -239,7 +243,7 @@ const Chart = props => {
     return (
         <SmartChart
             barriers={props.barriers_array}
-            bottomWidgets={isBottomWidgetVisible() ? ChartBottomWidgets : null}
+            bottomWidgets={bottomWidgets}
             chartControlsWidgets={null}
             chartType={props.chart_type}
             endEpoch={props.end_epoch}
@@ -274,7 +278,7 @@ const Chart = props => {
                     key={marker.react_key}
                     marker_config={marker.marker_config}
                     marker_content_props={marker.content_config}
-                    is_bottom_widget_visible={isBottomWidgetVisible()}
+                    is_bottom_widget_visible={is_bottom_widget_visible}
                 />
             ))}
         </SmartChart>
@@ -307,6 +311,7 @@ Chart.propTypes = {
     wsSendRequest: PropTypes.func,
     wsSubscribe: PropTypes.func,
     shouldFetchTickHistory: PropTypes.bool,
+    show_accumulators_stats: PropTypes.bool,
 };
 
 const ReplayChart = connect(({ modules, ui, common, contract_replay }) => {
@@ -348,6 +353,7 @@ const ReplayChart = connect(({ modules, ui, common, contract_replay }) => {
         is_static_chart: contract_replay.is_static_chart,
         barriers_array: contract_store.barriers_array,
         markers_array: contract_store.markers_array,
+        show_accumulators_stats: trade.show_accumulators_stats,
         symbol: contract_store.contract_info.underlying,
         contract_info: contract_store.contract_info,
         all_ticks: contract_store.contract_info.audit_details

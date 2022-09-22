@@ -71,12 +71,17 @@ export const ChartTopWidgets = connect(({ modules, ui }) => ({
     );
 });
 
-export const ChartBottomWidgets = ({ digits, tick, show_accumulators_stats, is_trade_page }) =>
-    show_accumulators_stats ? (
-        <BottomWidgets Widget={<TicksHistoryStats is_trade_page={is_trade_page} />} />
-    ) : (
-        <BottomWidgets Widget={<DigitsWidget digits={digits} tick={tick} />} />
-    );
+export const ChartBottomWidgets = ({ digits, tick, show_accumulators_stats, is_trade_page }) => (
+    <BottomWidgets
+        Widget={
+            show_accumulators_stats ? (
+                <TicksHistoryStats is_trade_page={is_trade_page} />
+            ) : (
+                <BottomWidgets Widget={<DigitsWidget digits={digits} tick={tick} />} />
+            )
+        }
+    />
+);
 
 export const ChartControlWidgets = connect(({ contract_trade }) => ({
     updateChartType: contract_trade.updateChartType,

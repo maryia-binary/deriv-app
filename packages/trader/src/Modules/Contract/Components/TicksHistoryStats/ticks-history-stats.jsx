@@ -6,8 +6,19 @@ import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import 'Sass/app/modules/contract/ticks-history-stats.scss';
 
-const TickHistoryItem = ({ value }) => {
-    return <div className='ticks-history-stats__history-item'>{value}</div>;
+const TickHistoryItem = ({ has_progress_dots, value }) => {
+    return (
+        <div className='ticks-history-stats__history-item'>
+            {value}
+            {has_progress_dots && (
+                <div className='ticks-history-stats__progress-dots'>
+                    {[1, 2, 3].map(dot => {
+                        return <span key={dot} className={`dot-${dot}`} />;
+                    })}
+                </div>
+            )}
+        </div>
+    );
 };
 
 const CONTRACT_TYPES = {
@@ -59,7 +70,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                 </div>
                 <Text size='xxs' className='ticks-history-stats__history'>
                     {is_collapsed ? (
-                        rows[0]?.map((el, i) => <TickHistoryItem key={i} value={el} />)
+                        rows[0]?.map((el, i) => <TickHistoryItem key={i} value={el} has_progress_dots={i === 0} />)
                     ) : (
                         <div className='ticks-history-stats__history-heading'>{localize('Number of ticks')}</div>
                     )}
@@ -71,7 +82,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                     {rows.map((row, i) => (
                         <div key={i} className='ticks-history-stats__row'>
                             {row.map((el, idx) => (
-                                <TickHistoryItem key={idx} value={el} />
+                                <TickHistoryItem key={idx} value={el} has_progress_dots={i === 0 && idx === 0} />
                             ))}
                         </div>
                     ))}

@@ -4,7 +4,6 @@ import InfoBox from 'Modules/Contract/Components/InfoBox';
 import { connect } from 'Stores/connect';
 import BottomWidgets from '../../SmartChart/Components/bottom-widgets.jsx';
 import TopWidgets from '../../SmartChart/Components/top-widgets.jsx';
-import TicksHistoryStats from 'Modules/Contract/Components/TicksHistoryStats';
 
 export const DigitsWidget = connect(({ contract_replay }) => ({
     contract_info: contract_replay.contract_store.contract_info,
@@ -32,6 +31,4 @@ export const InfoBoxWidget = connect(({ contract_replay }) => ({
 
 // Chart widgets passed into SmartCharts
 export const ChartTopWidgets = () => <TopWidgets InfoBox={<InfoBoxWidget />} is_title_enabled={false} />;
-export const ChartBottomWidgets = ({ show_accumulators_stats }) => (
-    <BottomWidgets Widget={show_accumulators_stats ? <TicksHistoryStats /> : <DigitsWidget />} />
-);
+export const ChartBottomWidgets = () => <BottomWidgets Digits={<DigitsWidget />} />;

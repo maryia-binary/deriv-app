@@ -47,7 +47,6 @@ const Trade = ({
     prepareTradeStore,
     setContractTypes,
     setMobileDigitView,
-    show_accumulators_stats,
     show_digits_stats,
     should_show_multipliers_onboarding,
     symbol,
@@ -61,7 +60,6 @@ const Trade = ({
     const [subcategory, setSubcategory] = React.useState(null);
     const [is_digits_widget_active, setIsDigitsWidgetActive] = React.useState(false);
     const charts_ref = React.useRef();
-    const show_stats = show_accumulators_stats || show_digits_stats;
 
     const open_market = React.useMemo(() => {
         if (try_synthetic_indices) {
@@ -110,15 +108,9 @@ const Trade = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const bottomWidgets = React.useCallback(
-        ({ digits: d, tick: t }) => {
-            if (show_accumulators_stats) return <ChartBottomWidgets show_accumulators_stats is_trade_page />;
-            else if (show_digits_stats)
-                return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
-            return undefined;
-        },
-        [show_accumulators_stats, show_digits_stats]
-    );
+    const bottomWidgets = React.useCallback(({ digits: d, tick: t }) => {
+        return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
+    }, []);
 
     const onChangeSwipeableIndex = index => {
         setMobileDigitView(index === 0);
@@ -168,11 +160,7 @@ const Trade = ({
                     <DesktopWrapper>
                         <div className='chart-container__wrapper'>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <ChartTrade
-                                show_accumulators_stats={show_accumulators_stats}
-                                topWidgets={topWidgets}
-                                charts_ref={charts_ref}
-                            />
+                            <ChartTrade topWidgets={topWidgets} charts_ref={charts_ref} />
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -197,7 +185,7 @@ const Trade = ({
                             <ChartTrade
                                 topWidgets={topWidgets}
                                 charts_ref={charts_ref}
-                                bottomWidgets={show_stats ? bottomWidgets : undefined}
+                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
                             />
                         </SwipeableWrapper>
                     </MobileWrapper>
@@ -238,7 +226,6 @@ export default connect(({ client, common, modules, ui }) => ({
     should_show_active_symbols_loading: modules.trade.should_show_active_symbols_loading,
     is_chart_loading: modules.trade.is_chart_loading,
     is_market_closed: modules.trade.is_market_closed,
-    show_accumulators_stats: modules.trade.show_accumulators_stats,
     show_digits_stats: modules.trade.show_digits_stats,
     is_trade_enabled: modules.trade.is_trade_enabled,
     prepareTradeStore: modules.trade.prepareTradeStore,
@@ -456,6 +443,7 @@ const ChartTrade = connect(({ modules, ui, common, contract_trade }) => ({
     extra_barriers: modules.trade.barriers_flattened,
     show_digits_stats: modules.trade.show_digits_stats,
     contract_type: modules.trade.contract_type,
+    show_accumulators_stats: modules.trade.show_accumulators_stats,
     symbol: modules.trade.symbol,
     exportLayout: modules.trade.exportLayout,
     setChartStatus: modules.trade.setChartStatus,

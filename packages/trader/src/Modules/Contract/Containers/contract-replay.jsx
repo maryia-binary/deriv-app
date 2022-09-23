@@ -219,18 +219,14 @@ export default connect(({ common, contract_replay, ui }) => {
 // CHART -----------------------------------------
 
 const Chart = props => {
-    const { is_digit_contract, show_accumulators_stats } = props;
-    const is_bottom_widget_visible = isDesktop() && (is_digit_contract || show_accumulators_stats);
-    const bottomWidgets = React.useCallback(() => {
-        if (show_accumulators_stats) return <ChartBottomWidgets show_accumulators_stats />;
-        else if (is_bottom_widget_visible) return <ChartBottomWidgets />;
-        return null;
-    }, [is_bottom_widget_visible, show_accumulators_stats]);
+    const isBottomWidgetVisible = () => {
+        return isDesktop() && props.is_digit_contract;
+    };
 
     const getChartYAxisMargin = () => {
         const margin = {
             top: isMobile() ? 96 : 148,
-            bottom: is_bottom_widget_visible ? 128 : 112,
+            bottom: isBottomWidgetVisible() ? 128 : 112,
         };
 
         if (isMobile()) {
@@ -243,7 +239,7 @@ const Chart = props => {
     return (
         <SmartChart
             barriers={props.barriers_array}
-            bottomWidgets={bottomWidgets}
+            bottomWidgets={isBottomWidgetVisible() ? ChartBottomWidgets : null}
             chartControlsWidgets={null}
             chartType={props.chart_type}
             endEpoch={props.end_epoch}
@@ -270,7 +266,10 @@ const Chart = props => {
             shouldFetchTradingTimes={!props.end_epoch}
             yAxisMargin={getChartYAxisMargin()}
             anchorChartToLeft={isMobile()}
-            shouldFetchTickHistory={getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds'}
+            shouldFetchTickHistory={
+                getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds' ||
+                props.is_accumulator_contract
+            }
             contractInfo={props.contract_info}
         >
             {props.markers_array.map(marker => (
@@ -278,7 +277,7 @@ const Chart = props => {
                     key={marker.react_key}
                     marker_config={marker.marker_config}
                     marker_content_props={marker.content_config}
-                    is_bottom_widget_visible={is_bottom_widget_visible}
+                    is_bottom_widget_visible={isBottomWidgetVisible()}
                 />
             ))}
         </SmartChart>
@@ -293,6 +292,7 @@ Chart.propTypes = {
     end_epoch: PropTypes.number,
     granularity: PropTypes.number,
     InfoBox: PropTypes.node,
+    is_accumulator_contract: PropTypes.bool,
     is_digit_contract: PropTypes.bool,
     is_mobile: PropTypes.bool,
     is_socket_opened: PropTypes.bool,
@@ -311,7 +311,6 @@ Chart.propTypes = {
     wsSendRequest: PropTypes.func,
     wsSubscribe: PropTypes.func,
     shouldFetchTickHistory: PropTypes.bool,
-    show_accumulators_stats: PropTypes.bool,
 };
 
 const ReplayChart = connect(({ modules, ui, common, contract_replay }) => {
@@ -345,6 +344,7 @@ const ReplayChart = connect(({ modules, ui, common, contract_replay }) => {
         granularity: contract_config.granularity,
         scroll_to_epoch: allow_scroll_to_epoch ? contract_config.scroll_to_epoch : undefined,
         settings,
+        is_accumulator_contract: contract_store.is_accumulator_contract,
         is_mobile: ui.is_mobile,
         is_socket_opened: common.is_socket_opened,
         is_digit_contract: contract_store.is_digit_contract,
@@ -353,7 +353,6 @@ const ReplayChart = connect(({ modules, ui, common, contract_replay }) => {
         is_static_chart: contract_replay.is_static_chart,
         barriers_array: contract_store.barriers_array,
         markers_array: contract_store.markers_array,
-        show_accumulators_stats: trade.show_accumulators_stats,
         symbol: contract_store.contract_info.underlying,
         contract_info: contract_store.contract_info,
         all_ticks: contract_store.contract_info.audit_details

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Icon, Text } from '@deriv/components';
-import { isDesktop, isMobile } from '@deriv/shared';
+import { isDesktop } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import 'Sass/app/modules/contract/ticks-history-stats.scss';
@@ -29,7 +29,7 @@ TickHistoryItem.displayName = 'TickHistoryItem';
 export const TicksHistoryStats = connect(({ modules }) => ({
     break_out_history: modules.trade.break_out_history,
     stay_in_history: modules.trade.stay_in_history,
-}))(({ break_out_history, stay_in_history }) => {
+}))(({ break_out_history, is_expandable, stay_in_history }) => {
     const [is_collapsed, setIsCollapsed] = React.useState(true);
     const [displayed_contract_name, setDisplayedContractName] = React.useState(CONTRACT_TYPES.STAY_IN);
     const ticks_history = displayed_contract_name === CONTRACT_TYPES.STAY_IN ? stay_in_history : break_out_history;
@@ -69,7 +69,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                         <div className='ticks-history-stats__history-heading'>{localize('Number of ticks')}</div>
                     )}
                 </Text>
-                {isMobile() && (
+                {is_expandable && (
                     <Icon
                         icon={is_collapsed ? 'IcArrowUp' : 'IcArrowDown'}
                         onClick={() => setIsCollapsed(!is_collapsed)}
@@ -77,7 +77,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                     />
                 )}
             </div>
-            {isMobile() && !is_collapsed && (
+            {is_expandable && !is_collapsed && (
                 <Text size='xxs' className='ticks-history-stats__history--expanded'>
                     {rows.map((row, i) => (
                         <div key={i} className='ticks-history-stats__row'>

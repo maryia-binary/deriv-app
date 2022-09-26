@@ -36,9 +36,9 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_h
     };
 
     return (
-        <div className='ticks-history-stats'>
-            <div className={classNames('ticks-history-stats__container--collapsed')}>
-                <div className='ticks-history-stats__title'>
+        <div className='accumulators-stats'>
+            <div className={classNames('accumulators-stats__container--collapsed')}>
+                <div className='accumulators-stats__title'>
                     <AccumulatorsStatsManualModal
                         title={widget_title}
                         icon_classname='info'
@@ -49,30 +49,30 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_h
                         {widget_title}
                     </Text>
                 </div>
-                <div className='ticks-history-stats__nav-buttons' onClick={handleSwitchBetweenContracts}>
+                <div className='accumulators-stats__nav-buttons' onClick={handleSwitchBetweenContracts}>
                     {['IcChevronUpNormal', 'IcChevronDown'].map(icon => (
                         <Icon key={icon} icon={icon} />
                     ))}
                 </div>
-                <Text size='xxs' className='ticks-history-stats__history'>
-                    {is_collapsed ? (
-                        rows[0]?.map((el, i) => <TicksHistoryCounter key={i} value={el} has_progress_dots={i === 0} />)
+                <Text size={isDesktop() ? 'xxs' : 'xxxs'} className='accumulators-stats__history'>
+                    {isDesktop() && !is_collapsed ? (
+                        <div className='accumulators-stats__history-heading'>{localize('Number of ticks')}</div>
                     ) : (
-                        <div className='ticks-history-stats__history-heading'>{localize('Number of ticks')}</div>
+                        rows[0]?.map((el, i) => <TicksHistoryCounter key={i} value={el} has_progress_dots={i === 0} />)
                     )}
                 </Text>
                 {is_expandable && (
                     <Icon
                         icon={is_collapsed ? 'IcArrowUp' : 'IcArrowDown'}
                         onClick={() => setIsCollapsed(!is_collapsed)}
-                        className='ticks-history-stats__accordion-toggle-arrow'
+                        className='accumulators-stats__accordion-toggle-arrow'
                     />
                 )}
             </div>
             {is_expandable && !is_collapsed && (
-                <Text size='xxs' className='ticks-history-stats__history--expanded'>
+                <Text size={isDesktop() ? 'xxs' : 'xxxs'} className='accumulators-stats__history--expanded'>
                     {rows.map((row, i) => (
-                        <div key={i} className='ticks-history-stats__row'>
+                        <div key={i} className='accumulators-stats__row'>
                             {row.map((el, idx) => (
                                 <TicksHistoryCounter key={idx} value={el} has_progress_dots={i === 0 && idx === 0} />
                             ))}

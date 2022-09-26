@@ -3,8 +3,7 @@
     bottom: 10px !important;
 }
 
-/** @define ticks-history-stats; weak */
-.ticks-history-stats {
+.accumulators-stats {
     $self: &;
     display: flex;
     flex-direction: column;
@@ -118,6 +117,10 @@
                     }
                 }
             }
+
+            @include mobile {
+                width: 3.2rem;
+            }
         }
         &-heading {
             margin-left: 46.5rem;
@@ -149,21 +152,28 @@
 }
 
 .accumulators-stats-modal-body {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     &__image {
-        position: relative;
-        top: -0.8rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        margin-bottom: 2.4rem;
+        height: 49rem;
 
-        &:last-child {
-            position: relative;
-            top: -0.8rem;
+        @include mobile {
+            margin: 0.8rem 0 1.6rem;
+            height: 35.5rem;
         }
     }
-    &__text {
-        margin-top: 1.6rem;
+    @include mobile {
+        &__text {
+            width: 29.6rem;
+        }
+    }
+}
+
+@include mobile {
+    .dc-modal-header--accumulators-stats-manual-modal {
+        height: 5.2rem;
     }
 }

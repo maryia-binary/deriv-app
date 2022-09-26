@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TicksHistoryCounter = ({ has_progress_dots, value }) => (
-    <div className='ticks-history-stats__history-counter'>
+    <div className='accumulators-stats__history-counter'>
         {value}
         {has_progress_dots && (
-            <div className='ticks-history-stats__progress-dots'>
+            <div className='accumulators-stats__progress-dots'>
                 {[1, 2, 3].map(dot => {
                     return <span key={dot} className={`dot-${dot}`} />;
                 })}

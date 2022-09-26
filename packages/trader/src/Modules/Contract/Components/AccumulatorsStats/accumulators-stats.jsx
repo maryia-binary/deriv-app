@@ -14,12 +14,16 @@ const CONTRACT_TYPES = {
     BREAK_OUT: 'Break out',
 };
 
-const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_history }) => {
+const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_history }) => {
     const [is_collapsed, setIsCollapsed] = React.useState(true);
     const [is_manual_open, setIsManualOpen] = React.useState(false);
     const [displayed_contract_name, setDisplayedContractName] = React.useState(CONTRACT_TYPES.STAY_IN);
     const widget_title = localize('{{displayed_contract_name}} history', { displayed_contract_name });
-    const ticks_history = displayed_contract_name === CONTRACT_TYPES.STAY_IN ? stay_in_history : break_out_history;
+    const ticks_history =
+        displayed_contract_name === CONTRACT_TYPES.STAY_IN
+            ? stay_in_history.map(counter => counter.counter_value)
+            : break_out_history.map(counter => counter.counter_value);
+    const history_text_size = isDesktop() ? 'xxs' : 'xxxs';
 
     const rows = ticks_history.reduce((acc, _el, index) => {
         const desktop_row_size = is_collapsed ? 15 : 10;
@@ -54,7 +58,7 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_h
                         <Icon key={icon} icon={icon} />
                     ))}
                 </div>
-                <Text size={isDesktop() ? 'xxs' : 'xxxs'} className='accumulators-stats__history'>
+                <Text size={history_text_size} className='accumulators-stats__history'>
                     {isDesktop() && !is_collapsed ? (
                         <div className='accumulators-stats__history-heading'>{localize('Number of ticks')}</div>
                     ) : (
@@ -70,11 +74,15 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_h
                 )}
             </div>
             {is_expandable && !is_collapsed && (
-                <Text size={isDesktop() ? 'xxs' : 'xxxs'} className='accumulators-stats__history--expanded'>
+                <Text size={history_text_size} className='accumulators-stats__history--expanded'>
                     {rows.map((row, i) => (
                         <div key={i} className='accumulators-stats__row'>
-                            {row.map((el, idx) => (
-                                <TicksHistoryCounter key={idx} value={el} has_progress_dots={i === 0 && idx === 0} />
+                            {row.map((counter, idx) => (
+                                <TicksHistoryCounter
+                                    key={idx}
+                                    value={counter}
+                                    has_progress_dots={i === 0 && idx === 0}
+                                />
                             ))}
                         </div>
                     ))}

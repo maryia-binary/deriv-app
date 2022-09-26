@@ -34,6 +34,7 @@ import ServerTime from '_common/base/server_time';
 import { processPurchase } from './Actions/purchase';
 import * as Symbol from './Actions/symbol';
 
+import { getUpdatedTicksHistoryStats } from './Helpers/accumulator';
 import { processTradeParams } from './Helpers/process';
 import { createProposalRequests, getProposalErrorField, getProposalInfo } from './Helpers/proposal';
 import { setLimitOrderBarriers } from './Helpers/limit-orders';
@@ -981,9 +982,13 @@ export default class TradeStore extends BaseStore {
                 low_barrier,
             } = this.proposal_info.ACCU;
             if (this.proposal_info.DECCU) {
-                this.break_out_history = this.proposal_info.DECCU.ticks_history_stats;
-            } else this.break_out_history = dummy_break_out_history;
-            this.stay_in_history = stay_in_history;
+                this.break_out_history = getUpdatedTicksHistoryStats(
+                    this.break_out_history,
+                    this.proposal_info.DECCU.ticks_history_stats
+                );
+            } else
+                this.break_out_history = getUpdatedTicksHistoryStats(this.break_out_history, dummy_break_out_history);
+            this.stay_in_history = getUpdatedTicksHistoryStats(this.stay_in_history, stay_in_history);
             this.tick_size_barrier = tick_size_barrier;
             this.max_ticks_number = max_ticks_number;
             this.max_payout = max_payout;

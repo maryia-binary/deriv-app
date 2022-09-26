@@ -1,37 +1,24 @@
 import React from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { Icon, Text } from '@deriv/components';
 import { isDesktop } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
-import 'Sass/app/modules/contract/ticks-history-stats.scss';
+import TicksHistoryCounter from './ticks-history-counter';
+import { AccumulatorsStatsManualModal } from './accumulators-stats-manual-modal';
+import 'Sass/app/modules/contract/accumulators-stats.scss';
 
 const CONTRACT_TYPES = {
     STAY_IN: 'Stay in',
     BREAK_OUT: 'Break out',
 };
 
-const TickHistoryItem = React.memo(({ has_progress_dots, value }) => (
-    <div className='ticks-history-stats__history-item'>
-        {value}
-        {has_progress_dots && (
-            <div className='ticks-history-stats__progress-dots'>
-                {[1, 2, 3].map(dot => {
-                    return <span key={dot} className={`dot-${dot}`} />;
-                })}
-            </div>
-        )}
-    </div>
-));
-
-TickHistoryItem.displayName = 'TickHistoryItem';
-
-export const TicksHistoryStats = connect(({ modules }) => ({
-    break_out_history: modules.trade.break_out_history,
-    stay_in_history: modules.trade.stay_in_history,
-}))(({ break_out_history, is_expandable, stay_in_history }) => {
+const AccumulatorsStats = ({ break_out_history, is_expandable = false, stay_in_history }) => {
     const [is_collapsed, setIsCollapsed] = React.useState(true);
+    const [is_manual_open, setIsManualOpen] = React.useState(false);
     const [displayed_contract_name, setDisplayedContractName] = React.useState(CONTRACT_TYPES.STAY_IN);
+    const widget_title = localize('{{displayed_contract_name}} history', { displayed_contract_name });
     const ticks_history = displayed_contract_name === CONTRACT_TYPES.STAY_IN ? stay_in_history : break_out_history;
 
     const rows = ticks_history.reduce((acc, _el, index) => {
@@ -52,9 +39,14 @@ export const TicksHistoryStats = connect(({ modules }) => ({
         <div className='ticks-history-stats'>
             <div className={classNames('ticks-history-stats__container--collapsed')}>
                 <div className='ticks-history-stats__title'>
-                    <Icon icon='IcInfoOutline' onClick={() => {}} size={16} className='info' />
+                    <AccumulatorsStatsManualModal
+                        title={widget_title}
+                        icon_classname='info'
+                        is_manual_open={is_manual_open}
+                        toggleManual={() => setIsManualOpen(!is_manual_open)}
+                    />
                     <Text weight='bold' size='xxs'>
-                        {localize('{{displayed_contract_name}} history', { displayed_contract_name })}
+                        {widget_title}
                     </Text>
                 </div>
                 <div className='ticks-history-stats__nav-buttons' onClick={handleSwitchBetweenContracts}>
@@ -64,7 +56,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                 </div>
                 <Text size='xxs' className='ticks-history-stats__history'>
                     {is_collapsed ? (
-                        rows[0]?.map((el, i) => <TickHistoryItem key={i} value={el} has_progress_dots={i === 0} />)
+                        rows[0]?.map((el, i) => <TicksHistoryCounter key={i} value={el} has_progress_dots={i === 0} />)
                     ) : (
                         <div className='ticks-history-stats__history-heading'>{localize('Number of ticks')}</div>
                     )}
@@ -82,7 +74,7 @@ export const TicksHistoryStats = connect(({ modules }) => ({
                     {rows.map((row, i) => (
                         <div key={i} className='ticks-history-stats__row'>
                             {row.map((el, idx) => (
-                                <TickHistoryItem key={idx} value={el} has_progress_dots={i === 0 && idx === 0} />
+                                <TicksHistoryCounter key={idx} value={el} has_progress_dots={i === 0 && idx === 0} />
                             ))}
                         </div>
                     ))}
@@ -90,4 +82,15 @@ export const TicksHistoryStats = connect(({ modules }) => ({
             )}
         </div>
     );
-});
+};
+
+AccumulatorsStats.propTypes = {
+    break_out_history: PropTypes.array,
+    is_expandable: PropTypes.bool,
+    stay_in_history: PropTypes.array,
+};
+
+export default connect(({ modules }) => ({
+    break_out_history: modules.trade.break_out_history,
+    stay_in_history: modules.trade.stay_in_history,
+}))(AccumulatorsStats);

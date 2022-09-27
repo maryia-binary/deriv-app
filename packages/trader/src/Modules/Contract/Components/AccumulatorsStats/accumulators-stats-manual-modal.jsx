@@ -15,8 +15,8 @@ const AccumulatorsStatsManualModal = ({ title, icon_classname, is_manual_open, t
                 should_header_stick_body={false}
                 title={title}
                 toggleModal={toggleManual}
-                height={isMobile() ? '94vh' : '712px'}
-                width={isMobile() ? '90vw' : '755px'}
+                height={isMobile() ? '605px' : '712px'}
+                width={isMobile() ? '328px' : '755px'}
                 className='accumulators-stats-manual-modal'
             >
                 <Modal.Body className='accumulators-stats-modal-body'>

@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Icon, Text } from '@deriv/components';
-import { isDesktop } from '@deriv/shared';
+import { Icon, MobileDialog, Text } from '@deriv/components';
+import { isDesktop, isMobile } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import TicksHistoryCounter from './ticks-history-counter';
@@ -23,7 +23,7 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
         displayed_contract_name === CONTRACT_TYPES.STAY_IN
             ? stay_in_history.map(counter => counter.counter_value)
             : break_out_history.map(counter => counter.counter_value);
-    const history_text_size = isDesktop() ? 'xxs' : 'xxxs';
+    const history_text_size = isDesktop() || !is_collapsed ? 'xxs' : 'xxxs';
 
     const rows = ticks_history.reduce((acc, _el, index) => {
         const desktop_row_size = is_collapsed ? 15 : 10;
@@ -37,6 +37,19 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
 
     const handleSwitchBetweenContracts = () => {
         setDisplayedContractName(Object.values(CONTRACT_TYPES).find(name => name !== displayed_contract_name));
+    };
+
+    const DynamicWrapper = {
+        Component: isMobile() ? MobileDialog : React.Fragment,
+        props: isMobile()
+            ? {
+                  onClose: () => setIsCollapsed(!is_collapsed),
+                  portal_element_id: 'modal_root',
+                  title: widget_title,
+                  visible: !is_collapsed,
+                  wrapper_classname: 'accumulators-stats',
+              }
+            : null,
     };
 
     return (
@@ -74,19 +87,21 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
                 )}
             </div>
             {is_expandable && !is_collapsed && (
-                <Text size={history_text_size} className='accumulators-stats__history--expanded'>
-                    {rows.map((row, i) => (
-                        <div key={i} className='accumulators-stats__row'>
-                            {row.map((counter, idx) => (
-                                <TicksHistoryCounter
-                                    key={idx}
-                                    value={counter}
-                                    has_progress_dots={i === 0 && idx === 0}
-                                />
-                            ))}
-                        </div>
-                    ))}
-                </Text>
+                <DynamicWrapper.Component {...DynamicWrapper.props}>
+                    <Text size={history_text_size} className='accumulators-stats__history--expanded'>
+                        {rows.map((row, i) => (
+                            <div key={i} className='accumulators-stats__row'>
+                                {row.map((counter, idx) => (
+                                    <TicksHistoryCounter
+                                        key={idx}
+                                        value={counter}
+                                        has_progress_dots={i === 0 && idx === 0}
+                                    />
+                                ))}
+                            </div>
+                        ))}
+                    </Text>
+                </DynamicWrapper.Component>
             )}
         </div>
     );

@@ -52,6 +52,8 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
             : null,
     };
 
+    if (!ticks_history.length) return null;
+
     return (
         <div className='accumulators-stats'>
             <div className={classNames('accumulators-stats__container--collapsed')}>

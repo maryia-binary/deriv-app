@@ -21,7 +21,7 @@ const limit_order = {
 const contract_status = 'open'; // 'lost', 'won' or 'open'
 const position_status = 'profit'; // 'profit' or 'loss'
 const result = ''; // 'won' or 'lost'
-const profit_loss = +0.15;
+const profit = +0.15;
 const profit_percentage = +1.5;
 const is_sold = 0; // 0 || 1
 const ticks_history_stats = [
@@ -39,7 +39,7 @@ const tick_count = 1000;
 //             contract_status = 'won'; // 'lost', 'won' or 'open'
 //             position_status = 'profit'; // 'profit' or 'loss'
 //             result = 'won'; // 'won' or 'lost'
-//             profit_loss = +0.15;
+//             profit = +0.15;
 //             profit_percentage = +1.5;
 //             is_sold = 1; // 0 || 1
 //         }, ms1);
@@ -47,15 +47,15 @@ const tick_count = 1000;
 //             contract_status = 'lost'; // 'lost', 'won' or 'open'
 //             position_status = 'loss'; // 'profit' or 'loss'
 //             result = 'lost'; // 'won' or 'lost'
-//             profit_loss = -0.15;
-//             profit_percentage = -1.5;
+//             profit = -10;
+//             profit_percentage = -100;
 //             is_sold = 1; // 0 || 1
 //         }, ms2);
 //         setTimeout(() => {
 //             contract_status = 'open'; // 'lost', 'won' or 'open'
 //             position_status = 'profit'; // 'profit' or 'loss'
 //             result = ''; // 'won' or 'lost'
-//             profit_loss = +0.15;
+//             profit = +0.15;
 //             profit_percentage = +1.5;
 //             is_sold = 0; // 0 || 1
 //         }, ms3);
@@ -121,7 +121,7 @@ export const getDummyPOCResponseForACCU = time_now => {
             current_ticks_count,
             longcode,
             growth_rate: 0.01,
-            profit: profit_loss,
+            profit,
             profit_percentage,
             purchase_time: dummy_start_time,
             shortcode,
@@ -290,7 +290,7 @@ export const getDummyAllPositionsForACCU = time_now => {
                 longcode,
                 growth_rate: 0.01,
                 payout: 27.45,
-                profit: profit_loss,
+                profit,
                 profit_percentage,
                 purchase_time: dummy_start_time,
                 shortcode,
@@ -324,7 +324,7 @@ export const getDummyAllPositionsForACCU = time_now => {
                 },
                 underlying: 'frxAUDJPY',
             },
-            details: `Win payout when every tick of your contract is within ± ${tick_size_barrier} % of the previous tick in AUD/JPY`,
+            details: longcode,
             display_name: 'AUD/JPY',
             indicative: 8.46,
             payout: 27.45,
@@ -332,7 +332,7 @@ export const getDummyAllPositionsForACCU = time_now => {
             reference: 45479,
             type: contract_type,
             is_unsupported: false,
-            profit_loss,
+            profit_loss: profit,
             is_valid_to_sell: true,
             current_tick: 4,
             barrier_count: 2,
@@ -364,13 +364,13 @@ export const getDummyProposalInfoForACCU = (growth_rate, response) => {
         has_increased: null,
         id: '2b88e20f-f976-a380-904d-04db08e10eeb',
         limit_order,
-        message: `Win payout when every tick of your contract is within ± ${tick_size_barrier} % of the previous tick in AUD/JPY`,
+        message: longcode,
         obj_contract_basis: {
             text: '',
             value: '',
         },
         payout: 27.45,
-        profit: `${profit_loss}`,
+        profit: `${profit}`,
         returns: '-100.00%',
         stake,
     };
@@ -433,7 +433,6 @@ export const getDummyProposalResponseForACCU = time_now => {
         proposal: {
             ticks_history_stats,
             tick_size_barrier,
-            current_ticks_count,
             tick_count,
             max_payout: 20000,
             high_barrier,

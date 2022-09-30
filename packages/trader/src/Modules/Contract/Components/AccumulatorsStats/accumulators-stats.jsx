@@ -9,7 +9,7 @@ import TicksHistoryCounter from './ticks-history-counter';
 import { AccumulatorsStatsManualModal } from './accumulators-stats-manual-modal';
 import 'Sass/app/modules/contract/accumulators-stats.scss';
 
-const CONTRACT_TYPES = {
+export const CONTRACT_TYPES = {
     STAY_IN: 'Stay in',
     BREAK_OUT: 'Break out',
 };
@@ -68,7 +68,11 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
                         {widget_title}
                     </Text>
                 </div>
-                <div className='accumulators-stats__nav-buttons' onClick={handleSwitchBetweenContracts}>
+                <div
+                    data-testid='dt_nav_buttons'
+                    className='accumulators-stats__nav-buttons'
+                    onClick={handleSwitchBetweenContracts}
+                >
                     {['IcChevronUpNormal', 'IcChevronDown'].map(icon => (
                         <Icon key={icon} icon={icon} />
                     ))}

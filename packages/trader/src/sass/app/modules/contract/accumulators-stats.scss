@@ -62,7 +62,7 @@
             }
         }
     }
-    &__nav-buttons {
+    &__switcher {
         display: flex;
         flex-direction: column;
         margin: 0 0.8rem 0 0.4rem;
@@ -162,7 +162,7 @@
             flex-grow: 1;
         }
     }
-    &__accordion-toggle-arrow {
+    .accordion-toggle-arrow {
         position: absolute;
         right: 0.4rem;
         top: 0;

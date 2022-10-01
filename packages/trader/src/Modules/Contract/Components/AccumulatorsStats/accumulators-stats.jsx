@@ -13,6 +13,12 @@ export const CONTRACT_TYPES = {
     STAY_IN: 'Stay in',
     BREAK_OUT: 'Break out',
 };
+export const ROW_SIZES = {
+    DESKTOP_COLLAPSED: 15,
+    DESKTOP_EXPANDED: 10,
+    MOBILE_COLLAPSED: 6,
+    MOBILE_EXPANDED: 5,
+};
 
 const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_history }) => {
     const [is_collapsed, setIsCollapsed] = React.useState(true);
@@ -26,8 +32,8 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
     const history_text_size = isDesktop() || !is_collapsed ? 'xxs' : 'xxxs';
 
     const rows = ticks_history.reduce((acc, _el, index) => {
-        const desktop_row_size = is_collapsed ? 15 : 10;
-        const mobile_row_size = is_collapsed ? 6 : 5;
+        const desktop_row_size = is_collapsed ? ROW_SIZES.DESKTOP_COLLAPSED : ROW_SIZES.DESKTOP_EXPANDED;
+        const mobile_row_size = is_collapsed ? ROW_SIZES.MOBILE_COLLAPSED : ROW_SIZES.MOBILE_EXPANDED;
         const row_size = isDesktop() ? desktop_row_size : mobile_row_size;
         if (index % row_size === 0) {
             acc.push(ticks_history.slice(index, index + row_size));
@@ -69,8 +75,8 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
                     </Text>
                 </div>
                 <div
-                    data-testid='dt_nav_buttons'
-                    className='accumulators-stats__nav-buttons'
+                    data-testid='dt_accu_stats_switcher'
+                    className='accumulators-stats__switcher'
                     onClick={handleSwitchBetweenContracts}
                 >
                     {['IcChevronUpNormal', 'IcChevronDown'].map(icon => (
@@ -88,7 +94,7 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
                     <Icon
                         icon={is_collapsed ? 'IcArrowUp' : 'IcArrowDown'}
                         onClick={() => setIsCollapsed(!is_collapsed)}
-                        className='accumulators-stats__accordion-toggle-arrow'
+                        className='accordion-toggle-arrow'
                     />
                 )}
             </div>
@@ -96,7 +102,7 @@ const AccumulatorsStats = ({ break_out_history, is_expandable = true, stay_in_hi
                 <DynamicWrapper.Component {...DynamicWrapper.props}>
                     <Text size={history_text_size} className='accumulators-stats__history--expanded'>
                         {rows.map((row, i) => (
-                            <div key={i} className='accumulators-stats__row'>
+                            <div key={i} data-testid='dt_accu_stats_history_row' className='accumulators-stats__row'>
                                 {row.map((counter, idx) => (
                                     <TicksHistoryCounter
                                         key={idx}

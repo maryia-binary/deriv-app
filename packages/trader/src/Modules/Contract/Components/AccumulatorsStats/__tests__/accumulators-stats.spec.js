@@ -1,7 +1,7 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { isDesktop, isMobile } from '@deriv/shared';
-import AccumulatorsStats, { CONTRACT_TYPES } from '../accumulators-stats';
+import AccumulatorsStats, { CONTRACT_TYPES, ROW_SIZES } from '../accumulators-stats';
 
 const mock_connect_props = {
     stay_in_history: [
@@ -57,8 +57,8 @@ jest.mock('Stores/connect.js', () => ({
 }));
 jest.mock('@deriv/shared', () => ({
     ...jest.requireActual('@deriv/shared'),
-    isDesktop: jest.fn(() => true),
-    isMobile: jest.fn(() => false),
+    isDesktop: jest.fn(),
+    isMobile: jest.fn(),
     getUrlBase: jest.fn(() => 'image_src.svg'),
 }));
 
@@ -68,48 +68,66 @@ describe('AccumulatorsStats', () => {
     document.body.appendChild(modal_root_el);
     const { break_out_history, stay_in_history } = mock_connect_props;
 
+    beforeEach(() => {
+        isMobile.mockReturnValue(false);
+        isDesktop.mockReturnValue(true);
+    });
+
     it('should render as expandable', () => {
         const { container } = render(<AccumulatorsStats />);
-        expect(container.querySelector('.accumulators-stats__accordion-toggle-arrow')).toBeInTheDocument();
+        expect(container.querySelector('.accordion-toggle-arrow')).toBeInTheDocument();
     });
     it('should render as non-expandable', () => {
         const { container } = render(<AccumulatorsStats is_expandable={false} />);
-        expect(container.querySelector('.accumulators-stats__accordion-toggle-arrow')).not.toBeInTheDocument();
+        expect(container.querySelector('.accordion-toggle-arrow')).not.toBeInTheDocument();
     });
-    it('should switch to Break out history when nav_buttons are clicked', () => {
+    it('should switch to Break out history when switcher are clicked and back to Stay in history when clicked again', () => {
         render(<AccumulatorsStats />);
         expect(screen.getByText(`${CONTRACT_TYPES.STAY_IN} history`)).toBeInTheDocument();
+        expect(screen.getByText(stay_in_history[0].counter_value)).toBeInTheDocument();
 
-        fireEvent.click(screen.getByTestId('dt_nav_buttons'));
+        fireEvent.click(screen.getByTestId('dt_accu_stats_switcher'));
         expect(screen.getByText(`${CONTRACT_TYPES.BREAK_OUT} history`)).toBeInTheDocument();
-        expect(screen.getByText(break_out_history[0].counter_value.toString())).toBeInTheDocument();
+        expect(screen.getByText(break_out_history[0].counter_value)).toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId('dt_accu_stats_switcher'));
+        expect(screen.getByText(`${CONTRACT_TYPES.STAY_IN} history`)).toBeInTheDocument();
+        expect(screen.getByText(stay_in_history[0].counter_value)).toBeInTheDocument();
     });
-    it('should show manual when is_manual_open is set to true', () => {
-        jest.spyOn(React, 'useState')
-            .mockReturnValueOnce([true, () => {}]) // is_collapsed
-            .mockReturnValueOnce([true, () => {}]); // is_manual_open
-        render(<AccumulatorsStats />);
+    it('should show manual after info icon is clicked', () => {
+        const { container } = render(<AccumulatorsStats />);
+        fireEvent.click(container.querySelector('.info'));
         expect(screen.getByAltText('accumulators_stats_manual')).toBeInTheDocument();
     });
-    it('should render 15 history values (tick counters) initially for desktop', () => {
+    it('should render partial history values (tick counters) when initially collapsed in desktop', () => {
         render(<AccumulatorsStats />);
-        expect(screen.getAllByTestId('dt_history_counter').length).toEqual(15);
+        expect(screen.getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.DESKTOP_COLLAPSED);
     });
-    it('should render 6 history values (tick counters) initially for mobile', () => {
+    it('should render partial history values (tick counters) when initially collapsed in mobile', () => {
         isMobile.mockReturnValue(true);
         isDesktop.mockReturnValue(false);
         render(<AccumulatorsStats />);
-        expect(screen.getAllByTestId('dt_history_counter').length).toEqual(6);
+        expect(screen.getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.MOBILE_COLLAPSED);
     });
-    it('should expand when accordion_toggle_arrow is clicked', () => {
+    it('should expand in desktop when accordion_toggle_arrow is clicked', () => {
         const { container } = render(<AccumulatorsStats />);
-        expect(
-            screen.queryByText(stay_in_history[stay_in_history.length - 1].counter_value.toString())
-        ).not.toBeInTheDocument();
+        expect(screen.getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.DESKTOP_COLLAPSED);
 
-        fireEvent.click(container.querySelector('.accumulators-stats__accordion-toggle-arrow'));
-        expect(
-            screen.getByText(stay_in_history[stay_in_history.length - 1].counter_value.toString())
-        ).toBeInTheDocument();
+        fireEvent.click(container.querySelector('.accordion-toggle-arrow'));
+        const row = screen.getAllByTestId('dt_accu_stats_history_row')[0];
+        expect(within(row).getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.DESKTOP_EXPANDED);
+        expect(screen.getAllByTestId('dt_accu_stats_history_counter').length).toEqual(20);
+    });
+    it('should show MobileDialog with full "Stay in history" in mobile when accordion_toggle_arrow is clicked', () => {
+        isMobile.mockReturnValue(true);
+        isDesktop.mockReturnValue(false);
+        const { container } = render(<AccumulatorsStats />);
+        expect(screen.getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.MOBILE_COLLAPSED);
+
+        fireEvent.click(container.querySelector('.accordion-toggle-arrow'));
+        const mobile_dialog = document.body.querySelector('.dc-mobile-dialog__accumulators-stats');
+        const row = within(mobile_dialog).getAllByTestId('dt_accu_stats_history_row')[0];
+        expect(within(row).getAllByTestId('dt_accu_stats_history_counter').length).toEqual(ROW_SIZES.MOBILE_EXPANDED);
+        expect(within(mobile_dialog).getAllByTestId('dt_accu_stats_history_counter').length).toEqual(20);
     });
 });

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const BottomWidgets = ({ Widget }) => <div className='bottom-widgets'>{Widget}</div>;
+const BottomWidgets = ({ Digits }) => <div className='bottom-widgets'>{Digits}</div>;
 
 BottomWidgets.propTypes = {
-    Widget: PropTypes.node,
+    Digits: PropTypes.node,
 };
 
 export default BottomWidgets;

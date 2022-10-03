@@ -1,7 +1,6 @@
 import React from 'react';
 import { isMobile } from '@deriv/shared';
 import Digits from 'Modules/Contract/Components/Digits';
-import AccumulatorsStats from 'Modules/Contract/Components/AccumulatorsStats';
 import { connect } from 'Stores/connect';
 import BottomWidgets from '../../SmartChart/Components/bottom-widgets.jsx';
 import ControlWidgets from '../../SmartChart/Components/control-widgets.jsx';
@@ -71,16 +70,8 @@ export const ChartTopWidgets = connect(({ modules, ui }) => ({
     );
 });
 
-export const ChartBottomWidgets = ({ digits, tick, show_accumulators_stats }) => (
-    <BottomWidgets
-        Widget={
-            show_accumulators_stats ? (
-                <AccumulatorsStats />
-            ) : (
-                <BottomWidgets Widget={<DigitsWidget digits={digits} tick={tick} />} />
-            )
-        }
-    />
+export const ChartBottomWidgets = ({ digits, tick }) => (
+    <BottomWidgets Digits={<DigitsWidget digits={digits} tick={tick} />} />
 );
 
 export const ChartControlWidgets = connect(({ contract_trade }) => ({

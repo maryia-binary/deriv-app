@@ -15,8 +15,7 @@
                     transform: translate3d(130px, 0, 0) !important;
                 }
                 .cq-bottom-ui-widgets {
-                    .digits__container,
-                    .accumulators-stats {
+                    .digits__container {
                         transform: translate3d(130px, 0, 0) !important;
                     }
                 }
@@ -25,8 +24,7 @@
                         transform: translate3d(248px, 0, 0) !important;
                     }
                     .cq-bottom-ui-widgets {
-                        .digits__container,
-                        .accumulators-stats {
+                        .digits__container {
                             transform: translate3d(170px, 40px, 0) !important;
                         }
                     }
@@ -431,6 +429,16 @@ $FLOATING_HEADER_HEIGHT: 41px;
         // charts width is 100% - sidebar width - sidebar margin - .trade-container padding
         width: calc(100% - 240px - 1.6rem - 2.4rem);
         height: calc(100vh - #{$HEADER_HEIGHT} - #{$FOOTER_HEIGHT});
+
+        .trade-container--accumulators & {
+            .smartcharts {
+                height: calc(100% - 4.8rem - #{$POSITIONS_DRAWER_MARGIN * 2});
+            }
+            .accumulators-stats {
+                position: absolute;
+                bottom: 0;
+            }
+        }
     }
     &__loader {
         position: absolute;

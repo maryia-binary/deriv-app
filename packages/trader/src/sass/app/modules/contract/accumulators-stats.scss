@@ -1,47 +1,36 @@
-/** @define cq-bottom-ui-widgets; weak */
-.cq-bottom-ui-widgets {
-    bottom: 10px !important;
-}
-
 .accumulators-stats {
     $self: &;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    margin: 0 2.5em 0 1em;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    margin-bottom: #{$POSITIONS_DRAWER_MARGIN * 2};
     background-color: var(--general-section-1);
     border-radius: $BORDER_RADIUS * 2;
+    min-width: 73.6rem;
 
     @include mobile {
-        position: absolute;
         top: -5.4rem;
         left: -0.8rem;
         margin: 0 0.8rem;
         width: calc(100vw - 1.6rem);
+        min-width: unset;
     }
 
-    /* Screen height fixes due to UI space restrictions */
-    @media only screen and (max-height: 520px) {
-        transform: scale(0.85);
-        transform-origin: bottom;
-        padding: 0 0.8rem !important;
-    }
-    @media only screen and (max-height: 480px) {
-        transform: scale(0.75);
+    .app-contents--show-positions-drawer & {
+        left: 26rem;
+        width: calc(100% - 26rem);
     }
 
     &__container--collapsed {
         display: flex;
         align-items: center;
-        width: 73.6rem;
+        width: 100%;
         height: 4.8rem;
         position: relative;
         padding: 1.3rem 0.8rem;
-
-        @include mobile {
-            width: 100%;
-        }
     }
     &__title {
         display: flex;
@@ -76,6 +65,8 @@
         display: flex;
         align-items: center;
         margin-right: 0.5rem;
+        justify-content: space-between;
+        flex-grow: 1;
 
         &-counter {
             width: 3.8rem;
@@ -132,7 +123,8 @@
             }
         }
         &-heading {
-            margin-left: 46.5rem;
+            position: absolute;
+            right: 3.2rem;
         }
         &--expanded {
             display: flex;
@@ -156,10 +148,6 @@
                     width: 3.8rem;
                 }
             }
-        }
-        @include mobile {
-            justify-content: space-between;
-            flex-grow: 1;
         }
     }
     .accordion-toggle-arrow {

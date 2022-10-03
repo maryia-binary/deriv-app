@@ -12,6 +12,7 @@ import { ChartBottomWidgets, ChartTopWidgets, DigitsWidget } from './chart-widge
 import FormLayout from '../Components/Form/form-layout.jsx';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets.jsx';
+import AccumulatorsStats from 'Modules/Contract/Components/AccumulatorsStats/accumulators-stats.jsx';
 
 const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }) => {
     React.useEffect(() => {
@@ -166,11 +167,8 @@ const Trade = ({
                     <DesktopWrapper>
                         <div className='chart-container__wrapper'>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <ChartTrade
-                                topWidgets={topWidgets}
-                                charts_ref={charts_ref}
-                                show_accumulators_stats={show_accumulators_stats}
-                            />
+                            <ChartTrade topWidgets={topWidgets} charts_ref={charts_ref} />
+                            {show_accumulators_stats && <AccumulatorsStats />}
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -305,7 +303,6 @@ const Chart = props => {
         refToAddTick,
         setChartStatus,
         settings,
-        show_accumulators_stats,
         show_digits_stats,
         symbol,
         wsForget,
@@ -315,15 +312,8 @@ const Chart = props => {
     } = props;
 
     const bottomWidgets = React.useCallback(
-        ({ digits, tick }) => (
-            <ChartBottomWidgets
-                digits={digits}
-                tick={tick}
-                show_accumulators_stats={show_accumulators_stats}
-                is_trade_page
-            />
-        ),
-        [show_accumulators_stats]
+        ({ digits, tick }) => <ChartBottomWidgets digits={digits} tick={tick} />,
+        []
     );
 
     const getMarketsOrder = active_symbols => {
@@ -354,9 +344,7 @@ const Chart = props => {
         <SmartChartWithRef
             ref={charts_ref}
             barriers={barriers}
-            bottomWidgets={
-                (show_accumulators_stats || show_digits_stats) && isDesktop() ? bottomWidgets : props.bottomWidgets
-            }
+            bottomWidgets={show_digits_stats && isDesktop() ? bottomWidgets : props.bottomWidgets}
             crosshair={isMobile() ? 0 : undefined}
             crosshairTooltipLeftAllow={560}
             showLastDigitStats={isDesktop() ? show_digits_stats : false}
@@ -423,7 +411,6 @@ Chart.propTypes = {
     refToAddTick: PropTypes.func,
     setChartStatus: PropTypes.func,
     settings: PropTypes.object,
-    show_accumulators_stats: PropTypes.bool,
     symbol: PropTypes.string,
     wsForget: PropTypes.func,
     wsForgetStream: PropTypes.func,

@@ -1,15 +1,15 @@
-const high_barrier = 96.58;
-const low_barrier = 96.54;
-const tick_1_price = 92.444;
-const tick_2_price = 92.317;
-const tick_3_price = 92.431;
-const tick_4_price = 92.544;
-const tick_5_price = 92.832;
-const entry_spot = 92.812;
-const tick_8_price = 92.678;
-const previous_tick_price = 92.693;
-const current_spot = 95.426;
-const take_profit_price = 90.021;
+const high_barrier = 6545.0;
+const low_barrier = 6543;
+const tick_1_price = 6543.44;
+const tick_2_price = 6543.31;
+const tick_3_price = 6543.43;
+const tick_4_price = 6543.54;
+const tick_5_price = 6543.83;
+const entry_spot = 6543.81;
+const tick_8_price = 6543.67;
+const previous_tick_price = 6543.69;
+const current_spot = 6543.42;
+const take_profit_price = 6543.02;
 const limit_order = {
     take_profit: {
         display_name: 'Take profit',

@@ -76,7 +76,7 @@ export default class ContractStore extends BaseStore {
         // TODO: don't update the barriers & markers if they are not changed
         this.updateBarriersArray(contract_info, this.root_store.ui.is_dark_mode_on);
         this.markers_array = createChartMarkers(this.contract_info);
-        this.marker = calculate_marker(this.contract_info);
+        this.marker = calculate_marker(this.contract_info, this.root_store.portfolio.contract_type);
 
         this.contract_config = getChartConfig(this.contract_info);
         this.display_status = getDisplayStatus(this.contract_info);
@@ -216,8 +216,11 @@ export default class ContractStore extends BaseStore {
     }
 }
 
-function calculate_marker(contract_info) {
-    if (!contract_info || isMultiplierContract(contract_info.contract_type)) {
+function calculate_marker(contract_info, trade_type) {
+    // eslint-disable-next-line no-console
+    console.log(trade_type, 'trade_type');
+    const is_accumulator = trade_type === 'accumulator';
+    if ((!is_accumulator && !contract_info) || isMultiplierContract(contract_info.contract_type)) {
         return null;
     }
     const {
@@ -278,7 +281,7 @@ function calculate_marker(contract_info) {
         if (!isDigitContract(contract_type)) {
             // TickContract
             return {
-                contract_info: toJS(contract_info),
+                contract_info: toJS({ ...contract_info, is_accumulator }),
                 type: 'TickContract',
                 key: `${contract_id}-date_start`,
                 epoch_array: [date_start, current_spot_time, ...ticks_epoch_array],

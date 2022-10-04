@@ -261,12 +261,13 @@ import classNames from 'classnames';
 const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChart innerRef={ref} {...props} />);
 
 // ChartMarkers --------------------------
-const Markers = ({ markers_array, is_dark_theme, granularity, currency, config }) =>
+const Markers = ({ markers_array, is_dark_theme, granularity, currency, config, is_accumulator_trade }) =>
     markers_array.map(marker => {
         const Marker = AllMarkers[marker.type];
         return (
             <Marker
                 key={marker.key}
+                is_accumulator_trade={is_accumulator_trade}
                 is_dark_theme={is_dark_theme}
                 granularity={granularity}
                 currency={currency}
@@ -276,11 +277,12 @@ const Markers = ({ markers_array, is_dark_theme, granularity, currency, config }
         );
     });
 
-const ChartMarkers = connect(({ ui, client, contract_trade }) => ({
+const ChartMarkers = connect(({ ui, client, contract_trade, modules }) => ({
     markers_array: contract_trade.markers_array,
     is_digit_contract: contract_trade.is_digit_contract,
     granularity: contract_trade.granularity,
     is_dark_theme: ui.is_dark_mode_on,
+    is_accumulator_trade: modules.trade.is_accumulator,
     currency: client.currency,
 }))(Markers);
 

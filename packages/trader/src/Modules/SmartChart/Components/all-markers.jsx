@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Things to do before touching this file :P
 // 1- Please read https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 // 2- Please read RawMarker.jsx in https://github.com/binary-com/SmartCharts
@@ -202,6 +203,7 @@ const TickContract = RawMarkerMaker(
         canvas_height: canvas_fixed_height,
         points: [start, current_spot_time, ...ticks],
         prices: [barrier, barrier_2], // TODO: support two barrier contracts
+        is_accumulator_trade,
         is_last_contract,
         is_dark_theme,
         granularity,
@@ -212,12 +214,15 @@ const TickContract = RawMarkerMaker(
             status,
             profit,
             profit_percentage,
+            is_accumulator,
             is_sold,
             is_expired,
             // tick_stream,
             tick_count,
         },
     }) => {
+        console.log('is_accumulator!', is_accumulator);
+        console.log('is_accumulator_trade', is_accumulator_trade);
         /** @type {CanvasRenderingContext2D} */
         const ctx = context;
 

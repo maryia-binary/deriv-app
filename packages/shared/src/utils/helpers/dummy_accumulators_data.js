@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 const high_barrier = 6545.0;
 const low_barrier = 6543;
 const tick_1_price = 6543.44;
@@ -32,23 +33,23 @@ const market = 'synthetic_index';
 const submarket = 'random_index';
 const exchange_name = 'RANDOM';
 
-const contract_status = 'open'; // 'lost', 'won' or 'open'
-const position_status = 'profit'; // 'profit' or 'loss'
-const result = ''; // 'won' or 'lost'
-const profit = +0.15;
-const profit_percentage = +1.5;
-const is_sold = 0; // 0 || 1
+let contract_status = 'open'; // 'lost', 'won' or 'open'
+let position_status = 'profit'; // 'profit' or 'loss'
+let result = ''; // 'won' or 'lost'
+let profit = +0.15;
+let profit_percentage = +1.5;
+let is_sold = 0; // 0 || 1
 
 // let first_time;
 // const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
 //     setInterval(() => {
 //         setTimeout(() => {
-//             contract_status = 'won'; // 'lost', 'won' or 'open'
-//             position_status = 'profit'; // 'profit' or 'loss'
-//             result = 'won'; // 'won' or 'lost'
-//             profit = +0.15;
-//             profit_percentage = +1.5;
-//             is_sold = 1; // 0 || 1
+contract_status = 'won'; // 'lost', 'won' or 'open'
+position_status = 'profit'; // 'profit' or 'loss'
+result = 'won'; // 'won' or 'lost'
+profit = +0.15;
+profit_percentage = +1.5;
+is_sold = 1; // 0 || 1
 //         }, ms1);
 //         setTimeout(() => {
 //             contract_status = 'lost'; // 'lost', 'won' or 'open'
@@ -379,6 +380,7 @@ export const getDummyProposalInfoForACCU = (growth_rate, response) => {
         payout: 27.45,
         profit: `${profit}`,
         returns: '-100.00%',
+        spot_time: response.proposal.spot_time,
         stake,
     };
 };
@@ -411,7 +413,7 @@ export const dummy_accumulators_proposals = {
         contract_type: 'ACCU',
         currency: 'USD',
         symbol,
-        multiplier: 30,
+        growth_rate: 0.01,
     },
 };
 

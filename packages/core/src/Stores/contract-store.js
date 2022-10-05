@@ -76,7 +76,7 @@ export default class ContractStore extends BaseStore {
         // TODO: don't update the barriers & markers if they are not changed
         this.updateBarriersArray(contract_info, this.root_store.ui.is_dark_mode_on);
         this.markers_array = createChartMarkers(this.contract_info);
-        this.marker = calculate_marker(this.contract_info, this.root_store.portfolio.contract_type);
+        this.marker = calculate_marker(this.contract_info, this.root_store.portfolio.is_accumulator);
 
         this.contract_config = getChartConfig(this.contract_info);
         this.display_status = getDisplayStatus(this.contract_info);
@@ -216,10 +216,7 @@ export default class ContractStore extends BaseStore {
     }
 }
 
-function calculate_marker(contract_info, trade_type) {
-    // eslint-disable-next-line no-console
-    console.log(trade_type, 'trade_type');
-    const is_accumulator = trade_type === 'accumulator';
+function calculate_marker(contract_info, is_accumulator) {
     if ((!is_accumulator && !contract_info) || isMultiplierContract(contract_info.contract_type)) {
         return null;
     }
@@ -262,11 +259,11 @@ function calculate_marker(contract_info, trade_type) {
         price_array.push(exit_tick);
     }
 
-    if (!date_start) {
+    if (!date_start && !is_accumulator) {
         return null;
     }
     // if we have not yet received the first POC response
-    if (!transaction_ids) {
+    if (!transaction_ids && !is_accumulator) {
         const type = is_digit_contract ? 'DigitContract' : 'TickContract';
         return {
             type,
@@ -277,25 +274,27 @@ function calculate_marker(contract_info, trade_type) {
         };
     }
 
-    if (tick_count >= 1) {
+    if (tick_count >= 1 || is_accumulator) {
         if (!isDigitContract(contract_type)) {
             // TickContract
             return {
-                contract_info: toJS({ ...contract_info, is_accumulator }),
+                contract_info: toJS(contract_info),
                 type: 'TickContract',
                 key: `${contract_id}-date_start`,
                 epoch_array: [date_start, current_spot_time, ...ticks_epoch_array],
                 price_array,
             };
         }
-        // DigitContract
-        return {
-            contract_info: toJS(contract_info),
-            type: 'DigitContract',
-            key: `${contract_id}-date_start`,
-            epoch_array: [date_start, ...ticks_epoch_array],
-            price_array,
-        };
+        if (tick_count >= 1) {
+            // DigitContract
+            return {
+                contract_info: toJS(contract_info),
+                type: 'DigitContract',
+                key: `${contract_id}-date_start`,
+                epoch_array: [date_start, ...ticks_epoch_array],
+                price_array,
+            };
+        }
     }
     // NonTickContract
     if (!tick_count) {

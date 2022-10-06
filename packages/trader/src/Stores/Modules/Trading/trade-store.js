@@ -120,7 +120,6 @@ export default class TradeStore extends BaseStore {
 
     // Accumulator trade params
     @observable accumulator_rates_list = [];
-    @observable current_spot_time;
     @observable growth_rate;
     @observable max_payout = 0;
     @observable max_ticks_number = 0;
@@ -989,7 +988,7 @@ export default class TradeStore extends BaseStore {
                 );
             } else
                 this.break_out_history = getUpdatedTicksHistoryStats(this.break_out_history, dummy_break_out_history);
-            this.current_spot_time = spot_time;
+            this.root_store.contract_trade.current_spot_time = spot_time;
             this.stay_in_history = getUpdatedTicksHistoryStats(this.stay_in_history, stay_in_history);
             this.tick_size_barrier = tick_size_barrier;
             this.max_ticks_number = tick_count;

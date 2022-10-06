@@ -1,16 +1,21 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prefer-const */
-const high_barrier = 6545.0;
-const low_barrier = 6543;
-const tick_1_price = 6543.44;
-const tick_2_price = 6543.31;
-const tick_3_price = 6543.43;
-const tick_4_price = 6543.54;
-const tick_5_price = 6543.83;
-const entry_spot = 6543.81;
-const tick_8_price = 6543.67;
-const previous_tick_price = 6543.69;
-const current_spot = 6543.42;
-const take_profit_price = 6543.02;
+const dummy_current_time = 1665073384; // should be an epoch of some real tick!
+const dummy_start_time = dummy_current_time - 7;
+const dummy_end_time = dummy_current_time + 6;
+
+const high_barrier = 6598.9;
+const low_barrier = 6596;
+const tick_1_price = low_barrier + 0.1;
+const tick_2_price = low_barrier + 0.15;
+const tick_3_price = low_barrier + 0.5;
+const tick_4_price = low_barrier + 0.25;
+const tick_5_price = low_barrier + 0.5;
+const entry_spot = low_barrier + 0.33;
+const tick_8_price = low_barrier + 0.75;
+const previous_tick_price = low_barrier + 0.19;
+const current_spot = low_barrier + 0.45;
+const take_profit_price = low_barrier + 3;
 const limit_order = {
     take_profit: {
         display_name: 'Take profit',
@@ -44,12 +49,12 @@ let is_sold = 0; // 0 || 1
 // const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
 //     setInterval(() => {
 //         setTimeout(() => {
-contract_status = 'won'; // 'lost', 'won' or 'open'
-position_status = 'profit'; // 'profit' or 'loss'
-result = 'won'; // 'won' or 'lost'
-profit = +0.15;
-profit_percentage = +1.5;
-is_sold = 1; // 0 || 1
+// contract_status = 'won'; // 'lost', 'won' or 'open'
+// position_status = 'profit'; // 'profit' or 'loss'
+// result = 'won'; // 'won' or 'lost'
+// profit = +0.15;
+// profit_percentage = +1.5;
+// is_sold = 1; // 0 || 1
 //         }, ms1);
 //         setTimeout(() => {
 //             contract_status = 'lost'; // 'lost', 'won' or 'open'
@@ -83,9 +88,6 @@ export const dummy_break_out_history = [
 ];
 
 export const getDummyPOCResponseForACCU = time_now => {
-    const dummy_current_time = Math.round(time_now / 1000); // 10 digits number
-    const dummy_start_time = dummy_current_time - 7;
-    const dummy_end_time = dummy_current_time + 6;
     return {
         echo_req: {
             proposal_open_contract: 1,
@@ -171,9 +173,6 @@ export const getDummyPOCResponseForACCU = time_now => {
 };
 
 export const getDummyPortfolioContractsForACCU = time_now => {
-    const dummy_current_time = Math.round(time_now / 1000); // 10 digit number
-    const dummy_start_time = dummy_current_time - 7;
-    const dummy_end_time = dummy_current_time + 6;
     // if (!first_time) {
     //     const interval = 5000;
     //     winLoseAndOpenContractInSec(interval, interval * 2, interval * 3);
@@ -200,9 +199,6 @@ export const getDummyPortfolioContractsForACCU = time_now => {
 };
 
 export const getDummyAllPositionsForACCU = time_now => {
-    const dummy_current_time = Math.round(time_now / 1000); // 10 digits number
-    const dummy_start_time = dummy_current_time - 7;
-    const dummy_end_time = dummy_current_time + 6;
     return [
         {
             contract_info: {
@@ -418,9 +414,6 @@ export const dummy_accumulators_proposals = {
 };
 
 export const getDummyProposalResponseForACCU = time_now => {
-    const dummy_current_time = Math.round(time_now / 1000); // 10 digits number
-    const dummy_start_time = dummy_current_time - 7;
-    const dummy_end_time = dummy_current_time + 6;
     return {
         echo_req: {
             amount: 10,

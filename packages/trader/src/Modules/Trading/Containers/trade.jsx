@@ -261,33 +261,8 @@ import classNames from 'classnames';
 const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChart innerRef={ref} {...props} />);
 
 // ChartMarkers --------------------------
-const Markers = ({
-    markers_array,
-    is_dark_theme,
-    granularity,
-    currency,
-    config,
-    current_spot_time = 0,
-    is_accumulator_trade,
-    high_barrier,
-    last_contract_status,
-    low_barrier,
-}) => {
-    let all_markers_array = [];
-    if (is_accumulator_trade && last_contract_status !== 'open') {
-        all_markers_array = [
-            {
-                type: 'TickContract',
-                contract_info: { is_accumulators_trade_without_contract: true },
-                key: 'accumulators_barriers_without_contract',
-                price_array: [high_barrier, low_barrier],
-                epoch_array: [current_spot_time, current_spot_time],
-            },
-        ];
-    } else {
-        all_markers_array = markers_array;
-    }
-    return all_markers_array?.map(marker => {
+const Markers = ({ markers_array, is_dark_theme, granularity, currency, config }) =>
+    markers_array.map(marker => {
         const Marker = AllMarkers[marker.type];
         return (
             <Marker
@@ -300,18 +275,12 @@ const Markers = ({
             />
         );
     });
-};
 
 const ChartMarkers = connect(({ ui, client, contract_trade, modules }) => ({
-    current_spot_time: modules.trade.current_spot_time,
     markers_array: contract_trade.markers_array,
     is_digit_contract: contract_trade.is_digit_contract,
     granularity: contract_trade.granularity,
     is_dark_theme: ui.is_dark_mode_on,
-    is_accumulator_trade: modules.trade.is_accumulator,
-    high_barrier: modules.trade.barrier_1,
-    last_contract_status: contract_trade.last_contract.contract_info?.status,
-    low_barrier: modules.trade.barrier_2,
     currency: client.currency,
 }))(Markers);
 

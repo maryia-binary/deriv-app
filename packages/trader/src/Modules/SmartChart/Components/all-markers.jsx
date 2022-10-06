@@ -176,8 +176,8 @@ const draw_partial_shade = ({
     }
 
     if (!is_between_shade) {
-        gradient.addColorStop(0.01, is_bottom_shade ? 'rgba(236, 63, 63, 0.16)' : 'rgba(236, 63, 63, 0)');
-        gradient.addColorStop(0.98, is_bottom_shade ? 'rgba(236, 63, 63, 0)' : 'rgba(236, 63, 63, 0.16)');
+        gradient.addColorStop(0.01, is_bottom_shade ? 'rgba(0, 167, 158, 0.16)' : 'rgba(0, 167, 158, 0)');
+        gradient.addColorStop(0.98, is_bottom_shade ? 'rgba(0, 167, 158, 0)' : 'rgba(0, 167, 158, 0.16)');
     }
 
     ctx.fillStyle = fill_color || is_between_shade ? 'rgba(0, 167, 158, 0.08)' : gradient;
@@ -294,42 +294,38 @@ const TickContract = RawMarkerMaker(
             return;
         }
         const entry = ticks[0];
-        const current_tick_index = ticks.findIndex(t => t.epoch === current_spot_time.epoch);
-        const current_tick = ticks[current_tick_index];
-        const previous_tick = ticks[current_tick_index - 1] || ticks[0];
         const exit = ticks[ticks.length - 1];
+        const previous_tick = ticks[ticks.length - 2] || exit;
         const opacity = is_sold ? calc_opacity(start.left, exit.left) : '';
 
         // barrier line
         if (start.visible || entry.visible || exit.visible) {
-            if (is_accumulators_contract && (status === 'lost' || status === 'won')) {
-                ctx.strokeStyle = color;
-                ctx.beginPath();
-                ctx.setLineDash([]);
-                ctx.moveTo(start.left, barrier);
-                ctx.lineTo(exit.left, barrier);
-                ctx.stroke();
-            } else if (!is_accumulators_contract) {
-                ctx.strokeStyle = color + opacity;
-                ctx.beginPath();
-                ctx.setLineDash([1, 1]);
-                ctx.moveTo(start.left, barrier);
-                ctx.lineTo(entry.left, barrier);
-                ctx.stroke();
+            const top = is_accumulators_contract ? entry.top : barrier;
+            ctx.strokeStyle = color + opacity;
+            ctx.beginPath();
+            ctx.setLineDash([1, 1]);
+            ctx.moveTo(start.left, top);
+            ctx.lineTo(entry.left, top);
+            ctx.stroke();
 
-                ctx.beginPath();
-                ctx.setLineDash([]);
-                ctx.moveTo(entry.left, barrier);
-                ctx.lineTo(exit.left, barrier);
-                ctx.stroke();
-                ctx.strokeStyle = color;
-            }
+            ctx.beginPath();
+            ctx.setLineDash([]);
+            ctx.moveTo(entry.left, top);
+            ctx.lineTo(exit.left, top);
+            ctx.stroke();
+            ctx.strokeStyle = color;
         }
 
         // ticks for last contract
         if (is_last_contract && granularity === 0 && !is_sold) {
             ticks
-                .filter(tick => tick.visible)
+                .filter((tick, index) => {
+                    if (is_accumulators_contract) {
+                        // mark only 2 latest ticks for accumulators
+                        return index >= ticks.length - 2;
+                    }
+                    return tick.visible;
+                })
                 .forEach(tick => {
                     const clr = tick === exit ? color : getColor({ status: 'fg', is_dark_theme });
                     ctx.fillStyle = clr + opacity;
@@ -384,7 +380,7 @@ const TickContract = RawMarkerMaker(
         // start-time marker
         if (start.visible) {
             draw_path(ctx, {
-                top: is_accumulators_contract ? entry.top : barrier - 9 * scale,
+                top: is_accumulators_contract ? entry.top - 9 * scale : barrier - 9 * scale,
                 left: start.left - 1 * scale,
                 zoom: start.zoom,
                 icon: ICONS.START.with_color(
@@ -396,7 +392,7 @@ const TickContract = RawMarkerMaker(
         // status marker
         if (exit.visible && is_sold) {
             draw_path(ctx, {
-                top: barrier - 9 * scale,
+                top: is_accumulators_contract ? entry.top - 9 * scale : barrier - 9 * scale,
                 left: exit.left + 8 * scale,
                 zoom: exit.zoom,
                 icon: ICONS.END.with_color(color, getColor({ status: 'bg', is_dark_theme })),
@@ -408,73 +404,94 @@ const TickContract = RawMarkerMaker(
             const sign = profit > 0 ? '+' : '';
             const profit_text = `${sign}${profit}`;
             ctx.save();
-            // draw 3 text items with different font size and weight:
-            shadowed_text({
-                ctx,
-                scale,
-                is_dark_theme,
-                text: profit_text,
-                font: `bold 20px IBM Plex Sans`,
-                text_align: 'start',
-                color: getColor({ status: 'open', profit }),
-                left: current_tick.left + 33,
-                top: current_tick.top,
-            });
-            const profit_text_width = ctx.measureText(profit_text).width;
-            shadowed_text({
-                ctx,
-                scale,
-                is_dark_theme,
-                text: `${currency}`,
-                font: '10px IBM Plex Sans',
-                text_align: 'start',
-                color: getColor({ status: 'open', profit }),
-                left: current_tick.left + profit_text_width + 35,
-                top: current_tick.top + 1.5,
-            });
-            shadowed_text({
-                ctx,
-                scale,
-                is_dark_theme,
-                text: `${sign}${profit_percentage}%`,
-                font: '12px IBM Plex Sans',
-                text_align: 'start',
-                color: getColor({ status: 'open', profit }),
-                left: current_tick.left + profit_text_width + 29,
-                top: current_tick.top + 16,
-            });
-            ctx.restore();
+            if (current_spot_time.visible && !is_sold) {
+                // draw 3 text items with different font size and weight:
+                [
+                    {
+                        text: profit_text,
+                        font: `bold 20px IBM Plex Sans`,
+                        left: current_spot_time.left + 33,
+                        top: current_spot_time.top,
+                    },
+                    {
+                        text: `${currency}`,
+                        font: '10px IBM Plex Sans',
+                        left: current_spot_time.left + 35,
+                        top: current_spot_time.top + 1.5,
+                    },
+                    {
+                        text: `${sign}${profit_percentage}%`,
+                        font: '12px IBM Plex Sans',
+                        left: current_spot_time.left + 29,
+                        top: current_spot_time.top + 16,
+                    },
+                ].forEach(({ text, font, left, top }) => {
+                    shadowed_text({
+                        ctx,
+                        scale,
+                        is_dark_theme,
+                        text,
+                        font,
+                        text_align: 'start',
+                        color: getColor({ status: 'open', profit }),
+                        left: text === profit_text ? left : left + ctx.measureText(profit_text).width,
+                        top,
+                    });
+                });
+                ctx.restore();
+            }
 
-            const start_left =
-                start === current_tick || entry === current_tick ? current_tick.left : previous_tick.left;
-            // draw custom barrier shadows with borders:
-            if (profit > 0) {
-                draw_partial_shade({
-                    ctx,
-                    start_left,
-                    stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
-                    top: barrier,
-                    bottom: barrier_2,
-                    is_between_shade: true,
-                    scale,
+            // draw custom barrier shadows with borders and labels for accumulators:
+            if (contract_type === 'ACCU') {
+                if (status === 'open') {
+                    // draw 2 barriers with a shade between them for an open Stay in contract
+                    draw_partial_shade({
+                        ctx,
+                        start_left: previous_tick.left,
+                        stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
+                        top: barrier,
+                        bottom: barrier_2,
+                        is_between_shade: true,
+                        scale,
+                    });
+                } else {
+                    // TODO: maryia - draw an interactive label for a won/lost Stay in contract with text and close icon
+                    draw_path(ctx, {
+                        top: exit.top * scale,
+                        left: exit.left + 1 * scale,
+                        zoom: start.zoom,
+                        icon: ICONS[profit > 0 ? 'WON_TOOLTIP' : 'LOST_TOOLTIP'].with_color(
+                            color,
+                            getColor({ status: profit > 0 ? 'won' : 'lost', is_dark_theme })
+                        ),
+                    });
+                }
+            } else if (status === 'open') {
+                // draw 2 barriers with a shade outside them for an open Break out contract
+                [
+                    { top: barrier - 165 * scale, bottom: barrier },
+                    { top: barrier_2, bottom: barrier_2 + 165 * scale, is_bottom_shade: true },
+                ].forEach(({ top, bottom, is_bottom_shade }) => {
+                    draw_partial_shade({
+                        ctx,
+                        start_left: previous_tick.left,
+                        stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
+                        top,
+                        bottom,
+                        is_bottom_shade,
+                        scale,
+                    });
                 });
             } else {
-                draw_partial_shade({
-                    ctx,
-                    start_left,
-                    stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
-                    top: barrier - 165 * scale,
-                    bottom: barrier,
-                    scale,
-                });
-                draw_partial_shade({
-                    ctx,
-                    start_left,
-                    stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
-                    top: barrier_2,
-                    bottom: barrier_2 + 165 * scale,
-                    is_bottom_shade: true,
-                    scale,
+                // TODO: maryia - draw an interactive label for a won/lost Break out contract with text and close icon
+                draw_path(ctx, {
+                    top: exit.top * scale,
+                    left: exit.left + 1 * scale,
+                    zoom: start.zoom,
+                    icon: ICONS[profit > 0 ? 'WON_TOOLTIP' : 'LOST_TOOLTIP'].with_color(
+                        color,
+                        getColor({ status: profit > 0 ? 'won' : 'lost', is_dark_theme })
+                    ),
                 });
             }
         }

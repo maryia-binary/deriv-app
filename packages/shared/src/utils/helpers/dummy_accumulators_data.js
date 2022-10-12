@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-const */
-const dummy_current_time = 1665130804; // should be an epoch of some real tick!
+const dummy_current_time = 1665570506; // should be an epoch of some real tick!
 const dummy_start_time = dummy_current_time - 7;
 const dummy_end_time = dummy_current_time + 6;
 
-const high_barrier = 6569.9;
-const low_barrier = 6567;
+const high_barrier = 6534;
+const low_barrier = 6532;
 const tick_1_price = low_barrier + 0.1;
 const tick_2_price = low_barrier + 0.15;
 const tick_3_price = low_barrier + 0.5;
@@ -51,6 +51,12 @@ let profit = +0.15;
 let profit_percentage = +1.5;
 let is_sold = 0; // 0 || 1
 
+//losing:
+// contract_status = 'open'; // 'lost', 'won' or 'open'
+// profit = -10;
+// profit_percentage = -100;
+// is_sold = 0; // 0 || 1
+
 // let first_time;
 // const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
 //     setInterval(() => {
@@ -63,12 +69,12 @@ let is_sold = 0; // 0 || 1
 // is_sold = 1; // 0 || 1
 //         }, ms1);
 //         setTimeout(() => {
-//             contract_status = 'lost'; // 'lost', 'won' or 'open'
-//             position_status = 'loss'; // 'profit' or 'loss'
-//             result = 'lost'; // 'won' or 'lost'
-//             profit = -10;
-//             profit_percentage = -100;
-//             is_sold = 1; // 0 || 1
+// contract_status = 'lost'; // 'lost', 'won' or 'open'
+// position_status = 'loss'; // 'profit' or 'loss'
+// result = 'lost'; // 'won' or 'lost'
+// profit = -100;
+// profit_percentage = -100;
+// is_sold = 1; // 0 || 1
 //         }, ms2);
 //         setTimeout(() => {
 //             contract_status = 'open'; // 'lost', 'won' or 'open'

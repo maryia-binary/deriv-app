@@ -36,7 +36,7 @@ const break_out_history_stats = [
     ...new Array(33).fill(5554),
     1114,
 ];
-const current_ticks_count = 4;
+const tick_passed = 4;
 const tick_count = 1000;
 const symbol = 'R_10';
 const symbol_display_name = 'Volatility 10 Index';
@@ -133,7 +133,7 @@ export const getDummyPOCResponseForACCU = time_now => {
             is_valid_to_cancel: 0,
             is_valid_to_sell: 1,
             limit_order,
-            current_ticks_count,
+            tick_passed,
             longcode,
             growth_rate: 0.01,
             profit,
@@ -192,7 +192,7 @@ export const getDummyPortfolioContractsForACCU = time_now => {
             currency: 'USD',
             date_start: dummy_start_time,
             expiry_time: dummy_end_time,
-            current_ticks_count,
+            tick_passed,
             longcode,
             payout: 27.45,
             purchase_time: dummy_start_time,
@@ -295,7 +295,7 @@ export const getDummyAllPositionsForACCU = time_now => {
                 is_valid_to_cancel: 0,
                 is_valid_to_sell: 1,
                 limit_order,
-                current_ticks_count,
+                tick_passed,
                 longcode,
                 growth_rate: 0.01,
                 payout: 27.45,
@@ -417,7 +417,7 @@ export const getDummyProposalInfoForDECCU = (growth_rate, response) => {
 };
 
 export const dummy_accu_in_contracts_for_available = {
-    accumulator_growth_rates: [0.01, 0.02, 0.03, 0.04, 0.05],
+    growth_rate_range: [0.01, 0.02, 0.03, 0.04, 0.05],
     barrier_category: 'american',
     barriers: 2,
     contract_category: 'accumulator',
@@ -436,7 +436,7 @@ export const dummy_accu_in_contracts_for_available = {
 };
 
 export const dummy_deccu_in_contracts_for_available = {
-    accumulator_growth_rates: [0.01, 0.02, 0.03, 0.04, 0.05],
+    growth_rate_range: [0.01, 0.02, 0.03, 0.04, 0.05],
     barrier_category: 'american',
     barriers: 2,
     contract_category: 'accumulator',

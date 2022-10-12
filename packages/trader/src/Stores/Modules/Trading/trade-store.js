@@ -119,7 +119,7 @@ export default class TradeStore extends BaseStore {
     @observable should_show_active_symbols_loading = false;
 
     // Accumulator trade params
-    @observable accumulator_rates_list = [];
+    @observable accumulator_range_list = [];
     @observable growth_rate;
     @observable maximum_payout = 0;
     @observable maximum_ticks = 0;

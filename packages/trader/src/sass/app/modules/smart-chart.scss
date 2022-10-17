@@ -251,6 +251,32 @@
     width: 17.2rem;
     height: 6.55rem;
 
+    &.lost {
+        #{$self}__spot-circle,
+        #{$self}__content {
+            background-color: var(--text-loss-danger);
+
+            &:after {
+                border-right: 4px solid var(--text-loss-danger);
+            }
+            &:before {
+                border-left: 4px solid var(--text-loss-danger);
+            }
+        }
+    }
+    &.won {
+        #{$self}__spot-circle,
+        #{$self}__content {
+            background-color: var(--text-profit-success);
+
+            &:after {
+                border-right: 4px solid var(--text-profit-success);
+            }
+            &:before {
+                border-left: 4px solid var(--text-profit-success);
+            }
+        }
+    }
     &__spot-circle {
         position: absolute;
         border-radius: 100%;
@@ -259,13 +285,6 @@
         top: -2.5px;
         left: -2.5px;
         cursor: pointer;
-
-        &.lost {
-            background-color: var(--text-loss-danger);
-        }
-        &.won {
-            background-color: var(--text-profit-success);
-        }
     }
     &__content {
         position: absolute;
@@ -276,7 +295,7 @@
         flex-direction: column;
         gap: 0.4rem;
         padding: 0.8rem;
-        background-color: var(--text-profit-success);
+        // background-color: var(--text-profit-success);
         // TODO: implement different colors for profit/loss
 
         &:after,
@@ -292,12 +311,12 @@
         }
         &:after {
             left: -4px;
-            border-right: 4px solid var(--text-profit-success);
+            // border-right: 4px solid var(--text-profit-success);
             // TODO: implement different colors for profit/loss
         }
         &:before {
             left: 100%;
-            border-left: 4px solid var(--text-profit-success);
+            // border-left: 4px solid var(--text-profit-success);
             // TODO: implement different colors for profit/loss
         }
         &.arrow-left {

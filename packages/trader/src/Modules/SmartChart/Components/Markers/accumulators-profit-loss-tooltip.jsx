@@ -6,9 +6,7 @@ import { FastMarker } from 'Modules/SmartChart';
 
 const AccumulatorsProfitLossTooltip = ({ currency, exit_tick = 0, exit_tick_time = 0, profit }) => {
     // TODO:
-    // - implement different coloring of elements for won/lost contract
     // - add top, bottom arrows & dependency to select one of 4 arrows
-    // - show AccumulatorsProfitLossTooltip for all closed contracts on the chart, not only the last one
     const [is_tooltip_open, setIsTooltipOpen] = React.useState(true);
     const className = 'sc-accumulators-profit-loss-tooltip';
     const won = profit > 0;
@@ -28,9 +26,9 @@ const AccumulatorsProfitLossTooltip = ({ currency, exit_tick = 0, exit_tick_time
     };
 
     return (
-        <FastMarker markerRef={onRef} className={className}>
+        <FastMarker markerRef={onRef} className={`${className} ${won ? 'won' : 'lost'}`}>
             <span
-                className={`${className}__spot-circle ${won ? 'won' : 'lost'}`}
+                className={`${className}__spot-circle`}
                 onMouseEnter={() => !is_tooltip_open && setIsTooltipOpen(true)}
             />
             {is_tooltip_open && (

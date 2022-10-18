@@ -197,6 +197,7 @@ const Trade = ({
                                 topWidgets={topWidgets}
                                 charts_ref={charts_ref}
                                 bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
+                                show_accumulators_stats={show_accumulators_stats}
                             />
                         </SwipeableWrapper>
                     </MobileWrapper>
@@ -414,7 +415,11 @@ const Chart = props => {
             <ChartMarkers />
             {show_accumulators_stats &&
                 accumulators_positions.map(({ contract_info }) => {
-                    return contract_info.is_sold && <AccumulatorsProfitLossTooltip {...contract_info} />;
+                    return (
+                        contract_info.is_sold && (
+                            <AccumulatorsProfitLossTooltip key={contract_info.contract_id} {...contract_info} />
+                        )
+                    );
                 })}
         </SmartChartWithRef>
     );

@@ -41,7 +41,6 @@ const stay_in_history_stats = [
     ...new Array(33).fill(2853),
     2913,
 ];
-
 const tick_passed = 14;
 const tick_count = 1000;
 const symbol = 'R_10';
@@ -68,16 +67,16 @@ let is_expired = 0; // 0 || 1
 // const winLoseAndOpenContractInSec = (ms1, ms2, ms3) => {
 //     setInterval(() => {
 //         setTimeout(() => {
-// contract_status = 'won'; // 'lost', 'won' or 'open'
-// position_status = 'profit'; // 'profit' or 'loss'
-// result = 'won'; // 'won' or 'lost'
-// profit = +0.15;
-// profit_percentage = +1.5;
-// is_sold = 1; // 0 || 1
-// exit_tick = current_spot;
-// exit_tick_display_value = `${current_spot}`;
-// exit_tick_time = dummy_current_time;
-// is_expired = 1;
+contract_status = 'won'; // 'lost', 'won' or 'open'
+position_status = 'profit'; // 'profit' or 'loss'
+result = 'won'; // 'won' or 'lost'
+profit = +0.15;
+profit_percentage = +1.5;
+is_sold = 1; // 0 || 1
+exit_tick = current_spot;
+exit_tick_display_value = `${current_spot}`;
+exit_tick_time = dummy_current_time;
+is_expired = 1;
 //         }, ms1);
 //         setTimeout(() => {
 // contract_status = 'lost'; // 'lost', 'won' or 'open'
@@ -104,7 +103,7 @@ let is_expired = 0; // 0 || 1
 const tick_size_barrier = 0.000409;
 const longcode = `Win payout when every tick of your contract is within the barriers of the previous tick in ${symbol_display_name}.`;
 const stake = '10.00';
-const contract_type = 'ACCU'; // 'ACCU'
+const contract_type = 'ACCU';
 const shortcode = `ACCU_${symbol}_10.00_6_0.01_1_0.000409_1653292620`;
 
 export const getDummyPOCResponseForACCU = time_now => {

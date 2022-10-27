@@ -292,6 +292,7 @@ const TickContract = RawMarkerMaker(
                     });
                 }
             }
+
             if (is_in_contract_details) {
                 ctx.restore();
                 return;

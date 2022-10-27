@@ -241,6 +241,7 @@ const Chart = props => {
 
         return margin;
     };
+    const max_tick = props.is_accumulator_contract ? 10 : undefined;
 
     return (
         <SmartChart
@@ -258,7 +259,7 @@ const Chart = props => {
             requestForget={props.wsForget}
             requestForgetStream={props.wsForgetStream}
             crosshair={isMobile() ? 0 : undefined}
-            maxTick={isMobile() ? 8 : undefined}
+            maxTick={isMobile() ? 8 : max_tick}
             requestSubscribe={props.wsSubscribe}
             settings={props.settings}
             startEpoch={props.start_epoch}

@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prefer-const */
-const dummy_current_time = 1666720140; // should be an epoch of some real tick!
-const dummy_start_time = dummy_current_time - 7;
+const dummy_current_time = 1666869714; // should be an epoch of some real tick!
+const dummy_start_time = dummy_current_time - 17;
 const dummy_end_time = dummy_current_time + 6;
 
-const high_barrier = 6609.9;
-const low_barrier = 6609.5;
+const high_barrier = 6557.9;
+const low_barrier = 6557.5;
 const tick_1_price = low_barrier + 0.1;
 const tick_2_price = low_barrier + 0.15;
 const tick_3_price = low_barrier + 0.5;
@@ -14,6 +14,16 @@ const tick_5_price = low_barrier + 0.5;
 const entry_spot = low_barrier + 0.33;
 let exit_tick, exit_tick_display_value, exit_tick_time;
 const tick_8_price = low_barrier + 0.75;
+const tick_9_price = low_barrier + 0.5;
+const tick_10_price = low_barrier + 0.65;
+const tick_11_price = low_barrier + 0.15;
+const tick_12_price = low_barrier + 0.74;
+const tick_13_price = low_barrier + 0.34;
+const tick_14_price = low_barrier + 0.23;
+const tick_15_price = low_barrier + 0.53;
+const tick_16_price = low_barrier + 0.46;
+const tick_17_price = low_barrier + 0.79;
+const tick_18_price = low_barrier + 0.12;
 const previous_tick_price = low_barrier + 0.19;
 const current_spot = low_barrier + 0.45;
 const take_profit_price = low_barrier + 3;
@@ -31,13 +41,8 @@ const stay_in_history_stats = [
     ...new Array(33).fill(2853),
     2913,
 ];
-const break_out_history_stats = [
-    ...new Array(33).fill(8884),
-    ...new Array(33).fill(4444),
-    ...new Array(33).fill(5554),
-    1114,
-];
-const tick_passed = 4;
+
+const tick_passed = 14;
 const tick_count = 1000;
 const symbol = 'R_10';
 const symbol_display_name = 'Volatility 10 Index';
@@ -99,8 +104,8 @@ let is_expired = 0; // 0 || 1
 const tick_size_barrier = 0.000409;
 const longcode = `Win payout when every tick of your contract is within the barriers of the previous tick in ${symbol_display_name}.`;
 const stake = '10.00';
-const contract_type = 'ACCU'; // 'ACCU' or 'DECCU'
-const shortcode = `ACCU_${symbol}_10.00_6_0.01_1_0.000409_1653292620`; // `DECCU_${symbol}_10.00_6_0.01_1_0.000409_1653292620`
+const contract_type = 'ACCU'; // 'ACCU'
+const shortcode = `ACCU_${symbol}_10.00_6_0.01_1_0.000409_1653292620`;
 
 export const getDummyPOCResponseForACCU = time_now => {
     return {
@@ -168,7 +173,57 @@ export const getDummyPOCResponseForACCU = time_now => {
                     tick_display_value: `${tick_8_price}`,
                 },
                 {
+                    epoch: dummy_start_time + 4,
+                    tick: tick_9_price,
+                    tick_display_value: `${tick_9_price}`,
+                },
+                {
                     epoch: dummy_start_time + 5,
+                    tick: tick_10_price,
+                    tick_display_value: `${tick_10_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 6,
+                    tick: tick_11_price,
+                    tick_display_value: `${tick_11_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 7,
+                    tick: tick_12_price,
+                    tick_display_value: `${tick_12_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 8,
+                    tick: tick_13_price,
+                    tick_display_value: `${tick_13_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 9,
+                    tick: tick_14_price,
+                    tick_display_value: `${tick_14_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 10,
+                    tick: tick_15_price,
+                    tick_display_value: `${tick_15_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 11,
+                    tick: tick_16_price,
+                    tick_display_value: `${tick_16_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 12,
+                    tick: tick_17_price,
+                    tick_display_value: `${tick_17_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 13,
+                    tick: tick_18_price,
+                    tick_display_value: `${tick_18_price}`,
+                },
+                {
+                    epoch: dummy_start_time + 14,
                     tick: previous_tick_price,
                     tick_display_value: `${previous_tick_price}`,
                 },
@@ -266,7 +321,57 @@ export const getDummyAllPositionsForACCU = time_now => {
                             tick_display_value: `${tick_8_price}`,
                         },
                         {
+                            epoch: dummy_start_time + 4,
+                            tick: tick_9_price,
+                            tick_display_value: `${tick_9_price}`,
+                        },
+                        {
                             epoch: dummy_start_time + 5,
+                            tick: tick_10_price,
+                            tick_display_value: `${tick_10_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 6,
+                            tick: tick_11_price,
+                            tick_display_value: `${tick_11_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 7,
+                            tick: tick_12_price,
+                            tick_display_value: `${tick_12_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 8,
+                            tick: tick_13_price,
+                            tick_display_value: `${tick_13_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 9,
+                            tick: tick_14_price,
+                            tick_display_value: `${tick_14_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 10,
+                            tick: tick_15_price,
+                            tick_display_value: `${tick_15_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 11,
+                            tick: tick_16_price,
+                            tick_display_value: `${tick_16_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 12,
+                            tick: tick_17_price,
+                            tick_display_value: `${tick_17_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 13,
+                            tick: tick_18_price,
+                            tick_display_value: `${tick_18_price}`,
+                        },
+                        {
+                            epoch: dummy_start_time + 14,
                             tick: previous_tick_price,
                             tick_display_value: `${previous_tick_price}`,
                         },
@@ -334,7 +439,57 @@ export const getDummyAllPositionsForACCU = time_now => {
                         tick_display_value: `${tick_8_price}`,
                     },
                     {
+                        epoch: dummy_start_time + 4,
+                        tick: tick_9_price,
+                        tick_display_value: `${tick_9_price}`,
+                    },
+                    {
                         epoch: dummy_start_time + 5,
+                        tick: tick_10_price,
+                        tick_display_value: `${tick_10_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 6,
+                        tick: tick_11_price,
+                        tick_display_value: `${tick_11_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 7,
+                        tick: tick_12_price,
+                        tick_display_value: `${tick_12_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 8,
+                        tick: tick_13_price,
+                        tick_display_value: `${tick_13_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 9,
+                        tick: tick_14_price,
+                        tick_display_value: `${tick_14_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 10,
+                        tick: tick_15_price,
+                        tick_display_value: `${tick_15_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 11,
+                        tick: tick_16_price,
+                        tick_display_value: `${tick_16_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 12,
+                        tick: tick_17_price,
+                        tick_display_value: `${tick_17_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 13,
+                        tick: tick_18_price,
+                        tick_display_value: `${tick_18_price}`,
+                    },
+                    {
+                        epoch: dummy_start_time + 14,
                         tick: previous_tick_price,
                         tick_display_value: `${previous_tick_price}`,
                     },
@@ -402,63 +557,15 @@ export const getDummyProposalInfoForACCU = (growth_rate, response) => {
         stake,
     };
 };
-export const getDummyProposalInfoForDECCU = (growth_rate, response) => {
-    return {
-        ticks_stayed_in: response.proposal.contract_details.ticks_stayed_in,
-        tick_size_barrier: response.proposal.contract_details.tick_size_barrier,
-        maximum_payout: response.proposal.contract_details.maximum_payout,
-        maximum_ticks: response.proposal.contract_details.maximum_ticks,
-        high_barrier: response.proposal.contract_details.high_barrier,
-        last_tick_epoch: response.proposal.contract_details.last_tick_epoch,
-        low_barrier: response.proposal.contract_details.low_barrier,
-        error_code: undefined,
-        error_field: undefined,
-        growth_rate,
-        has_error: false,
-        has_error_details: false,
-        has_increased: null,
-        id: '2b88e20f-f976-a380-904d-04db08e10eec',
-        limit_order,
-        message: longcode,
-        obj_contract_basis: {
-            text: '',
-            value: '',
-        },
-        payout: 27.45,
-        profit: `${profit}`,
-        returns: '-100.00%',
-        spot_time: response.proposal.spot_time,
-        stake,
-    };
-};
 
 export const dummy_accu_in_contracts_for_available = {
     growth_rate_range: [0.01, 0.02, 0.03, 0.04, 0.05],
     barrier_category: 'american',
     barriers: 2,
     contract_category: 'accumulator',
-    contract_category_display: 'Stay in/Break out',
+    contract_category_display: 'Stay in',
     contract_display: 'Stay in',
     contract_type: 'ACCU',
-    exchange_name,
-    expiry_type: 'tick',
-    market,
-    max_contract_duration: '1d',
-    min_contract_duration: '1s',
-    sentiment: 'inside',
-    start_type: 'spot',
-    submarket,
-    underlying_symbol: symbol,
-};
-
-export const dummy_deccu_in_contracts_for_available = {
-    growth_rate_range: [0.01, 0.02, 0.03, 0.04, 0.05],
-    barrier_category: 'american',
-    barriers: 2,
-    contract_category: 'accumulator',
-    contract_category_display: 'Stay in/Break out',
-    contract_display: 'Break out',
-    contract_type: 'DECCU',
     exchange_name,
     expiry_type: 'tick',
     market,
@@ -477,16 +584,6 @@ export const dummy_accumulators_proposals = {
         amount: 10,
         basis: 'stake',
         contract_type: 'ACCU',
-        currency: 'USD',
-        symbol,
-        growth_rate: 0.01,
-    },
-    DECCU: {
-        proposal: 1,
-        subscribe: 1,
-        amount: 10,
-        basis: 'stake',
-        contract_type: 'DECCU',
         currency: 'USD',
         symbol,
         growth_rate: 0.01,
@@ -536,53 +633,6 @@ export const getDummyProposalResponseForACCU = time_now => {
         req_id: 32,
         subscription: {
             id: '2b88e20f-f976-a380-904d-04db08e10eeb',
-        },
-    };
-};
-
-export const getDummyProposalResponseForDECCU = time_now => {
-    return {
-        echo_req: {
-            amount: 10,
-            basis: 'stake',
-            contract_type: 'DECCU',
-            currency: 'USD',
-            duration_unit: 's',
-            limit_order: {
-                take_profit: 150,
-            },
-            growth_rate: 0.01,
-            product_type: 'basic',
-            proposal: 1,
-            req_id: 32,
-            subscribe: 1,
-            symbol,
-        },
-        msg_type: 'proposal',
-        proposal: {
-            contract_details: {
-                high_barrier,
-                last_tick_epoch: dummy_current_time,
-                low_barrier,
-                maximum_payout: 20000,
-                maximum_ticks: tick_count,
-                tick_size_barrier,
-                ticks_stayed_in: break_out_history_stats,
-            },
-            ask_price: 10,
-            date_expiry: dummy_end_time,
-            date_start: dummy_start_time,
-            display_value: '10.00',
-            id: '2b88e20f-f976-a380-904d-04db08e10eec',
-            limit_order,
-            longcode,
-            payout: 27.45,
-            spot: current_spot,
-            spot_time: dummy_current_time,
-        },
-        req_id: 32,
-        subscription: {
-            id: '2b88e20f-f976-a380-904d-04db08e10eec',
         },
     };
 };

@@ -283,7 +283,7 @@ const TickContract = RawMarkerMaker(
                     // draw 2 barriers with a shade between them for an open Stay in contract
                     draw_partial_shade({
                         ctx,
-                        start_left: status !== 'open' ? exit.left : previous_tick.left,
+                        start_left: previous_tick.left,
                         stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
                         top: barrier,
                         bottom: barrier_2,

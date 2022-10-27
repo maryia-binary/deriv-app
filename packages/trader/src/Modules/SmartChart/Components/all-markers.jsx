@@ -146,11 +146,16 @@ const draw_partial_shade = ({
     scale,
 }) => {
     const end_left = ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
+    const end_top = ctx.canvas.offsetHeight - ctx.canvas.parentElement.stx.xaxisHeight;
+    const is_top_visible = top < end_top;
+    const is_bottom_visible = bottom < end_top;
+    const displayed_top = is_top_visible ? top : end_top;
+    const displayed_bottom = is_bottom_visible ? bottom : end_top;
     const gradient = ctx.createLinearGradient(start_left, top, start_left, bottom);
     ctx.lineWidth = 1;
     ctx.strokeStyle = stroke_color;
 
-    if (is_between_shade || is_bottom_shade) {
+    if (is_top_visible && (is_between_shade || is_bottom_shade)) {
         ctx.beginPath();
         ctx.setLineDash([]);
         ctx.arc(start_left, top, 1.5, 0, Math.PI * 2);
@@ -162,7 +167,7 @@ const draw_partial_shade = ({
         ctx.lineTo(end_left, top);
         ctx.stroke();
     }
-    if (is_between_shade || !is_bottom_shade) {
+    if (is_bottom_visible && (is_between_shade || !is_bottom_shade)) {
         ctx.beginPath();
         ctx.setLineDash([]);
         ctx.arc(start_left, bottom, 1.5, 0, Math.PI * 2);
@@ -181,7 +186,7 @@ const draw_partial_shade = ({
     }
 
     ctx.fillStyle = fill_color || is_between_shade ? 'rgba(0, 167, 158, 0.08)' : gradient;
-    ctx.fillRect(start_left, top, end_left - start_left, Math.abs(bottom - top));
+    ctx.fillRect(start_left, displayed_top, end_left - start_left, Math.abs(displayed_bottom - displayed_top));
 };
 
 const render_label = ({ ctx, text, tick: { zoom, left, top } }) => {

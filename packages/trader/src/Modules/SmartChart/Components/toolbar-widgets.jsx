@@ -3,9 +3,14 @@ import React from 'react';
 import { isDesktop, isMobile } from '@deriv/shared';
 import { ChartMode, DrawTools, Share, StudyLegend, Views, ToolbarWidget } from 'Modules/SmartChart';
 
-const ToolbarWidgets = ({ position, updateChartType, updateGranularity }) => (
+const ToolbarWidgets = ({ position, updateChartType, updateGranularity, settings }) => (
     <ToolbarWidget position={position || isMobile() ? 'bottom' : null}>
-        <ChartMode portalNodeId='modal_root' onChartType={updateChartType} onGranularity={updateGranularity} />
+        <ChartMode
+            portalNodeId='modal_root'
+            onChartType={updateChartType}
+            onGranularity={updateGranularity}
+            settings={settings}
+        />
         {isDesktop() && <StudyLegend portalNodeId='modal_root' searchInputClassName='data-hj-whitelist' />}
         {isDesktop() && <Views portalNodeId='modal_root' searchInputClassName='data-hj-whitelist' />}
         {isDesktop() && <DrawTools portalNodeId='modal_root' />}
@@ -17,6 +22,7 @@ ToolbarWidgets.propTypes = {
     position: PropTypes.string,
     updateChartType: PropTypes.func,
     updateGranularity: PropTypes.func,
+    settings: PropTypes.object,
 };
 
 export default React.memo(ToolbarWidgets);

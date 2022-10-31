@@ -361,6 +361,13 @@ const Chart = props => {
             filterByContractType(p.contract_info, 'accumulator')
     );
 
+    const toolbar_settings = show_accumulators_stats
+        ? {
+              enabled_chart_types: ['mountain'], // 'Area' chart type
+              enabled_intervals_in_seconds: [0], // 0 seconds means 1 tick time inteval (0 granularity)
+          }
+        : undefined;
+
     return (
         <SmartChartWithRef
             ref={charts_ref}
@@ -400,7 +407,11 @@ const Chart = props => {
             isConnectionOpened={is_socket_opened}
             clearChart={false}
             toolbarWidget={() => (
-                <ToolbarWidgets updateChartType={updateChartType} updateGranularity={updateGranularity} />
+                <ToolbarWidgets
+                    updateChartType={updateChartType}
+                    updateGranularity={updateGranularity}
+                    settings={toolbar_settings}
+                />
             )}
             importedLayout={chart_layout}
             onExportLayout={exportLayout}

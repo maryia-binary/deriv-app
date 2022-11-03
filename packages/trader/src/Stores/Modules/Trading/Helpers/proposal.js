@@ -1,10 +1,4 @@
-import {
-    getDecimalPlaces,
-    getPropertyValue,
-    convertToUnix,
-    toMoment,
-    getDummyProposalInfoForACCU,
-} from '@deriv/shared';
+import { getDecimalPlaces, getPropertyValue, convertToUnix, toMoment } from '@deriv/shared';
 
 const isVisible = elem => !(!elem || (elem.offsetWidth === 0 && elem.offsetHeight === 0));
 
@@ -48,10 +42,6 @@ export const getProposalInfo = (store, response, obj_prev_contract_basis) => {
     const commission = proposal.commission;
     const cancellation = proposal.cancellation;
 
-    if (store.contract_type === 'accumulator') {
-        // maryia: temporary dummy proposal info for accumulators:
-        return getDummyProposalInfoForACCU(store.growth_rate, response);
-    }
     return {
         commission,
         cancellation,
@@ -68,6 +58,15 @@ export const getProposalInfo = (store, response, obj_prev_contract_basis) => {
         profit: profit.toFixed(getDecimalPlaces(store.currency)),
         returns: `${returns.toFixed(2)}%`,
         stake,
+        ticks_stayed_in: proposal.contract_details.ticks_stayed_in,
+        tick_size_barrier: proposal.contract_details.tick_size_barrier,
+        maximum_payout: proposal.contract_details.maximum_payout,
+        maximum_ticks: proposal.contract_details.maximum_ticks,
+        high_barrier: proposal.contract_details.high_barrier,
+        last_tick_epoch: proposal.contract_details.last_tick_epoch,
+        low_barrier: proposal.contract_details.low_barrier,
+        growth_rate: store.growth_rate,
+        spot_time: proposal.spot_time,
     };
 };
 
@@ -141,10 +140,10 @@ const createProposalRequestForContract = (store, type_of_contract) => {
               }
             : obj_expiry),
         ...((store.barrier_count > 0 || store.form_components.indexOf('last_digit') !== -1) &&
-            store.contract_type !== 'accumulator' && {
+            type_of_contract !== 'ACCU' && {
                 barrier: store.barrier_1 || store.last_digit,
             }),
-        ...(store.barrier_count === 2 && { barrier2: store.barrier_2 }),
+        ...(store.barrier_count === 2 && type_of_contract !== 'ACCU' && { barrier2: store.barrier_2 }),
         ...obj_accumulator,
         ...obj_multiplier,
     };

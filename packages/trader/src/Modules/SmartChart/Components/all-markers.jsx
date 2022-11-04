@@ -134,8 +134,12 @@ const draw_path = (ctx, { zoom, top, left, icon }) => {
     ctx.restore();
 };
 
-const draw_partial_shade = ({
+let previous_coordinates = {};
+
+const draw_accumulators_barriers = ({
     ctx,
+    end_left,
+    end_top,
     start_left,
     top,
     bottom,
@@ -145,40 +149,75 @@ const draw_partial_shade = ({
     fill_color,
     scale,
 }) => {
-    const end_left = ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
-    const end_top = ctx.canvas.offsetHeight - ctx.canvas.parentElement.stx.xaxisHeight;
     const is_top_visible = top < end_top;
     const is_bottom_visible = bottom < end_top;
     const displayed_top = is_top_visible ? top : end_top;
     const displayed_bottom = is_bottom_visible ? bottom : end_top;
-    const gradient = ctx.createLinearGradient(start_left, top, start_left, bottom);
-    const is_start_left_visible = start_left < end_left;
-    if (!is_start_left_visible) return;
+    // let frame = 0;
+    // const frames = 3;
+
+    // const animated = ({ x, y }) => {
+    //     if (frame >= frames) return undefined;
+    //     frame += 1;
+
+    //     const params = {
+    //         xFrom: x === 'start' ? previous_coordinates.start_left : previous_coordinates.end_left,
+    //         xTo: x === 'start' ? start_left : end_left,
+    //         yFrom: y === 'top' ? previous_coordinates.top : previous_coordinates.bottom,
+    //         yTo: y === 'top' ? displayed_top : displayed_bottom,
+    //     };
+    //     let distance, start;
+    //     if (x) {
+    //         distance = params.xTo - params.xFrom;
+    //         start = params.xFrom;
+    //     } else if (y) {
+    //         distance = params.yTo - params.yFrom;
+    //         start = params.yFrom;
+    //     }
+    //     const steps = frames;
+    //     let current_progress = frame;
+    //     current_progress /= steps / 2;
+    //     if (current_progress < 1) {
+    //         return (distance / 2) * Math.pow(current_progress, 4) + start;
+    //     }
+    //     current_progress -= 2;
+    //     return ((-1 * distance) / 2) * (Math.pow(current_progress, 4) - 2) + start;
+    // };
+    // const animated_start_left = animated({ x: 'start' }) || start_left;
+    // const animated_end_left = animated({ x: 'end' }) || end_left;
+    // const animated_top = animated({ y: 'top' }) || top;
+    // const animated_bottom = animated({ y: 'bottom' }) || bottom;
+    const animated_start_left = start_left;
+    const animated_end_left = end_left;
+    const animated_top = displayed_top;
+    const animated_bottom = displayed_bottom;
+
+    const gradient = ctx.createLinearGradient(animated_start_left, animated_top, animated_start_left, animated_bottom);
     ctx.lineWidth = 1;
     ctx.strokeStyle = stroke_color;
 
     if (is_top_visible && (is_between_shade || is_bottom_shade)) {
         ctx.beginPath();
         ctx.setLineDash([]);
-        ctx.arc(start_left, top, 1.5, 0, Math.PI * 2);
+        ctx.arc(animated_start_left, animated_top, 1.5, 0, Math.PI * 2);
         ctx.stroke();
 
         ctx.beginPath();
         ctx.setLineDash([2, 3]);
-        ctx.moveTo(start_left + 1.5 * scale, top);
-        ctx.lineTo(end_left, top);
+        ctx.moveTo(animated_start_left + 1.5 * scale, animated_top);
+        ctx.lineTo(animated_end_left, animated_top);
         ctx.stroke();
     }
     if (is_bottom_visible && (is_between_shade || !is_bottom_shade)) {
         ctx.beginPath();
         ctx.setLineDash([]);
-        ctx.arc(start_left, bottom, 1.5, 0, Math.PI * 2);
+        ctx.arc(animated_start_left, animated_bottom, 1.5, 0, Math.PI * 2);
         ctx.stroke();
 
         ctx.beginPath();
         ctx.setLineDash([2, 3]);
-        ctx.moveTo(start_left + 1.5 * scale, bottom);
-        ctx.lineTo(end_left, bottom);
+        ctx.moveTo(animated_start_left + 1.5 * scale, animated_bottom);
+        ctx.lineTo(animated_end_left, animated_bottom);
         ctx.stroke();
     }
 
@@ -187,8 +226,37 @@ const draw_partial_shade = ({
         gradient.addColorStop(0.98, is_bottom_shade ? 'rgba(0, 167, 158, 0)' : 'rgba(0, 167, 158, 0.16)');
     }
 
-    ctx.fillStyle = fill_color || is_between_shade ? 'rgba(0, 167, 158, 0.08)' : gradient;
-    ctx.fillRect(start_left, displayed_top, end_left - start_left, Math.abs(displayed_bottom - displayed_top));
+    ctx.fillStyle = fill_color || (!is_between_shade && gradient);
+    ctx.fillRect(
+        animated_start_left,
+        animated_top,
+        animated_end_left - animated_start_left,
+        Math.abs(animated_bottom - animated_top)
+    );
+    // if (frame < frames) {
+    // window.requestAnimationFrame(
+    //     draw_accumulators_barriers({
+    //         ctx,
+    //         end_left,
+    //         end_top,
+    //         start_left,
+    //         top,
+    //         bottom,
+    //         is_between_shade,
+    //         is_bottom_shade,
+    //         stroke_color,
+    //         fill_color,
+    //         scale,
+    //     })
+    // );
+    // }
+    previous_coordinates = {
+        ...previous_coordinates,
+        start_left,
+        end_left,
+        top: displayed_top,
+        bottom: displayed_bottom,
+    };
 };
 
 const render_label = ({ ctx, text, tick: { zoom, left, top } }) => {
@@ -268,12 +336,17 @@ const TickContract = RawMarkerMaker(
         const previous_tick = ticks[ticks.length - 2] || exit;
         const opacity = is_sold ? calc_opacity(start.left, exit.left) : '';
 
-        if (is_accumulators_trade_without_contract) {
+        const end_left = ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
+        const end_top = ctx.canvas.offsetHeight - ctx.canvas.parentElement.stx.xaxisHeight;
+
+        if (is_accumulators_trade_without_contract && start.left < end_left) {
             // draw 2 barriers with a shade in-between only
-            draw_partial_shade({
+            draw_accumulators_barriers({
                 ctx,
+                end_left,
+                end_top,
                 start_left: start.left,
-                fill_color: getColor({ status: 'open', is_dark_theme }),
+                fill_color: 'rgba(55, 124, 252, 0.08)',
                 stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
                 top: barrier,
                 bottom: barrier_2,
@@ -287,11 +360,14 @@ const TickContract = RawMarkerMaker(
         if (is_accumulators_contract) {
             // draw custom barrier shadows with borders and labels for accumulators:
             if (contract_type === 'ACCU') {
-                if (status === 'open' || is_in_contract_details) {
+                if (previous_tick.left < end_left && (status === 'open' || is_in_contract_details)) {
                     // draw 2 barriers with a shade between them for an open Accumulate contract
-                    draw_partial_shade({
+                    draw_accumulators_barriers({
                         ctx,
+                        end_left,
+                        end_top,
                         start_left: previous_tick.left,
+                        fill_color: getColor({ status: 'open', is_dark_theme }),
                         stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
                         top: barrier,
                         bottom: barrier_2,
@@ -310,8 +386,6 @@ const TickContract = RawMarkerMaker(
                 const sign = profit > 0 ? '+' : '';
                 const profit_text = `${sign}${profit}`;
                 ctx.save();
-                const end_left =
-                    ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
                 const getMaxWidth = (is_profit_text, left, profit_text_width) => {
                     if (
                         !is_profit_text &&

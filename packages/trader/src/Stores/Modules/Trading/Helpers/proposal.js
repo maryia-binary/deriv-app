@@ -41,16 +41,8 @@ export const getProposalInfo = (store, response, obj_prev_contract_basis) => {
 
     const commission = proposal.commission;
     const cancellation = proposal.cancellation;
-    const contract_details = proposal.contract_details;
     const accumulators_details = {
-        ticks_stayed_in: contract_details?.ticks_stayed_in,
-        tick_size_barrier: contract_details?.tick_size_barrier,
-        maximum_payout: contract_details?.maximum_payout,
-        maximum_ticks: contract_details?.maximum_ticks,
-        high_barrier: contract_details?.high_barrier,
-        last_tick_epoch: contract_details?.last_tick_epoch,
-        low_barrier: contract_details?.low_barrier,
-        growth_rate: store.growth_rate,
+        ...proposal.contract_details,
         spot_time: proposal.spot_time,
     };
 

@@ -134,7 +134,7 @@ export default class ContractTradeStore extends BaseStore {
                 contract_info: { is_accumulators_trade_without_contract: true },
                 key: 'accumulators_barriers_without_contract',
                 price_array: [this.accumulators_high_barrier, this.accumulators_low_barrier],
-                epoch_array: [this.current_symbol_spot_time],
+                epoch_array: [this.current_symbol_spot_time, this.current_symbol_spot_time],
             });
         }
         return markers;

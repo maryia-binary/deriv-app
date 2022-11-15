@@ -247,6 +247,7 @@ function calculate_marker(contract_info) {
         transaction_ids,
         tick_stream,
         contract_id,
+        current_spot_time,
         date_start,
         date_expiry,
         entry_tick,
@@ -303,7 +304,7 @@ function calculate_marker(contract_info) {
                 contract_info: toJS(contract_info),
                 type: 'TickContract',
                 key: `${contract_id}-date_start`,
-                epoch_array: [date_start, ...ticks_epoch_array],
+                epoch_array: [date_start, current_spot_time, ...ticks_epoch_array],
                 price_array,
             };
         }

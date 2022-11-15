@@ -204,7 +204,7 @@ const TickContract = RawMarkerMaker(
     ({
         ctx: context,
         canvas_height: canvas_fixed_height,
-        points: [start, ...ticks],
+        points: [start, current_spot_time, ...ticks],
         prices: [barrier, barrier_2], // TODO: support two barrier contracts
         is_last_contract,
         is_dark_theme,
@@ -214,7 +214,6 @@ const TickContract = RawMarkerMaker(
             contract_type,
             // exit_tick_time,
             currency,
-            current_spot_time,
             status,
             profit,
             is_accumulators_trade_without_contract,
@@ -288,10 +287,9 @@ const TickContract = RawMarkerMaker(
                 return;
             }
 
-            if (start.visible || entry.visible) {
+            if (current_spot_time?.visible && !is_sold) {
                 const sign = profit > 0 ? '+' : '';
                 const profit_text = `${sign}${profit}`;
-                ctx.save();
                 const end_left =
                     ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
                 const getMaxWidth = (is_profit_text, left, profit_text_width) => {
@@ -306,42 +304,39 @@ const TickContract = RawMarkerMaker(
                     }
                     return 0;
                 };
-                if (current_spot_time?.visible && !is_sold) {
-                    // draw 3 text items with different font size and weight:
-                    let profit_text_width = 0;
-                    [
-                        {
-                            text: profit_text,
-                            font: `bold 20px IBM Plex Sans`,
-                            left: current_spot_time.left + 33,
-                            top: current_spot_time.top,
-                        },
-                        {
-                            text: `${currency}`,
-                            font: '10px IBM Plex Sans',
-                            left: current_spot_time.left + 35,
-                            top: current_spot_time.top + 1.5,
-                        },
-                    ].forEach(({ text, font, left, top }) => {
-                        shadowed_text({
-                            ctx,
-                            scale,
-                            is_dark_theme,
-                            text,
-                            font,
-                            text_align: 'start',
-                            color: getColor({ status: 'open', profit }),
-                            left: text === profit_text ? left : left + profit_text_width,
-                            top,
-                            max_width: getMaxWidth(text === profit_text, left, profit_text_width),
-                        });
-                        profit_text_width =
-                            text === profit_text
-                                ? ctx.measureText(profit_text).actualBoundingBoxRight
-                                : profit_text_width;
+                let profit_text_width = 0;
+                // draw 3 text items with different font size and weight:
+                ctx.save();
+                [
+                    {
+                        text: profit_text,
+                        font: `bold 20px IBM Plex Sans`,
+                        left: current_spot_time.left + 33,
+                        top: current_spot_time.top,
+                    },
+                    {
+                        text: `${currency}`,
+                        font: '10px IBM Plex Sans',
+                        left: current_spot_time.left + 35,
+                        top: current_spot_time.top + 1.5,
+                    },
+                ].forEach(({ text, font, left, top }) => {
+                    shadowed_text({
+                        ctx,
+                        scale,
+                        is_dark_theme,
+                        text,
+                        font,
+                        text_align: 'start',
+                        color: getColor({ status: 'open', profit }),
+                        left: text === profit_text ? left : left + profit_text_width,
+                        top,
+                        max_width: getMaxWidth(text === profit_text, left, profit_text_width),
                     });
-                    ctx.restore();
-                }
+                    profit_text_width =
+                        text === profit_text ? ctx.measureText(profit_text).actualBoundingBoxRight : profit_text_width;
+                });
+                ctx.restore();
             }
         }
 

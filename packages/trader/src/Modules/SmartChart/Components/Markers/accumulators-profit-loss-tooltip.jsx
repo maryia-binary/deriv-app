@@ -18,6 +18,119 @@ const AccumulatorsProfitLossTooltip = ({
     const won = profit > 0;
     const sign = won ? '+' : '';
 
+    // const [value, setValue] = React.useState(0);
+    // const timeout_ids = React.useRef([]);
+    // const counter = React.useRef(null);
+    // const prev_profit = React.useRef(profit);
+    // const animated_ref = React.useRef();
+
+    // React.useEffect(() => {
+    //     if (animated_ref?.current) {
+    //         animated_ref.current.animate([{ transform: 'translateY(-10px)' }, { transform: 'translateY(0)' }], {
+    //             duration: 700,
+    //             fill: 'both',
+    //             easing: 'ease-in-out',
+    //         });
+    //     }
+    // }, [profit]);
+
+    // const update = (start, end) => {
+    //     timeout_ids.current.forEach(id => {
+    //         clearTimeout(id);
+    //     });
+
+    //     const delta = Math.abs(end - start) || 1;
+    //     const i = counter.current ?? start;
+
+    //     if (start < end) {
+    //         const runLoop = () => {
+    //             //  create a loop function
+    //             const timeout_id = setTimeout(() => {
+    //                 //  call a 3s setTimeout when the loop is called
+    //                 if (i <= end) {
+    //                     setValue(i % 10);
+    //                     if (i !== end) {
+    //                         counter.current = (i + 1) % 10;
+    //                         //  if the counter < 10, call the loop function
+    //                         runLoop(); //  ..  again which will trigger another
+    //                     }
+    //                 } else {
+    //                     counter.current = null;
+    //                 } //  ..  setTimeout()
+    //                 // i++; //  increment the counter
+    //             }, 300 / delta);
+    //             timeout_ids.current.push(timeout_id);
+    //         };
+
+    //         runLoop();
+    //     } else if (start > end) {
+    //         const runLoop = () => {
+    //             //  create a loop function
+    //             const timeout_id = setTimeout(() => {
+    //                 //  call a 3s setTimeout when the loop is called
+
+    //                 if (i >= end) {
+    //                     setValue(i % 10); //  your code here
+
+    //                     if (i !== end) {
+    //                         counter.current = Math.abs(i - 1) % 10;
+    //                         //  if the counter < 10, call the loop function
+    //                         runLoop(); //  ..  again which will trigger another
+    //                     }
+    //                 } else {
+    //                     counter.current = null;
+    //                 } //  ..  setTimeout()
+    //             }, 300 / delta);
+    //             timeout_ids.current.push(timeout_id);
+    //         };
+
+    //         runLoop();
+    //     } else {
+    //         const runLoop = () => {
+    //             //  create a loop function
+    //             const timeout_id = setTimeout(() => {
+    //                 //  call a 3s setTimeout when the loop is called
+
+    //                 if (i <= start + 10) {
+    //                     setValue(i % 10); //  your code here
+
+    //                     if (i !== end) {
+    //                         counter.current = i + 1;
+    //                         //  if the counter < 10, call the loop function
+    //                         runLoop(); //  ..  again which will trigger another
+    //                     }
+    //                 } else {
+    //                     counter.current = null;
+    //                 } //  ..  setTimeout()
+    //             }, 300 / delta);
+    //             timeout_ids.current.push(timeout_id);
+    //         };
+
+    //         runLoop();
+    //     }
+    // };
+
+    // const getAnimatedProfit = () => {
+    //     const new_arr = profit.toFixed(2).split('.');
+    //     const prev_arr = prev_profit.current?.toFixed(2).split('.');
+    //     const new_counter = +new_arr[1][0];
+    //     const prev_counter = +prev_arr[1][0];
+
+    //     const getCounter = () => {
+    //         update(prev_counter, new_counter);
+    //         return value;
+    //     };
+    //     return (
+    //         <>
+    //             {`${new_arr[0]}.`}
+    //             <span ref={animated_ref} style={{ display: 'inline-block' }}>
+    //                 {getCounter()}
+    //             </span>
+    //             {new_arr[1].slice(1)}
+    //         </>
+    //     );
+    // };
+
     const opposite_arrow_position = React.useMemo(() => {
         const horizontal = ['left', 'right'];
         return horizontal.includes(alignment)
@@ -67,6 +180,7 @@ const AccumulatorsProfitLossTooltip = ({
                     )}
                 </div>
             )}
+            {/* <>{getAnimatedProfit()}</> */}
         </FastMarker>
     );
 };

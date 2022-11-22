@@ -355,12 +355,6 @@ const Chart = props => {
             symbol === p.contract_info.underlying &&
             filterByContractType(p.contract_info, 'accumulator')
     );
-    const mult_positions = all_positions.filter(
-        p =>
-            p.contract_info &&
-            symbol === p.contract_info.underlying &&
-            filterByContractType(p.contract_info, 'multiplier')
-    );
 
     return (
         <SmartChartWithRef

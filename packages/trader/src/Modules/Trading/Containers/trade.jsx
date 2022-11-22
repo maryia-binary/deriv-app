@@ -355,6 +355,12 @@ const Chart = props => {
             symbol === p.contract_info.underlying &&
             filterByContractType(p.contract_info, 'accumulator')
     );
+    const mult_positions = all_positions.filter(
+        p =>
+            p.contract_info &&
+            symbol === p.contract_info.underlying &&
+            filterByContractType(p.contract_info, 'multiplier')
+    );
 
     return (
         <SmartChartWithRef
@@ -407,13 +413,9 @@ const Chart = props => {
         >
             <ChartMarkers />
             {is_accumulator &&
-                accumulators_positions.map(({ contract_info }) => {
-                    return (
-                        !!contract_info.is_sold && (
-                            <AccumulatorsProfitLossTooltip key={contract_info.contract_id} {...contract_info} />
-                        )
-                    );
-                })}
+                accumulators_positions.map(({ contract_info }) => (
+                    <AccumulatorsProfitLossTooltip key={contract_info.contract_id} {...contract_info} />
+                ))}
         </SmartChartWithRef>
     );
 };

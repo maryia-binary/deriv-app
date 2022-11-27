@@ -223,7 +223,7 @@ export default connect(({ common, contract_replay, ui }) => {
 // CHART -----------------------------------------
 
 const Chart = props => {
-    const AccumulatorsMarkerWithBarriers = allMarkers[props.accumulators_barriers_marker.type];
+    const AccumulatorsMarkerWithBarriers = allMarkers[props.accumulators_barriers_marker?.type];
 
     const isBottomWidgetVisible = () => {
         return isDesktop() && props.is_digit_contract;
@@ -272,10 +272,7 @@ const Chart = props => {
             shouldFetchTradingTimes={!props.end_epoch}
             yAxisMargin={getChartYAxisMargin()}
             anchorChartToLeft={isMobile()}
-            shouldFetchTickHistory={
-                getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds' ||
-                props.is_accumulator_contract
-            }
+            shouldFetchTickHistory={getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds'}
             contractInfo={props.contract_info}
         >
             {props.markers_array.map(marker => (

@@ -7,7 +7,7 @@ import {
     createMarkerSpotMiddle,
     getSpotCount,
 } from './chart-marker-helpers';
-import { getEndTime, unique } from '@deriv/shared';
+import { getEndTime, isAccumulatorContract, unique } from '@deriv/shared';
 import { MARKER_TYPES_CONFIG } from '../Constants/markers';
 import { getChartType } from './logic';
 
@@ -61,12 +61,21 @@ const addLabelAlignment = (tick, idx, arr) => {
 };
 
 const createTickMarkers = contract_info => {
-    const tick_stream = unique(contract_info.tick_stream, 'epoch').map(addLabelAlignment);
+    const is_accumulator = isAccumulatorContract(contract_info.contract_type);
+    const available_ticks = is_accumulator
+        ? contract_info.audit_details?.all_ticks || contract_info.tick_stream
+        : contract_info.tick_stream;
+    const tick_stream = unique(available_ticks, 'epoch').map(addLabelAlignment);
     const result = [];
 
     tick_stream.forEach((tick, idx) => {
-        const is_entry_spot = idx === 0 && +tick.epoch !== contract_info.exit_tick_time;
-        const is_middle_spot = idx > 0 && +tick.epoch !== +contract_info.exit_tick_time;
+        const getAccuEntrySpot = _tick => _tick.name === 'Entry Spot';
+        const accu_entry_spot_index = tick_stream.findIndex(getAccuEntrySpot);
+        const is_entry_spot = is_accumulator
+            ? getAccuEntrySpot(tick)
+            : idx === 0 && +tick.epoch !== contract_info.exit_tick_time;
+        const is_middle_spot =
+            (is_accumulator ? idx > accu_entry_spot_index : idx > 0) && +tick.epoch !== +contract_info.exit_tick_time;
         const is_exit_spot =
             +tick.epoch === +contract_info.exit_tick_time ||
             getSpotCount(contract_info, idx) === contract_info.tick_count;

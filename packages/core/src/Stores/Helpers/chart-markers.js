@@ -69,7 +69,7 @@ const createTickMarkers = contract_info => {
     const is_accumulator = isAccumulatorContract(contract_info.contract_type);
     // TODO: maryia-binary: refactor this if BE adds entry_spot to tick_stream for ACCU:
     // accumulators open contract tick_stream contains 10 last ticks only & for now does not contain entry spot
-    const accu_enty_tick = {
+    const accu_entry_tick = {
         epoch: contract_info.entry_tick_time,
         flag: 'highlight_tick',
         name: 'Entry Spot',
@@ -78,7 +78,7 @@ const createTickMarkers = contract_info => {
     };
     const accu_tick_stream =
         contract_info.tick_stream.length && contract_info.tick_stream.length < 10
-            ? [accu_enty_tick, ...contract_info.tick_stream]
+            ? [accu_entry_tick, ...contract_info.tick_stream]
             : contract_info.tick_stream;
     const available_ticks = is_accumulator
         ? contract_info.audit_details?.all_ticks || accu_tick_stream

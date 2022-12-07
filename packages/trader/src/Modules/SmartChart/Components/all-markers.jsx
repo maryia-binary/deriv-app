@@ -248,17 +248,6 @@ const TickContract = RawMarkerMaker(
         const previous_tick = ticks[ticks.length - 2] || exit;
         const opacity = is_sold ? calc_opacity(start.left, exit.left) : '';
 
-        if (is_accumulators_trade_without_contract || is_accumulators_contract) {
-            if (barrier && barrier_2 && exit && (exit.top < barrier || exit.top > barrier_2)) {
-                ctx.save();
-                const gradient = ctx.createRadialGradient(exit.left, exit.top, 4, exit.left, exit.top, 16);
-                gradient.addColorStop(0, 'rgba(55, 124, 252, 0.72)');
-                gradient.addColorStop(1, 'rgba(55, 124, 252, 0)');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(exit.left - 16, exit.top - 16, 32, 32);
-                ctx.restore();
-            }
-        }
         if (start && is_accumulators_trade_without_contract) {
             // draw 2 barriers with a shade in-between only
             draw_partial_shade({
@@ -308,9 +297,8 @@ const TickContract = RawMarkerMaker(
                 tick: { zoom: start.zoom, left: start.left - 1 * scale, top: canvas_height - 50 },
             });
             ctx.beginPath();
-            if (is_accumulators_contract) {
-                ctx.setLineDash([]);
-            } else ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = color + opacity;
+            ctx.setLineDash([3, 3]);
             ctx.moveTo(start.left - 1 * scale, 0);
             if (ticks.length && barrier && !is_accumulators_contract) {
                 ctx.lineTo(start.left - 1 * scale, barrier - 34 * scale);

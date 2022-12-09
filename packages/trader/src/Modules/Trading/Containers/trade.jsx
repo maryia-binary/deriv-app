@@ -54,6 +54,7 @@ const Trade = ({
     should_show_multipliers_onboarding,
     symbol,
     is_synthetics_available,
+    is_synthetics_trading_market_available,
 }) => {
     const [digits, setDigits] = React.useState([]);
     const [tick, setTick] = React.useState({});
@@ -211,8 +212,8 @@ const Trade = ({
                 {is_market_closed && !is_market_unavailable_visible && (
                     <MarketIsClosedOverlay
                         is_eu={is_eu}
-                        is_synthetics_available={is_synthetics_available}
-                        {...(is_eu && category && { is_market_available: true })}
+                        is_synthetics_trading_market_available={is_synthetics_trading_market_available}
+                        {...(is_eu && category)}
                         onClick={onTryOtherMarkets}
                         onMarketOpen={prepareTradeStore}
                         symbol={symbol}
@@ -234,6 +235,7 @@ export default connect(({ client, common, modules, ui }) => ({
     is_accumulator: modules.trade.is_accumulator,
     is_eu: client.is_eu,
     is_synthetics_available: modules.trade.is_synthetics_available,
+    is_synthetics_trading_market_available: modules.trade.is_synthetics_trading_market_available,
     network_status: common.network_status,
     contract_type: modules.trade.contract_type,
     form_components: modules.trade.form_components,

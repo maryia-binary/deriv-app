@@ -280,8 +280,8 @@ const Chart = props => {
             yAxisMargin={getChartYAxisMargin()}
             anchorChartToLeft={isMobile()}
             shouldFetchTickHistory={
-                props.is_accumulator_contract ||
-                getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds'
+                getDurationUnitText(getDurationPeriod(props.contract_info)) !== 'seconds' &&
+                !props.is_accumulator_contract
             }
             contractInfo={passthrough_contract_info}
         >

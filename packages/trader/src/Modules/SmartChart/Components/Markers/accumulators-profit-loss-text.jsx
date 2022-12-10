@@ -27,9 +27,13 @@ const AccumulatorsProfitLossText = ({
     const jumping_timeout = React.useRef();
 
     React.useEffect(() => {
+        const sliding_digit_timeouts = timeout_ids.current;
         return () => {
             clearTimeout(brightening_timeout.current);
             clearTimeout(jumping_timeout.current);
+            sliding_digit_timeouts?.forEach(id => {
+                clearTimeout(id);
+            });
         };
     }, []);
 
@@ -44,10 +48,7 @@ const AccumulatorsProfitLossText = ({
                 setIsJumping(false);
             }, 300);
         }
-    }, [profit]);
-
-    React.useEffect(() => {
-        update(prev_counter, new_counter);
+        if (profit !== 0) update(prev_counter, new_counter);
     }, [profit, prev_counter, new_counter]);
 
     // TODO: maryia-binary: refactor this function

@@ -46,21 +46,9 @@ const AccumulatorsProfitLossTooltip = ({
             : ['top', 'bottom'].find(el => el !== alignment);
     }, [alignment]);
 
-    const onMouseEnterHandler = () => {
-        if (!is_tooltip_open) {
-            setIsTooltipOpen(true);
-        }
-    };
-
-    const onMouseLeaveHandler = () => {
-        if (is_tooltip_open) {
-            setIsTooltipOpen(false);
-        }
-    };
-
     const onClickMobileHandler = () => {
         if (isMobile()) {
-            onMouseEnterHandler();
+            setIsTooltipOpen(true);
             tooltip_timeout.current = onCloseDelayed(2000);
         }
     };
@@ -94,8 +82,8 @@ const AccumulatorsProfitLossTooltip = ({
         <FastMarker markerRef={onRef} className={classNames(className, won ? 'won' : 'lost')}>
             <span
                 className={`${className}__spot-circle`}
-                onMouseEnter={onMouseEnterHandler}
-                onMouseLeave={onMouseLeaveHandler}
+                onMouseEnter={() => setIsTooltipOpen(true)}
+                onMouseLeave={() => setIsTooltipOpen(false)}
                 // onTouchStart for open tooltip on mobile
                 onTouchStart={onClickMobileHandler}
             />

@@ -17,48 +17,46 @@ const AccumulatorsProfitLossText = ({
     className = 'sc-accumulators-profit-loss-text',
     profit,
 }) => {
-    const [value, setValue] = React.useState(0);
     const [is_fading_in, setIsFadingIn] = React.useState(false);
     const [is_sliding, setIsSliding] = React.useState(false);
     const prev_profit = React.useRef(profit);
-    const intervals_ids = React.useRef([]);
-    const sliding_decimal = React.useRef(null);
-    const fading_in_timeout = React.useRef();
-    const sliding_timeout = React.useRef();
+    const prev_profit_tenth = +prev_profit.current?.toFixed(2).split('.')[1][0];
+    const [current_profit_tenth, setCurrentProfitTenth] = React.useState(prev_profit_tenth);
+    const profit_tenth_ref = React.useRef();
+    const interval_id_ref = React.useRef(null);
+    const fading_in_timeout_id = React.useRef();
+    const sliding_timeout_id = React.useRef();
+    const profit_portions_array = profit.toFixed(2).split('.');
+    const profit_whole_number = +profit_portions_array[0];
+    const profit_tenth = +profit_portions_array[1][0];
+    const profit_hundredths = +profit_portions_array[1].slice(1);
     const won = profit > 0;
     const sign = won ? '+' : '';
-    const new_arr = profit.toFixed(2).split('.');
-    const prev_arr = prev_profit.current?.toFixed(2).split('.');
-    const new_counter = +new_arr[1][0];
-    const prev_counter = +prev_arr[1][0];
 
-    const slideDecimalDigit = (action, interval_ms, start, end) => {
+    const runThroughTenthDigit = (action, interval_ms, start, end) => {
+        clearInterval(interval_id_ref.current);
         const interval_id = setInterval(() => {
-            if (action === ACTIONS.INC && sliding_decimal.current < end) {
-                sliding_decimal.current = (sliding_decimal.current + 1) % 10;
-            } else if (action === ACTIONS.DEC && sliding_decimal.current > end) {
-                sliding_decimal.current = Math.abs(sliding_decimal.current - 1) % 10;
-            } else if (action === ACTIONS.ADD10 && sliding_decimal.current < start + 10) {
-                sliding_decimal.current += 1;
+            if (action === ACTIONS.INC && profit_tenth_ref.current < end) {
+                profit_tenth_ref.current = (profit_tenth_ref.current + 1) % 10;
+            } else if (action === ACTIONS.DEC && profit_tenth_ref.current > end) {
+                profit_tenth_ref.current = Math.abs(profit_tenth_ref.current - 1) % 10;
+            } else if (action === ACTIONS.ADD10 && profit_tenth_ref.current < start + 10) {
+                profit_tenth_ref.current += 1;
             } else if (
-                action === ACTIONS.ADD10 ? sliding_decimal.current === start + 10 : sliding_decimal.current === end
+                action === ACTIONS.ADD10 ? profit_tenth_ref.current === start + 10 : profit_tenth_ref.current === end
             ) {
-                intervals_ids.current.splice(intervals_ids.current.indexOf(interval_id), 1);
                 clearInterval(interval_id);
             }
-            setValue(sliding_decimal.current % 10);
+            setCurrentProfitTenth(profit_tenth_ref.current % 10);
         }, interval_ms);
-        intervals_ids.current.push(interval_id);
+        interval_id_ref.current = interval_id;
     };
 
     React.useEffect(() => {
-        const sliding_digit_intervals = intervals_ids.current;
         return () => {
-            clearTimeout(fading_in_timeout.current);
-            clearTimeout(sliding_timeout.current);
-            sliding_digit_intervals?.forEach(id => {
-                clearInterval(id);
-            });
+            clearTimeout(fading_in_timeout_id.current);
+            clearTimeout(sliding_timeout_id.current);
+            clearInterval(interval_id_ref.current);
         };
     }, []);
 
@@ -66,28 +64,28 @@ const AccumulatorsProfitLossText = ({
         if (profit) {
             setIsFadingIn(true);
             setIsSliding(true);
-            fading_in_timeout.current = setTimeout(() => {
+            fading_in_timeout_id.current = setTimeout(() => {
                 setIsFadingIn(false);
             }, 600);
-            sliding_timeout.current = setTimeout(() => {
+            sliding_timeout_id.current = setTimeout(() => {
                 setIsSliding(false);
             }, 300);
         }
         if (profit !== 0) {
-            const update = (start, end) => {
+            const updateTenth = (start, end) => {
                 const delta = Math.abs(end - start);
-                sliding_decimal.current = start;
+                profit_tenth_ref.current = start;
                 if (start < end) {
-                    slideDecimalDigit(ACTIONS.INC, 300 / delta, start, end);
+                    runThroughTenthDigit(ACTIONS.INC, 300 / delta, start, end);
                 } else if (start > end) {
-                    slideDecimalDigit(ACTIONS.DEC, 300 / delta, start, end);
+                    runThroughTenthDigit(ACTIONS.DEC, 300 / delta, start, end);
                 } else {
-                    slideDecimalDigit(ACTIONS.ADD10, 30, start, end);
+                    runThroughTenthDigit(ACTIONS.ADD10, 30, start, end);
                 }
             };
-            update(prev_counter, new_counter);
+            updateTenth(prev_profit_tenth, profit_tenth);
         }
-    }, [profit, prev_counter, new_counter]);
+    }, [profit, prev_profit_tenth, profit_tenth]);
 
     const onRef = ref => {
         if (ref) {
@@ -113,9 +111,9 @@ const AccumulatorsProfitLossText = ({
                 })}
                 as='div'
             >
-                {`${sign}${new_arr[0]}.`}
-                <div className={is_sliding ? `${className}__sliding-decimal` : ''}>{value}</div>
-                {`${new_arr[1].slice(1)}`}
+                {`${sign}${profit_whole_number}.`}
+                <div className={is_sliding ? `${className}__sliding-tenth` : ''}>{current_profit_tenth}</div>
+                {`${profit_hundredths}`}
             </Text>
             <Text size='xxs' as='div' className={`${className}__currency`}>
                 {currency}

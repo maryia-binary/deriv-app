@@ -7,7 +7,7 @@ import 'Sass/app/modules/contract/accumulators-stats.scss';
 
 const AccumulatorsStatsManualModal = ({ title, icon_classname, is_manual_open, toggleManual }) => {
     const is_mobile = isMobile();
-    // memoize video sources and open the modal only after we get them to avoid showing half-empty modal
+    // memoize file paths for videos and open the modal only after we get them
     const getVideoSource = React.useCallback(
         extension => {
             return getUrlBase(
@@ -16,11 +16,14 @@ const AccumulatorsStatsManualModal = ({ title, icon_classname, is_manual_open, t
         },
         [is_mobile]
     );
+    const mp4_src = React.useMemo(() => getVideoSource('mp4'), [getVideoSource]);
+    const webm_src = React.useMemo(() => getVideoSource('webm'), [getVideoSource]);
+
     return (
         <React.Fragment>
             <Icon icon='IcInfoOutline' onClick={toggleManual} size={16} className={icon_classname} />
             <Modal
-                is_open={is_manual_open && !!getVideoSource('mp4') && !!getVideoSource('webm')}
+                is_open={is_manual_open && !!mp4_src && !!webm_src}
                 should_header_stick_body={false}
                 title={title}
                 toggleModal={toggleManual}
@@ -37,8 +40,8 @@ const AccumulatorsStatsManualModal = ({ title, icon_classname, is_manual_open, t
                             data-testid='dt_accumulators_stats_manual_video'
                         >
                             {/* a browser will select a source with extension it recognizes */}
-                            <source src={getVideoSource('mp4')} type='video/mp4' />
-                            <source src={getVideoSource('webm')} type='video/webm' />
+                            <source src={mp4_src} type='video/mp4' />
+                            <source src={webm_src} type='video/webm' />
                             {localize('Unfortunately, your browser does not support the video.')}
                         </video>
                     </div>

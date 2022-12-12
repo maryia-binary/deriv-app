@@ -7,8 +7,7 @@ describe('PurchaseButtonsOverlay', () => {
 
     it('should render with a correct message', () => {
         render(<PurchaseButtonsOverlay message={message} />);
-        const correct_message = screen.getByText(message);
-        expect(correct_message).toBeInTheDocument();
+        expect(screen.getByText(message)).toBeInTheDocument();
     });
     it('should have purchase-buttons-overlay__one-button class when is_to_cover_one_button prop is passed', () => {
         render(<PurchaseButtonsOverlay message={message} is_to_cover_one_button />);

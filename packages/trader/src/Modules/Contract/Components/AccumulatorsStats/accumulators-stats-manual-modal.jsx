@@ -28,8 +28,14 @@ const AccumulatorsStatsManualModal = ({ title, icon_classname, is_manual_open, t
                 className='accumulators-stats-manual-modal'
             >
                 <Modal.Body className='accumulators-stats-modal-body'>
-                    <div className='accumulators-stats-modal-body__video' data-testid='dt_accumulators_stats_manual'>
-                        <video width={is_mobile ? 296 : 563} autoPlay loop playsInline>
+                    <div className='accumulators-stats-modal-body__video'>
+                        <video
+                            width={is_mobile ? 296 : 563}
+                            autoPlay
+                            loop
+                            playsInline
+                            data-testid='dt_accumulators_stats_manual_video'
+                        >
                             {/* a browser will select a source with extension it recognizes */}
                             <source src={getVideoSource('mp4')} type='video/mp4' />
                             <source src={getVideoSource('webm')} type='video/webm' />

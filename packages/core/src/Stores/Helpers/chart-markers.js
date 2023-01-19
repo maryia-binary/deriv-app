@@ -98,7 +98,8 @@ const createTickMarkers = contract_info => {
         } else if (is_middle_spot) {
             marker_config = createMarkerSpotMiddle(contract_info, tick, idx);
             if (is_accumulator && !is_preexit_spot && !is_current_last_spot) {
-                marker_config.content_config.spot_className = `${marker_config.content_config.spot_className} ${marker_config.content_config.spot_className}-small`;
+                const spot_className = marker_config.content_config.spot_className;
+                marker_config.content_config.spot_className = `${spot_className} ${spot_className}-small`;
             }
         } else if ((is_current_last_spot || is_preexit_spot) && is_accumulator && !is_exit_spot) {
             marker_config = createMarkerSpotMiddle(contract_info, tick, idx);

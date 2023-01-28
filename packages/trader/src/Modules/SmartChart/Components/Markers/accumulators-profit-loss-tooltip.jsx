@@ -9,7 +9,6 @@ import AccumulatorsProfitLossText from './accumulators-profit-loss-text';
 
 const AccumulatorsProfitLossTooltip = ({
     alignment = 'right',
-    current_spot,
     current_spot_time,
     className = 'sc-accumulators-profit-loss-tooltip',
     currency,
@@ -17,6 +16,7 @@ const AccumulatorsProfitLossTooltip = ({
     exit_tick_time,
     high_barrier,
     is_sold,
+    low_barrier,
     profit,
 }) => {
     const [is_tooltip_open, setIsTooltipOpen] = React.useState(false);
@@ -68,15 +68,18 @@ const AccumulatorsProfitLossTooltip = ({
     };
 
     if (typeof profit !== 'number') return null;
-    if (!is_sold && current_spot_time && high_barrier)
+    const time_now = Date.now() / 1000;
+    const diff = time_now - exit_tick_time;
+    if ((!is_sold || diff <= 1.3) && current_spot_time && high_barrier) {
         return (
             <AccumulatorsProfitLossText
                 currency={currency}
-                current_spot={current_spot}
+                current_spot={+low_barrier + (+high_barrier - +low_barrier) / 2}
                 current_spot_time={current_spot_time}
                 profit={profit}
             />
         );
+    }
     return is_sold && exit_tick_time ? (
         <FastMarker markerRef={onRef} className={classNames(className, won ? 'won' : 'lost')}>
             <span
@@ -112,7 +115,6 @@ const AccumulatorsProfitLossTooltip = ({
 
 AccumulatorsProfitLossTooltip.propTypes = {
     alignment: PropTypes.string,
-    current_spot: PropTypes.number,
     current_spot_time: PropTypes.number,
     className: PropTypes.string,
     currency: PropTypes.string,
@@ -120,6 +122,7 @@ AccumulatorsProfitLossTooltip.propTypes = {
     exit_tick_time: PropTypes.number,
     high_barrier: PropTypes.string,
     is_sold: PropTypes.number,
+    low_barrier: PropTypes.string,
     profit: PropTypes.number,
 };
 

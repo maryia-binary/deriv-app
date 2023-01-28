@@ -17,8 +17,8 @@ const AccumulatorsChartElements = ({
     );
     const last_contract_info = accumulators_positions.slice().pop()?.contract_info;
     const should_highlight_tick_without_contract = !!current_symbol_spot_time && is_stats_highlighted;
-    const should_highlight_contract_tick =
-        last_contract_info?.status === 'lost' && current_symbol_spot_time === last_contract_info?.exit_tick_time;
+    const diff = Date.now() / 1000 - last_contract_info?.exit_tick_time;
+    const should_highlight_contract_tick = last_contract_info?.status === 'lost' && diff <= 1.3;
     const should_highlight_tick = should_highlight_tick_without_contract || should_highlight_contract_tick;
     const current_spot = should_highlight_contract_tick ? last_contract_info?.exit_tick : current_symbol_spot;
     const current_spot_time = should_highlight_contract_tick

@@ -22,6 +22,7 @@ import {
     getBarrierPipSize,
     isBarrierSupported,
     removeBarrier,
+    isAccumulatorContract,
 } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { getValidationRules, getMultiplierValidationRules } from 'Stores/Modules/Trading/Constants/validation-rules';
@@ -1098,8 +1099,19 @@ export default class TradeStore extends BaseStore {
                 spot,
                 spot_time,
             } = this.proposal_info.ACCU;
-            this.root_store.contract_trade.current_symbol_spot = spot;
-            this.root_store.contract_trade.current_symbol_spot_time = spot_time;
+            const accu_contracts = this.root_store.portfolio.all_positions.filter(
+                ({ contract_info, type }) => isAccumulatorContract(type) && contract_info.underlying === this.symbol
+            );
+            const { status, exit_tick_time } = accu_contracts[accu_contracts.length - 1]?.contract_info || {};
+            const diff = Date.now() / 1000 - exit_tick_time;
+            if (status === 'open' || (status && diff < 1.3)) {
+                // hide barriers from proposal while last contract barriers are shown
+                this.root_store.contract_trade.current_symbol_spot = null;
+                this.root_store.contract_trade.current_symbol_spot_time = null;
+            } else {
+                this.root_store.contract_trade.current_symbol_spot = spot;
+                this.root_store.contract_trade.current_symbol_spot_time = spot_time;
+            }
             this.ticks_history_stats = getUpdatedTicksHistoryStats({
                 previous_ticks_history_stats: this.ticks_history_stats,
                 new_ticks_history_stats: ticks_stayed_in,

@@ -211,7 +211,7 @@ const TickContract = RawMarkerMaker(
         granularity,
         contract_info: {
             contract_type,
-            current_spot_time,
+            exit_tick_time,
             status,
             profit,
             is_accumulators_trade_without_contract,
@@ -247,9 +247,8 @@ const TickContract = RawMarkerMaker(
         const exit = ticks[ticks.length - 1];
         const previous_tick = ticks[ticks.length - 2] || exit;
         const opacity = is_sold ? calc_opacity(start.left, exit.left) : '';
-        const time_now = Date.now() / 1000;
 
-        if (start && is_accumulators_trade_without_contract && (time_now - current_spot_time > 1.3 || !status)) {
+        if (start && is_accumulators_trade_without_contract) {
             // draw 2 barriers with a shade in-between only
             draw_shaded_barriers({
                 ctx,
@@ -269,7 +268,7 @@ const TickContract = RawMarkerMaker(
                 barrier &&
                 barrier_2 &&
                 previous_tick &&
-                (status === 'open' || (status && time_now - current_spot_time <= 1.3) || is_in_contract_details)
+                (status === 'open' || Date.now() / 1000 - exit_tick_time <= 1.3 || is_in_contract_details)
             ) {
                 // draw 2 barriers with a shade between them for an open ACCU contract
                 draw_shaded_barriers({

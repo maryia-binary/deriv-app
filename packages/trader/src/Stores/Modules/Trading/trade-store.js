@@ -22,6 +22,7 @@ import {
     getBarrierPipSize,
     isBarrierSupported,
     removeBarrier,
+    isAccumulatorContract,
 } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { getValidationRules, getMultiplierValidationRules } from 'Stores/Modules/Trading/Constants/validation-rules';
@@ -1087,19 +1088,8 @@ export default class TradeStore extends BaseStore {
             this.stop_out = limit_order?.stop_out?.order_amount;
         }
         if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const {
-                maximum_ticks,
-                ticks_stayed_in,
-                tick_size_barrier,
-                last_tick_epoch,
-                maximum_payout,
-                high_barrier,
-                low_barrier,
-                spot,
-                spot_time,
-            } = this.proposal_info.ACCU;
-            this.root_store.contract_trade.current_symbol_spot = spot;
-            this.root_store.contract_trade.current_symbol_spot_time = spot_time;
+            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout } =
+                this.proposal_info.ACCU;
             this.ticks_history_stats = getUpdatedTicksHistoryStats({
                 previous_ticks_history_stats: this.ticks_history_stats,
                 new_ticks_history_stats: ticks_stayed_in,
@@ -1108,8 +1098,6 @@ export default class TradeStore extends BaseStore {
             this.tick_size_barrier = tick_size_barrier;
             this.maximum_ticks = maximum_ticks;
             this.maximum_payout = maximum_payout;
-            this.root_store.contract_trade.accumulators_high_barrier = high_barrier;
-            this.root_store.contract_trade.accumulators_low_barrier = low_barrier;
         }
 
         if (!this.main_barrier || this.main_barrier?.shade) {
@@ -1368,9 +1356,68 @@ export default class TradeStore extends BaseStore {
 
     // ---------- WS ----------
     wsSubscribe = (req, callback) => {
+        const accumulator_ticks_interceptor = (...args) => {
+            const { current_symbol_spot, current_symbol_spot_time } = this.root_store.contract_trade;
+            const { shortcode, high_barrier, low_barrier } =
+                this.root_store.portfolio.active_positions.find(
+                    ({ type, contract_info: _contract_info }) =>
+                        isAccumulatorContract(type) && _contract_info.underlying === this.symbol
+                )?.contract_info || {};
+            if (shortcode) {
+                // has an ongoing contract
+                const result = extractInfoFromShortcode(shortcode);
+                const contract_tick_size_barrier = +result.tick_size_barrier;
+                if (current_symbol_spot && contract_tick_size_barrier) {
+                    this.root_store.contract_trade.updateAccumulatorBarriers({
+                        high_barrier: (1 + contract_tick_size_barrier) * current_symbol_spot,
+                        low_barrier: (1 - contract_tick_size_barrier) * current_symbol_spot,
+                    });
+                } else if (!current_symbol_spot && high_barrier && low_barrier) {
+                    // if current_symbol_spot is null, use barriers from proposal_open_contract
+                    this.root_store.contract_trade.updateAccumulatorBarriers({ high_barrier, low_barrier });
+                }
+            } else if (current_symbol_spot && this.tick_size_barrier) {
+                // has no open contracts
+                this.root_store.contract_trade.updateAccumulatorBarriers({
+                    high_barrier: (1 + this.tick_size_barrier) * current_symbol_spot,
+                    low_barrier: (1 - this.tick_size_barrier) * current_symbol_spot,
+                });
+            } else if (!current_symbol_spot && this.proposal_info.ACCU) {
+                // if current_symbol_spot is null, use barriers from proposal
+                const { high_barrier: proposal_high_barrier, low_barrier: proposal_low_barrier } =
+                    this.proposal_info.ACCU;
+                this.root_store.contract_trade.updateAccumulatorBarriers({
+                    high_barrier: proposal_high_barrier,
+                    low_barrier: proposal_low_barrier,
+                });
+            }
+
+            if ('tick' in args[0]) {
+                const tick = args[0].tick;
+                this.root_store.contract_trade.updateAccumulatorSpots({
+                    current_symbol_spot: tick.quote,
+                    current_symbol_spot_time: tick.epoch,
+                    previous_symbol_spot_time: current_symbol_spot_time,
+                });
+            } else if ('history' in args[0]) {
+                const { prices, times } = args[0].history;
+                this.root_store.contract_trade.updateAccumulatorSpots({
+                    current_symbol_spot: prices[prices.length - 1],
+                    current_symbol_spot_time: times[times.length - 1],
+                    previous_symbol_spot_time: times[times.length - 2],
+                });
+                this.root_store.contract_trade.updateAccumulatorBarriers({
+                    high_barrier: null,
+                    low_barrier: null,
+                });
+            }
+
+            callback(...args);
+        };
+        const passthrough_callback = this.is_accumulator ? accumulator_ticks_interceptor : callback;
         if (req.subscribe === 1) {
             const key = JSON.stringify(req);
-            const subscriber = WS.subscribeTicksHistory(req, callback);
+            const subscriber = WS.subscribeTicksHistory(req, passthrough_callback);
             g_subscribers_map[key] = subscriber;
         }
     };

@@ -45,7 +45,6 @@ export const getProposalInfo = (store, response, obj_prev_contract_basis) => {
         ...proposal.contract_details,
         growth_rate: store.growth_rate,
         spot: proposal.spot,
-        spot_time: proposal.spot_time,
     };
 
     return {

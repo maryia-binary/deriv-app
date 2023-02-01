@@ -8,6 +8,11 @@ type TContract = {
 
 type TObjectBarrier = Pick<TContract, 'barrier' | 'low_barrier' | 'high_barrier'>;
 
+type TAccumulatorBarriers = {
+    high_barrier: number;
+    low_barrier: number;
+};
+
 export const buildBarriersConfig = (contract: TContract, barriers = { count: contract.barriers }) => {
     if (!contract.barriers) {
         return undefined;
@@ -22,6 +27,21 @@ export const buildBarriersConfig = (contract: TContract, barriers = { count: con
     return Object.assign(barriers || {}, {
         [contract.expiry_type]: obj_barrier,
     });
+};
+
+export const getAccumulatorBarriers = (
+    tick_size_barrier: number,
+    previous_spot: number,
+    pip_size: number
+): TAccumulatorBarriers => {
+    const high_barrier = (1 + tick_size_barrier) * previous_spot;
+    const low_barrier = (1 - tick_size_barrier) * previous_spot;
+    // ACCU barrier pip size is always 1 tick longer than a tick pip_size:
+    const precision = pip_size / 10;
+    return {
+        high_barrier: Math.ceil(high_barrier / precision) * precision,
+        low_barrier: Math.floor(low_barrier / precision) * precision,
+    };
 };
 
 export const getBarrierPipSize = (barrier: string) => {

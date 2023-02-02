@@ -35,11 +35,11 @@ export const buildBarriersConfig = (contract: TContract, barriers = { count: con
     we can't use barriers from proposal_open_contract for an ongoing contract because
     proposal_open_contract response is a separate API call which comes too late,
     only after we receive the current crossing tick from ticks_history call.
-    This calculation is performed only on DTrader page for the purpose of ticks/barriers visual synchronization.
- * @param {number} tick_size_barrier
- * @param {number} previous_spot
- * @param {number} spot_pip_size
- * @returns {Object} object of type: { high_barrier: string, low_barrier: string }
+    This calculation is performed only on DTrader page (not in Contract Details) to visually synchronize ticks & barriers.
+ * @param {number} tick_size_barrier - e.g. 0.000648677482
+ * @param {number} previous_spot - e.g. 9017.26
+ * @param {number} spot_pip_size - e.g. 2
+ * @returns {Object} barriers, e.g. { high_barrier: '9023.110', low_barrier: '9011.410' }
  */
 export const getAccumulatorBarriers = (
     tick_size_barrier: number,
@@ -50,10 +50,12 @@ export const getAccumulatorBarriers = (
     const low_barrier = (1 - tick_size_barrier) * previous_spot;
     // spot pip size + 1 extra digit = ACCU barriers pip size (e.g. 3), which we convert to precision (e.g. 0.001):
     const accu_barriers_pip_size = spot_pip_size + 1;
-    const precision = 10 ** -accu_barriers_pip_size;
+    const precision = Math.pow(10, -accu_barriers_pip_size);
+    const rounded_high_barrier = Math.ceil(high_barrier / precision) * precision;
+    const rounded_low_barrier = Math.floor(low_barrier / precision) * precision;
     return {
-        high_barrier: (Math.ceil(high_barrier / precision) * precision).toFixed(accu_barriers_pip_size),
-        low_barrier: (Math.floor(low_barrier / precision) * precision).toFixed(accu_barriers_pip_size),
+        high_barrier: isNaN(rounded_high_barrier) ? '' : rounded_high_barrier.toFixed(accu_barriers_pip_size),
+        low_barrier: isNaN(rounded_low_barrier) ? '' : rounded_low_barrier.toFixed(accu_barriers_pip_size),
     };
 };
 

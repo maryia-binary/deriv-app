@@ -36,10 +36,10 @@ export const buildBarriersConfig = (contract: TContract, barriers = { count: con
     proposal_open_contract response is a separate API call which comes too late,
     only after we receive the current crossing tick from ticks_history call.
     This calculation is performed only on DTrader page for the purpose of ticks/barriers visual synchronization.
- * @param { number } tick_size_barrier
- * @param { number } previous_spot 
- * @param { number } spot_pip_size 
- * @returns 
+ * @param {number} tick_size_barrier
+ * @param {number} previous_spot
+ * @param {number} spot_pip_size
+ * @returns {Object} object of type: { high_barrier: string, low_barrier: string }
  */
 export const getAccumulatorBarriers = (
     tick_size_barrier: number,

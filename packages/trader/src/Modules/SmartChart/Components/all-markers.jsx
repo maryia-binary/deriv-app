@@ -276,8 +276,7 @@ const TickContract = RawMarkerMaker(
             barrier_2 &&
             ((previous_tick && is_accumulators_contract && is_in_contract_details) || (!contract_type && start))
         ) {
-            // draw custom barrier shadows with borders and labels for accumulators:
-            // draw 2 barriers with a shade between them for an open ACCU contract
+            // draw 2 barriers with a shade between them for an ongoing ACCU contract:
             draw_shaded_barriers({
                 ctx,
                 start_left: is_in_contract_details ? previous_tick.left : start.left,

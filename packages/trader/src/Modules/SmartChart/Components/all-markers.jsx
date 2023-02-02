@@ -146,9 +146,11 @@ const draw_shaded_barriers = ({
 }) => {
     const end_left = ctx.canvas.offsetWidth - ctx.canvas.parentElement.stx.panels.chart.yaxisTotalWidthRight;
     const end_top = ctx.canvas.offsetHeight - ctx.canvas.parentElement.stx.xaxisHeight;
-    const is_top_visible = top < end_top;
+    const is_top_visible = top < end_top && (top >= 0 || !has_persistent_borders);
     const is_bottom_visible = bottom < end_top;
-    const displayed_top = is_top_visible ? top : end_top;
+    // using 2 instead of 0 to distance the top barrier line from the top of the chart and make it clearly visible:
+    const persistent_top = top < 0 && has_persistent_borders ? 2 : end_top;
+    const displayed_top = is_top_visible ? top : persistent_top;
     const displayed_bottom = is_bottom_visible ? bottom : end_top;
     const is_start_left_visible = start_left < end_left;
     if (!is_start_left_visible) return;
@@ -281,6 +283,7 @@ const TickContract = RawMarkerMaker(
                 ctx,
                 start_left: is_in_contract_details ? previous_tick.left : start.left,
                 fill_color: 'rgba(0, 167, 158, 0.08)',
+                // we should show barrier lines in contract details even when they are outside of the chart:
                 has_persistent_borders: is_in_contract_details,
                 stroke_color: getColor({ status: 'dashed_border', is_dark_theme }),
                 top: barrier,

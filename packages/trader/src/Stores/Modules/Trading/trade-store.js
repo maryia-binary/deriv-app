@@ -119,12 +119,12 @@ export default class TradeStore extends BaseStore {
 
     // Accumulator trade params
     accumulator_range_list = [];
+    barrier_pip_size = 0;
     growth_rate = 0.03;
     maximum_payout = 0;
     maximum_ticks = 0;
     ticks_history_stats = {};
     tick_size_barrier = 0;
-    symbol_pip_size = 0;
 
     // Multiplier trade params
     multiplier;
@@ -191,10 +191,10 @@ export default class TradeStore extends BaseStore {
 
         makeObservable(this, {
             accumulator_range_list: observable,
+            barrier_pip_size: observable,
             growth_rate: observable,
             maximum_payout: observable,
             maximum_ticks: observable,
-            symbol_pip_size: observable,
             ticks_history_stats: observable,
             tick_size_barrier: observable,
             is_trade_component_mounted: observable,
@@ -1091,17 +1091,17 @@ export default class TradeStore extends BaseStore {
             this.stop_out = limit_order?.stop_out?.order_amount;
         }
         if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout, spot } =
+            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout, high_barrier } =
                 this.proposal_info.ACCU;
             this.ticks_history_stats = getUpdatedTicksHistoryStats({
                 previous_ticks_history_stats: this.ticks_history_stats,
                 new_ticks_history_stats: ticks_stayed_in,
                 last_tick_epoch,
             });
-            this.tick_size_barrier = tick_size_barrier;
+            this.barrier_pip_size = high_barrier.split('.')[1].length;
             this.maximum_ticks = maximum_ticks;
             this.maximum_payout = maximum_payout;
-            this.symbol_pip_size = spot.toString().split('.')[1].length;
+            this.tick_size_barrier = tick_size_barrier;
         }
 
         if (!this.main_barrier || this.main_barrier?.shade) {
@@ -1371,13 +1371,13 @@ export default class TradeStore extends BaseStore {
             const contract_tick_size_barrier = +result.tick_size_barrier;
             if (previous_spot && contract_tick_size_barrier) {
                 this.root_store.contract_trade.updateAccumulatorBarriers(
-                    getAccumulatorBarriers(contract_tick_size_barrier, previous_spot, this.symbol_pip_size)
+                    getAccumulatorBarriers(contract_tick_size_barrier, previous_spot, this.barrier_pip_size)
                 );
             }
         } else if (previous_spot && this.tick_size_barrier) {
             // has no open ACCU contracts
             this.root_store.contract_trade.updateAccumulatorBarriers(
-                getAccumulatorBarriers(this.tick_size_barrier, previous_spot, this.symbol_pip_size)
+                getAccumulatorBarriers(this.tick_size_barrier, previous_spot, this.barrier_pip_size)
             );
         }
         // save spots:

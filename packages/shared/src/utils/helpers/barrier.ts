@@ -32,12 +32,12 @@ export const buildBarriersConfig = (contract: TContract, barriers = { count: con
 export const getAccumulatorBarriers = (
     tick_size_barrier: number,
     previous_spot: number,
-    pip_size: number
+    barrier_pip_size: number
 ): TAccumulatorBarriers => {
     const high_barrier = (1 + tick_size_barrier) * previous_spot;
     const low_barrier = (1 - tick_size_barrier) * previous_spot;
-    // ACCU barrier pip size is always 1 tick longer than a tick pip_size:
-    const precision = pip_size / 10;
+    // convert barrier_pip_size (3) into precision (0.001):
+    const precision = 10 ** -barrier_pip_size;
     return {
         high_barrier: Math.ceil(high_barrier / precision) * precision,
         low_barrier: Math.floor(low_barrier / precision) * precision,

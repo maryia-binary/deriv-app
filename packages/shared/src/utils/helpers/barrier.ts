@@ -9,8 +9,8 @@ type TContract = {
 type TObjectBarrier = Pick<TContract, 'barrier' | 'low_barrier' | 'high_barrier'>;
 
 type TAccumulatorBarriers = {
-    high_barrier: number;
-    low_barrier: number;
+    high_barrier: string;
+    low_barrier: string;
 };
 
 export const buildBarriersConfig = (contract: TContract, barriers = { count: contract.barriers }) => {
@@ -29,18 +29,31 @@ export const buildBarriersConfig = (contract: TContract, barriers = { count: con
     });
 };
 
+/**
+ * Here we calculate and return Accumulator Barriers for DTrader page for the reason that
+    we can't use barriers from proposal response because proposal is received not on every tick, and
+    we can't use barriers from proposal_open_contract for an ongoing contract because
+    proposal_open_contract response is a separate API call which comes too late,
+    only after we receive the current crossing tick from ticks_history call.
+    This calculation is performed only on DTrader page for the purpose of ticks/barriers visual synchronization.
+ * @param { number } tick_size_barrier
+ * @param { number } previous_spot 
+ * @param { number } spot_pip_size 
+ * @returns 
+ */
 export const getAccumulatorBarriers = (
     tick_size_barrier: number,
     previous_spot: number,
-    barrier_pip_size: number
+    spot_pip_size: number
 ): TAccumulatorBarriers => {
     const high_barrier = (1 + tick_size_barrier) * previous_spot;
     const low_barrier = (1 - tick_size_barrier) * previous_spot;
-    // convert barrier_pip_size (3) into precision (0.001):
-    const precision = 10 ** -barrier_pip_size;
+    // spot pip size + 1 extra digit = ACCU barriers pip size (e.g. 3), which we convert to precision (e.g. 0.001):
+    const accu_barriers_pip_size = spot_pip_size + 1;
+    const precision = 10 ** -accu_barriers_pip_size;
     return {
-        high_barrier: Math.ceil(high_barrier / precision) * precision,
-        low_barrier: Math.floor(low_barrier / precision) * precision,
+        high_barrier: (Math.ceil(high_barrier / precision) * precision).toFixed(accu_barriers_pip_size),
+        low_barrier: (Math.floor(low_barrier / precision) * precision).toFixed(accu_barriers_pip_size),
     };
 };
 

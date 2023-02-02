@@ -119,7 +119,6 @@ export default class TradeStore extends BaseStore {
 
     // Accumulator trade params
     accumulator_range_list = [];
-    barrier_pip_size = 0;
     growth_rate = 0.03;
     maximum_payout = 0;
     maximum_ticks = 0;
@@ -191,7 +190,6 @@ export default class TradeStore extends BaseStore {
 
         makeObservable(this, {
             accumulator_range_list: observable,
-            barrier_pip_size: observable,
             growth_rate: observable,
             maximum_payout: observable,
             maximum_ticks: observable,
@@ -1091,14 +1089,13 @@ export default class TradeStore extends BaseStore {
             this.stop_out = limit_order?.stop_out?.order_amount;
         }
         if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout, high_barrier } =
+            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout } =
                 this.proposal_info.ACCU;
             this.ticks_history_stats = getUpdatedTicksHistoryStats({
                 previous_ticks_history_stats: this.ticks_history_stats,
                 new_ticks_history_stats: ticks_stayed_in,
                 last_tick_epoch,
             });
-            this.barrier_pip_size = high_barrier.split('.')[1].length;
             this.maximum_ticks = maximum_ticks;
             this.maximum_payout = maximum_payout;
             this.tick_size_barrier = tick_size_barrier;
@@ -1358,7 +1355,13 @@ export default class TradeStore extends BaseStore {
         };
     }
 
-    updateAccumulatorBarriersAndSpots({ previous_spot, previous_spot_time, current_spot, current_spot_time }) {
+    updateAccumulatorBarriersAndSpots({
+        previous_spot,
+        previous_spot_time,
+        current_spot,
+        current_spot_time,
+        spot_pip_size,
+    }) {
         const { shortcode } =
             this.root_store.portfolio.active_positions.find(
                 ({ type, contract_info: _contract_info }) =>
@@ -1369,15 +1372,15 @@ export default class TradeStore extends BaseStore {
             // has an ongoing ACCU contract
             const result = extractInfoFromShortcode(shortcode);
             const contract_tick_size_barrier = +result.tick_size_barrier;
-            if (previous_spot && contract_tick_size_barrier) {
+            if (previous_spot && contract_tick_size_barrier && spot_pip_size) {
                 this.root_store.contract_trade.updateAccumulatorBarriers(
-                    getAccumulatorBarriers(contract_tick_size_barrier, previous_spot, this.barrier_pip_size)
+                    getAccumulatorBarriers(contract_tick_size_barrier, previous_spot, spot_pip_size)
                 );
             }
-        } else if (previous_spot && this.tick_size_barrier) {
+        } else if (previous_spot && this.tick_size_barrier && spot_pip_size) {
             // has no open ACCU contracts
             this.root_store.contract_trade.updateAccumulatorBarriers(
-                getAccumulatorBarriers(this.tick_size_barrier, previous_spot, this.barrier_pip_size)
+                getAccumulatorBarriers(this.tick_size_barrier, previous_spot, spot_pip_size)
             );
         }
         // save spots:
@@ -1399,15 +1402,18 @@ export default class TradeStore extends BaseStore {
                     previous_spot_time: current_symbol_spot_time,
                     current_spot: tick.quote,
                     current_spot_time: tick.epoch,
+                    spot_pip_size: tick.pip_size,
                 });
             } else if ('history' in args[0]) {
                 const { prices, times } = args[0].history;
                 const previous_symbol_spot = prices[prices.length - 2];
+                const pip_size = args[0].pip_size;
                 this.updateAccumulatorBarriersAndSpots({
                     previous_spot: previous_symbol_spot,
                     previous_spot_time: times[times.length - 2],
                     current_spot: prices[prices.length - 1],
                     current_spot_time: times[times.length - 1],
+                    spot_pip_size: pip_size,
                 });
             }
             callback(...args);

@@ -32,7 +32,6 @@ const Info = ({ handleNavigationClick, handleSelect, initial_index, item, list }
             </div>
         );
     });
-
     return (
         <Carousel
             className='contract-type-info'

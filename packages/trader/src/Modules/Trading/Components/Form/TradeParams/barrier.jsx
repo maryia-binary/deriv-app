@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { DesktopWrapper, Icon, InputField, MobileWrapper } from '@deriv/components';
+import { DesktopWrapper, Dropdown, Icon, InputField, MobileWrapper } from '@deriv/components';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { connect } from 'Stores/connect';
 import { localize } from '@deriv/translations';
@@ -15,8 +15,10 @@ const Barrier = ({
     duration_unit,
     is_minimized,
     is_absolute_only,
+    is_turbos,
     onChange,
     setCurrentFocus,
+    turbos_barrier_choices,
     validation_errors,
 }) => {
     const barrier_title = barrier_count === 1 ? localize('Barrier') : localize('Barriers');
@@ -57,44 +59,55 @@ const Barrier = ({
                     is_center
                 >
                     <div>
-                        <InputField
-                            id='dt_barrier_1_input'
-                            type='number'
-                            name='barrier_1'
-                            value={barrier_1}
-                            className={`trade-container__barriers-${input_class}`}
-                            classNameInput={classNames(
-                                'trade-container__input',
-                                'trade-container__barriers-input',
-                                `trade-container__barriers-${input_class}-input`
-                            )}
-                            current_focus={current_focus}
-                            onChange={onChange}
-                            error_messages={validation_errors.barrier_1 || []}
-                            is_float
-                            is_signed
-                            setCurrentFocus={setCurrentFocus}
-                        />
-
-                        {barrier_count === 2 && (
-                            <React.Fragment>
+                        {is_turbos ? (
+                            <Dropdown
+                                name='barrier_1'
+                                list={turbos_barrier_choices.map(choice => ({ text: choice, value: choice }))}
+                                value={barrier_1}
+                                onChange={onChange}
+                            />
+                        ) : (
+                            <>
                                 <InputField
-                                    id='dt_barrier_2_input'
+                                    id='dt_barrier_1_input'
                                     type='number'
-                                    name='barrier_2'
-                                    value={barrier_2}
-                                    className='multiple'
-                                    classNameInput='trade-container__input'
+                                    name='barrier_1'
+                                    value={barrier_1}
+                                    className={`trade-container__barriers-${input_class}`}
+                                    classNameInput={classNames(
+                                        'trade-container__input',
+                                        'trade-container__barriers-input',
+                                        `trade-container__barriers-${input_class}-input`
+                                    )}
                                     current_focus={current_focus}
                                     onChange={onChange}
-                                    error_messages={validation_errors.barrier_2}
+                                    error_messages={validation_errors.barrier_1 || []}
                                     is_float
                                     is_signed
                                     setCurrentFocus={setCurrentFocus}
                                 />
-                                <Icon icon='IcArrowUp' className='trade-container__barriers--up' />
-                                <Icon icon='IcArrowDown' className='trade-container__barriers--down' />
-                            </React.Fragment>
+
+                                {barrier_count === 2 && (
+                                    <React.Fragment>
+                                        <InputField
+                                            id='dt_barrier_2_input'
+                                            type='number'
+                                            name='barrier_2'
+                                            value={barrier_2}
+                                            className='multiple'
+                                            classNameInput='trade-container__input'
+                                            current_focus={current_focus}
+                                            onChange={onChange}
+                                            error_messages={validation_errors.barrier_2}
+                                            is_float
+                                            is_signed
+                                            setCurrentFocus={setCurrentFocus}
+                                        />
+                                        <Icon icon='IcArrowUp' className='trade-container__barriers--up' />
+                                        <Icon icon='IcArrowDown' className='trade-container__barriers--down' />
+                                    </React.Fragment>
+                                )}
+                            </>
                         )}
                     </div>
                 </Fieldset>
@@ -176,8 +189,10 @@ Barrier.propTypes = {
     duration_unit: PropTypes.string,
     is_absolute_only: PropTypes.bool,
     is_minimized: PropTypes.bool,
+    is_turbos: PropTypes.bool,
     onChange: PropTypes.func,
     setCurrentFocus: PropTypes.func,
+    turbos_barrier_choices: PropTypes.array,
     validation_errors: PropTypes.object,
 };
 
@@ -188,7 +203,9 @@ export default connect(({ modules, ui }) => ({
     barrier_count: modules.trade.barrier_count,
     current_focus: ui.current_focus,
     duration_unit: modules.trade.duration_unit,
+    is_turbos: modules.trade.is_turbos,
     onChange: modules.trade.onChange,
     setCurrentFocus: ui.setCurrentFocus,
+    turbos_barrier_choices: modules.trade.turbos_barrier_choices,
     validation_errors: modules.trade.validation_errors,
 }))(Barrier);

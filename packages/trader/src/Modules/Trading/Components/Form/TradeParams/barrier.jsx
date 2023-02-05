@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { DesktopWrapper, Dropdown, Icon, InputField, MobileWrapper } from '@deriv/components';
+import { DesktopWrapper, Dropdown, Icon, InputField, MobileWrapper, SelectNative } from '@deriv/components';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { connect } from 'Stores/connect';
 import { localize } from '@deriv/translations';
@@ -115,30 +115,44 @@ const Barrier = ({
             <MobileWrapper>
                 <div className='barrier__widget'>
                     <Fieldset className='barrier__fields'>
-                        <InputField
-                            id='dt_barrier_1_input'
-                            type='number'
-                            name='barrier_1'
-                            value={barrier_1}
-                            is_incrementable={!is_absolute_barrier}
-                            is_incrementable_on_long_press={!is_absolute_barrier}
-                            is_negative_disabled={is_absolute_barrier}
-                            className={`barrier__fields-${input_class}`}
-                            classNameInput={classNames(
-                                'barrier__fields-input',
-                                'barrier__fields-barriers-input',
-                                `barrier__fields-barriers-${input_class}-input`,
-                                {
-                                    'barrier__fields-input--is-offset': !is_absolute_barrier,
-                                }
-                            )}
-                            current_focus={current_focus}
-                            format={format}
-                            onChange={onChange}
-                            is_float
-                            is_signed
-                            setCurrentFocus={setCurrentFocus}
-                        />
+                        {is_turbos ? (
+                            <SelectNative
+                                name='barrier_1'
+                                align_center
+                                list_items={turbos_barrier_choices.map(choice => ({
+                                    text: choice,
+                                    value: choice,
+                                }))}
+                                value={barrier_1}
+                                should_show_empty_option={false}
+                                onChange={onChange}
+                            />
+                        ) : (
+                            <InputField
+                                id='dt_barrier_1_input'
+                                type='number'
+                                name='barrier_1'
+                                value={barrier_1}
+                                is_incrementable={!is_absolute_barrier}
+                                is_incrementable_on_long_press={!is_absolute_barrier}
+                                is_negative_disabled={is_absolute_barrier}
+                                className={`barrier__fields-${input_class}`}
+                                classNameInput={classNames(
+                                    'barrier__fields-input',
+                                    'barrier__fields-barriers-input',
+                                    `barrier__fields-barriers-${input_class}-input`,
+                                    {
+                                        'barrier__fields-input--is-offset': !is_absolute_barrier,
+                                    }
+                                )}
+                                current_focus={current_focus}
+                                format={format}
+                                onChange={onChange}
+                                is_float
+                                is_signed
+                                setCurrentFocus={setCurrentFocus}
+                            />
+                        )}
                     </Fieldset>
                     <h2 className='barrier__widget-title'>
                         {barrier_count === 2 ? localize('Barrier 1') : localize('Barrier')}

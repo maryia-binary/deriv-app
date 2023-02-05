@@ -45,6 +45,7 @@ const SelectNativeOptions = ({ list_items, should_hide_disabled_options, use_tex
 };
 
 const SelectNative = ({
+    align_center,
     className,
     classNameDisplay,
     classNameHint,
@@ -79,7 +80,11 @@ const SelectNative = ({
                     'dc-input--error': error,
                 })}
             >
-                <div className='dc-select-native__display'>
+                <div
+                    className={classNames('dc-select-native__display', {
+                        'dc-select-native__display--centered': align_center,
+                    })}
+                >
                     {list_items && value && (
                         <div
                             className={classNames('dc-select-native__display-text', classNameDisplay)}
@@ -184,6 +189,7 @@ const list_items_shape = PropTypes.oneOfType([
 ]);
 
 SelectNative.propTypes = {
+    align_center: PropTypes.bool,
     className: PropTypes.string,
     classNameDisplay: PropTypes.string,
     classNameHint: PropTypes.string,

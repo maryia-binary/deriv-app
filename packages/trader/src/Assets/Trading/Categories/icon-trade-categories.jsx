@@ -208,12 +208,18 @@ const IconTradeCategory = ({ category, className }) => {
                     </React.Fragment>
                 );
                 break;
-            case 'turbos':
+            case 'turbosshort':
                 IconCategory = (
                     <React.Fragment>
                         <div className='category-wrapper'>
                             <Icon icon='IcTradetypeTurbosshort' className='category-type' color='brand' />
                         </div>
+                    </React.Fragment>
+                );
+                break;
+            case 'turboslong':
+                IconCategory = (
+                    <React.Fragment>
                         <div className='category-wrapper'>
                             <Icon icon='IcTradetypeTurboslong' className='category-type' color='brand' />
                         </div>

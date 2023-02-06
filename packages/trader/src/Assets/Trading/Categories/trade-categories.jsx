@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { localize } from '@deriv/translations';
-import { TurbosTradeDescription } from './turbos-trade-description';
+import { TurbosShortTradeDescription } from './turbosshort-trade-description';
+import { TurbosLongTradeDescription } from './turboslong-trade-description';
 
 // Templates are from Binary 1.0, it should be checked if they need change or not and add all of trade types
 
@@ -423,8 +424,11 @@ const TradeCategories = ({ category }) => {
                     </React.Fragment>
                 );
                 break;
-            case 'turbos':
-                TradeTypeTemplate = <TurbosTradeDescription />;
+            case 'turbosshort':
+                TradeTypeTemplate = <TurbosShortTradeDescription />;
+                break;
+            case 'turboslong':
+                TradeTypeTemplate = <TurbosLongTradeDescription />;
                 break;
             default:
                 TradeTypeTemplate = <p>{localize('Description not found.')}</p>;

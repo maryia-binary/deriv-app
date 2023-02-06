@@ -1,7 +1,7 @@
 import React from 'react';
 import { localize } from '@deriv/translations';
 
-export const TurbosTradeDescription = () => {
+export const TurbosLongTradeDescription = () => {
     const content = [
         {
             type: 'paragraph',
@@ -12,7 +12,7 @@ export const TurbosTradeDescription = () => {
         {
             type: 'paragraph',
             text: localize(
-                'If you select “Long”, you will earn a payout if the spot price never touches the barrier, that is the spot price is always above the barrier. Your payout will grow proportionally according to the distance between the market price and the barrier, with the condition that the spot didn’t cross the barrier at any time during the trade. If the spot price touches or breaches the barrier during the trade, then there won’t be a payout. Select a “Long” contract if you think the market will grow strongly without falling. If you select “Short”, you will earn a payout if the spot price never touches the barrier, that is the spot price is always below the barrier. Your payout will grow proportionally according to the distance between the market price and the barrier, with the condition that the spot didn’t cross the barrier at any time during the trade. If the spot price touches or breaches the barrier during the trade, then there won’t be a payout. Select a “Short” contract if you think the market will decay strongly without rising.'
+                'If you select “Long”, you will earn a payout if the spot price never touches the barrier, that is the spot price is always above the barrier. Your payout will grow proportionally according to the distance between the market price and the barrier, with the condition that the spot didn’t cross the barrier at any time during the trade. If the spot price touches or breaches the barrier during the trade, then there won’t be a payout. Select a “Long” contract if you think the market will grow strongly without falling.'
             ),
         },
         {

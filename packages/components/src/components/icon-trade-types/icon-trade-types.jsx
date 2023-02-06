@@ -71,7 +71,7 @@ const IconTradeTypes = ({ type, className, ...props }) => {
             return <Icon icon='IcTradetypeTicklow' className={className} color='brand' {...props} />;
         case 'turboslong':
             return <Icon icon='IcTradetypeTurboslong' className={className} color='brand' {...props} />;
-        case 'turbosshot':
+        case 'turbosshort':
             return <Icon icon='IcTradetypeTurbosshort' className={className} color='brand' {...props} />;
         case 'upordown':
             return <Icon icon='IcTradetypeUpordown' className={className} color='brand' {...props} />;

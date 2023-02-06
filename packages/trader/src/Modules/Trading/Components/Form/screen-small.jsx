@@ -62,12 +62,7 @@ const CollapsibleTradeParams = ({
             )}
             <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />
             {has_allow_equals && <AllowEqualsMobile collapsible='true' />}
-            {is_multiplier && (
-                <div collapsible='true'>
-                    <RiskManagementInfo />
-                </div>
-            )}
-            {is_turbos && (
+            {(is_multiplier || is_turbos) && (
                 <div collapsible='true'>
                     <RiskManagementInfo />
                 </div>

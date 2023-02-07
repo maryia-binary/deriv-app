@@ -462,7 +462,8 @@
             }
         }
     }
-    &__multipliers-trade-info {
+    &__multipliers-trade-info,
+    &__turbos-trade-info {
         display: flex;
         justify-content: space-around;
         gap: 2.8rem;
@@ -476,6 +477,15 @@
 
             span {
                 border-bottom: 1px dotted var(--text-general);
+            }
+        }
+    }
+    &__turbos-trade-info {
+        justify-content: space-between;
+
+        &-tooltip-text {
+            span {
+                border-bottom: none;
             }
         }
     }

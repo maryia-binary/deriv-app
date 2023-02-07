@@ -41,6 +41,10 @@
         &__bottom {
             width: 40vw; // TODO remove this when find a solution for fill-width inside flex.
         }
+        &__turbos {
+            align-items: center;
+            width: auto;
+        }
         &:hover {
             transform: none !important;
         }
@@ -104,6 +108,9 @@
             position: absolute;
         }
     }
+    &__info--left--turbos {
+        width: 70%;
+    }
     &__info--right {
         width: 45%;
         padding-right: 1rem;
@@ -136,6 +143,19 @@
         top: 0;
         bottom: 0;
         display: inline-block;
+    }
+    &__effect-detail--arrow--turbos {
+        // content: '';
+        // width: 55px;
+        // transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        // transform: rotate(45deg);
+        // height: 100%;
+        // background: var(--purchase-main-1);
+        left: 120px;
+        // position: absolute;
+        // top: 0;
+        // bottom: 0;
+        // display: inline-block;
     }
     &[disabled]:hover {
         cursor: initial;
@@ -323,5 +343,7 @@
                 height: 64px;
             }
         }
+    }
+    &--turbos {
     }
 }

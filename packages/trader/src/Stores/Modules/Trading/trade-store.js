@@ -681,9 +681,11 @@ export default class TradeStore extends BaseStore {
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;
+            const turbos_color = contract_type === 'TURBOSSHORT' ? BARRIER_COLORS.RED : BARRIER_COLORS.GRAY;
+
             // create barrier only when it's available in response
             this.main_barrier = new ChartBarrierStore(barrier || high_barrier, low_barrier, this.onChartBarrierChange, {
-                color,
+                color: isTurbosContract(contract_type) ? turbos_color : color,
                 not_draggable: isTurbosContract(contract_type),
             });
             // this.main_barrier.updateBarrierShade(true, contract_type);

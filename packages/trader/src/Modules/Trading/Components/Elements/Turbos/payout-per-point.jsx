@@ -15,7 +15,7 @@ const PayoutPerPoint = ({ currency, proposal_info, contract_type }) => {
     return (
         <Fieldset className={classNames('payout-per-point')}>
             <div className='payout-per-point__text-popover'>
-                <Text size='xs' weight='normal' className='payout-per-point__text'>
+                <Text size='xs' color='less-prominent' className='payout-per-point__text'>
                     {label}
                 </Text>
                 <Popover

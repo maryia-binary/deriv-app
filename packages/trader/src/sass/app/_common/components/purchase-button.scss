@@ -145,7 +145,7 @@
         display: inline-block;
     }
     &__effect-detail--arrow--turbos {
-        left: 120px;
+        left: 12rem;
     }
     &[disabled]:hover {
         cursor: initial;
@@ -334,6 +334,4 @@
             }
         }
     }
-    // &--turbos {
-    // }
 }

@@ -681,7 +681,7 @@ export default class TradeStore extends BaseStore {
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;
-            const turbos_color = contract_type === 'TURBOSSHORT' ? BARRIER_COLORS.RED : BARRIER_COLORS.GRAY;
+            const turbos_color = this.getTurbosColor(contract_type);
 
             // create barrier only when it's available in response
             this.main_barrier = new ChartBarrierStore(barrier || high_barrier, low_barrier, this.onChartBarrierChange, {
@@ -691,6 +691,18 @@ export default class TradeStore extends BaseStore {
             // this.main_barrier.updateBarrierShade(true, contract_type);
         } else {
             this.main_barrier = null;
+        }
+    };
+
+    // Get Turbos barrier Line Color Based on the Contract Type
+    getTurbosColor = type => {
+        switch (type) {
+            case 'TURBOSSHORT':
+                return BARRIER_COLORS.RED;
+            case 'TURBOSLONG':
+                return BARRIER_COLORS.GRAY;
+            default:
+                return BARRIER_COLORS.GRAY;
         }
     };
 

@@ -5,27 +5,27 @@ import { Money, Text } from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 
-const TurbosInfo = ({ className, currency, has_stop_loss, max_stake = 100, min_stake = 1 }) => {
-    const getTextForStake = (text, amount_of_stake) => (
-        <Text
-            as='p'
-            line_height='s'
-            size='xxxs'
-            className={classNames({
-                [`${className}-tooltip-text`]: className,
-            })}
-        >
-            <Localize
-                i18n_default_text={text}
-                components={[<Money key={0} amount={amount_of_stake} currency={currency} show_currency />]}
-            />
-        </Text>
-    );
+const getTextForStake = (amount_of_stake, className, currency, text) => (
+    <Text
+        as='p'
+        line_height='s'
+        size='xxxs'
+        className={classNames({
+            [`${className}-tooltip-text`]: className,
+        })}
+    >
+        <Localize
+            i18n_default_text={text}
+            components={[<Money key={0} amount={amount_of_stake} currency={currency} show_currency />]}
+        />
+    </Text>
+);
 
+const TurbosInfo = ({ className, currency, has_stop_loss, max_stake, min_stake }) => {
     return (
         <div className={classNames('turbos-trade-info', className)}>
-            {getTextForStake('Min. stake <0/>', min_stake)}
-            {!has_stop_loss && getTextForStake('Max. stake <0/>', max_stake)}
+            {getTextForStake(min_stake, className, currency, 'Min. stake <0/>')}
+            {!has_stop_loss && getTextForStake(max_stake, className, currency, 'Max. stake <0/>')}
         </div>
     );
 };

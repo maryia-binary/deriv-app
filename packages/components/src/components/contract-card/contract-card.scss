@@ -557,6 +557,15 @@
             color: var(--text-less-prominent);
         }
     }
+    &__type-turbos {
+        margin-left: 0.5rem;
+        line-height: 1.1;
+
+        &-subtype {
+            font-size: 1rem;
+            color: var(--text-less-prominent);
+        }
+    }
 }
 
 /** @define dc-btn; */

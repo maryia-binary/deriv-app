@@ -700,7 +700,6 @@ export default class TradeStore extends BaseStore {
             case 'TURBOSSHORT':
                 return BARRIER_COLORS.RED;
             case 'TURBOSLONG':
-                return BARRIER_COLORS.GRAY;
             default:
                 return BARRIER_COLORS.GRAY;
         }

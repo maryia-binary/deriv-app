@@ -38,7 +38,7 @@ import { setLimitOrderBarriers } from './Helpers/limit-orders';
 import { ChartBarrierStore } from '../SmartChart/chart-barrier-store';
 import { BARRIER_COLORS } from '../SmartChart/Constants/barriers';
 import BaseStore from '../../base-store';
-import { getTurbosColor } from './Helpers/turbos';
+import { getTurbosColor } from './Helpers/turbos-utils';
 
 const store_name = 'trade_store';
 const g_subscribers_map = {}; // blame amin.m

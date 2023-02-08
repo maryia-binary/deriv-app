@@ -81,10 +81,14 @@ const Basis = ({
                     currency={currency}
                     min={min_amount}
                     is_currency
-                    render={({ value: v, className }) => {
+                    render={({ value, className }) => {
                         return (
                             <div className={className}>
-                                {parseFloat(v) > 0 ? <Money currency={currency} amount={v} should_format={false} /> : v}
+                                {parseFloat(value) > 0 ? (
+                                    <Money currency={currency} amount={value} should_format={false} />
+                                ) : (
+                                    value
+                                )}
                             </div>
                         );
                     }}

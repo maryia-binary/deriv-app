@@ -664,7 +664,8 @@
     justify-content: space-between;
     padding-bottom: 1rem;
     &__text {
-        margin-bottom: 0.3rem;
+        position: relative;
+        bottom: 0.3rem;
 
         &-popover {
             display: flex;
@@ -672,7 +673,8 @@
         }
     }
     &__currency {
-        justify-content: flex-end;
+        position: relative;
+        bottom: 0.2rem;
     }
 }
 

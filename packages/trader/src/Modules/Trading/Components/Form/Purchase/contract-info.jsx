@@ -60,7 +60,9 @@ const ContractInfo = ({
 
     const basis_text = has_error_or_not_loaded
         ? stakeOrPayout()
-        : localize('{{value}}', { value: is_turbos ? 'Payout per point' : proposal_info.obj_contract_basis.text });
+        : localize('{{value}}', {
+              value: is_turbos ? localize('Payout per point') : proposal_info.obj_contract_basis.text,
+          });
 
     const { message, obj_contract_basis, stake } = proposal_info;
 

@@ -7,7 +7,7 @@ import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { connect } from 'Stores/connect';
 
 const PayoutPerPoint = ({ currency, proposal_info, contract_type }) => {
-    const labels = localize('Payout per point');
+    const label = localize('Payout per point');
     const contract_key = contract_type?.toUpperCase();
     const stake = proposal_info?.[contract_key]?.number_of_contracts || 0;
     const message = proposal_info?.[contract_key]?.message || ' ';
@@ -15,8 +15,8 @@ const PayoutPerPoint = ({ currency, proposal_info, contract_type }) => {
     return (
         <Fieldset className={classNames('payout-per-point')}>
             <div className='payout-per-point__text-popover'>
-                <Text key={labels} size='xs' weight='normal' className='payout-per-point__text'>
-                    {labels}
+                <Text size='xs' weight='normal' className='payout-per-point__text'>
+                    {label}
                 </Text>
                 <Popover
                     alignment='top'

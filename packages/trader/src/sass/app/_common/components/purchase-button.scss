@@ -145,17 +145,7 @@
         display: inline-block;
     }
     &__effect-detail--arrow--turbos {
-        // content: '';
-        // width: 55px;
-        // transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-        // transform: rotate(45deg);
-        // height: 100%;
-        // background: var(--purchase-main-1);
         left: 120px;
-        // position: absolute;
-        // top: 0;
-        // bottom: 0;
-        // display: inline-block;
     }
     &[disabled]:hover {
         cursor: initial;
@@ -344,6 +334,6 @@
             }
         }
     }
-    &--turbos {
-    }
+    // &--turbos {
+    // }
 }

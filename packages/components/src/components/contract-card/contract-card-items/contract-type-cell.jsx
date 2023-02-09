@@ -1,20 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconTradeTypes from '../../icon-trade-types';
-import { getSubType } from '@deriv/shared';
 
-const ContractTypeCell = ({ getContractTypeDisplay, is_high_low, multiplier, type }) => {
-    let contract_type_display;
-    if (type.toLowerCase().includes('turbos')) {
-        contract_type_display = (
-            <div className='dc-contract-type__type-turbos'>
-                Turbos<span className='dc-contract-type__type-turbos-subtype'> {getSubType(type)}</span>
-            </div>
-        );
-    } else {
-        contract_type_display = <div>{getContractTypeDisplay(type, is_high_low) || ''}</div>;
-    }
-
+const ContractTypeCell = ({ displayed_trade_param, getContractTypeDisplay, is_high_low, type }) => {
     return (
         <div className='dc-contract-type'>
             <div className='dc-contract-type__type-wrapper'>
@@ -25,17 +13,19 @@ const ContractTypeCell = ({ getContractTypeDisplay, is_high_low, multiplier, typ
                 />
             </div>
             <div className='dc-contract-type__type-label'>
-                {contract_type_display}
-                {multiplier && <div className='dc-contract-type__type-label-multiplier'>x{multiplier}</div>}
+                <div>{getContractTypeDisplay(type, is_high_low) || ''}</div>
+                {displayed_trade_param && (
+                    <div className='dc-contract-type__type-label-trade-param'>{displayed_trade_param}</div>
+                )}
             </div>
         </div>
     );
 };
 
 ContractTypeCell.propTypes = {
+    displayed_trade_param: PropTypes.string,
     getContractTypeDisplay: PropTypes.func,
     is_high_low: PropTypes.bool,
-    multiplier: PropTypes.number,
     type: PropTypes.string,
 };
 

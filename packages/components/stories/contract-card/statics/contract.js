@@ -235,6 +235,14 @@ export const getSupportedContracts = is_high_low => ({
         name: 'Down',
         position: 'bottom',
     },
+    TURBOSLONG: {
+        name: 'Turbos',
+        position: 'top',
+    },
+    TURBOSSHORT: {
+        name: 'Turbos',
+        position: 'bottom',
+    },
 });
 
 export const getContractConfig = is_high_low => ({

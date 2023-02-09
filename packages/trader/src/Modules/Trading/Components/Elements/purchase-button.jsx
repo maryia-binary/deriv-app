@@ -61,6 +61,7 @@ const PurchaseButton = ({
                 'btn-purchase--2': index === 1,
                 'btn-purchase--multiplier': is_multiplier,
                 'btn-purchase--multiplier-deal-cancel': has_deal_cancellation,
+                'btn-purchase--turbos': is_turbos,
             })}
             onClick={() => {
                 setPurchaseState(index);
@@ -70,7 +71,7 @@ const PurchaseButton = ({
             <DesktopWrapper>
                 <div
                     className={classNames('btn-purchase__info', 'btn-purchase__info--left', {
-                        'btn-purchase__info--left--turbos': is_turbos,
+                        // 'btn-purchase__info--left--turbos': is_turbos,
                     })}
                 >
                     <div className='btn-purchase__type-wrapper'>
@@ -86,7 +87,7 @@ const PurchaseButton = ({
                 <div className='btn-purchase__effect-detail' />
                 <div
                     className={classNames('btn-purchase__effect-detail--arrow', {
-                        'btn-purchase__effect-detail--arrow--turbos': is_turbos,
+                        // 'btn-purchase__effect-detail--arrow--turbos': is_turbos,
                     })}
                 />
                 <div className='btn-purchase__info btn-purchase__info--right'>

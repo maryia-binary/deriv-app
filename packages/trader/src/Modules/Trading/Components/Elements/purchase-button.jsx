@@ -99,11 +99,7 @@ const PurchaseButton = ({
                 </div>
             </DesktopWrapper>
             <MobileWrapper>
-                <div
-                    className={classNames('btn-purchase__top', {
-                        'btn-purchase__turbos': is_turbos,
-                    })}
-                >
+                <div className='btn-purchase__top'>
                     <IconComponentWrapper type={getIconType()} />
                     <ButtonTextWrapper
                         should_fade={should_fade}

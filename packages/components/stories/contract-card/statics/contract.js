@@ -2,10 +2,12 @@ import { localize } from '@deriv/translations';
 
 export const getCardLabels = () => ({
     APPLY: 'Apply',
+    BARRIER_LEVEL: 'Barrier level',
     STAKE: 'Stake:',
     CLOSE: 'Close',
     CANCEL: 'Cancel',
     CURRENT_STAKE: 'Current stake:',
+    CURRENT_PRICE: 'Current price',
     DEAL_CANCEL_FEE: 'Deal cancel. fee:',
     TAKE_PROFIT: 'Take profit:',
     BUY_PRICE: 'Buy price:',

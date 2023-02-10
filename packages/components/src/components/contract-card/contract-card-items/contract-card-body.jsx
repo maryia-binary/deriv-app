@@ -96,9 +96,11 @@ const ContractCardBody = ({
                 is_sold={is_sold}
                 onMouseLeave={onMouseLeave}
                 status={status}
+                is_mobile={is_mobile}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
                 is_positions={is_positions}
+                progress_slider_mobile_el={progress_slider_mobile_el}
             />
         );
     } else {
@@ -164,7 +166,7 @@ const ContractCardBody = ({
                     className={
                         ('dc-contract-card__separatorclass',
                         classNames({
-                            'dc-contract-card__body-wrapper': !is_multiplier,
+                            'dc-contract-card__body-wrapper': !is_multiplier && !is_turbos,
                         }))
                     }
                 >

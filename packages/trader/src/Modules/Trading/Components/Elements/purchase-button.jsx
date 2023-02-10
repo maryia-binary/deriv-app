@@ -69,11 +69,7 @@ const PurchaseButton = ({
             }}
         >
             <DesktopWrapper>
-                <div
-                    className={classNames('btn-purchase__info', 'btn-purchase__info--left', {
-                        // 'btn-purchase__info--left--turbos': is_turbos,
-                    })}
-                >
+                <div className='btn-purchase__info btn-purchase__info--left'>
                     <div className='btn-purchase__type-wrapper'>
                         <IconComponentWrapper type={getIconType()} />
                         <ButtonTextWrapper
@@ -85,11 +81,7 @@ const PurchaseButton = ({
                     </div>
                 </div>
                 <div className='btn-purchase__effect-detail' />
-                <div
-                    className={classNames('btn-purchase__effect-detail--arrow', {
-                        // 'btn-purchase__effect-detail--arrow--turbos': is_turbos,
-                    })}
-                />
+                <div className='btn-purchase__effect-detail--arrow' />
                 <div className='btn-purchase__info btn-purchase__info--right'>
                     <div className='btn-purchase__text_wrapper'>
                         {is_multiplier ? (
@@ -107,11 +99,7 @@ const PurchaseButton = ({
                 </div>
             </DesktopWrapper>
             <MobileWrapper>
-                <div
-                    className={classNames('btn-purchase__top', {
-                        'btn-purchase__turbos': is_turbos,
-                    })}
-                >
+                <div className='btn-purchase__top'>
                     <IconComponentWrapper type={getIconType()} />
                     <ButtonTextWrapper
                         should_fade={should_fade}

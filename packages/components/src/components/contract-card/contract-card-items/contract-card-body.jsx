@@ -26,7 +26,6 @@ const ContractCardBody = ({
     has_progress_slider,
     is_mobile,
     is_multiplier,
-    is_positions,
     is_sold,
     is_turbos,
     onMouseLeave,
@@ -99,7 +98,6 @@ const ContractCardBody = ({
                 is_mobile={is_mobile}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
-                is_positions={is_positions}
                 progress_slider_mobile_el={progress_slider_mobile_el}
             />
         );
@@ -189,7 +187,6 @@ ContractCardBody.propTypes = {
     getContractById: PropTypes.func,
     is_mobile: PropTypes.bool,
     is_multiplier: PropTypes.bool,
-    is_positions: PropTypes.bool,
     is_sold: PropTypes.bool,
     is_turbos: PropTypes.bool,
     onMouseLeave: PropTypes.func,

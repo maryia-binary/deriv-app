@@ -139,7 +139,6 @@ TurbosCardBody.propTypes = {
     error_message_alignment: PropTypes.string,
     getCardLabels: PropTypes.func,
     getContractById: PropTypes.func,
-    is_positions: PropTypes.bool,
     is_sold: PropTypes.bool,
     is_mobile: PropTypes.bool,
     onMouseLeave: PropTypes.func,

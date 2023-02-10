@@ -11,6 +11,7 @@ import Money from '../../money';
 import { ResultStatusIcon } from '../result-overlay/result-overlay.jsx';
 import ProgressSliderMobile from '../../progress-slider-mobile';
 import MultiplierCardBody from './multiplier-card-body.jsx';
+import TurbosCardBody from './turbos-card-body.jsx';
 
 const ContractCardBody = ({
     addToast,
@@ -25,7 +26,9 @@ const ContractCardBody = ({
     has_progress_slider,
     is_mobile,
     is_multiplier,
+    is_positions,
     is_sold,
+    is_turbos,
     onMouseLeave,
     removeToast,
     server_time,
@@ -76,6 +79,26 @@ const ContractCardBody = ({
                 setCurrentFocus={setCurrentFocus}
                 should_show_cancellation_warning={should_show_cancellation_warning}
                 toggleCancellationWarning={toggleCancellationWarning}
+            />
+        );
+    } else if (is_turbos) {
+        card_body = (
+            <TurbosCardBody
+                addToast={addToast}
+                connectWithContractUpdate={connectWithContractUpdate}
+                contract_info={contract_info}
+                contract_update={contract_update}
+                currency={currency}
+                current_focus={current_focus}
+                error_message_alignment={error_message_alignment}
+                getCardLabels={getCardLabels}
+                getContractById={getContractById}
+                is_sold={is_sold}
+                onMouseLeave={onMouseLeave}
+                status={status}
+                removeToast={removeToast}
+                setCurrentFocus={setCurrentFocus}
+                is_positions={is_positions}
             />
         );
     } else {
@@ -164,7 +187,9 @@ ContractCardBody.propTypes = {
     getContractById: PropTypes.func,
     is_mobile: PropTypes.bool,
     is_multiplier: PropTypes.bool,
+    is_positions: PropTypes.bool,
     is_sold: PropTypes.bool,
+    is_turbos: PropTypes.bool,
     onMouseLeave: PropTypes.func,
     removeToast: PropTypes.func,
     server_time: PropTypes.object,

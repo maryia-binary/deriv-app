@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { isHighLow, getCurrentTick, isBot , getSubType, isTurbosContract, isMultiplierContract } from '@deriv/shared';
+import { isHighLow, getCurrentTick, isBot, getSubType, isTurbosContract, isMultiplierContract } from '@deriv/shared';
 import ContractTypeCell from './contract-type-cell.jsx';
 import Button from '../../button';
 import Icon from '../../icon';
@@ -47,7 +47,7 @@ const ContractCardHeader = ({
         )?.displayed_trade_text || '';
 
     return (
-        <>
+        <React.Fragment>
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
                     'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier,
@@ -113,7 +113,7 @@ const ContractCardHeader = ({
                     />
                 )}
             </DesktopWrapper>
-        </>
+        </React.Fragment>
     );
 };
 

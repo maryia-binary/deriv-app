@@ -446,7 +446,12 @@ export const getTurbosOpenPositionsColumnsTemplate = ({ currency, onClickSell, g
     {
         title: localize('Barrier Level'),
         col_index: 'barrier',
-        renderCellContent: ({ row_obj }) => <Money amount={row_obj?.barrier} currency={currency} />,
+        renderCellContent: ({ row_obj, is_footer }) => {
+            if (is_footer) {
+                return <div className='open-positions__row-action' />;
+            }
+            return <Money amount={row_obj?.barrier} currency={currency} />;
+        },
     },
 
     {
@@ -482,7 +487,12 @@ export const getTurbosOpenPositionsColumnsTemplate = ({ currency, onClickSell, g
     {
         title: localize('Remaining time'),
         col_index: 'id',
-        renderCellContent: ({ row_obj }) => <ProgressSliderStream contract_info={row_obj.contract_info} />,
+        renderCellContent: ({ row_obj, is_footer }) => {
+            if (is_footer) {
+                return <div className='open-positions__row-action' />;
+            }
+            return <ProgressSliderStream contract_info={row_obj?.contract_info} />;
+        },
     },
     {
         title: localize('Action'),

@@ -87,7 +87,7 @@ const TurbosCardBody = ({
                                     error_message_alignment={error_message_alignment}
                                     getCardLabels={getCardLabels}
                                     getContractById={getContractById}
-                                    is_accumulator
+                                    is_turbos
                                     onMouseLeave={onMouseLeave}
                                     removeToast={removeToast}
                                     setCurrentFocus={setCurrentFocus}

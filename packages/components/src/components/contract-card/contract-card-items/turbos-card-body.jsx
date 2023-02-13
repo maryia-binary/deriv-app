@@ -49,14 +49,14 @@ const TurbosCardBody = ({
                 </ContractCardItem>
                 <ContractCardItem
                     header={is_sold ? PAYOUT : CURRENT_PRICE}
-                    className={is_mobile && 'dc-contract-card__current-price-mobile'}
+                    className={is_mobile ? 'dc-contract-card__current-price-mobile' : ''}
                 >
                     <Money currency={currency} amount={sell_spot || current_spot_display_value} />
                 </ContractCardItem>
                 <ContractCardItem
                     header={is_sold ? BUY_PRICE : BARRIER_LEVEL}
                     is_crypto={isCryptocurrency(currency)}
-                    className={is_mobile && 'dc-contract-card__buy-price-mobile'}
+                    className={is_mobile ? 'dc-contract-card__buy-price-mobile' : ''}
                 >
                     <Money amount={is_sold ? entry_spot : barrier} currency={currency} />
                 </ContractCardItem>
@@ -64,7 +64,7 @@ const TurbosCardBody = ({
                 {is_sold ? (
                     <ContractCardItem
                         header={BARRIER_LEVEL}
-                        className={is_mobile && 'dc-contract-card__barrier-level-mobile'}
+                        className={is_mobile ? 'dc-contract-card__barrier-level-mobile' : ''}
                     >
                         <Money amount={barrier} currency={currency} />
                     </ContractCardItem>
@@ -108,23 +108,25 @@ const TurbosCardBody = ({
                 </MobileWrapper>
             </div>
 
-            <ContractCardItem
-                className='dc-contract-card-item__total-profit-loss'
-                header={TOTAL_PROFIT_LOSS}
-                is_crypto={isCryptocurrency(currency)}
-                is_loss={+total_profit < 0}
-                is_won={+total_profit > 0}
-            >
-                <Money amount={total_profit} currency={currency} />
-                <div
-                    className={classNames('dc-contract-card__indicative--movement', {
-                        'dc-contract-card__indicative--movement-complete': is_sold,
-                    })}
+            {!is_sold && (
+                <ContractCardItem
+                    className='dc-contract-card-item__total-profit-loss'
+                    header={TOTAL_PROFIT_LOSS}
+                    is_crypto={isCryptocurrency(currency)}
+                    is_loss={+total_profit < 0}
+                    is_won={+total_profit > 0}
                 >
-                    {status === 'profit' && <Icon icon='IcProfit' />}
-                    {status === 'loss' && <Icon icon='IcLoss' />}
-                </div>
-            </ContractCardItem>
+                    <Money amount={total_profit} currency={currency} />
+                    <div
+                        className={classNames('dc-contract-card__indicative--movement', {
+                            'dc-contract-card__indicative--movement-complete': is_sold,
+                        })}
+                    >
+                        {status === 'profit' && <Icon icon='IcProfit' />}
+                        {status === 'loss' && <Icon icon='IcLoss' />}
+                    </div>
+                </ContractCardItem>
+            )}
         </React.Fragment>
     );
 };

@@ -438,7 +438,7 @@ export const getSupportedContracts = (is_high_low?: boolean) => ({
         position: 'bottom',
     },
     TURBOSLONG: {
-        name: <Localize i18n_default_text='Tubos' />,
+        name: <Localize i18n_default_text='Turbos' />,
         button_name: <Localize i18n_default_text='Buy' />,
         position: 'top',
     },

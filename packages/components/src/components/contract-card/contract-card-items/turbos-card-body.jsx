@@ -39,7 +39,7 @@ const TurbosCardBody = ({
         <React.Fragment>
             <div className={is_mobile ? 'dc-contract-card-items-wrapper--mobile' : 'dc-contract-card-items-wrapper'}>
                 <ContractCardItem
-                    className={'dc-contract-card__stake'}
+                    className='dc-contract-card__stake'
                     header={is_sold ? PROFIT_LOSS : STAKE}
                     is_crypto={isCryptocurrency(currency)}
                     is_loss={is_sold ? +profit < 0 : false}
@@ -47,26 +47,23 @@ const TurbosCardBody = ({
                 >
                     <Money amount={buy_price} currency={currency} />
                 </ContractCardItem>
-                <ContractCardItem
-                    header={is_sold ? PAYOUT : CURRENT_PRICE}
-                    className={'dc-contract-card__current-price'}
-                >
+                <ContractCardItem header={is_sold ? PAYOUT : CURRENT_PRICE} className='dc-contract-card__current-price'>
                     <Money currency={currency} amount={sell_spot || current_spot_display_value} />
                 </ContractCardItem>
                 <ContractCardItem
                     header={is_sold ? BUY_PRICE : BARRIER_LEVEL}
                     is_crypto={isCryptocurrency(currency)}
-                    className={'dc-contract-card__buy-price'}
+                    className='dc-contract-card__buy-price'
                 >
                     <Money amount={is_sold ? entry_spot : barrier} currency={currency} />
                 </ContractCardItem>
 
                 {is_sold ? (
-                    <ContractCardItem header={BARRIER_LEVEL} className={'dc-contract-card__barrier-level'}>
+                    <ContractCardItem header={BARRIER_LEVEL} className='dc-contract-card__barrier-level'>
                         <Money amount={barrier} currency={currency} />
                     </ContractCardItem>
                 ) : (
-                    <div className={'dc-contract-card__limit-order-info'}>
+                    <div className='dc-contract-card__limit-order-info'>
                         <ContractCardItem header={TAKE_PROFIT} className='dc-contract-card__take-profit'>
                             {take_profit ? <Money amount={take_profit} currency={currency} /> : <strong>-</strong>}
                             {is_valid_to_sell && (

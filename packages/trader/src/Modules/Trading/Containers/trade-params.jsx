@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Amount from 'Modules/Trading/Components/Form/TradeParams/amount.jsx';
 import Barrier from 'Modules/Trading/Components/Form/TradeParams/barrier.jsx';
+import BarriersTable from 'Modules/Trading/Components/Form/TradeParams/Turbos/barrier-table.jsx';
 import Duration from 'Modules/Trading/Components/Form/TradeParams/Duration';
 import LastDigit from 'Modules/Trading/Components/Form/TradeParams/last-digit.jsx';
 import CancelDeal from 'Modules/Trading/Components/Form/TradeParams/Multiplier/cancel-deal.jsx';
@@ -11,7 +12,7 @@ import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/t
 import Expiration from 'Modules/Trading/Components/Form/TradeParams/Multiplier/expiration.jsx';
 import { connect } from 'Stores/connect';
 
-const TradeParams = ({ form_components, is_minimized }) => {
+const TradeParams = ({ form_components, is_minimized, is_turbos }) => {
     const isVisible = component_key => {
         return form_components.includes(component_key);
     };
@@ -25,14 +26,17 @@ const TradeParams = ({ form_components, is_minimized }) => {
             {isVisible('stop_loss') && <StopLoss key={'stop_loss'} />}
             {isVisible('cancellation') && <CancelDeal key={'cancellation'} />}
             {isVisible('expiration') && <Expiration key={'expiration'} />}
+            {isVisible('barrier') && is_turbos && <BarriersTable key={'barrier_table'} />}
         </React.Fragment>
     );
 };
 TradeParams.propTypes = {
     form_components: MobxPropTypes.arrayOrObservableArray,
     is_minimized: PropTypes.bool,
+    is_turbos: PropTypes.bool,
 };
 
 export default connect(({ modules }) => ({
     form_components: modules.trade.form_components,
+    is_turbos: modules.trade.is_turbos,
 }))(TradeParams);

@@ -63,10 +63,10 @@ const ContractDetails = ({ contract_end_time, contract_info, duration, duration_
         />
     );
 
-    let unic_card_info;
+    let unique_card_info;
 
     if (isMultiplierContract(contract_type)) {
-        unic_card_info = (
+        unique_card_info = (
             <React.Fragment>
                 <ContractAuditItem
                     id='dt_commission_label'
@@ -85,7 +85,7 @@ const ContractDetails = ({ contract_end_time, contract_info, duration, duration_
             </React.Fragment>
         );
     } else if (isTurbosContract(contract_type)) {
-        unic_card_info = isNaN(contract_end_time) ? null : (
+        unique_card_info = isNaN(contract_end_time) ? null : (
             <React.Fragment>
                 <ContractAuditItem
                     id='dt_duration_label'
@@ -101,7 +101,7 @@ const ContractDetails = ({ contract_end_time, contract_info, duration, duration_
             </React.Fragment>
         );
     } else {
-        unic_card_info = barrier_card_info;
+        unique_card_info = barrier_card_info;
     }
 
     return (
@@ -114,7 +114,7 @@ const ContractDetails = ({ contract_end_time, contract_info, duration, duration_
                     value={localize('{{buy_value}} (Buy)', { buy_value: buy })}
                     value2={sell ? localize('{{sell_value}} (Sell)', { sell_value: sell }) : undefined}
                 />
-                {unic_card_info}
+                {unique_card_info}
                 <ContractAuditItem
                     id='dt_start_time_label'
                     icon={<Icon icon='IcContractStartTime' size={24} />}

@@ -270,6 +270,31 @@
             grid-gap: 0.8rem 0.4rem;
             flex: 1;
             padding: 0.4rem 0;
+            .dc-contract-card {
+                &__stake {
+                    grid-column: 1/1;
+                    grid-row: 1/1;
+                    padding: 8px 0;
+                }
+                &__current-price {
+                    grid-column: 2/2;
+                    grid-row: 1/2;
+                    padding: 8px 0;
+                }
+                &__buy-price {
+                    grid-column: 1/2;
+                    grid-row: 2/2;
+                }
+                &__barrier-level {
+                    grid-column: 2/2;
+                    grid-row: 2/2;
+                }
+                &__limit-order-info {
+                    grid-row: 2/2;
+                    grid-column: 2/2;
+                    position: relative;
+                }
+            }
         }
         &--has-progress-slider {
             grid-template-columns: 1fr 1fr 1fr;
@@ -473,38 +498,15 @@
         & .dc-contract-card__stop-loss {
             padding-bottom: 0.4rem;
         }
-        &-mobile {
-            grid-row: 2/2;
-            grid-column: 2/2;
-            position: relative;
-        }
     }
     &__buy-price {
         grid-area: buy-price;
-        &-mobile {
-            grid-column: 1/2;
-            grid-row: 2/2;
-        }
     }
     &__deal-cancel-fee {
         grid-area: deal-cancel-fee;
     }
     &__stake {
         grid-area: stake;
-        &-mobile {
-            grid-column: 1/1;
-            grid-row: 1/1;
-            padding: 8px 0;
-        }
-    }
-    &__current-price-mobile {
-        grid-column: 2/2;
-        grid-row: 1/2;
-        padding: 8px 0;
-    }
-    &__barrier-level-mobile {
-        grid-column: 2/2;
-        grid-row: 2/2;
     }
     &__date-expiry {
         grid-area: date-expiry;

@@ -89,7 +89,7 @@ const TurbosCardBody = ({
                     </div>
                 )}
                 <MobileWrapper>
-                    <div className='dc-contract-card__status-mobile'>
+                    <div className='dc-contract-card__status'>
                         {is_sold ? (
                             <ResultStatusIcon getCardLabels={getCardLabels} is_contract_won={+profit > 0} />
                         ) : (

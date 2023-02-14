@@ -360,6 +360,35 @@ const OpenPositions = ({
         contract_types.find(type => type.is_default)?.value || 'Options'
     );
 
+    const accumulator_rates = [
+        {
+            text: 'All Rates',
+            value: 'all',
+        },
+        {
+            text: '1%',
+            value: '0.01',
+        },
+        {
+            text: '2%',
+            value: '0.02',
+        },
+        {
+            text: '3%',
+            value: '0.03',
+        },
+        {
+            text: '4%',
+            value: '0.04',
+        },
+        {
+            text: '5%',
+            value: '0.05',
+        },
+    ];
+
+    const [accumulator_rate, setAccumulatorRate] = React.useState('all');
+
     React.useEffect(() => {
         /*
          * For mobile, we show portfolio stepper in header even for reports pages.
@@ -463,9 +492,28 @@ const OpenPositions = ({
         totals: active_positions_filtered_totals,
     };
 
-    const handleChange = e => {
+    // const handleChange = e => {
+    //     console.log(e);
+    //     if(e.target.name !== 'contract_types') {
+    //         setAccumulatorRate(e.target.value);
+    //     } else {
+    //         console.log(e.target);
+    //         setContractTypeValue(e.target.value);
+    //     }
+    // };
+
+    const handleContractChange = e => {
         setContractTypeValue(e.target.value);
     };
+
+    const handleRateChange = e => {
+        setAccumulatorRate(e.target.value);
+    };
+
+    const isAccumulatorTableEmpty =
+        active_positions_filtered.length === 0 ||
+        (accumulator_rate !== active_positions_filtered['0']?.contract_info?.growth_rate?.toString() &&
+            accumulator_rate !== 'all');
 
     const getOpenPositionsTable = () => {
         if (is_options_selected)
@@ -483,7 +531,7 @@ const OpenPositions = ({
                 <OpenPositionsTable
                     className='open-positions-accumulator open-positions'
                     columns={columns}
-                    is_empty={active_positions_filtered.length === 0}
+                    is_empty={isAccumulatorTableEmpty}
                     row_size={isMobile() ? 3 : 68}
                     {...shared_props}
                 />
@@ -505,31 +553,70 @@ const OpenPositions = ({
             {active_positions.length !== 0 && (
                 <React.Fragment>
                     <DesktopWrapper>
-                        <div className='open-positions__contract-types-selector__container'>
-                            <Dropdown
-                                is_align_text_left
-                                name='contract_types'
-                                list={contract_types}
-                                value={contract_type_value}
-                                onChange={handleChange}
-                            />
+                        <div
+                            className={
+                                is_accumulator_selected
+                                    ? 'open-positions__accumulator-container'
+                                    : 'open-positions__contract-types-selector-container'
+                            }
+                        >
+                            <div className='open-positions__accumulator-container__contract-dropdown'>
+                                <Dropdown
+                                    is_align_text_left
+                                    name='contract_types'
+                                    list={contract_types}
+                                    value={contract_type_value}
+                                    onChange={handleContractChange}
+                                />
+                            </div>
+
+                            {is_accumulator_selected && (
+                                <div className='open-positions__accumulator-container__rates-dropdown'>
+                                    <Dropdown
+                                        is_align_text_left
+                                        name='accumulator_rates'
+                                        list={accumulator_rates}
+                                        value={accumulator_rate}
+                                        onChange={handleRateChange}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
-                        <SelectNative
-                            className='open-positions__contract-types-selector'
-                            list_items={contract_types.map(option => ({
-                                text: option.text,
-                                value: option.value,
-                            }))}
-                            value={contract_type_value}
-                            should_show_empty_option={false}
-                            onChange={handleChange}
-                        />
+                        <div
+                            className={
+                                is_accumulator_selected
+                                    ? 'open-positions__accumulator-container--mobile'
+                                    : 'open-positions__contract-types-selector-container--mobile'
+                            }
+                        >
+                            <SelectNative
+                                className='open-positions__accumulator-container-mobile__contract-dropdown'
+                                list_items={contract_types.map(option => ({
+                                    text: option.text,
+                                    value: option.value,
+                                }))}
+                                value={contract_type_value}
+                                should_show_empty_option={false}
+                                onChange={handleContractChange}
+                            />
+                            {is_accumulator_selected && (
+                                <SelectNative
+                                    className='open-positions__accumulator-container--mobile__rates-dropdown'
+                                    list_items={accumulator_rates.map(option => ({
+                                        text: option.text,
+                                        value: option.value.toString(),
+                                    }))}
+                                    value={accumulator_rate}
+                                    should_show_empty_option={false}
+                                    onChange={handleRateChange}
+                                />
+                            )}
+                        </div>
                     </MobileWrapper>
                 </React.Fragment>
             )}
-
             {getOpenPositionsTable()}
         </React.Fragment>
     );

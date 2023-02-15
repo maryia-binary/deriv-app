@@ -19,10 +19,7 @@ const TradeParams = ({ form_components, is_minimized, is_turbos }) => {
         return form_components.includes(component_key);
     };
 
-    const toggleBarriersTable = e => {
-        e.preventDefault();
-        setIsBarriersTableExpanded(!is_barriers_table_expanded);
-    };
+    const toggleBarriersTable = () => setIsBarriersTableExpanded(!is_barriers_table_expanded);
 
     return (
         <React.Fragment>
@@ -37,7 +34,11 @@ const TradeParams = ({ form_components, is_minimized, is_turbos }) => {
             {isVisible('cancellation') && <CancelDeal key={'cancellation'} />}
             {isVisible('expiration') && <Expiration key={'expiration'} />}
             {isVisible('barrier') && is_turbos && is_barriers_table_expanded && (
-                <BarriersTable key={'barriers_table'} toggleBarriersTable={toggleBarriersTable} />
+                <BarriersTable
+                    key={'barriers_table'}
+                    toggleBarriersTable={toggleBarriersTable}
+                    is_barriers_table_expanded={is_barriers_table_expanded}
+                />
             )}
         </React.Fragment>
     );

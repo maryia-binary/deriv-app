@@ -5,7 +5,7 @@ import { Icon, Text } from '@deriv/components';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { connect } from 'Stores/connect';
 
-const BarriersTable = ({ turbos_barrier_choices }) => {
+const BarriersTable = ({ turbos_barrier_choices, toggleBarriersTable }) => {
     //TODO: remove slice after adding scroll
     const barriers_list = turbos_barrier_choices.slice(4).map((barrier, index) => (
         <li key={index} className='trade-container__barriers-table__item'>
@@ -21,7 +21,7 @@ const BarriersTable = ({ turbos_barrier_choices }) => {
                 <div
                     // id='barriers-table__icon-close'
                     className='trade-container__barriers-table__icon-close'
-                    // onClick={toggleBarriersTable}
+                    onClick={toggleBarriersTable}
                 >
                     <Icon icon='IcCross' />
                 </div>
@@ -34,6 +34,7 @@ const BarriersTable = ({ turbos_barrier_choices }) => {
 
 BarriersTable.propTypes = {
     turbos_barrier_choices: PropTypes.arrayOf(PropTypes.string),
+    toggleBarriersTable: PropTypes.func,
 };
 
 export default connect(({ modules }) => ({

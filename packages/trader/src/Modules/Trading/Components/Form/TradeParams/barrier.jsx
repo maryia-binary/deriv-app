@@ -18,6 +18,7 @@ const Barrier = ({
     onChange,
     setCurrentFocus,
     validation_errors,
+    toggleBarriersTable,
 }) => {
     const barrier_title = barrier_count === 1 ? localize('Barrier') : localize('Barriers');
 
@@ -56,7 +57,7 @@ const Barrier = ({
                     header={barrier_title}
                     is_center
                 >
-                    <div>
+                    <div onClick={toggleBarriersTable}>
                         <InputField
                             id='dt_barrier_1_input'
                             type='number'
@@ -176,6 +177,7 @@ Barrier.propTypes = {
     duration_unit: PropTypes.string,
     is_absolute_only: PropTypes.bool,
     is_minimized: PropTypes.bool,
+    toggleBarriersTable: PropTypes.func,
     onChange: PropTypes.func,
     setCurrentFocus: PropTypes.func,
     validation_errors: PropTypes.object,

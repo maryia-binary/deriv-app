@@ -261,6 +261,7 @@ export default class TradeStore extends BaseStore {
             setPreviousSymbol: action.bound,
             setAllowEqual: action.bound,
             setIsTradeParamsExpanded: action.bound,
+            setChosenBarrier: action.bound,
             resetPreviousSymbol: action.bound,
             updateBarrierColor: action.bound,
             onHoverPurchase: action.bound,
@@ -573,6 +574,10 @@ export default class TradeStore extends BaseStore {
         this.root_store.common.setSelectedContractType(this.contract_type);
     }
 
+    setChosenBarrier(new_value) {
+        this.barrier_1 = new_value;
+    }
+
     setPreviousSymbol(symbol) {
         if (this.previous_symbol !== symbol) this.previous_symbol = symbol;
     }
@@ -682,7 +687,7 @@ export default class TradeStore extends BaseStore {
         if (!proposal_info) {
             return;
         }
-        const { contract_type, barrier, high_barrier, low_barrier } = proposal_info;
+        const { barrier, contract_type, high_barrier, low_barrier } = proposal_info;
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;

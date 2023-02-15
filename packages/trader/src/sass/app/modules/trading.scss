@@ -377,10 +377,12 @@
             font-size: var(--text-size-xxs);
             line-height: var(--text-lh-l);
             cursor: pointer;
-            &:hover {
+
+            &:hover:not(&--selected) {
                 background-color: var(--general-hover);
                 font-weight: var(--text-weight-bold);
             }
+            &--selected,
             &:active,
             &:focus {
                 background-color: var(--general-active);

@@ -360,9 +360,7 @@ const OpenPositions = ({
     const [contract_type_value, setContractTypeValue] = React.useState(
         contract_types.find(type => type.is_default)?.value || 'Options'
     );
-
     const accumulator_rates = ['all', '0.01', '0.02', '0.03', '0.04', '0.05'];
-
     const [accumulator_rate, setAccumulatorRate] = React.useState(accumulator_rates[0]);
 
     React.useEffect(() => {

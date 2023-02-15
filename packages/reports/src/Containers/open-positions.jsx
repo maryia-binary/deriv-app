@@ -37,6 +37,7 @@ import {
 import PlaceholderComponent from '../Components/placeholder-component.jsx';
 import { getCardLabels } from '_common/contract';
 import { connect } from 'Stores/connect';
+import classNames from 'classnames';
 
 const EmptyPlaceholderWrapper = props => (
     <React.Fragment>
@@ -504,7 +505,10 @@ const OpenPositions = ({
                 />
             ) : (
                 <OpenPositionsTable
-                    className='open-positions-multiplier open-positions'
+                    className={classNames('open-positions', {
+                        'open-positions-multiplier': is_multiplier,
+                        'open-positions-turbos': is_turbos,
+                    })}
                     columns={columns}
                     row_size={isMobile() ? 3 : 68}
                     is_empty={active_positions_filtered.length === 0}

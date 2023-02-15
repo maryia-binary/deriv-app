@@ -42,7 +42,7 @@ const PositionsDrawerCard = ({
     status,
     toggleCancellationWarning,
     toggleUnsupportedContractModal,
-    // duration_type,
+    duration_type,
     is_open_positions,
 }) => {
     const is_multiplier = isMultiplierContract(contract_info.contract_type);
@@ -53,6 +53,7 @@ const PositionsDrawerCard = ({
     const contract_card_classname = classNames('dc-contract-card', {
         'dc-contract-card--green': !is_turbos && !is_multiplier && profit_loss > 0 && !result,
         'dc-contract-card--red': !is_turbos && !is_multiplier && profit_loss < 0 && !result,
+        'dc-contract-card--turbos': is_turbos && is_open_positions,
     });
 
     const loader_el = (
@@ -60,7 +61,6 @@ const PositionsDrawerCard = ({
             <ContractCard.Loader speed={2} />
         </div>
     );
-    // console.log("is_open_positions",is_open_positions)
     const card_header = (
         <ContractCard.Header
             contract_info={contract_info}
@@ -72,6 +72,8 @@ const PositionsDrawerCard = ({
             is_sell_requested={is_sell_requested}
             onClickSell={onClickSell}
             server_time={server_time}
+            duration_type={duration_type}
+            is_open_positions={is_open_positions}
         />
     );
 
@@ -108,7 +110,9 @@ const PositionsDrawerCard = ({
             contract_info={contract_info}
             getCardLabels={getCardLabels}
             is_multiplier={is_multiplier}
+            is_turbos={is_turbos}
             is_positions
+            is_open_positions={is_open_positions}
             is_sell_requested={is_sell_requested}
             onClickCancel={onClickCancel}
             onClickSell={onClickSell}
@@ -218,7 +222,7 @@ PositionsDrawerCard.propTypes = {
     toggleCancellationWarning: PropTypes.func,
     toggleUnsupportedContractModal: PropTypes.func,
     type: PropTypes.string,
-    // duration_type: PropTypes.string,
+    duration_type: PropTypes.string,
     is_open_positions: PropTypes.bool,
 };
 

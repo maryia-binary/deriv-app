@@ -10,7 +10,7 @@ import MobileWrapper from '../../mobile-wrapper';
 import Money from '../../money';
 import { ResultStatusIcon } from '../result-overlay/result-overlay.jsx';
 import ProgressSliderMobile from '../../progress-slider-mobile';
-// import TurbosOpenCardBody from './turbos-open-card-body.jsx';
+import TurbosOpenCardBody from './turbos-open-card-body.jsx';
 import MultiplierCardBody from './multiplier-card-body.jsx';
 import TurbosCardBody from './turbos-card-body.jsx';
 
@@ -37,7 +37,7 @@ const ContractCardBody = ({
     should_show_cancellation_warning,
     status,
     toggleCancellationWarning,
-    // is_open_positions,
+    is_open_positions,
 }) => {
     const indicative = getIndicativePrice(contract_info);
     const { buy_price, sell_price, payout, profit, tick_count, date_expiry, purchase_time } = contract_info;
@@ -83,7 +83,7 @@ const ContractCardBody = ({
                 toggleCancellationWarning={toggleCancellationWarning}
             />
         );
-    } else if (is_turbos) {
+    } else if (is_turbos && !is_open_positions) {
         card_body = (
             <TurbosCardBody
                 addToast={addToast}
@@ -99,6 +99,28 @@ const ContractCardBody = ({
                 onMouseLeave={onMouseLeave}
                 status={status}
                 is_mobile={is_mobile}
+                removeToast={removeToast}
+                setCurrentFocus={setCurrentFocus}
+                progress_slider_mobile_el={progress_slider_mobile_el}
+            />
+        );
+    } else if (is_turbos && is_open_positions) {
+        card_body = (
+            <TurbosOpenCardBody
+                addToast={addToast}
+                connectWithContractUpdate={connectWithContractUpdate}
+                contract_info={contract_info}
+                contract_update={contract_update}
+                currency={currency}
+                current_focus={current_focus}
+                error_message_alignment={error_message_alignment}
+                getCardLabels={getCardLabels}
+                getContractById={getContractById}
+                is_sold={is_sold}
+                onMouseLeave={onMouseLeave}
+                status={status}
+                is_mobile={is_mobile}
+                is_open_positions={is_open_positions}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
                 progress_slider_mobile_el={progress_slider_mobile_el}

@@ -19,7 +19,6 @@ import ProgressSlider from '../../progress-slider';
 import DesktopWrapper from '../../desktop-wrapper';
 import MobileWrapper from '../../mobile-wrapper';
 import ProgressBar from '../../progress-bar';
-// import { getContractDurationType } from '../../../../../'';
 
 const ContractCardHeader = ({
     contract_info,
@@ -38,24 +37,11 @@ const ContractCardHeader = ({
     is_open_positions,
 }) => {
     const current_tick = contract_info.tick_count ? getCurrentTick(contract_info) : null;
-    const {
-        // growth_rate,
-        underlying,
-        multiplier,
-        contract_type,
-        shortcode,
-        purchase_time,
-        date_expiry,
-        date_start,
-        tick_count,
-        // tick_passed,
-    } = contract_info;
+    const { underlying, multiplier, contract_type, shortcode, purchase_time, date_expiry, date_start, tick_count } =
+        contract_info;
     const is_sold = !!contract_info.is_sold || is_contract_sold;
     const is_turbos = isTurbosContract(contract_type);
     const progress_value = getTimePercentage(server_time, date_start, date_expiry) / 100;
-    // const displayed_turbos = growth_rate && `${getGrowthRatePercentage(growth_rate)}%`;
-    // const displayed_multiplier = multiplier && `x${multiplier}`;
-    // const displayed_trade_param = is_turbos ? displayed_turbos : displayed_multiplier;
 
     const contract_type_list_info = [
         {
@@ -101,6 +87,8 @@ const ContractCardHeader = ({
                         type={contract_type}
                         is_open_positions={is_open_positions}
                     />
+                </div>
+                <div className={'dc-contract-card__type--progress-bar'}>
                     {is_turbos && is_open_positions && <ProgressBar label={duration_type} value={progress_value} />}
                 </div>
                 <MobileWrapper>

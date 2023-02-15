@@ -56,22 +56,24 @@
             width: 16px;
             height: 16px;
         }
-        &--accu-small {
-            width: 6px;
-            height: 6px;
-            bottom: -3px;
-            margin-left: -4px;
-            background-color: var(--text-less-prominent);
+        &--accumulator {
+            &-small {
+                width: 6px;
+                height: 6px;
+                bottom: -3px;
+                margin-left: -4px;
+                background-color: var(--text-less-prominent);
 
-            @include mobile {
-                width: 4px;
-                height: 4px;
-                bottom: -2px;
-                margin-left: -3px;
+                @include mobile {
+                    width: 4px;
+                    height: 4px;
+                    bottom: -2px;
+                    margin-left: -3px;
+                }
             }
-        }
-        &--accu-bold {
-            border-width: 0.3rem;
+            &-bold {
+                border-width: 0.3rem;
+            }
         }
     }
     &__sell {

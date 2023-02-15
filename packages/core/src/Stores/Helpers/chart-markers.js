@@ -104,8 +104,8 @@ const createTickMarkers = contract_info => {
         }
         if (has_accumulator_bold_marker || (is_accumulator && is_middle_spot)) {
             const spot_className = marker_config.content_config.spot_className;
-            marker_config.content_config.spot_className = `${spot_className} ${spot_className}${
-                has_accumulator_bold_marker ? '--accu-bold' : '--accu-small'
+            marker_config.content_config.spot_className = `${spot_className} ${spot_className}--accumulator${
+                has_accumulator_bold_marker ? '-bold' : '-small'
             }`;
         }
 

@@ -23,6 +23,7 @@ import {
     website_name,
     getTotalProfit,
     getContractPath,
+    getGrowthRatePercentage,
 } from '@deriv/shared';
 import { localize, Localize } from '@deriv/translations';
 import { ReportsTableRowLoader } from '../Components/Elements/ContentLoader';
@@ -360,34 +361,9 @@ const OpenPositions = ({
         contract_types.find(type => type.is_default)?.value || 'Options'
     );
 
-    const accumulator_rates = [
-        {
-            text: 'All Rates',
-            value: 'all',
-        },
-        {
-            text: '1%',
-            value: '0.01',
-        },
-        {
-            text: '2%',
-            value: '0.02',
-        },
-        {
-            text: '3%',
-            value: '0.03',
-        },
-        {
-            text: '4%',
-            value: '0.04',
-        },
-        {
-            text: '5%',
-            value: '0.05',
-        },
-    ];
+    const accumulator_rates = ['all', '0.01', '0.02', '0.03', '0.04', '0.05'];
 
-    const [accumulator_rate, setAccumulatorRate] = React.useState('all');
+    const [accumulator_rate, setAccumulatorRate] = React.useState(accumulator_rates[0]);
 
     React.useEffect(() => {
         /*
@@ -492,16 +468,6 @@ const OpenPositions = ({
         totals: active_positions_filtered_totals,
     };
 
-    // const handleChange = e => {
-    //     console.log(e);
-    //     if(e.target.name !== 'contract_types') {
-    //         setAccumulatorRate(e.target.value);
-    //     } else {
-    //         console.log(e.target);
-    //         setContractTypeValue(e.target.value);
-    //     }
-    // };
-
     const handleContractChange = e => {
         setContractTypeValue(e.target.value);
     };
@@ -514,6 +480,11 @@ const OpenPositions = ({
         active_positions_filtered.length === 0 ||
         (accumulator_rate !== active_positions_filtered['0']?.contract_info?.growth_rate?.toString() &&
             accumulator_rate !== 'all');
+
+    const accumulators_rates_list = accumulator_rates.map(option => ({
+        text: option === 'all' ? localize('All Rates') : `${getGrowthRatePercentage(+option)}%`,
+        value: option,
+    }));
 
     const getOpenPositionsTable = () => {
         if (is_options_selected)
@@ -569,13 +540,12 @@ const OpenPositions = ({
                                     onChange={handleContractChange}
                                 />
                             </div>
-
                             {is_accumulator_selected && (
                                 <div className='open-positions__accumulator-container__rates-dropdown'>
                                     <Dropdown
                                         is_align_text_left
                                         name='accumulator_rates'
-                                        list={accumulator_rates}
+                                        list={accumulators_rates_list}
                                         value={accumulator_rate}
                                         onChange={handleRateChange}
                                     />
@@ -604,10 +574,7 @@ const OpenPositions = ({
                             {is_accumulator_selected && (
                                 <SelectNative
                                     className='open-positions__accumulator-container--mobile__rates-dropdown'
-                                    list_items={accumulator_rates.map(option => ({
-                                        text: option.text,
-                                        value: option.value.toString(),
-                                    }))}
+                                    list_items={accumulators_rates_list}
                                     value={accumulator_rate}
                                     should_show_empty_option={false}
                                     onChange={handleRateChange}

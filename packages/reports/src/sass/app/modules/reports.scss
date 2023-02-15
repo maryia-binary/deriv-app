@@ -727,7 +727,6 @@ $side-padding: 1.2em;
     }
     &__accumulator-container {
         display: flex;
-        flex-direction: row;
         max-width: 45.6rem;
         gap: 0.8rem;
 
@@ -735,7 +734,6 @@ $side-padding: 1.2em;
         &__rates-dropdown {
             width: 100%;
         }
-
         &--mobile {
             display: flex;
             flex-direction: column;

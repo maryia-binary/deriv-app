@@ -1,21 +1,8 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-// import {
-//     isCryptocurrency,
-//     getCancellationPrice,
-//     getIndicativePrice,
-//     getLimitOrderAmount,
-//     getCurrentTick,
-//     getDisplayStatus,
-//     getTotalProfit,
-//     isValidToCancel,
-//     isValidToSell,
-//     shouldShowCancellation,
-// } from '@deriv/shared';
 import { isCryptocurrency, getIndicativePrice, getCurrentTick, getDisplayStatus } from '@deriv/shared';
 import ContractCardItem from './contract-card-item.jsx';
-// import ToggleCardDialog from './toggle-card-dialog.jsx';
 import CurrencyBadge from '../../currency-badge';
 import DesktopWrapper from '../../desktop-wrapper';
 import Icon from '../../icon';
@@ -23,8 +10,9 @@ import MobileWrapper from '../../mobile-wrapper';
 import Money from '../../money';
 import { ResultStatusIcon } from '../result-overlay/result-overlay.jsx';
 import ProgressSliderMobile from '../../progress-slider-mobile';
-import TurbosOpenCardBody from './turbos-open-card-body.jsx';
+// import TurbosOpenCardBody from './turbos-open-card-body.jsx';
 import MultiplierCardBody from './multiplier-card-body.jsx';
+import TurbosCardBody from './turbos-card-body.jsx';
 
 const ContractCardBody = ({
     addToast,
@@ -40,7 +28,7 @@ const ContractCardBody = ({
     is_mobile,
     is_multiplier,
     is_turbos,
-    is_positions,
+    // is_positions,
     is_sold,
     onMouseLeave,
     removeToast,
@@ -97,7 +85,7 @@ const ContractCardBody = ({
         );
     } else if (is_turbos) {
         card_body = (
-            <TurbosOpenCardBody
+            <TurbosCardBody
                 addToast={addToast}
                 connectWithContractUpdate={connectWithContractUpdate}
                 contract_info={contract_info}
@@ -107,13 +95,13 @@ const ContractCardBody = ({
                 error_message_alignment={error_message_alignment}
                 getCardLabels={getCardLabels}
                 getContractById={getContractById}
-                indicative={indicative}
                 is_sold={is_sold}
                 onMouseLeave={onMouseLeave}
                 status={status}
+                is_mobile={is_mobile}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
-                is_positions={is_positions}
+                progress_slider_mobile_el={progress_slider_mobile_el}
             />
         );
     } else {
@@ -179,7 +167,7 @@ const ContractCardBody = ({
                     className={
                         ('dc-contract-card__separatorclass',
                         classNames({
-                            'dc-contract-card__body-wrapper': !is_multiplier,
+                            'dc-contract-card__body-wrapper': !is_multiplier && !is_turbos,
                         }))
                     }
                 >
@@ -203,7 +191,7 @@ ContractCardBody.propTypes = {
     is_mobile: PropTypes.bool,
     is_multiplier: PropTypes.bool,
     is_turbos: PropTypes.bool,
-    is_positions: PropTypes.bool,
+    // is_positions: PropTypes.bool,
     is_sold: PropTypes.bool,
     onMouseLeave: PropTypes.func,
     removeToast: PropTypes.func,

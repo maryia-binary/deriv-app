@@ -6,9 +6,10 @@ import {
     isHighLow,
     getCurrentTick,
     isBot,
-    getGrowthRatePercentage,
-    getTimePercentage,
+    getSubType,
     isTurbosContract,
+    isMultiplierContract,
+    getTimePercentage,
 } from '@deriv/shared';
 import ContractTypeCell from './contract-type-cell.jsx';
 import Button from '../../button';
@@ -38,7 +39,7 @@ const ContractCardHeader = ({
 }) => {
     const current_tick = contract_info.tick_count ? getCurrentTick(contract_info) : null;
     const {
-        growth_rate,
+        // growth_rate,
         underlying,
         multiplier,
         contract_type,
@@ -52,12 +53,30 @@ const ContractCardHeader = ({
     const is_sold = !!contract_info.is_sold || is_contract_sold;
     const is_turbos = isTurbosContract(contract_type);
     const progress_value = getTimePercentage(server_time, date_start, date_expiry) / 100;
-    const displayed_turbos = growth_rate && `${getGrowthRatePercentage(growth_rate)}%`;
-    const displayed_multiplier = multiplier && `x${multiplier}`;
-    const displayed_trade_param = is_turbos ? displayed_turbos : displayed_multiplier;
+    // const displayed_turbos = growth_rate && `${getGrowthRatePercentage(growth_rate)}%`;
+    // const displayed_multiplier = multiplier && `x${multiplier}`;
+    // const displayed_trade_param = is_turbos ? displayed_turbos : displayed_multiplier;
+
+    const contract_type_list_info = [
+        {
+            value: 'Multiplier',
+            checkContractType: isMultiplierContract,
+            displayed_trade_text: `x${multiplier}`,
+        },
+        {
+            value: 'Turbos',
+            checkContractType: isTurbosContract,
+            displayed_trade_text: getSubType(contract_type),
+        },
+    ];
+
+    const displayed_trade_param =
+        contract_type_list_info.find(contract_type_item_info =>
+            contract_type_item_info.checkContractType(contract_type)
+        )?.displayed_trade_text || '';
 
     return (
-        <>
+        <React.Fragment>
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
                     'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier && !is_turbos,
@@ -76,9 +95,9 @@ const ContractCardHeader = ({
                 </div>
                 <div id='dc-contract_card_type_label' className={'dc-contract-card__type'}>
                     <ContractTypeCell
+                        displayed_trade_param={displayed_trade_param}
                         getContractTypeDisplay={getContractTypeDisplay}
                         is_high_low={isHighLow({ shortcode })}
-                        displayed_trade_param={displayed_trade_param}
                         type={contract_type}
                         is_open_positions={is_open_positions}
                     />
@@ -129,7 +148,7 @@ const ContractCardHeader = ({
                     />
                 )}
             </DesktopWrapper>
-        </>
+        </React.Fragment>
     );
 };
 

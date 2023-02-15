@@ -7,10 +7,10 @@ import {
     getContractPath,
     isCryptoContract,
     isMultiplierContract,
+    isTurbosContract,
     getCardLabels,
     getContractTypeDisplay,
     getEndTime,
-    isTurbosContract,
 } from '@deriv/shared';
 
 const PositionsDrawerCard = ({
@@ -42,7 +42,7 @@ const PositionsDrawerCard = ({
     status,
     toggleCancellationWarning,
     toggleUnsupportedContractModal,
-    duration_type,
+    // duration_type,
     is_open_positions,
 }) => {
     const is_multiplier = isMultiplierContract(contract_info.contract_type);
@@ -69,9 +69,6 @@ const PositionsDrawerCard = ({
             getContractTypeDisplay={getContractTypeDisplay}
             has_progress_slider={!is_mobile && has_progress_slider}
             is_mobile={is_mobile}
-            is_open_positions={is_open_positions}
-            // is_positions={true}
-            duration_type={duration_type}
             is_sell_requested={is_sell_requested}
             onClickSell={onClickSell}
             server_time={server_time}
@@ -92,9 +89,9 @@ const PositionsDrawerCard = ({
             }}
             is_mobile={is_mobile}
             is_multiplier={is_multiplier}
-            is_turbos={is_turbos}
-            is_sold={has_ended}
             is_positions
+            is_sold={has_ended}
+            is_turbos={is_turbos}
             has_progress_slider={is_mobile && has_progress_slider}
             removeToast={removeToast}
             server_time={server_time}
@@ -154,6 +151,7 @@ const PositionsDrawerCard = ({
             getContractPath={getContractPath}
             is_multiplier={is_multiplier}
             is_positions
+            is_turbos={is_turbos}
             is_unsupported={is_unsupported}
             onClickRemove={onClickRemove}
             profit_loss={profit_loss}
@@ -220,7 +218,7 @@ PositionsDrawerCard.propTypes = {
     toggleCancellationWarning: PropTypes.func,
     toggleUnsupportedContractModal: PropTypes.func,
     type: PropTypes.string,
-    duration_type: PropTypes.string,
+    // duration_type: PropTypes.string,
     is_open_positions: PropTypes.bool,
 };
 

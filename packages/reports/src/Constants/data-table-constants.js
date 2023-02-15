@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Icon, Label, Money, ContractCard, Popover } from '@deriv/components';
+import { Icon, Label, Money, ContractCard, ContractCardSell, Popover } from '@deriv/components';
 import { isMobile, getCurrencyDisplayCode, getTotalProfit, shouldShowCancellation } from '@deriv/shared';
 import { localize, Localize } from '@deriv/translations';
 import ProgressSliderStream from '../Containers/progress-slider-stream.jsx';
@@ -508,7 +508,7 @@ export const getTurbosOpenPositionsColumnsTemplate = ({ currency, onClickSell, g
 
             return (
                 <div className='open-positions__row-action'>
-                    <ContractCard.Sell
+                    <ContractCardSell
                         contract_info={contract_info}
                         is_sell_requested={is_sell_requested}
                         getCardLabels={getCardLabels}

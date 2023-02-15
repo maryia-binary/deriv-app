@@ -7,6 +7,7 @@ export const getCardLabels = () => ({
     CLOSE: localize('Close'),
     CANCEL: localize('Cancel'),
     CURRENT_STAKE: localize('Current stake:'),
+    CURRENT_PRICE: localize('Current price:'),
     DEAL_CANCEL_FEE: localize('Deal cancel. fee:'),
     TAKE_PROFIT: localize('Take profit:'),
     BUY_PRICE: localize('Buy price:'),
@@ -19,6 +20,7 @@ export const getCardLabels = () => ({
     PURCHASE_PRICE: localize('Buy price:'),
     POTENTIAL_PAYOUT: localize('Payout limit:'),
     TICK: localize('Tick '),
+    TICKS: localize('Ticks '),
     WON: localize('Won'),
     LOST: localize('Lost'),
     DAYS: localize('days'),
@@ -32,6 +34,7 @@ export const getCardLabels = () => ({
     DONT_SHOW_THIS_AGAIN: localize("Don't show this again"),
     RESALE_NOT_OFFERED: localize('Resale not offered'),
     NOT_AVAILABLE: localize('N/A'),
+    BARRIER_LEVEL: localize('Barrier level:'),
 });
 
 export const getMarketNamesMap = () => ({

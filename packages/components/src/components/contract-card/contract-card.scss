@@ -43,6 +43,20 @@
 
             &--trader {
                 grid-template-columns: 1.2fr 1fr;
+                &--turbos {
+                    display: flex;
+                    flex-direction: row;
+                    &-sold {
+                        padding-top: 1rem;
+                    }
+                    .dc-contract-card {
+                        &__type {
+                            position: absolute;
+                            justify-content: end;
+                            left: 5rem;
+                        }
+                    }
+                }
             }
             &--mobile {
                 grid-template-columns: 1fr 1fr 25%;
@@ -455,7 +469,8 @@
         align-items: center;
         justify-content: center;
 
-        .result-icon {
+        .result-icon,
+        &--accumulator-mobile-positions .dc-result__icon {
             margin-left: 0.4rem;
         }
     }
@@ -468,6 +483,9 @@
         & .dc-contract-card__stop-loss {
             padding-bottom: 0.4rem;
         }
+    }
+    &__take-profit {
+        position: relative;
     }
     &__buy-price {
         grid-area: buy-price;
@@ -551,7 +569,7 @@
         line-height: 1.5;
         text-align: left;
 
-        &-multiplier {
+        &-trade-param {
             font-size: 1rem;
             line-height: 1rem;
             color: var(--text-less-prominent);

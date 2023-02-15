@@ -95,7 +95,7 @@ const MobileRowRenderer = ({
     const duration_type = getContractDurationType(contract_info.longcode);
     const progress_value = getTimePercentage(server_time, date_start, date_expiry) / 100;
 
-    if (isMultiplierContract(type)) {
+    if (isMultiplierContract(type) || isTurbosContract(type)) {
         return (
             <PositionsDrawerCard
                 contract_info={contract_info}
@@ -103,10 +103,12 @@ const MobileRowRenderer = ({
                 currency={currency}
                 is_multiplier
                 is_link_disabled
+                is_open_positions={isTurbosContract(type)}
                 onClickCancel={onClickCancel}
                 onClickSell={onClickSell}
                 server_time={server_time}
                 status={status}
+                duration_type={duration_type}
                 {...props}
             />
         );
@@ -351,6 +353,10 @@ const OpenPositions = ({
         {
             text: localize('Multipliers'),
             value: 'Multipliers',
+        },
+        {
+            text: localize('Turbos'),
+            value: 'Turbos',
         },
     ];
 

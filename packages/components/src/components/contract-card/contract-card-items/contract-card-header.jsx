@@ -2,7 +2,14 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { isHighLow, getCurrentTick, isBot } from '@deriv/shared';
+import {
+    isHighLow,
+    getCurrentTick,
+    isBot,
+    getGrowthRatePercentage,
+    getTimePercentage,
+    isTurbosContract,
+} from '@deriv/shared';
 import ContractTypeCell from './contract-type-cell.jsx';
 import Button from '../../button';
 import Icon from '../../icon';
@@ -10,6 +17,8 @@ import Text from '../../text';
 import ProgressSlider from '../../progress-slider';
 import DesktopWrapper from '../../desktop-wrapper';
 import MobileWrapper from '../../mobile-wrapper';
+import ProgressBar from '../../progress-bar';
+// import { getContractDurationType } from '../../../../../'';
 
 const ContractCardHeader = ({
     contract_info,
@@ -19,36 +28,61 @@ const ContractCardHeader = ({
     has_progress_slider,
     id,
     is_mobile,
+    is_sold: is_contract_sold,
     is_sell_requested,
     is_valid_to_sell,
     onClickSell,
     server_time,
+    duration_type,
+    is_open_positions,
 }) => {
     const current_tick = contract_info.tick_count ? getCurrentTick(contract_info) : null;
-    const { underlying, multiplier, contract_type, shortcode, purchase_time, date_expiry, tick_count, is_sold } =
-        contract_info;
+    const {
+        growth_rate,
+        underlying,
+        multiplier,
+        contract_type,
+        shortcode,
+        purchase_time,
+        date_expiry,
+        date_start,
+        tick_count,
+        // tick_passed,
+    } = contract_info;
+    const is_sold = !!contract_info.is_sold || is_contract_sold;
+    const is_turbos = isTurbosContract(contract_type);
+    const progress_value = getTimePercentage(server_time, date_start, date_expiry) / 100;
+    const displayed_turbos = growth_rate && `${getGrowthRatePercentage(growth_rate)}%`;
+    const displayed_multiplier = multiplier && `x${multiplier}`;
+    const displayed_trade_param = is_turbos ? displayed_turbos : displayed_multiplier;
 
     return (
         <>
             <div
                 className={classNames('dc-contract-card__grid', 'dc-contract-card__grid-underlying-trade', {
-                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier,
+                    'dc-contract-card__grid-underlying-trade--mobile': is_mobile && !multiplier && !is_turbos,
                     'dc-contract-card__grid-underlying-trade--trader': !isBot(),
+                    'dc-contract-card__grid-underlying-trade--trader--turbos': is_turbos && is_open_positions,
+                    'dc-contract-card__grid-underlying-trade--trader--turbos-sold': is_turbos && is_sold,
                 })}
             >
                 <div id='dc-contract_card_underlying_label' className='dc-contract-card__underlying-name'>
                     <Icon icon={underlying ? `IcUnderlying${underlying}` : 'IcUnknown'} width={40} size={32} />
-                    <Text size='xxs' className='dc-contract-card__symbol' weight='bold'>
-                        {display_name || contract_info.display_name}
-                    </Text>
+                    {!is_open_positions && (
+                        <Text size='xxs' className='dc-contract-card__symbol' weight='bold'>
+                            {display_name || contract_info.display_name}
+                        </Text>
+                    )}
                 </div>
-                <div id='dc-contract_card_type_label' className='dc-contract-card__type'>
+                <div id='dc-contract_card_type_label' className={'dc-contract-card__type'}>
                     <ContractTypeCell
                         getContractTypeDisplay={getContractTypeDisplay}
                         is_high_low={isHighLow({ shortcode })}
-                        multiplier={multiplier}
+                        displayed_trade_param={displayed_trade_param}
                         type={contract_type}
+                        is_open_positions={is_open_positions}
                     />
+                    {is_turbos && is_open_positions && <ProgressBar label={duration_type} value={progress_value} />}
                 </div>
                 <MobileWrapper>
                     {is_valid_to_sell ? (
@@ -106,10 +140,13 @@ ContractCardHeader.propTypes = {
     getContractTypeDisplay: PropTypes.func,
     has_progress_slider: PropTypes.bool,
     is_mobile: PropTypes.bool,
+    is_sold: PropTypes.bool,
     is_sell_requested: PropTypes.bool,
     is_valid_to_sell: PropTypes.bool,
     onClickSell: PropTypes.func,
     server_time: PropTypes.object,
+    duration_type: PropTypes.string,
+    is_open_positions: PropTypes.bool,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 

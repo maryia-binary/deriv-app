@@ -60,16 +60,25 @@ const TurbosOpenCardBody = ({
                 <ContractCardItem
                     header={POTENTIAL_PROFIT_LOSS}
                     is_crypto={isCryptocurrency(currency)}
+                    is_loss={+total_profit < 0}
+                    is_won={+total_profit > 0}
                     className='dc-contract-card__buy-price'
                 >
-                    <Money amount={total_profit} currency={currency} />
+                    <div
+                        className={classNames({
+                            'dc-contract-card__buy-price--positive': total_profit > 0,
+                            'dc-contract-card__buy-price--negative': total_profit < 0,
+                        })}
+                    >
+                        <Money amount={total_profit} currency={currency} />
+                    </div>
                     <div
                         className={classNames('dc-contract-card__indicative--movement', {
                             'dc-contract-card__indicative--movement-complete': is_sold,
                         })}
                     >
-                        {status === 'profit' && <Icon icon='IcProfit' />}
-                        {status === 'loss' && <Icon icon='IcLoss' />}
+                        {total_profit > 0 && <Icon icon='IcProfit' />}
+                        {total_profit < 0 && <Icon icon='IcLoss' />}
                     </div>
                 </ContractCardItem>
                 <div className='dc-contract-card__limit-order-info'>
@@ -94,26 +103,6 @@ const TurbosOpenCardBody = ({
                     </ContractCardItem>
                 </div>
             </div>
-
-            {/* {!is_sold && (
-                <ContractCardItem
-                    className='dc-contract-card-item__total-profit-loss'
-                    header={TOTAL_PROFIT_LOSS}
-                    is_crypto={isCryptocurrency(currency)}
-                    is_loss={+total_profit < 0}
-                    is_won={+total_profit > 0}
-                >
-                    <Money amount={total_profit} currency={currency} />
-                    <div
-                        className={classNames('dc-contract-card__indicative--movement', {
-                            'dc-contract-card__indicative--movement-complete': is_sold,
-                        })}
-                    >
-                        {status === 'profit' && <Icon icon='IcProfit' />}
-                        {status === 'loss' && <Icon icon='IcLoss' />}
-                    </div>
-                </ContractCardItem>
-            )} */}
         </React.Fragment>
     );
 };

@@ -663,6 +663,38 @@ $side-padding: 1.2em;
                 }
             }
         }
+        &-turbos {
+            .data-list__item {
+                .dc-contract-card {
+                    background-color: var(--general-section-1);
+                    &-item__footer {
+                        background-color: var(--general-section-1);
+                    }
+                    &__wrapper {
+                        background-color: var(--general-section-1);
+                    }
+                }
+            }
+            .open-positions__data-list-footer {
+                &--content {
+                    justify-content: flex-start;
+                    /* postcss-bem-linter: ignore */
+                    .data-list__row-content {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-items: flex-start;
+                        position: relative;
+                        bottom: 2rem;
+                    }
+                }
+            }
+            .data-list__row-content {
+                left: 10rem;
+                display: flex;
+                position: relative;
+            }
+        }
         &__data-list {
             margin-top: 0.8rem;
         }

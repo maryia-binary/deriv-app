@@ -59,6 +59,7 @@ const MobileRowRenderer = ({
     is_footer,
     columns_map,
     server_time,
+    is_mobile,
     onClickCancel,
     onClickSell,
     measure,
@@ -103,6 +104,7 @@ const MobileRowRenderer = ({
                 contract_update={contract_update}
                 currency={currency}
                 is_multiplier
+                is_mobile={is_mobile}
                 is_link_disabled
                 is_open_positions={isTurbosContract(type)}
                 onClickCancel={onClickCancel}
@@ -332,6 +334,7 @@ const OpenPositions = ({
     is_loading,
     is_multiplier,
     is_turbos,
+    is_mobile,
     NotificationMessages,
     onClickCancel,
     onClickSell,
@@ -443,6 +446,7 @@ const OpenPositions = ({
             {...args}
             columns_map={columns_map}
             server_time={server_time}
+            is_mobile={is_mobile}
             onClickCancel={onClickCancel}
             onClickSell={onClickSell}
             {...props}
@@ -506,8 +510,8 @@ const OpenPositions = ({
             ) : (
                 <OpenPositionsTable
                     className={classNames('open-positions', {
-                        'open-positions-multiplier': is_multiplier,
-                        'open-positions-turbos': is_turbos,
+                        'open-positions-multiplier': is_mobile && is_multiplier_selected && has_multiplier_contract,
+                        'open-positions-turbos': is_mobile && is_turbos_selected && has_turbos_contract,
                     })}
                     columns={columns}
                     row_size={isMobile() ? 3 : 68}

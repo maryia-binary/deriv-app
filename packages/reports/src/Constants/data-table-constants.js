@@ -463,7 +463,7 @@ export const getTurbosOpenPositionsColumnsTemplate = ({ currency, onClickSell, g
         },
     },
     {
-        title: localize('Profit/loss'),
+        title: isMobile() ? localize('Profit/Loss on the last 50 contracts') : localize('Profit/loss'),
         col_index: 'profit',
         renderCellContent: ({ row_obj }) => {
             if (!row_obj.contract_info || !row_obj.contract_info.profit) return null;

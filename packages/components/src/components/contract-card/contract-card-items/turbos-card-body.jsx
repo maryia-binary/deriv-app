@@ -24,7 +24,7 @@ const TurbosCardBody = ({
     removeToast,
     setCurrentFocus,
     status,
-    is_mobile,
+    // is_mobile,
     progress_slider_mobile_el,
 }) => {
     const total_profit = getTotalProfit(contract_info);
@@ -37,7 +37,7 @@ const TurbosCardBody = ({
 
     return (
         <React.Fragment>
-            <div className={is_mobile ? 'dc-contract-card-items-wrapper--mobile' : 'dc-contract-card-items-wrapper'}>
+            <div className='dc-contract-card-items-wrapper'>
                 <ContractCardItem
                     className='dc-contract-card__stake'
                     header={is_sold ? PROFIT_LOSS : STAKE}
@@ -130,7 +130,7 @@ TurbosCardBody.propTypes = {
     getCardLabels: PropTypes.func,
     getContractById: PropTypes.func,
     is_sold: PropTypes.bool,
-    is_mobile: PropTypes.bool,
+    // is_mobile: PropTypes.bool,
     onMouseLeave: PropTypes.func,
     removeToast: PropTypes.func,
     progress_slider_mobile_el: PropTypes.node,

@@ -1,36 +1,31 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import { Icon, Text } from '@deriv/components';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
+import BarriersList from './barriers-list.jsx';
 
 const BarriersTable = ({
     barrier_1,
-    setChosenBarrier,
+    onChange,
     is_barriers_table_expanded,
     turbos_barrier_choices,
     toggleBarriersTable,
 }) => {
-    const [new_barrier, setNewBarrier] = useState(barrier_1);
+    const [chosen_barrier, setChosenBarrier] = React.useState(barrier_1);
+
     const changeBarrier = e => {
         e.stopPropagation();
-        setNewBarrier(e.target.innerText);
-        setChosenBarrier(e.target.innerText);
+        setChosenBarrier(e.target.id);
+        onChange({
+            target: {
+                name: 'barrier_1',
+                value: e.target.id,
+            },
+        });
     };
-    //TODO: remove slice after adding scroll
-    const barriers_list = turbos_barrier_choices.slice(0, 16).map(barrier => (
-        <li
-            key={barrier}
-            className={`trade-container__barriers-table__item ${
-                new_barrier === barrier ? 'trade-container__barriers-table__item--selected' : ''
-            }`}
-            onClick={changeBarrier}
-        >
-            {barrier}
-        </li>
-    ));
 
     return (
         <CSSTransition
@@ -55,7 +50,15 @@ const BarriersTable = ({
                     </div>
                 </div>
                 <div className='trade-container__barriers-table__text'>Distance to spot</div>
-                <ul className='trade-container__barriers-table__list'>{barriers_list}</ul>
+                <BarriersList
+                    base_class_name='trade-container__barriers-table__item'
+                    active_item_class_name='trade-container__barriers-table__item--selected'
+                    className='trade-container__barriers-table__list'
+                    list={turbos_barrier_choices}
+                    chosen_item={chosen_barrier}
+                    onClick={changeBarrier}
+                    hover_item_class_name='trade-container__barriers-table__item--highlight'
+                />
             </Fieldset>
         </CSSTransition>
     );
@@ -63,7 +66,7 @@ const BarriersTable = ({
 
 BarriersTable.propTypes = {
     barrier_1: PropTypes.string,
-    setChosenBarrier: PropTypes.func,
+    onChange: PropTypes.func,
     is_barriers_table_expanded: PropTypes.bool,
     turbos_barrier_choices: PropTypes.arrayOf(PropTypes.string),
     toggleBarriersTable: PropTypes.func,
@@ -71,6 +74,6 @@ BarriersTable.propTypes = {
 
 export default connect(({ modules }) => ({
     barrier_1: modules.trade.barrier_1,
-    setChosenBarrier: modules.trade.setChosenBarrier,
+    onChange: modules.trade.onChange,
     turbos_barrier_choices: modules.trade.turbos_barrier_choices,
 }))(BarriersTable);

@@ -378,7 +378,7 @@
             line-height: var(--text-lh-l);
             cursor: pointer;
 
-            &:hover:not(&--selected) {
+            &--highlight:hover:not(&--selected) {
                 background-color: var(--general-hover);
                 font-weight: var(--text-weight-bold);
             }

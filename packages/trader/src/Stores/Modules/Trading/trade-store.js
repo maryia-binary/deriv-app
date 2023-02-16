@@ -261,7 +261,6 @@ export default class TradeStore extends BaseStore {
             setPreviousSymbol: action.bound,
             setAllowEqual: action.bound,
             setIsTradeParamsExpanded: action.bound,
-            setChosenBarrier: action.bound,
             resetPreviousSymbol: action.bound,
             updateBarrierColor: action.bound,
             onHoverPurchase: action.bound,
@@ -572,10 +571,6 @@ export default class TradeStore extends BaseStore {
         ); // wait for store to be updated
         this.validateAllProperties(); // then run validation before sending proposal
         this.root_store.common.setSelectedContractType(this.contract_type);
-    }
-
-    setChosenBarrier(new_value) {
-        this.barrier_1 = new_value;
     }
 
     setPreviousSymbol(symbol) {

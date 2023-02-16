@@ -3,13 +3,14 @@ import React from 'react';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
-import { Icon, Text } from '@deriv/components';
+import { Icon, Text, ThemedScrollbars } from '@deriv/components';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import BarriersList from './barriers-list.jsx';
 
 const BarriersTable = ({
     barrier_1,
     onChange,
+    setHoveredBarrier,
     is_barriers_table_expanded,
     turbos_barrier_choices,
     toggleBarriersTable,
@@ -17,14 +18,29 @@ const BarriersTable = ({
     const [chosen_barrier, setChosenBarrier] = React.useState(barrier_1);
 
     const changeBarrier = e => {
+        if (e.target.id) {
+            e.stopPropagation();
+            setHoveredBarrier(null);
+            setChosenBarrier(e.target.id);
+            onChange({
+                target: {
+                    name: 'barrier_1',
+                    value: e.target.id,
+                },
+            });
+        }
+    };
+
+    const onMouseOver = e => {
         e.stopPropagation();
-        setChosenBarrier(e.target.id);
-        onChange({
-            target: {
-                name: 'barrier_1',
-                value: e.target.id,
-            },
-        });
+        if (e.target.id && chosen_barrier !== e.target.id) {
+            setHoveredBarrier(e.target.id);
+        }
+    };
+
+    const onMouseOut = e => {
+        e.stopPropagation();
+        setHoveredBarrier(null);
     };
 
     return (
@@ -50,15 +66,19 @@ const BarriersTable = ({
                     </div>
                 </div>
                 <div className='trade-container__barriers-table__text'>Distance to spot</div>
-                <BarriersList
-                    base_class_name='trade-container__barriers-table__item'
-                    active_item_class_name='trade-container__barriers-table__item--selected'
-                    className='trade-container__barriers-table__list'
-                    list={turbos_barrier_choices}
-                    chosen_item={chosen_barrier}
-                    onClick={changeBarrier}
-                    hover_item_class_name='trade-container__barriers-table__item--highlight'
-                />
+                <ThemedScrollbars>
+                    <BarriersList
+                        base_class_name='trade-container__barriers-table__item'
+                        active_item_class_name='trade-container__barriers-table__item--selected'
+                        className='trade-container__barriers-table__list'
+                        list={turbos_barrier_choices}
+                        chosen_item={chosen_barrier}
+                        onClick={changeBarrier}
+                        onMouseOut={onMouseOut}
+                        onMouseOver={onMouseOver}
+                        hover_item_class_name='trade-container__barriers-table__item--highlight'
+                    />
+                </ThemedScrollbars>
             </Fieldset>
         </CSSTransition>
     );
@@ -67,6 +87,7 @@ const BarriersTable = ({
 BarriersTable.propTypes = {
     barrier_1: PropTypes.string,
     onChange: PropTypes.func,
+    setHoveredBarrier: PropTypes.func,
     is_barriers_table_expanded: PropTypes.bool,
     turbos_barrier_choices: PropTypes.arrayOf(PropTypes.string),
     toggleBarriersTable: PropTypes.func,
@@ -75,5 +96,6 @@ BarriersTable.propTypes = {
 export default connect(({ modules }) => ({
     barrier_1: modules.trade.barrier_1,
     onChange: modules.trade.onChange,
+    setHoveredBarrier: modules.trade.setHoveredBarrier,
     turbos_barrier_choices: modules.trade.turbos_barrier_choices,
 }))(BarriersTable);

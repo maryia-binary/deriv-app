@@ -364,6 +364,7 @@
             text-align: var(--text-align-left);
         }
         &__list {
+            overflow-y: scroll;
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;

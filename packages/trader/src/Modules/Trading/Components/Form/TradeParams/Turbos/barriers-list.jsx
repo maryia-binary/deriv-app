@@ -29,9 +29,10 @@ const BarriersList = ({
     hover_item_class_name,
     list,
     onClick,
+    onMouseOver,
+    onMouseOut,
 }) => {
-    //TODO: remove slice after adding scroll
-    const barriers_list = list.slice(0, 16).map(barrier => {
+    const barriers_list = list.map(barrier => {
         const is_active = chosen_item === barrier;
         return (
             <BarriersItem
@@ -46,7 +47,7 @@ const BarriersList = ({
         );
     });
     return (
-        <ul className={className} onClick={onClick}>
+        <ul className={className} onClick={onClick} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
             {barriers_list}
         </ul>
     );
@@ -60,6 +61,8 @@ BarriersList.propTypes = {
     hover_item_class_name: PropTypes.string,
     list: PropTypes.arrayOf(PropTypes.string),
     onClick: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseOut: PropTypes.func,
 };
 
 export default BarriersList;

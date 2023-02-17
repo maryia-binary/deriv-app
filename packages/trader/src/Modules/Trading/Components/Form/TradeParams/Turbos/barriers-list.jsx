@@ -32,6 +32,7 @@ const BarriersList = ({
             </li>
         );
     });
+
     return <ul className={className}>{barriers_list}</ul>;
 };
 
@@ -47,4 +48,4 @@ BarriersList.propTypes = {
     onMouseLeave: PropTypes.func,
 };
 
-export default BarriersList;
+export default React.memo(BarriersList);

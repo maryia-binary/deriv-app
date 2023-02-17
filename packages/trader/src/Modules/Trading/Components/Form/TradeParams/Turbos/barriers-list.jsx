@@ -1,26 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const BarriersItem = ({ active_item_class_name, base_class_name, id, is_active, hover_item_class_name, value }) => {
-    const genetated_class_name = `${base_class_name} ${
-        is_active ? active_item_class_name : ''
-    } ${hover_item_class_name}`;
-    return (
-        <li id={id} className={genetated_class_name}>
-            {value}
-        </li>
-    );
-};
-
-BarriersItem.propTypes = {
-    active_item_class_name: PropTypes.string,
-    base_class_name: PropTypes.string,
-    id: PropTypes.string,
-    is_active: PropTypes.bool,
-    hover_item_class_name: PropTypes.string,
-    value: PropTypes.string,
-};
-
 const BarriersList = ({
     active_item_class_name,
     base_class_name,
@@ -29,28 +9,30 @@ const BarriersList = ({
     hover_item_class_name,
     list,
     onClick,
-    onMouseOver,
-    onMouseOut,
+    onMouseEnter,
+    onMouseLeave,
 }) => {
     const barriers_list = list.map(barrier => {
         const is_active = chosen_item === barrier;
+
+        const genetated_class_name = `${base_class_name} ${
+            is_active ? active_item_class_name : ''
+        } ${hover_item_class_name}`;
+
         return (
-            <BarriersItem
-                id={barrier}
+            <li
                 key={barrier}
-                is_active={is_active}
-                hover_item_class_name={hover_item_class_name}
-                base_class_name={base_class_name}
-                active_item_class_name={active_item_class_name}
-                value={barrier}
-            />
+                id={barrier}
+                className={genetated_class_name}
+                onClick={onClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                {barrier}
+            </li>
         );
     });
-    return (
-        <ul className={className} onClick={onClick} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-            {barriers_list}
-        </ul>
-    );
+    return <ul className={className}>{barriers_list}</ul>;
 };
 
 BarriersList.propTypes = {
@@ -61,8 +43,8 @@ BarriersList.propTypes = {
     hover_item_class_name: PropTypes.string,
     list: PropTypes.arrayOf(PropTypes.string),
     onClick: PropTypes.func,
-    onMouseOver: PropTypes.func,
-    onMouseOut: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
 };
 
 export default BarriersList;

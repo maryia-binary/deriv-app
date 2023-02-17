@@ -141,14 +141,14 @@ export const getContractTypesConfig: TGetContractTypesConfig = symbol => ({
         trade_types: ['TURBOSLONG'],
         basis: ['stake'],
         barrier_count: 1,
-        components: ['barrier', 'take_profit'],
+        components: ['barrier_selector', 'take_profit'],
     },
     turbosshort: {
         title: localize('Short'),
         trade_types: ['TURBOSSHORT'],
         basis: ['stake'],
         barrier_count: 1,
-        components: ['barrier', 'take_profit'],
+        components: ['barrier_selector', 'take_profit'],
     },
 });
 

@@ -38,7 +38,6 @@ import { setLimitOrderBarriers } from './Helpers/limit-orders';
 import { ChartBarrierStore } from '../SmartChart/chart-barrier-store';
 import { BARRIER_COLORS, BARRIER_LINE_STYLES } from '../SmartChart/Constants/barriers';
 import BaseStore from '../../base-store';
-import { getTurbosColor } from './Helpers/turbos-utils';
 
 const store_name = 'trade_store';
 const g_subscribers_map = {}; // blame amin.m
@@ -694,7 +693,7 @@ export default class TradeStore extends BaseStore {
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;
-            const turbos_color = this.hovered_barrier ? getTurbosColor(contract_type) : BARRIER_COLORS.GRAY;
+            const turbos_hovered_color = contract_type === 'TURBOSSHORT' ? BARRIER_COLORS.RED : BARRIER_COLORS.GREEN;
 
             // create barrier only when it's available in response
             this.main_barrier = new ChartBarrierStore(
@@ -702,7 +701,7 @@ export default class TradeStore extends BaseStore {
                 low_barrier,
                 this.onChartBarrierChange,
                 {
-                    color: isTurbosContract(contract_type) ? turbos_color : color,
+                    color: isTurbosContract(contract_type) && this.hovered_barrier ? turbos_hovered_color : color,
                     line_style: this.hovered_barrier && BARRIER_LINE_STYLES.DASHED,
                     not_draggable: isTurbosContract(contract_type),
                 }

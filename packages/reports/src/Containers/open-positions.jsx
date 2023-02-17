@@ -468,6 +468,40 @@ const OpenPositions = ({
         setContractTypeValue(e.target.value);
     };
 
+    const getOpenPositionsTable = () => {
+        if (is_options_selected)
+            return (
+                <OpenPositionsTable
+                    is_empty={active_positions_filtered.length === 0}
+                    className='open-positions'
+                    columns={columns}
+                    {...shared_props}
+                    row_size={isMobile() ? 5 : 63}
+                />
+            );
+        if (is_turbos_selected)
+            return (
+                <OpenPositionsTable
+                    className={classNames('open-positions', {
+                        'open-positions-turbos': is_mobile,
+                    })}
+                    columns={columns}
+                    is_empty={active_positions_filtered.length === 0}
+                    row_size={isMobile() ? 5 : 63}
+                    {...shared_props}
+                />
+            );
+        return (
+            <OpenPositionsTable
+                className='open-positions-multiplier open-positions'
+                columns={columns}
+                row_size={isMobile() ? 3 : 68}
+                is_empty={active_positions_filtered.length === 0}
+                {...shared_props}
+            />
+        );
+    };
+
     return (
         <React.Fragment>
             <NotificationMessages />
@@ -499,26 +533,7 @@ const OpenPositions = ({
                 </React.Fragment>
             )}
 
-            {is_options_selected ? (
-                <OpenPositionsTable
-                    is_empty={active_positions_filtered.length === 0}
-                    className='open-positions'
-                    columns={columns}
-                    {...shared_props}
-                    row_size={isMobile() ? 5 : 63}
-                />
-            ) : (
-                <OpenPositionsTable
-                    className={classNames('open-positions', {
-                        'open-positions-multiplier': is_mobile && is_multiplier_selected && has_multiplier_contract,
-                        'open-positions-turbos': is_mobile && is_turbos_selected && has_turbos_contract,
-                    })}
-                    columns={columns}
-                    row_size={isMobile() ? 3 : 68}
-                    is_empty={active_positions_filtered.length === 0}
-                    {...shared_props}
-                />
-            )}
+            {getOpenPositionsTable()}
         </React.Fragment>
     );
 };

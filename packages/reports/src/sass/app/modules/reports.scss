@@ -686,6 +686,12 @@ $side-padding: 1.2em;
                         justify-items: flex-start;
                         position: relative;
                         bottom: 2rem;
+                        left: 12rem;
+                    }
+                    .data-list__row-title {
+                        font-size: 1.4rem;
+                        position: relative;
+                        right: 2rem;
                     }
                 }
             }

@@ -24,7 +24,6 @@ const TurbosCardBody = ({
     removeToast,
     setCurrentFocus,
     status,
-    // is_mobile,
     progress_slider_mobile_el,
 }) => {
     const total_profit = getTotalProfit(contract_info);
@@ -130,7 +129,6 @@ TurbosCardBody.propTypes = {
     getCardLabels: PropTypes.func,
     getContractById: PropTypes.func,
     is_sold: PropTypes.bool,
-    // is_mobile: PropTypes.bool,
     onMouseLeave: PropTypes.func,
     removeToast: PropTypes.func,
     progress_slider_mobile_el: PropTypes.node,

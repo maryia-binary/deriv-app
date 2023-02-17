@@ -345,7 +345,6 @@ const OpenPositions = ({
     const [has_multiplier_contract, setMultiplierContract] = React.useState(false);
     const [has_turbos_contract, setTurbosContract] = React.useState(
         active_positions.some(p => isTurbosContract(p.contract_info?.contract_type))
-        // false
     );
     const [contract_type_value, setContractTypeValue] = React.useState(is_multiplier ? 'Multipliers' : 'Options');
     const previous_active_positions = usePrevious(active_positions);

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconTradeTypes from '../../icon-trade-types';
-// import { isTurbosContract } from '@deriv/shared';
 
 const ContractTypeCell = ({ displayed_trade_param, getContractTypeDisplay, is_high_low, type, is_open_positions }) => (
     <div className='dc-contract-type'>

@@ -455,15 +455,15 @@ export const getTurbosOpenPositionsColumnsTemplate = ({ currency, onClickSell, g
     },
 
     {
-        title: localize('Stake'),
-        col_index: 'buy_price',
+        title: isMobile() ? localize('Total stake') : localize('Stake'),
+        col_index: 'purchase',
         renderCellContent: ({ row_obj }) => {
             if (!row_obj.contract_info || !row_obj.purchase) return '-';
             return <Money amount={row_obj.purchase} currency={currency} />;
         },
     },
     {
-        title: isMobile() ? localize('Profit/Loss on the last 50 contracts') : localize('Profit/loss'),
+        title: isMobile() ? localize('Total profit/Loss') : localize('Profit/loss'),
         col_index: 'profit',
         renderCellContent: ({ row_obj }) => {
             if (!row_obj.contract_info || !row_obj.contract_info.profit) return null;

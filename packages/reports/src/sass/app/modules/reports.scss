@@ -664,41 +664,30 @@ $side-padding: 1.2em;
             }
         }
         &-turbos {
-            .data-list__item {
-                .dc-contract-card {
-                    background-color: var(--general-section-1);
-                    &-item__footer {
+            .data-list {
+                &__item {
+                    .dc-contract-card {
                         background-color: var(--general-section-1);
-                    }
-                    &__wrapper {
-                        background-color: var(--general-section-1);
+                        &-item__footer {
+                            background-color: var(--general-section-1);
+                        }
+                        &__wrapper {
+                            background-color: var(--general-section-1);
+                        }
                     }
                 }
-            }
-            .open-positions__data-list-footer {
-                &--content {
-                    justify-content: flex-start;
-                    /* postcss-bem-linter: ignore */
-                    .data-list__row-content {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        justify-items: flex-start;
+                &__row {
+                    &-content {
+                        bottom: 0.6rem;
                         position: relative;
-                        bottom: 2rem;
-                        left: 12rem;
+                        font-weight: bold;
+                        font-size: 1rem;
                     }
-                    .data-list__row-title {
-                        font-size: 1.4rem;
-                        position: relative;
-                        right: 2rem;
+                    &-title {
+                        font-weight: bold;
+                        font-size: 1rem;
                     }
                 }
-            }
-            .data-list__row-content {
-                left: 10rem;
-                display: flex;
-                position: relative;
             }
         }
         &__data-list {

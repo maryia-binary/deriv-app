@@ -99,6 +99,7 @@ const ContractCardBody = ({
                 onMouseLeave={onMouseLeave}
                 status={status}
                 is_mobile={is_mobile}
+                is_turbos={is_turbos}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
                 progress_slider_mobile_el={progress_slider_mobile_el}

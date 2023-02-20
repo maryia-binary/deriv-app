@@ -10,7 +10,6 @@ import MobileWrapper from '../../mobile-wrapper';
 import Money from '../../money';
 import { ResultStatusIcon } from '../result-overlay/result-overlay.jsx';
 import ProgressSliderMobile from '../../progress-slider-mobile';
-import TurbosOpenCardBody from './turbos-open-card-body.jsx';
 import MultiplierCardBody from './multiplier-card-body.jsx';
 import TurbosCardBody from './turbos-card-body.jsx';
 
@@ -28,7 +27,7 @@ const ContractCardBody = ({
     is_mobile,
     is_multiplier,
     is_turbos,
-    // is_positions,
+    is_positions,
     is_sold,
     onMouseLeave,
     removeToast,
@@ -83,7 +82,7 @@ const ContractCardBody = ({
                 toggleCancellationWarning={toggleCancellationWarning}
             />
         );
-    } else if (is_turbos && !is_open_positions) {
+    } else if (is_turbos) {
         card_body = (
             <TurbosCardBody
                 addToast={addToast}
@@ -99,29 +98,9 @@ const ContractCardBody = ({
                 onMouseLeave={onMouseLeave}
                 status={status}
                 is_mobile={is_mobile}
-                is_turbos={is_turbos}
-                removeToast={removeToast}
-                setCurrentFocus={setCurrentFocus}
-                progress_slider_mobile_el={progress_slider_mobile_el}
-            />
-        );
-    } else if (is_turbos && is_open_positions) {
-        card_body = (
-            <TurbosOpenCardBody
-                addToast={addToast}
-                connectWithContractUpdate={connectWithContractUpdate}
-                contract_info={contract_info}
-                contract_update={contract_update}
-                currency={currency}
-                current_focus={current_focus}
-                error_message_alignment={error_message_alignment}
-                getCardLabels={getCardLabels}
-                getContractById={getContractById}
-                is_sold={is_sold}
-                onMouseLeave={onMouseLeave}
-                status={status}
-                is_mobile={is_mobile}
                 is_open_positions={is_open_positions}
+                is_positions={is_positions}
+                is_turbos={is_turbos}
                 removeToast={removeToast}
                 setCurrentFocus={setCurrentFocus}
                 progress_slider_mobile_el={progress_slider_mobile_el}
@@ -214,7 +193,7 @@ ContractCardBody.propTypes = {
     is_mobile: PropTypes.bool,
     is_multiplier: PropTypes.bool,
     is_turbos: PropTypes.bool,
-    // is_positions: PropTypes.bool,
+    is_positions: PropTypes.bool,
     is_sold: PropTypes.bool,
     onMouseLeave: PropTypes.func,
     removeToast: PropTypes.func,

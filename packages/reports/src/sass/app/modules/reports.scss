@@ -653,27 +653,6 @@ $side-padding: 1.2em;
 
                 /* postcss-bem-linter: ignore */
                 &--content {
-                    padding: 0 1.6rem;
-                    display: grid;
-                    grid-template-columns: 0.7fr 1fr;
-
-                    /* postcss-bem-linter: ignore */
-                    .profit {
-                        align-items: flex-start;
-                    }
-                }
-            }
-        }
-        &-accumulator {
-            & .open-positions__data-list-footer {
-                height: 48px;
-                min-height: 48px;
-                font-weight: bold;
-                align-items: center;
-                padding: 0;
-
-                /* postcss-bem-linter: ignore */
-                &--content {
                     flex: 1;
                     padding: 0.8rem 1.6rem 0;
                     display: flex;

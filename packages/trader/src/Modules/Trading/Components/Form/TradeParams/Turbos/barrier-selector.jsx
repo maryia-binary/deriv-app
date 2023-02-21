@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import { localize } from '@deriv/translations';
+import { Localize, localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import { Icon, InputField, Text, ThemedScrollbars } from '@deriv/components';
@@ -19,6 +19,20 @@ const BarrierSelector = ({
 }) => {
     const [selected_barrier, setSelectedBarrier] = React.useState(barrier_1);
     const [is_barriers_table_expanded, setIsBarriersTableExpanded] = React.useState(false);
+
+    const header_tooltip_text = (
+        <React.Fragment>
+            <p>
+                <span style={{ fontWeight: 'bold' }}>For Long: </span>You will earn profit if the market stays above the
+                entry spot and doesn&apos;t cross the barrier.
+            </p>
+            <br />
+            <p>
+                <span style={{ fontWeight: 'bold' }}>For Short: </span>You will earn profit if the market stays below
+                the entry spot and doesn&apos;t cross the barrier.
+            </p>
+        </React.Fragment>
+    );
 
     const toggleBarriersTable = () => setIsBarriersTableExpanded(!is_barriers_table_expanded);
 
@@ -48,7 +62,7 @@ const BarrierSelector = ({
 
     return (
         <React.Fragment>
-            {is_barriers_table_expanded ? (
+            {is_barriers_table_expanded && (
                 <CSSTransition
                     appear
                     in={is_barriers_table_expanded}
@@ -86,31 +100,35 @@ const BarrierSelector = ({
                         </ThemedScrollbars>
                     </Fieldset>
                 </CSSTransition>
-            ) : (
-                //TODO: remove Fieldset below after creating component for collapsed barrier
-                <Fieldset className='trade-container__fieldset trade-container__barriers' header='Barrier' is_center>
-                    <div onClick={toggleBarriersTable}>
-                        <InputField
-                            id='dt_barrier_1_input'
-                            type='number'
-                            name='barrier_1'
-                            value={barrier_1}
-                            className='trade-container__barriers-single'
-                            classNameInput={classNames(
-                                'trade-container__input',
-                                'trade-container__barriers-input',
-                                `trade-container__barriers-single-input`
-                            )}
-                            current_focus={current_focus}
-                            onChange={onChange}
-                            error_messages={validation_errors.barrier_1 || []}
-                            is_float
-                            is_signed
-                            setCurrentFocus={setCurrentFocus}
-                        />
-                    </div>
-                </Fieldset>
             )}
+            <Fieldset
+                className='trade-container__fieldset trade-container__barriers'
+                header={localize('Barrier')}
+                is_center
+                header_tooltip={<Localize i18n_default_text={header_tooltip_text} />}
+            >
+                <div onClick={toggleBarriersTable} className='trade-container__barriers__wrapper'>
+                    <div className='trade-container__barriers-spot'>{localize('Spot')}</div>
+                    <InputField
+                        id='dt_barrier_1_input'
+                        type='number'
+                        name='barrier_1'
+                        value={barrier_1}
+                        className='trade-container__barriers-single'
+                        classNameInput={classNames(
+                            'trade-container__input',
+                            'trade-container__barriers-input',
+                            `trade-container__barriers-single-input`
+                        )}
+                        current_focus={current_focus}
+                        onChange={onChange}
+                        error_messages={validation_errors.barrier_1 || []}
+                        is_float
+                        is_signed
+                        setCurrentFocus={setCurrentFocus}
+                    />
+                </div>
+            </Fieldset>
         </React.Fragment>
     );
 };

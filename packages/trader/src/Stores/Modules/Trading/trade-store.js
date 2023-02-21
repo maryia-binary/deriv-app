@@ -297,7 +297,7 @@ export default class TradeStore extends BaseStore {
             clientInitListener: action.bound,
             networkStatusChangeListener: action.bound,
             themeChangeListener: action.bound,
-            turbos_barrier_choices: observable,
+            turbos_barrier_choices: observable.struct,
             resetErrorServices: action.bound,
             onMount: action.bound,
             manageMxMltRemovalNotification: action.bound,

@@ -44,6 +44,8 @@ const BarrierSelector = ({
         setHoveredBarrier(null);
     };
 
+    React.useEffect(() => setSelectedBarrier(barrier_1), [barrier_1]);
+
     return (
         <React.Fragment>
             {is_barriers_table_expanded ? (

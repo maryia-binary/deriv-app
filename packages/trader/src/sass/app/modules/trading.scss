@@ -427,6 +427,14 @@
             align-self: flex-end;
         }
     }
+    &__tabs {
+        border-radius: 4px;
+        padding: 0.8rem;
+        margin-bottom: 0.4rem;
+        background-color: var(--general-section-1);
+        border-color: var(--general-section-1);
+        color: var(--text-general);
+    }
     &__deal-cancellation-popover {
         width: 28rem;
     }

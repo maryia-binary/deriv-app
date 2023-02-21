@@ -5,6 +5,7 @@ import Amount from 'Modules/Trading/Components/Form/TradeParams/amount.jsx';
 import Barrier from 'Modules/Trading/Components/Form/TradeParams/barrier.jsx';
 import Duration from 'Modules/Trading/Components/Form/TradeParams/Duration';
 import LastDigit from 'Modules/Trading/Components/Form/TradeParams/last-digit.jsx';
+import TurbosTab from 'Modules/Trading/Components/Form/TradeParams/Turbos/turbos-tab.jsx';
 import CancelDeal from 'Modules/Trading/Components/Form/TradeParams/Multiplier/cancel-deal.jsx';
 import StopLoss from 'Modules/Trading/Components/Form/TradeParams/Multiplier/stop-loss.jsx';
 import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/take-profit.jsx';
@@ -18,6 +19,7 @@ const TradeParams = ({ form_components, is_minimized }) => {
     return (
         <React.Fragment>
             {isVisible('duration') && <Duration key={'duration'} is_minimized={is_minimized} />}
+            {isVisible('tabs') && <TurbosTab key={'tabs'} is_minimized={is_minimized} />}
             {isVisible('barrier') && <Barrier key={'barrier'} is_minimized={is_minimized} />}
             {isVisible('last_digit') && <LastDigit key={'last_digit'} is_minimized={is_minimized} />}
             {isVisible('amount') && <Amount key={'amount'} is_minimized={is_minimized} />}

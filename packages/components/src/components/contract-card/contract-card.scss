@@ -396,11 +396,13 @@
                         height: calc(100% - 0.9rem);
                         border: 0.1rem solid #d6dadb;
                     }
-                    &-item__footer {
-                        background-color: var(--general-section-1);
-                    }
-                    &-item__body {
-                        padding-left: 0;
+                    &-item {
+                        &__footer {
+                            background-color: var(--general-section-1);
+                        }
+                        &__body {
+                            padding-left: 0;
+                        }
                     }
                 }
             }

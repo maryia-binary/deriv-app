@@ -79,7 +79,7 @@ const ContractCardHeader = ({
                         </Text>
                     )}
                 </div>
-                <div id='dc-contract_card_type_label' className={'dc-contract-card__type'}>
+                <div id='dc-contract_card_type_label' className='dc-contract-card__type'>
                     <ContractTypeCell
                         displayed_trade_param={displayed_trade_param}
                         getContractTypeDisplay={getContractTypeDisplay}
@@ -88,7 +88,7 @@ const ContractCardHeader = ({
                         is_open_positions={is_open_positions}
                     />
                 </div>
-                <div className={'dc-contract-card__type--progress-bar'}>
+                <div className='dc-contract-card__type--progress-bar'>
                     {is_turbos && is_open_positions && <ProgressBar label={duration_type} value={progress_value} />}
                 </div>
                 <MobileWrapper>

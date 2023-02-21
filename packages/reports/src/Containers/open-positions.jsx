@@ -393,7 +393,6 @@ const OpenPositions = ({
     if (error) return <p>{error}</p>;
 
     const is_multiplier_selected = contract_type_value === 'Multipliers';
-    const is_options_selected = contract_type_value === 'Options';
     const is_turbos_selected = contract_type_value === 'Turbos';
 
     const active_positions_filtered = active_positions?.filter(p => {
@@ -468,34 +467,23 @@ const OpenPositions = ({
     };
 
     const getOpenPositionsTable = () => {
-        if (is_options_selected)
-            return (
-                <OpenPositionsTable
-                    is_empty={active_positions_filtered.length === 0}
-                    className='open-positions'
-                    columns={columns}
-                    {...shared_props}
-                    row_size={isMobile() ? 5 : 63}
-                />
-            );
-        if (is_turbos_selected)
-            return (
-                <OpenPositionsTable
-                    className={classNames('open-positions', {
-                        'open-positions-turbos': is_mobile,
-                    })}
-                    columns={columns}
-                    is_empty={active_positions_filtered.length === 0}
-                    row_size={isMobile() ? 5 : 63}
-                    {...shared_props}
-                />
-            );
+        let classname = 'open-positions';
+        let row_size = isMobile() ? 5 : 63;
+
+        if (is_turbos_selected) {
+            classname = classNames('open-positions', {
+                'open-positions-turbos': is_mobile,
+            });
+        } else if (is_multiplier_selected) {
+            classname = 'open-positions-multiplier open-positions';
+            row_size = isMobile() ? 3 : 68;
+        }
         return (
             <OpenPositionsTable
-                className='open-positions-multiplier open-positions'
+                className={classname}
                 columns={columns}
-                row_size={isMobile() ? 3 : 68}
                 is_empty={active_positions_filtered.length === 0}
+                row_size={row_size}
                 {...shared_props}
             />
         );

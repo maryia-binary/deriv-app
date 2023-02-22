@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { localize } from '@deriv/translations';
+import { Localize, localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import { Icon, Text, ThemedScrollbars } from '@deriv/components';
@@ -13,22 +13,16 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
 
     const header_tooltip_text = (
         <React.Fragment>
-            <Text size='xxs' as='p' className='trade-container__barriers-tooltip'>
-                <Text size='xxs' weight='bold'>
-                    {localize('For Long: ')}
-                </Text>
-                {localize(
-                    "You will earn profit if the market stays above the entry spot and doesn't cross the barrier."
-                )}
-            </Text>
-            <Text size='xxs' as='p'>
-                <Text size='xxs' weight='bold'>
-                    {localize('For Short: ')}
-                </Text>
-                {localize(
-                    "You will earn profit if the market stays below the entry spot and doesn't cross the barrier."
-                )}
-            </Text>
+            <div className='trade-container__barriers-tooltip'>
+                <Localize
+                    i18n_default_text="<0>For Long: </0>You will earn profit if the market stays above the entry spot and doesn't cross the barrier."
+                    components={[<Text key={0} weight='bold' size='xxs' />]}
+                />
+            </div>
+            <Localize
+                i18n_default_text="<0>For Short: </0>You will earn profit if the market stays below the entry spot and doesn't cross the barrier."
+                components={[<Text key={0} weight='bold' size='xxs' />]}
+            />
         </React.Fragment>
     );
 

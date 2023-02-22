@@ -3,31 +3,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonToggle } from '@deriv/components';
 import { localize } from '@deriv/translations';
-// import { connect } from 'Stores/connect';
+import { connect } from 'Stores/connect';
 
-const TurbosTab = ({ className }) => {
-    const [selectedValue, setSelectedValue] = React.useState({
-        name: localize('Long'),
-        value: 'long',
-    });
+const TurbosTab = ({ className, onChange }) => {
+    const [selectedValue, setSelectedValue] = React.useState(
+        // {
+        // name: localize('Long'),
+        // value: 'turboslong',
+        // }
+        ''
+    );
     const expiry_list = [
         {
             text: localize('Long'),
-            value: 'long',
+            value: 'turboslong',
         },
         {
             text: localize('Short'),
-            value: 'short',
+            value: 'turbosshort',
         },
     ];
-    const onChange = e => {
+    const onChanges = e => {
         if (e.target.value !== selectedValue.value) {
+            const name = 'contract_type';
             const result = expiry_list.find(exp => exp.value === e.target.value);
             setSelectedValue(prevState => ({
                 ...prevState,
                 name: result ? result.text : e.target.name,
                 value: e.target.value,
             }));
+            onChange({ target: { name, value: selectedValue.value || e.target.value } });
         }
     };
 
@@ -36,9 +41,9 @@ const TurbosTab = ({ className }) => {
             <ButtonToggle
                 id='dt_advanced_duration_toggle'
                 buttons_arr={expiry_list}
-                name={selectedValue.name}
+                name={'contract_type'}
                 is_animated={true}
-                onChange={e => onChange(e)}
+                onChange={e => onChanges(e)}
                 value={selectedValue.value}
             />
         </div>
@@ -47,10 +52,9 @@ const TurbosTab = ({ className }) => {
 
 TurbosTab.propTypes = {
     className: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
-// export default connect(({ modules }) => ({
-//     currency: modules.trade.currency,
-// }))(TurbosTab);
-
-export default TurbosTab;
+export default connect(({ modules }) => ({
+    onChange: modules.trade.onChange,
+}))(TurbosTab);

@@ -293,6 +293,18 @@
         &:first-child {
             padding-right: 0.8rem;
         }
+        &-value {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.4rem;
+            background: var(--fill-normal);
+            border-radius: 0.4rem;
+            width: 100%;
+            height: 3.2rem;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
         &-input {
             padding-left: 0.3rem;
         }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Localize, localize } from '@deriv/translations';
+import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import { Icon, Text, ThemedScrollbars } from '@deriv/components';
@@ -13,15 +13,22 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
 
     const header_tooltip_text = (
         <React.Fragment>
-            <p>
-                <span style={{ fontWeight: 'bold' }}>For Long: </span>You will earn profit if the market stays above the
-                entry spot and doesn&apos;t cross the barrier.
-            </p>
-            <br />
-            <p>
-                <span style={{ fontWeight: 'bold' }}>For Short: </span>You will earn profit if the market stays below
-                the entry spot and doesn&apos;t cross the barrier.
-            </p>
+            <Text size='xxs' as='p' className='trade-container__barriers-tooltip'>
+                <Text size='xxs' weight='bold'>
+                    {localize('For Long: ')}
+                </Text>
+                {localize(
+                    "You will earn profit if the market stays above the entry spot and doesn't cross the barrier."
+                )}
+            </Text>
+            <Text size='xxs' as='p'>
+                <Text size='xxs' weight='bold'>
+                    {localize('For Short: ')}
+                </Text>
+                {localize(
+                    "You will earn profit if the market stays below the entry spot and doesn't cross the barrier."
+                )}
+            </Text>
         </React.Fragment>
     );
 
@@ -89,7 +96,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 className='trade-container__fieldset trade-container__barriers'
                 header={localize('Barrier')}
                 is_center
-                header_tooltip={<Localize i18n_default_text={header_tooltip_text} />}
+                header_tooltip={header_tooltip_text}
             >
                 <div onClick={toggleBarriersTable} className='trade-container__barriers__wrapper'>
                     <div className='trade-container__barriers-spot'>{localize('Spot')}</div>

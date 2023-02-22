@@ -87,15 +87,15 @@ const BarrierSelector = ({
                         <div className='trade-container__barriers-table__text'>Distance to spot</div>
                         <ThemedScrollbars>
                             <BarriersList
-                                base_class_name='trade-container__barriers-table__item'
-                                active_item_class_name='trade-container__barriers-table__item--selected'
+                                base_classname='trade-container__barriers-table__item'
+                                active_item_classname='trade-container__barriers-table__item--selected'
                                 className='trade-container__barriers-table__list'
                                 list={turbos_barrier_choices}
-                                chosen_item={selected_barrier}
+                                selected_item={selected_barrier}
                                 onClick={changeBarrier}
                                 onMouseLeave={onMouseLeave}
                                 onMouseEnter={onMouseEnter}
-                                hover_item_class_name='trade-container__barriers-table__item--highlight'
+                                hover_item_classname='trade-container__barriers-table__item--highlight'
                             />
                         </ThemedScrollbars>
                     </Fieldset>

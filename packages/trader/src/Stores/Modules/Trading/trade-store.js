@@ -26,12 +26,12 @@ import {
 } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { getValidationRules, getMultiplierValidationRules } from 'Stores/Modules/Trading/Constants/validation-rules';
+import { getHoveredColor } from './Helpers/barrier-utils';
 import { ContractType } from 'Stores/Modules/Trading/Helpers/contract-type';
 import { isDigitContractType, isDigitTradeType } from 'Modules/Trading/Helpers/digits';
 import ServerTime from '_common/base/server_time';
 import { processPurchase } from './Actions/purchase';
 import * as Symbol from './Actions/symbol';
-
 import { processTradeParams } from './Helpers/process';
 import { createProposalRequests, getProposalErrorField, getProposalInfo } from './Helpers/proposal';
 import { setLimitOrderBarriers } from './Helpers/limit-orders';
@@ -693,7 +693,6 @@ export default class TradeStore extends BaseStore {
 
         if (isBarrierSupported(contract_type)) {
             const color = this.root_store.ui.is_dark_mode_on ? BARRIER_COLORS.DARK_GRAY : BARRIER_COLORS.GRAY;
-            const turbos_hovered_color = contract_type === 'TURBOSSHORT' ? BARRIER_COLORS.RED : BARRIER_COLORS.GREEN;
 
             // create barrier only when it's available in response
             this.main_barrier = new ChartBarrierStore(
@@ -701,7 +700,7 @@ export default class TradeStore extends BaseStore {
                 low_barrier,
                 this.onChartBarrierChange,
                 {
-                    color: isTurbosContract(contract_type) && this.hovered_barrier ? turbos_hovered_color : color,
+                    color: this.hovered_barrier ? getHoveredColor(contract_type) : color,
                     line_style: this.hovered_barrier && BARRIER_LINE_STYLES.DASHED,
                     not_draggable: isTurbosContract(contract_type),
                 }

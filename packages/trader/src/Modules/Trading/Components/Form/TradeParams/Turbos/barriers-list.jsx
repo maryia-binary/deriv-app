@@ -2,22 +2,20 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const BarriersList = ({
-    active_item_class_name,
-    base_class_name,
-    chosen_item,
+    active_item_classname,
+    base_classname,
+    selected_item,
     className,
-    hover_item_class_name,
+    hover_item_classname,
     list,
     onClick,
     onMouseEnter,
     onMouseLeave,
 }) => {
     const barriers_list = list.map(barrier => {
-        const is_active = chosen_item === barrier;
-
-        const genetated_class_name = `${base_class_name} ${
-            is_active ? active_item_class_name : ''
-        } ${hover_item_class_name}`;
+        const genetated_class_name = `${base_classname} ${
+            selected_item === barrier ? active_item_classname : ''
+        } ${hover_item_classname}`;
 
         return (
             <li
@@ -37,11 +35,11 @@ const BarriersList = ({
 };
 
 BarriersList.propTypes = {
-    active_item_class_name: PropTypes.string,
-    base_class_name: PropTypes.string,
-    chosen_item: PropTypes.string,
+    active_item_classname: PropTypes.string,
+    base_classname: PropTypes.string,
+    selected_item: PropTypes.string,
     className: PropTypes.string,
-    hover_item_class_name: PropTypes.string,
+    hover_item_classname: PropTypes.string,
     list: PropTypes.arrayOf(PropTypes.string),
     onClick: PropTypes.func,
     onMouseEnter: PropTypes.func,

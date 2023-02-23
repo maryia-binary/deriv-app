@@ -28,22 +28,22 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
 
     const toggleBarriersTable = () => setIsBarriersTableExpanded(!is_barriers_table_expanded);
 
-    const changeBarrier = id => {
+    const onBarrierClick = barrier => {
         setHoveredBarrier(null);
-        setSelectedBarrier(id);
+        setSelectedBarrier(barrier);
         onChange({
             target: {
                 name: 'barrier_1',
-                value: id,
+                value: barrier,
             },
         });
     };
 
-    const onMouseEnter = id => setHoveredBarrier(id);
-
-    const onMouseLeave = () => setHoveredBarrier(null);
-
-    React.useEffect(() => setSelectedBarrier(barrier_1), [barrier_1]);
+    React.useEffect(() => {
+        if (barrier_1 !== selected_barrier) {
+            setSelectedBarrier(barrier_1);
+        }
+    }, [barrier_1, selected_barrier]);
 
     return (
         <React.Fragment>
@@ -77,9 +77,8 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                                 className='trade-container__barriers-table__list'
                                 list={turbos_barrier_choices}
                                 selected_item={selected_barrier}
-                                onClickCb={changeBarrier}
-                                onMouseLeaveCb={onMouseLeave}
-                                onMouseEnterCb={onMouseEnter}
+                                onClick={onBarrierClick}
+                                onHover={barrier => setHoveredBarrier(barrier)}
                                 hover_item_classname='trade-container__barriers-table__item--highlight'
                             />
                         </ThemedScrollbars>

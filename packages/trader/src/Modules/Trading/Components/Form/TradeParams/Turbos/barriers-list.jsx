@@ -8,23 +8,16 @@ const BarriersList = ({
     className,
     hover_item_classname,
     list,
-    onClickCb,
-    onMouseEnterCb,
-    onMouseLeaveCb,
+    onClick,
+    onHover,
 }) => {
-    const onMouseEnter = e => {
-        if (e.target.id && selected_item !== e.target.id) {
-            onMouseEnterCb(e.target.id);
+    const onMouseEnter = barrier => {
+        if (selected_item !== barrier) {
+            onHover(barrier);
         }
     };
-
-    const onMouseLeave = () => {
-        onMouseLeaveCb();
-    };
-
-    const onClick = e => {
-        e.stopPropagation();
-        onClickCb(e.target.id);
+    const handleClick = barrier => {
+        onClick(barrier);
     };
 
     const barriers_list = list.map(barrier => {
@@ -37,9 +30,9 @@ const BarriersList = ({
                 key={barrier}
                 id={barrier}
                 className={genetated_class_name}
-                onClick={onClick}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
+                onClick={() => handleClick(barrier)}
+                onMouseEnter={() => onMouseEnter(barrier)}
+                onMouseLeave={() => onHover(null)}
             >
                 {barrier}
             </li>
@@ -56,9 +49,8 @@ BarriersList.propTypes = {
     className: PropTypes.string,
     hover_item_classname: PropTypes.string,
     list: PropTypes.arrayOf(PropTypes.string),
-    onClickCb: PropTypes.func,
-    onMouseEnterCb: PropTypes.func,
-    onMouseLeaveCb: PropTypes.func,
+    onClick: PropTypes.func,
+    onHover: PropTypes.func,
 };
 
 export default React.memo(BarriersList);

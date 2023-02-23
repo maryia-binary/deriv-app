@@ -6,24 +6,14 @@ import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 
 const TurbosTab = ({ className, onChange }) => {
-    const [selectedValue, setSelectedValue] = React.useState(
-        // {
-        // name: localize('Long'),
-        // value: 'turboslong',
-        // }
-        ''
-    );
-    const expiry_list = [
-        {
-            text: localize('Long'),
-            value: 'turboslong',
-        },
-        {
-            text: localize('Short'),
-            value: 'turbosshort',
-        },
-    ];
-    const onChanges = e => {
+    const [selectedValue, setSelectedValue] = React.useState('');
+    const expiry_list = [{ text: localize('Long'), value: 'turboslong' }];
+
+    const has_short = expiry_list.find(expiry => expiry.value === 'turbosshort');
+    if (!has_short) {
+        expiry_list.push({ text: localize('Short'), value: 'turbosshort' });
+    }
+    const onTabChange = e => {
         if (e.target.value !== selectedValue.value) {
             const name = 'contract_type';
             const result = expiry_list.find(exp => exp.value === e.target.value);
@@ -32,7 +22,7 @@ const TurbosTab = ({ className, onChange }) => {
                 name: result ? result.text : e.target.name,
                 value: e.target.value,
             }));
-            onChange({ target: { name, value: selectedValue.value || e.target.value } });
+            onChange({ target: { name, value: e.target.value } });
         }
     };
 
@@ -43,7 +33,7 @@ const TurbosTab = ({ className, onChange }) => {
                 buttons_arr={expiry_list}
                 name={'contract_type'}
                 is_animated={true}
-                onChange={e => onChanges(e)}
+                onChange={e => onTabChange(e)}
                 value={selectedValue.value}
             />
         </div>

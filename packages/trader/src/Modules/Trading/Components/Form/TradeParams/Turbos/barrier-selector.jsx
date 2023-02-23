@@ -79,7 +79,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                                 selected_item={selected_barrier}
                                 onClick={onBarrierClick}
                                 onHover={barrier => setHoveredBarrier(barrier)}
-                                hover_item_classname='trade-container__barriers-table__item--highlight'
                             />
                         </ThemedScrollbars>
                     </Fieldset>

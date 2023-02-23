@@ -7,9 +7,6 @@ const BarriersList = ({ active_item_classname, base_classname, selected_item, cl
             onHover(barrier);
         }
     };
-    const handleClick = barrier => {
-        onClick(barrier);
-    };
 
     const barriers_list = list.map(barrier => {
         const genetated_class_name = `${base_classname} ${selected_item === barrier ? active_item_classname : ''}`;
@@ -19,7 +16,7 @@ const BarriersList = ({ active_item_classname, base_classname, selected_item, cl
                 key={barrier}
                 id={barrier}
                 className={genetated_class_name}
-                onClick={() => handleClick(barrier)}
+                onClick={() => onClick(barrier)}
                 onMouseEnter={() => onMouseEnter(barrier)}
                 onMouseLeave={() => onHover(null)}
             >

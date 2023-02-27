@@ -390,7 +390,7 @@
                 height: 4.5rem;
                 padding: 0 1.6rem;
             }
-            [data-testid='dt_popover_wrapper'] {
+            &__tooltip {
                 display: inline-block;
                 margin-left: 0.8rem;
                 position: relative;

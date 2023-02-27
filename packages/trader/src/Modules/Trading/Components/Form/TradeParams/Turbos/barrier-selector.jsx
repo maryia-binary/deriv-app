@@ -37,7 +37,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         }
     };
 
-    const buttonClickHandler = () => {
+    const onButtonClick = () => {
         setIsButtonBlocked(true);
         onChange({
             target: {
@@ -69,15 +69,17 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     const header_mobile = (
         <React.Fragment>
             {localize('Barriers')}
-            <Popover
-                alignment='bottom'
-                icon='info'
-                is_bubble_hover_enabled
-                zIndex={9999}
-                message={header_tooltip_text}
-                is_open={is_mobile_tooltip_visible}
-                onClick={toggleMobileTooltip}
-            />
+            <div className='trade-container__barriers-table__header__tooltip'>
+                <Popover
+                    alignment='bottom'
+                    icon='info'
+                    is_bubble_hover_enabled
+                    zIndex={9999}
+                    message={header_tooltip_text}
+                    is_open={is_mobile_tooltip_visible}
+                    onClick={toggleMobileTooltip}
+                />
+            </div>
         </React.Fragment>
     );
 
@@ -109,7 +111,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 large
                 primary
                 is_disabled={is_button_blocked}
-                onClick={buttonClickHandler}
+                onClick={onButtonClick}
             />
         </div>
     );

@@ -67,20 +67,18 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     );
 
     const header_mobile = (
-        <React.Fragment>
-            {localize('Barriers')}
-            <div className='trade-container__barriers-table__header__tooltip'>
-                <Popover
-                    alignment='bottom'
-                    icon='info'
-                    is_bubble_hover_enabled
-                    zIndex={9999}
-                    message={header_tooltip_text}
-                    is_open={is_mobile_tooltip_visible}
-                    onClick={toggleMobileTooltip}
-                />
-            </div>
-        </React.Fragment>
+        <div className='trade-container__barriers-table__header-tooltip'>
+            <div>{localize('Barriers')}</div>
+            <Popover
+                alignment='bottom'
+                icon='info'
+                is_bubble_hover_enabled
+                zIndex={9999}
+                message={header_tooltip_text}
+                is_open={is_mobile_tooltip_visible}
+                onClick={toggleMobileTooltip}
+            />
+        </div>
     );
 
     const barriers_list = (

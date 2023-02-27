@@ -390,11 +390,9 @@
                 height: 4.5rem;
                 padding: 0 1.6rem;
             }
-            &__tooltip {
-                display: inline-block;
-                margin-left: 0.8rem;
-                position: relative;
-                top: 0.3rem;
+            &-tooltip {
+                display: flex;
+                gap: 0.6rem;
             }
         }
         &__icon-close {

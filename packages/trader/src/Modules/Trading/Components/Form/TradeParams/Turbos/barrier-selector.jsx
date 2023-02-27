@@ -1,23 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Localize, localize } from '@deriv/translations';
+import BarriersList from './barriers-list.jsx';
+import { Button, Icon, MobileDialog, Text, ThemedScrollbars, Popover } from '@deriv/components';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
-import { Button, Icon, MobileDialog, Text, ThemedScrollbars, Popover } from '@deriv/components';
-import { isMobile } from '@deriv/shared';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
-import BarriersList from './barriers-list.jsx';
+import { isMobile } from '@deriv/shared';
+import { Localize, localize } from '@deriv/translations';
 
 const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrier_choices }) => {
-    const [selected_barrier, setSelectedBarrier] = React.useState(barrier_1);
     const [is_barriers_table_expanded, setIsBarriersTableExpanded] = React.useState(false);
     const [is_mobile_tooltip_visible, setIsMobileTooltipVisible] = React.useState(false);
-    const [is_button_blocked, setIsButtonBlocked] = React.useState(true);
+    const [selected_barrier, setSelectedBarrier] = React.useState(barrier_1);
 
     const toggleMobileTooltip = () => setIsMobileTooltipVisible(!is_mobile_tooltip_visible);
 
     const toggleBarriersTable = () => {
-        setIsButtonBlocked(true);
         setIsMobileTooltipVisible(false);
         setIsBarriersTableExpanded(!is_barriers_table_expanded);
         setSelectedBarrier(barrier_1);
@@ -26,7 +24,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     const onBarrierClick = barrier => {
         setHoveredBarrier(null);
         setSelectedBarrier(barrier);
-        setIsButtonBlocked(barrier === barrier_1);
         if (!isMobile()) {
             onChange({
                 target: {
@@ -38,7 +35,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     };
 
     const onButtonClick = () => {
-        setIsButtonBlocked(true);
         onChange({
             target: {
                 name: 'barrier_1',
@@ -66,13 +62,12 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         </React.Fragment>
     );
 
-    const header_mobile = (
+    const barriers_header_mobile = (
         <div className='trade-container__barriers-table__header-tooltip'>
             <div>{localize('Barriers')}</div>
             <Popover
                 alignment='bottom'
                 icon='info'
-                is_bubble_hover_enabled
                 zIndex={9999}
                 message={header_tooltip_text}
                 is_open={is_mobile_tooltip_visible}
@@ -98,17 +93,16 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         </React.Fragment>
     );
 
-    const footer_mobile = (
+    const barriers_footer_mobile = (
         <div className='trade-container__barriers__footer'>
             <Button
                 className='trade-container__barriers__footer__button'
                 type='submit'
                 data-testid={'submit-button'}
-                has_effect
                 text={localize('Select barrier')}
                 large
                 primary
-                is_disabled={is_button_blocked}
+                is_disabled={selected_barrier === barrier_1}
                 onClick={onButtonClick}
             />
         </div>
@@ -122,13 +116,13 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 <div className='mobile-widget__barrier'>{localize('Barrier')}</div>
             </div>
             <MobileDialog
-                title={header_mobile}
+                title={barriers_header_mobile}
                 onClose={toggleBarriersTable}
                 has_content_scroll={true}
                 portal_element_id='modal_root'
                 wrapper_classname='contracts-modal-list'
                 visible={is_barriers_table_expanded}
-                footer={footer_mobile}
+                footer={barriers_footer_mobile}
                 header_classname='trade-container__barriers-table__header'
             >
                 {barriers_list}

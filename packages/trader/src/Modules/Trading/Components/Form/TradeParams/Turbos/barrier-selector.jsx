@@ -14,7 +14,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     const [is_mobile_tooltip_visible, setIsMobileTooltipVisible] = React.useState(false);
     const [is_button_blocked, setIsButtonBlocked] = React.useState(true);
 
-    const toogleMobileTooltip = () => setIsMobileTooltipVisible(!is_mobile_tooltip_visible);
+    const toggleMobileTooltip = () => setIsMobileTooltipVisible(!is_mobile_tooltip_visible);
 
     const toggleBarriersTable = () => {
         setIsButtonBlocked(true);
@@ -26,7 +26,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     const onBarrierClick = barrier => {
         setHoveredBarrier(null);
         setSelectedBarrier(barrier);
-        setIsButtonBlocked(false);
+        setIsButtonBlocked(barrier === barrier_1);
         if (!isMobile()) {
             onChange({
                 target: {
@@ -35,6 +35,16 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 },
             });
         }
+    };
+
+    const buttonClickHandler = () => {
+        setIsButtonBlocked(true);
+        onChange({
+            target: {
+                name: 'barrier_1',
+                value: selected_barrier,
+            },
+        });
     };
 
     React.useEffect(() => {
@@ -66,15 +76,15 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 zIndex={9999}
                 message={header_tooltip_text}
                 is_open={is_mobile_tooltip_visible}
-                onClick={toogleMobileTooltip}
+                onClick={toggleMobileTooltip}
             />
         </React.Fragment>
     );
 
-    const children = (
+    const barriers_list = (
         <React.Fragment>
             <div className='trade-container__barriers-table__text'>Distance to spot</div>
-            <ThemedScrollbars height={isMobile() ? 'calc(100% - 55px)' : null} autohide={false}>
+            <ThemedScrollbars height={isMobile() ? 'calc(100% - 5.5rem)' : null} autohide={false}>
                 <BarriersList
                     base_classname='trade-container__barriers-table__item'
                     active_item_classname='trade-container__barriers-table__item--selected'
@@ -99,15 +109,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 large
                 primary
                 is_disabled={is_button_blocked}
-                onClick={() => {
-                    setIsButtonBlocked(true);
-                    onChange({
-                        target: {
-                            name: 'barrier_1',
-                            value: selected_barrier,
-                        },
-                    });
-                }}
+                onClick={buttonClickHandler}
             />
         </div>
     );
@@ -129,7 +131,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 footer={footer_mobile}
                 header_classname='trade-container__barriers-table__header'
             >
-                {children}
+                {barriers_list}
             </MobileDialog>
         </React.Fragment>
     ) : (
@@ -167,7 +169,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                                 <Icon icon='IcCross' />
                             </div>
                         </div>
-                        {children}
+                        {barriers_list}
                     </Fieldset>
                 </CSSTransition>
             )}

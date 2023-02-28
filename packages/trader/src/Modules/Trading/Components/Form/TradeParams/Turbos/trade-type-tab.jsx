@@ -7,16 +7,16 @@ import { connect } from 'Stores/connect';
 
 const TradeTypeTab = ({ className, onChange }) => {
     const [selectedValue, setSelectedValue] = React.useState('');
-    const expiry_list = [{ text: localize('Long'), value: 'turboslong' }];
+    const tab_list = [{ text: localize('Long'), value: 'turboslong' }];
 
-    const has_short = expiry_list.find(expiry => expiry.value === 'turbosshort');
+    const has_short = tab_list.find(tab => tab.value === 'turbosshort');
     if (!has_short) {
-        expiry_list.push({ text: localize('Short'), value: 'turbosshort' });
+        tab_list.push({ text: localize('Short'), value: 'turbosshort' });
     }
     const onTabChange = e => {
         if (e.target.value !== selectedValue.value) {
             const name = 'contract_type';
-            const result = expiry_list.find(exp => exp.value === e.target.value);
+            const result = tab_list.find(res => res.value === e.target.value);
             setSelectedValue(prevState => ({
                 ...prevState,
                 name: result ? result.text : e.target.name,
@@ -27,10 +27,10 @@ const TradeTypeTab = ({ className, onChange }) => {
     };
 
     return (
-        <div className={classNames('trade-container__tabs', className)}>
+        <div className={classNames('trade-container__trade-type-tab', className)}>
             <ButtonToggle
                 id='dt_advanced_duration_toggle'
-                buttons_arr={expiry_list}
+                buttons_arr={tab_list}
                 name={'contract_type'}
                 is_animated={true}
                 onChange={e => onTabChange(e)}

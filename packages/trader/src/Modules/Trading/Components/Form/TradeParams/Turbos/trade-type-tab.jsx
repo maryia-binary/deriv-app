@@ -7,12 +7,11 @@ import { connect } from 'Stores/connect';
 
 const TradeTypeTab = ({ className, onChange }) => {
     const [selectedValue, setSelectedValue] = React.useState('');
-    const tab_list = [{ text: localize('Long'), value: 'turboslong' }];
+    const tab_list = [
+        { text: localize('Long'), value: 'turboslong' },
+        { text: localize('Short'), value: 'turbosshort' },
+    ];
 
-    const has_short = tab_list.find(tab => tab.value === 'turbosshort');
-    if (!has_short) {
-        tab_list.push({ text: localize('Short'), value: 'turbosshort' });
-    }
     const onTabChange = e => {
         if (e.target.value !== selectedValue.value) {
             const name = 'contract_type';

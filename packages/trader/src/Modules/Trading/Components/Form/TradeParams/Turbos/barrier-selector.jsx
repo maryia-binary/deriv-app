@@ -111,9 +111,15 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
     return isMobile() ? (
         <React.Fragment>
             <div className='mobile-widget' onClick={toggleBarriersTable}>
-                <div className='mobile-widget__spot'>{localize('Spot')}</div>
-                <div className='mobile-widget__barriers-value'>{barrier_1}</div>
-                <div className='mobile-widget__barrier'>{localize('Barrier')}</div>
+                <Text size='xs' color='prominent' align='center'>
+                    {localize('Spot')}
+                </Text>
+                <Text size='xs' color='prominent' align='center' weight='bold'>
+                    {barrier_1}
+                </Text>
+                <Text size='xs' color='less-prominent' align='center'>
+                    {localize('Barrier')}
+                </Text>
             </div>
             <MobileDialog
                 title={barriers_header_mobile}
@@ -137,8 +143,12 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 header_tooltip={header_tooltip_text}
             >
                 <div onClick={toggleBarriersTable} className='trade-container__barriers__wrapper'>
-                    <div className='trade-container__barriers-spot'>{localize('Spot')}</div>
-                    <div className='trade-container__barriers-value'>{barrier_1}</div>
+                    <Text size='xs' className='trade-container__barriers-spot'>
+                        {localize('Spot')}
+                    </Text>
+                    <Text size='xs' className='trade-container__barriers-value'>
+                        {barrier_1}
+                    </Text>
                 </div>
             </Fieldset>
             {is_barriers_table_expanded && (

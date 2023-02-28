@@ -98,7 +98,9 @@ export const getMarketNamesMap = () => ({
     WLDUSD: 'USD Basket',
     '1HZ10V': 'Volatility 10 (1s) Index',
     '1HZ100V': 'Volatility 100 (1s) Index',
+    '1HZ150V': 'Volatility 150 (1s) Index',
     '1HZ200V': 'Volatility 200 (1s) Index',
+    '1HZ250V': 'Volatility 250 (1s) Index',
     '1HZ300V': 'Volatility 300 (1s) Index',
     JD10: localize('Jump 10 Index'),
     JD25: localize('Jump 25 Index'),
@@ -238,10 +240,12 @@ export const getSupportedContracts = is_high_low => ({
         position: 'bottom',
     },
     TURBOSLONG: {
+        button_name: 'Buy',
         name: 'Turbos',
         position: 'top',
     },
     TURBOSSHORT: {
+        button_name: 'Buy',
         name: 'Turbos',
         position: 'bottom',
     },
@@ -252,8 +256,9 @@ export const getContractConfig = is_high_low => ({
     ...getUnsupportedContracts(),
 });
 
-export const getContractTypeDisplay = (type, is_high_low = false) => {
-    return getContractConfig(is_high_low)[type] ? getContractConfig(is_high_low)[type.toUpperCase()].name : '';
+export const getContractTypeDisplay = (type, is_high_low = false, show_button_name = false) => {
+    const contract_config = getContractConfig(is_high_low)[type];
+    return (show_button_name && contract_config.button_name) || contract_config.name || '';
 };
 
 export const getContractTypePosition = (type, is_high_low = false) =>

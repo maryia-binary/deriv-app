@@ -141,14 +141,14 @@ export const getContractTypesConfig: TGetContractTypesConfig = symbol => ({
         trade_types: ['TURBOSLONG'],
         basis: ['stake'],
         barrier_count: 1,
-        components: ['tabs', 'barrier', 'take_profit'],
+        components: ['tabs', 'barrier_selector', 'take_profit'],
     },
     turbosshort: {
         title: localize('Turbos'),
         trade_types: ['TURBOSSHORT'],
         basis: ['stake'],
         barrier_count: 1,
-        components: ['tabs', 'barrier', 'take_profit'],
+        components: ['tabs', 'barrier_selector', 'take_profit'],
     },
 });
 
@@ -282,7 +282,9 @@ export const getMarketNamesMap = () => ({
     WLDUSD: localize('USD Basket'),
     '1HZ10V': localize('Volatility 10 (1s) Index'),
     '1HZ100V': localize('Volatility 100 (1s) Index'),
+    '1HZ150V': localize('Volatility 150 (1s) Index'),
     '1HZ200V': localize('Volatility 200 (1s) Index'),
+    '1HZ250V': localize('Volatility 250 (1s) Index'),
     '1HZ300V': localize('Volatility 300 (1s) Index'),
     JD10: localize('Jump 10 Index'),
     JD25: localize('Jump 25 Index'),
@@ -460,10 +462,9 @@ export const getContractConfig = (is_high_low?: boolean) => ({
 the difference between these two functions is just the property they return. (name/position)
 */
 
-export const getContractTypeDisplay = (type: TGetSupportedContracts, is_high_low = false, show_trade_text = false) => {
-    return show_trade_text
-        ? (getContractConfig(is_high_low)[type] as TContractConfig).button_name
-        : getContractConfig(is_high_low)[type].name;
+export const getContractTypeDisplay = (type: TGetSupportedContracts, is_high_low = false, show_button_name = false) => {
+    const contract_config = getContractConfig(is_high_low)[type] as TContractConfig;
+    return (show_button_name && contract_config.button_name) || contract_config.name || '';
 };
 
 export const getContractTypePosition = (type: TGetSupportedContracts, is_high_low = false) =>

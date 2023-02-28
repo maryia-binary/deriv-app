@@ -103,7 +103,9 @@ export const getMarketNamesMap = () => ({
     WLDUSD: localize('USD Basket'),
     '1HZ10V': localize('Volatility 10 (1s) Index'),
     '1HZ100V': localize('Volatility 100 (1s) Index'),
+    '1HZ150V': localize('Volatility 150 (1s) Index'),
     '1HZ200V': localize('Volatility 200 (1s) Index'),
+    '1HZ250V': localize('Volatility 250 (1s) Index'),
     '1HZ300V': localize('Volatility 300 (1s) Index'),
     JD10: localize('Jump 10 Index'),
     JD25: localize('Jump 25 Index'),
@@ -276,9 +278,9 @@ export const getContractConfig = is_high_low => ({
     ...getUnsupportedContracts(),
 });
 
-export const getContractTypeDisplay = (type, is_high_low = false, show_trade_text = false) => {
+export const getContractTypeDisplay = (type, is_high_low = false, show_button_name = false) => {
     const contract_config = getContractConfig(is_high_low)[type];
-    return show_trade_text ? contract_config.button_name || contract_config.name : contract_config.name;
+    return (show_button_name && contract_config.button_name) || contract_config.name || '';
 };
 
 export const getContractTypePosition = (type, is_high_low = false) =>

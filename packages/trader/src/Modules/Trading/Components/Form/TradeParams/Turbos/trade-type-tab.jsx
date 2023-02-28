@@ -13,14 +13,9 @@ const TradeTypeTab = ({ className, onChange }) => {
     ];
 
     const onTabChange = e => {
-        if (e.target.value !== selectedValue.value) {
+        if (e.target.value !== selectedValue) {
             const name = 'contract_type';
-            const result = tab_list.find(res => res.value === e.target.value);
-            setSelectedValue(prevState => ({
-                ...prevState,
-                name: result ? result.text : e.target.name,
-                value: e.target.value,
-            }));
+            setSelectedValue(e.target.value);
             onChange({ target: { name, value: e.target.value } });
         }
     };
@@ -33,7 +28,7 @@ const TradeTypeTab = ({ className, onChange }) => {
                 name={'contract_type'}
                 is_animated={true}
                 onChange={e => onTabChange(e)}
-                value={selectedValue.value}
+                value={selectedValue}
             />
         </div>
     );

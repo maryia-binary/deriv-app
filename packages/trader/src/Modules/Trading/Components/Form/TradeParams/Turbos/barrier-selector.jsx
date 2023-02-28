@@ -78,7 +78,12 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
 
     const barriers_list = (
         <React.Fragment>
-            <Text size='xxs' color='disabled' line_height='l' className='trade-container__barriers-table__text'>
+            <Text
+                size={isMobile() ? 's' : 'xxs'}
+                color='disabled'
+                line_height='l'
+                className='trade-container__barriers-table__text'
+            >
                 Distance to spot
             </Text>
             <ThemedScrollbars height={isMobile() ? 'calc(100% - 5.5rem)' : null} autohide={false}>

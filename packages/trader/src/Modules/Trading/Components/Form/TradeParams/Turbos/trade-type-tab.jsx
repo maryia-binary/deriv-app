@@ -5,7 +5,7 @@ import { ButtonToggle } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 
-const TurbosTab = ({ className, onChange }) => {
+const TradeTypeTab = ({ className, onChange }) => {
     const [selectedValue, setSelectedValue] = React.useState('');
     const expiry_list = [{ text: localize('Long'), value: 'turboslong' }];
 
@@ -40,11 +40,11 @@ const TurbosTab = ({ className, onChange }) => {
     );
 };
 
-TurbosTab.propTypes = {
+TradeTypeTab.propTypes = {
     className: PropTypes.string,
     onChange: PropTypes.func,
 };
 
 export default connect(({ modules }) => ({
     onChange: modules.trade.onChange,
-}))(TurbosTab);
+}))(TradeTypeTab);

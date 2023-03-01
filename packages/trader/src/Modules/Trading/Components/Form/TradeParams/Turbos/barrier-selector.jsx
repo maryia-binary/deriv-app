@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import BarriersList from './barriers-list.jsx';
-import { Button, Icon, MobileDialog, Text, ThemedScrollbars, Popover } from '@deriv/components';
+import { Button, Icon, MobileDialog, Text, Popover } from '@deriv/components';
 import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
@@ -76,30 +76,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         </div>
     );
 
-    const barriers_list = (
-        <React.Fragment>
-            <Text
-                size={isMobile() ? 's' : 'xxs'}
-                color='disabled'
-                line_height='l'
-                className='trade-container__barriers-table__text'
-            >
-                Distance to spot
-            </Text>
-            <ThemedScrollbars height={isMobile() ? 'calc(100% - 5.5rem)' : null} autohide={false}>
-                <BarriersList
-                    base_classname='trade-container__barriers-table__item'
-                    active_item_classname='trade-container__barriers-table__item--selected'
-                    className='trade-container__barriers-table__list'
-                    list={turbos_barrier_choices}
-                    selected_item={selected_barrier}
-                    onClick={onBarrierClick}
-                    onHover={barrier => setHoveredBarrier(barrier)}
-                />
-            </ThemedScrollbars>
-        </React.Fragment>
-    );
-
     const barriers_footer_mobile = (
         <div className='trade-container__barriers__footer'>
             <Button
@@ -138,7 +114,15 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 footer={barriers_footer_mobile}
                 header_classname='trade-container__barriers-table__header'
             >
-                {barriers_list}
+                <BarriersList
+                    base_classname='trade-container__barriers-table__item'
+                    active_item_classname='trade-container__barriers-table__item--selected'
+                    className='trade-container__barriers-table__list'
+                    list={turbos_barrier_choices}
+                    selected_item={selected_barrier}
+                    onClick={onBarrierClick}
+                    onHover={barrier => setHoveredBarrier(barrier)}
+                />
             </MobileDialog>
         </React.Fragment>
     ) : (
@@ -180,7 +164,15 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                                 <Icon icon='IcCross' />
                             </div>
                         </div>
-                        {barriers_list}
+                        <BarriersList
+                            base_classname='trade-container__barriers-table__item'
+                            active_item_classname='trade-container__barriers-table__item--selected'
+                            className='trade-container__barriers-table__list'
+                            list={turbos_barrier_choices}
+                            selected_item={selected_barrier}
+                            onClick={onBarrierClick}
+                            onHover={barrier => setHoveredBarrier(barrier)}
+                        />
                     </Fieldset>
                 </CSSTransition>
             )}

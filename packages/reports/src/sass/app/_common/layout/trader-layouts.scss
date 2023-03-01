@@ -403,9 +403,6 @@ $FLOATING_HEADER_HEIGHT: 41px;
     height: 212px;
     position: relative;
 
-    .trade-container--accumulators & {
-        height: 27rem;
-    }
     &__content-loader {
         position: absolute;
         height: 100%;
@@ -432,11 +429,11 @@ $FLOATING_HEADER_HEIGHT: 41px;
         width: calc(100% - 240px - 1.6rem - 2.4rem);
         height: calc(100vh - #{$HEADER_HEIGHT} - #{$FOOTER_HEIGHT});
 
-        .trade-container--accumulators & {
-            .sc-navigation-widget {
-                bottom: 9.2rem;
-            }
-        }
+        // .trade-container--accumulators & {
+        //     .sc-navigation-widget {
+        //         bottom: 9.2rem;
+        //     }
+        // }
     }
     &__loader {
         position: absolute;

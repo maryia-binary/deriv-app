@@ -5,40 +5,35 @@ import { ButtonToggle } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 
-const TradeTypeTab = ({ className, onChange }) => {
-    const [selectedValue, setSelectedValue] = React.useState('');
+const TradeTypeTabs = ({ className, onChange, contract_type }) => {
     const tab_list = [
         { text: localize('Long'), value: 'turboslong' },
         { text: localize('Short'), value: 'turbosshort' },
     ];
 
-    const onTabChange = e => {
-        if (e.target.value !== selectedValue) {
-            const name = 'contract_type';
-            setSelectedValue(e.target.value);
-            onChange({ target: { name, value: e.target.value } });
-        }
-    };
+    if (contract_type !== 'turbosshort' && contract_type !== 'turboslong') return null;
 
     return (
-        <div className={classNames('trade-container__trade-type-tab', className)}>
+        <div className={classNames('trade-container__trade-type-tabs', className)}>
             <ButtonToggle
                 id='dt_advanced_duration_toggle'
                 buttons_arr={tab_list}
-                name={'contract_type'}
+                name='contract_type'
                 is_animated={true}
-                onChange={e => onTabChange(e)}
-                value={selectedValue}
+                onChange={onChange}
+                value={tab_list.find(tab => tab.value === contract_type)?.value}
             />
         </div>
     );
 };
 
-TradeTypeTab.propTypes = {
+TradeTypeTabs.propTypes = {
     className: PropTypes.string,
     onChange: PropTypes.func,
+    contract_type: PropTypes.string,
 };
 
 export default connect(({ modules }) => ({
     onChange: modules.trade.onChange,
-}))(TradeTypeTab);
+    contract_type: modules.trade.contract_type,
+}))(TradeTypeTabs);

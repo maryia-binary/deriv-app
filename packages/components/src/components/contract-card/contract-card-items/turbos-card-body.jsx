@@ -31,7 +31,6 @@ const TurbosCardBody = ({
     const total_profit = getTotalProfit(contract_info);
     const { buy_price, profit, limit_order, barrier, current_spot_display_value, sell_spot, entry_spot } =
         contract_info;
-
     const { take_profit } = getLimitOrderAmount(contract_update || limit_order);
     const is_valid_to_sell = isValidToSell(contract_info);
     const {

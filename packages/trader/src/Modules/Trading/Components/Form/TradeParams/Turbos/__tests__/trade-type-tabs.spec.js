@@ -17,13 +17,21 @@ describe('Trade Type Tabs', () => {
     };
 
     it('should render only if contract_type is turbosshort or turboslong', () => {
-        const { container } = render(<TradeTypeTabs {...mockProps} />);
-        expect(container.firstChild).toBeInTheDocument();
+        render(<TradeTypeTabs {...mockProps} />);
+        const long_tab = screen.getByText('Long');
+        const short_tab = screen.getByText('Short');
+        [long_tab, short_tab].forEach(tab => {
+            expect(tab).toBeInTheDocument();
+        });
     });
 
     it('should not render if contract_type is other than turbosshort or turboslong', () => {
-        const { container } = render(<TradeTypeTabs {...mockProps} contract_type='invalid_type' />);
-        expect(container.firstChild).not.toBeInTheDocument();
+        render(<TradeTypeTabs {...mockProps} contract_type='invalid_type' />);
+        const long_tab = screen.queryByText('Long');
+        const short_tab = screen.queryByText('Short');
+        [long_tab, short_tab].forEach(tab => {
+            expect(tab).not.toBeInTheDocument();
+        });
     });
 
     it('should render two tabs with correct texts', () => {

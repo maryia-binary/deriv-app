@@ -81,7 +81,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
             <Button
                 className='trade-container__barriers__footer__button'
                 type='submit'
-                data-testid={'submit-button'}
+                data-testid='submit-button'
                 text={localize('Select barrier')}
                 large
                 primary

@@ -1,44 +1,7 @@
 import React from 'react';
-// import { render, fireEvent, screen } from '@testing-library/react';
-// import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
-// import TradeTypeTabs from '../../Turbos/trade-type-tabs.jsx';
-
-// describe('Trade Type Tabs', () => {
-//   const onChangeMock = jest.fn();
-//   const defaultProps = {
-//     className: 'test-classname',
-//     onChange: onChangeMock,
-//     contract_type: 'turboslong',
-//   };
-
-//   it('renders component correctly', () => {
-//     const { getByTestId } = render(<TradeTypeTabs {...defaultProps} />);
-//     expect(getByTestId('trade-type-tabs')).toBeTruthy();
-//   });
-
-//   it('returns null if contract_type is not turbosshort or turboslong', () => {
-//     const { queryByTestId } = render(<TradeTypeTabs {...defaultProps} contract_type="invalid" />);
-//     expect(queryByTestId('trade-type-tabs')).toBeNull();
-//   });
-
-//   it('calls onChange when a button is clicked', () => {
-//     const { getByText } = render(<TradeTypeTabs {...defaultProps} />);
-//     const shortButton = getByText('Short');
-//     fireEvent.click(shortButton);
-//     expect(onChangeMock).toHaveBeenCalledTimes(1);
-//   });
-
-//   it('sets the button value correctly based on contract_type prop', () => {
-//     const { getByText } = render(<TradeTypeTabs {...defaultProps} contract_type="turbosshort" />);
-//     const shortButton = getByText('Short');
-//     expect(shortButton).toHaveAttribute('aria-pressed', 'true');
-//   });
-// });
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
-// import TradeTypeTabs from '../trade-type-tabs';
 import TradeTypeTabs from '../trade-type-tabs';
 
 jest.mock('Stores/connect.js', () => ({

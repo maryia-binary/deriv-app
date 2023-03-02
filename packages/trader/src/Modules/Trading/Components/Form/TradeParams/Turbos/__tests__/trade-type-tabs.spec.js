@@ -17,13 +17,11 @@ describe('Trade Type Tabs', () => {
     };
 
     it('should render only if contract_type is turbosshort or turboslong', () => {
-        render(<TradeTypeTabs {...mockProps} />);
         const { container } = render(<TradeTypeTabs {...mockProps} />);
         expect(container.firstChild).toBeInTheDocument();
     });
 
     it('should not render if contract_type is other than turbosshort or turboslong', () => {
-        render(<TradeTypeTabs {...mockProps} />);
         const { container } = render(<TradeTypeTabs {...mockProps} contract_type='invalid_type' />);
         expect(container.firstChild).not.toBeInTheDocument();
     });

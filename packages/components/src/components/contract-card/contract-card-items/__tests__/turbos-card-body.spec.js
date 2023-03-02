@@ -57,7 +57,7 @@ describe('TurbosCardBody', () => {
     const total_profit = getTotalProfit(contract_info);
 
     // is_open_positions = false && is_sold = false
-    test('renders stake amount correctly', () => {
+    it('renders stake amount correctly', () => {
         render(<TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' />);
         const stakeHeader = screen.getByText('Stake');
         expect(stakeHeader).toBeInTheDocument();
@@ -68,7 +68,6 @@ describe('TurbosCardBody', () => {
         expect(currentPriceHeader).toBeInTheDocument();
         const currentPriceAmount = screen.getByText('1,046.80');
         expect(currentPriceAmount).toBeInTheDocument();
-        screen.debug();
 
         const barrierHeader = screen.getByText('Barrier level');
         expect(barrierHeader).toBeInTheDocument();
@@ -82,7 +81,7 @@ describe('TurbosCardBody', () => {
     });
 
     // is_open_positions = false && is_sold = true
-    test('renders current price correctly', () => {
+    it('renders current price correctly', () => {
         render(<TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' />);
 
         const stakeHeader = screen.getByText('Stake');
@@ -113,7 +112,7 @@ describe('TurbosCardBody', () => {
 
     // is_open_positions = true && is_sold = false
 
-    test('renders potential profit/loss correctly for open positions', () => {
+    it('renders potential profit/loss correctly for open positions', () => {
         render(
             <TurbosCardBody
                 {...mockProps}
@@ -152,7 +151,7 @@ describe('TurbosCardBody', () => {
     });
 
     // is_open_positions = true && is_sold = true
-    test('renders headers when contract is sold', () => {
+    it('renders headers when contract is sold', () => {
         render(
             <TurbosCardBody
                 {...mockProps}

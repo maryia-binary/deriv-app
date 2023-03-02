@@ -59,59 +59,33 @@ describe('TurbosCardBody', () => {
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
         render(<TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' />);
-        const stakeHeader = screen.getByText('Stake');
-        expect(stakeHeader).toBeInTheDocument();
-        const stakeAmount = screen.getByText('1,044.00');
-        expect(stakeAmount).toBeInTheDocument();
+        const stake_header = screen.getByText('Stake');
+        expect(stake_header).toBeInTheDocument();
+        const stake_amount = screen.getByText('1,044.00');
+        expect(stake_amount).toBeInTheDocument();
 
-        const currentPriceHeader = screen.getByText('Current price');
-        expect(currentPriceHeader).toBeInTheDocument();
-        const currentPriceAmount = screen.getByText('1,046.80');
-        expect(currentPriceAmount).toBeInTheDocument();
+        const current_price_header = screen.getByText('Current price');
+        expect(current_price_header).toBeInTheDocument();
+        const current_price_amount = screen.getByText('1,046.80');
+        expect(current_price_amount).toBeInTheDocument();
 
-        const barrierHeader = screen.getByText('Barrier level');
-        expect(barrierHeader).toBeInTheDocument();
-        const barrierLevel = screen.getByText('10,904.80');
-        expect(barrierLevel).toBeInTheDocument();
+        const barrier_header = screen.getByText('Barrier level');
+        expect(barrier_header).toBeInTheDocument();
+        const barrier_level = screen.getByText('10,904.80');
+        expect(barrier_level).toBeInTheDocument();
 
-        const takeProfitHeader = screen.getByText('Take profit');
-        expect(takeProfitHeader).toBeInTheDocument();
-        const takeProfitAmount = screen.getByText('0.00');
-        expect(takeProfitAmount).toBeInTheDocument();
-    });
+        const take_profit_header = screen.getByText('Take profit');
+        expect(take_profit_header).toBeInTheDocument();
+        const take_profit_amount = screen.getByText('0.00');
+        expect(take_profit_amount).toBeInTheDocument();
 
-    // is_open_positions = false && is_sold = true
-    it('renders current price correctly', () => {
-        render(<TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' />);
-
-        const stakeHeader = screen.getByText('Stake');
-        expect(stakeHeader).toBeInTheDocument();
-        const stakeAmount = screen.getByText('1,044.00');
-        expect(stakeAmount).toBeInTheDocument();
-
-        const currentPriceHeader = screen.getByText('Current price');
-        expect(currentPriceHeader).toBeInTheDocument();
-        const currentPriceAmount = screen.getByText('1,046.80');
-        expect(currentPriceAmount).toBeInTheDocument();
-
-        const barrierHeader = screen.getByText('Barrier level');
-        expect(barrierHeader).toBeInTheDocument();
-        const barrierLevel = screen.getByText('10,904.80');
-        expect(barrierLevel).toBeInTheDocument();
-
-        const takeProfitHeader = screen.getByText('Take profit');
-        expect(takeProfitHeader).toBeInTheDocument();
-        const takeProfitAmount = screen.getByText('-');
-        expect(takeProfitAmount).toBeInTheDocument();
-
-        const TotalProfitLossHeader = screen.getByText('Total profit/loss');
-        expect(TotalProfitLossHeader).toBeInTheDocument();
-        const TotalProfitLossAmount = screen.getByText('0.00');
-        expect(TotalProfitLossAmount).toBeInTheDocument();
+        const total_profit_loss_header = screen.getByText('Total profit/loss');
+        expect(total_profit_loss_header).toBeInTheDocument();
+        const total_profit_loss_amount = screen.getByText('0.00');
+        expect(total_profit_loss_amount).toBeInTheDocument();
     });
 
     // is_open_positions = true && is_sold = false
-
     it('renders potential profit/loss correctly for open positions', () => {
         render(
             <TurbosCardBody
@@ -122,65 +96,38 @@ describe('TurbosCardBody', () => {
                 is_sold={false}
             />
         );
-        const stakeHeader = screen.getByText('Stake');
-        expect(stakeHeader).toBeInTheDocument();
-        const stakeAmount = screen.getByText('1,044.00');
-        expect(stakeAmount).toBeInTheDocument();
 
-        const currentPriceHeader = screen.getByText('Current price');
-        expect(currentPriceHeader).toBeInTheDocument();
-        const currentPriceAmount = screen.getByText('1,046.80');
-        expect(currentPriceAmount).toBeInTheDocument();
-
-        const barrierHeader = screen.getByText('Barrier level');
-        expect(barrierHeader).toBeInTheDocument();
-        const barrierLevel = screen.getByText('10,904.80');
-        expect(barrierLevel).toBeInTheDocument();
-
-        const PotentialProfitLossHeader = screen.getByText('Potential profit/loss');
-        expect(PotentialProfitLossHeader).toBeInTheDocument();
-        const PotentialProfitLossAmount = screen.getByText('0.00');
-        expect(PotentialProfitLossAmount).toBeInTheDocument();
-
-        const takeProfitHeader = screen.getByText('Take profit');
-        expect(takeProfitHeader).toBeInTheDocument();
-        const takeProfitAmount = screen.getByText('-');
-        expect(takeProfitAmount).toBeInTheDocument();
-
-        screen.debug();
+        const potential_profit_loss_header = screen.getByText('Potential profit/loss');
+        expect(potential_profit_loss_header).toBeInTheDocument();
+        const potential_profit_loss_amount = screen.getByText('0.00');
+        expect(potential_profit_loss_amount).toBeInTheDocument();
     });
 
     // is_open_positions = true && is_sold = true
     it('renders headers when contract is sold', () => {
         render(
-            <TurbosCardBody
-                {...mockProps}
-                contract_info={contract_info}
-                currency='USD'
-                is_open_positions
-                is_sold={true}
-            />
+            <TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' is_open_positions is_sold />
         );
 
-        const profitLossHeader = screen.getByText('Profit/Loss');
-        expect(profitLossHeader).toBeInTheDocument();
-        const profitLossAmount = screen.getByText('1,044.00');
-        expect(profitLossAmount).toBeInTheDocument();
+        const profit_loss_header = screen.getByText('Profit/Loss');
+        expect(profit_loss_header).toBeInTheDocument();
+        const profit_loss_amount = screen.getByText('1,044.00');
+        expect(profit_loss_amount).toBeInTheDocument();
 
-        const payoutHeader = screen.getByText('Payout');
-        expect(payoutHeader).toBeInTheDocument();
-        const payoutAmount = screen.getByText('1,046.80');
-        expect(payoutAmount).toBeInTheDocument();
+        const payout_header = screen.getByText('Payout');
+        expect(payout_header).toBeInTheDocument();
+        const payout_amount = screen.getByText('1,046.80');
+        expect(payout_amount).toBeInTheDocument();
 
-        const buyPriceHeader = screen.getByText('Buy price');
-        expect(buyPriceHeader).toBeInTheDocument();
-        const buyPriceAmount = screen.getByText('1,054.00');
-        expect(buyPriceAmount).toBeInTheDocument();
+        const buy_price_header = screen.getByText('Buy price');
+        expect(buy_price_header).toBeInTheDocument();
+        const buy_price_amount = screen.getByText('1,054.00');
+        expect(buy_price_amount).toBeInTheDocument();
 
-        const takeProfitHeader = screen.getByText('Take profit');
-        expect(takeProfitHeader).toBeInTheDocument();
-        const takeProfitAmount = screen.getByText('-');
-        expect(takeProfitAmount).toBeInTheDocument();
+        const take_profit_header = screen.getByText('Take profit');
+        expect(take_profit_header).toBeInTheDocument();
+        const take_profit_amount = screen.getByText('-');
+        expect(take_profit_amount).toBeInTheDocument();
 
         expect(screen.queryByText('Barrier level')).not.toBeInTheDocument();
         expect(screen.queryByText('Current price')).not.toBeInTheDocument();

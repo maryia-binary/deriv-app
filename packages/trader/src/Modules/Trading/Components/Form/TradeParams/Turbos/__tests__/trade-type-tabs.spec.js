@@ -11,13 +11,13 @@ jest.mock('Stores/connect.js', () => ({
 }));
 
 describe('Trade Type Tabs', () => {
-    const mockProps = {
+    const mock_props = {
         contract_type: 'turboslong',
         onChange: jest.fn(),
     };
 
     it('should render only if contract_type is turbosshort or turboslong', () => {
-        render(<TradeTypeTabs {...mockProps} />);
+        render(<TradeTypeTabs {...mock_props} />);
         const long_tab = screen.getByText('Long');
         const short_tab = screen.getByText('Short');
         [long_tab, short_tab].forEach(tab => {
@@ -26,7 +26,7 @@ describe('Trade Type Tabs', () => {
     });
 
     it('should not render if contract_type is other than turbosshort or turboslong', () => {
-        render(<TradeTypeTabs {...mockProps} contract_type='invalid_type' />);
+        render(<TradeTypeTabs {...mock_props} contract_type='invalid_type' />);
         const long_tab = screen.queryByText('Long');
         const short_tab = screen.queryByText('Short');
         [long_tab, short_tab].forEach(tab => {
@@ -34,18 +34,12 @@ describe('Trade Type Tabs', () => {
         });
     });
 
-    it('should render two tabs with correct texts', () => {
-        render(<TradeTypeTabs {...mockProps} />);
-        expect(screen.getByText('Long')).toBeInTheDocument();
-        expect(screen.getByText('Short')).toBeInTheDocument();
-    });
-
     it('should call onChange when a tab is clicked', () => {
         const mockOnChange = jest.fn();
         render(<TradeTypeTabs contract_type='turboslong' onChange={mockOnChange} />);
 
-        const shortTab = screen.getByText('Short');
-        userEvent.click(shortTab);
+        const short_tab = screen.getByText('Short');
+        userEvent.click(short_tab);
 
         expect(mockOnChange).toHaveBeenCalled();
     });

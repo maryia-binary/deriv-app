@@ -2,8 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TurbosCardBody from '../turbos-card-body';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
-import { isMobile, getLimitOrderAmount, getTotalProfit } from '@deriv/shared';
 
 const contract_info = {
     contract_id: 1,
@@ -34,7 +32,7 @@ jest.mock('@deriv/shared', () => ({
 }));
 
 describe('TurbosCardBody', () => {
-    const mockProps = {
+    const mock_props = {
         addToast: jest.fn(),
         connectWithContractUpdate: jest.fn(),
         contract_info: contract_info,
@@ -54,11 +52,9 @@ describe('TurbosCardBody', () => {
         progress_slider_mobile_el: false,
     };
 
-    const total_profit = getTotalProfit(contract_info);
-
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
-        render(<TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' />);
+        render(<TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' />);
         const stake_header = screen.getByText('Stake');
         expect(stake_header).toBeInTheDocument();
         const stake_amount = screen.getByText('1,044.00');
@@ -89,7 +85,7 @@ describe('TurbosCardBody', () => {
     it('renders potential profit/loss correctly for open positions', () => {
         render(
             <TurbosCardBody
-                {...mockProps}
+                {...mock_props}
                 contract_info={contract_info}
                 currency='USD'
                 is_open_positions
@@ -106,7 +102,7 @@ describe('TurbosCardBody', () => {
     // is_open_positions = true && is_sold = true
     it('renders headers when contract is sold', () => {
         render(
-            <TurbosCardBody {...mockProps} contract_info={contract_info} currency='USD' is_open_positions is_sold />
+            <TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' is_open_positions is_sold />
         );
 
         const profit_loss_header = screen.getByText('Profit/Loss');

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TurbosCardBody from '../turbos-card-body';
-import '@testing-library/jest-dom';
 
 const contract_info = {
     contract_id: 1,
@@ -35,7 +34,7 @@ describe('TurbosCardBody', () => {
     const mock_props = {
         addToast: jest.fn(),
         connectWithContractUpdate: jest.fn(),
-        contract_info: contract_info,
+        contract_info,
         contract_update: contract_info,
         currency: 'USD',
         current_focus: null,

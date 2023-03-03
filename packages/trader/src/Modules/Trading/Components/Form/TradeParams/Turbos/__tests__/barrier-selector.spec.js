@@ -35,12 +35,13 @@ describe('Trade Params component', () => {
 });
 
 describe('Barriers Selector', () => {
+    let current_barrier;
     beforeEach(() => {
         render(<BarrierSelector {...mock_props} />);
+        current_barrier = screen.getByTestId('current_barrier');
     });
 
     it('The value of barrier_1 is chosen by default after first render', () => {
-        const current_barrier = screen.getByTestId('current_barrier');
         expect(current_barrier.innerHTML).toBe(mock_props.barrier_1);
     });
 
@@ -49,14 +50,12 @@ describe('Barriers Selector', () => {
     });
 
     it('The barrier list is shown after cliking on current barrier', () => {
-        const current_barrier = screen.getByTestId('current_barrier');
         userEvent.click(current_barrier);
 
         expect(screen.getByText('Distance to spot')).toBeInTheDocument();
     });
 
     it('All the available barriers from turbos_barrier_choices should be rendered in barrier list (when it can be shown)', () => {
-        const current_barrier = screen.getByTestId('current_barrier');
         userEvent.click(current_barrier);
 
         mock_props.turbos_barrier_choices.forEach(barrier =>
@@ -65,7 +64,6 @@ describe('Barriers Selector', () => {
     });
 
     it('After user clicked on the one of barriers option, it should be shown as current barrier value for desktop', () => {
-        const current_barrier = screen.getByTestId('current_barrier');
         userEvent.click(current_barrier);
         const cliked_barrier = screen.getByTestId(`${mock_props.turbos_barrier_choices[1]}`);
         userEvent.click(cliked_barrier);
@@ -74,7 +72,6 @@ describe('Barriers Selector', () => {
     });
 
     it('After clicking on cross icon barrier list should be closed/collapsed', () => {
-        const current_barrier = screen.getByTestId('current_barrier');
         userEvent.click(current_barrier);
         const icon_cross = screen
             .getByText('Barriers')

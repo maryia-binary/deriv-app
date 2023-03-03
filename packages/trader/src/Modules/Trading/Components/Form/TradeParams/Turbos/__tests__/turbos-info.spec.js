@@ -17,7 +17,7 @@ describe('Turbos Stake information', () => {
         min_stake: 100,
     };
 
-    it('max_stake should not be rendered if has_stop_loss is equl to true and min_stake should be rendered in any case', () => {
+    it('max_stake should not be rendered if has_stop_loss is equal to true and min_stake should be rendered in any case', () => {
         const { rerender } = render(<TurbosInfo className='trade-container__turbos-trade-info' {...mock_props} />);
 
         expect(screen.queryByText('Max. stake')).not.toBeInTheDocument();

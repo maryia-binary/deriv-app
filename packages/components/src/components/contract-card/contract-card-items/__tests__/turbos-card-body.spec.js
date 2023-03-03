@@ -55,27 +55,27 @@ describe('TurbosCardBody', () => {
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
         render(<TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' />);
-        const stake_header = screen.getByText('Stake');
+        const stake_header = screen.getByText(`${mockCardLabels().STAKE}`);
         expect(stake_header).toBeInTheDocument();
         const stake_amount = screen.getByText('1,044.00');
         expect(stake_amount).toBeInTheDocument();
 
-        const current_price_header = screen.getByText('Current price');
+        const current_price_header = screen.getByText(`${mockCardLabels().CURRENT_PRICE}`);
         expect(current_price_header).toBeInTheDocument();
         const current_price_amount = screen.getByText('1,046.80');
         expect(current_price_amount).toBeInTheDocument();
 
-        const barrier_header = screen.getByText('Barrier level');
+        const barrier_header = screen.getByText(`${mockCardLabels().BARRIER_LEVEL}`);
         expect(barrier_header).toBeInTheDocument();
         const barrier_level = screen.getByText('10,904.80');
         expect(barrier_level).toBeInTheDocument();
 
-        const take_profit_header = screen.getByText('Take profit');
+        const take_profit_header = screen.getByText(`${mockCardLabels().TAKE_PROFIT}`);
         expect(take_profit_header).toBeInTheDocument();
         const take_profit_amount = screen.getByText('0.00');
         expect(take_profit_amount).toBeInTheDocument();
 
-        const total_profit_loss_header = screen.getByText('Total profit/loss');
+        const total_profit_loss_header = screen.getByText(`${mockCardLabels().TOTAL_PROFIT_LOSS}`);
         expect(total_profit_loss_header).toBeInTheDocument();
         const total_profit_loss_amount = screen.getByText('0.00');
         expect(total_profit_loss_amount).toBeInTheDocument();
@@ -93,7 +93,7 @@ describe('TurbosCardBody', () => {
             />
         );
 
-        const potential_profit_loss_header = screen.getByText('Potential profit/loss');
+        const potential_profit_loss_header = screen.getByText(`${mockCardLabels().POTENTIAL_PROFIT_LOSS}`);
         expect(potential_profit_loss_header).toBeInTheDocument();
         const potential_profit_loss_amount = screen.getByText('0.00');
         expect(potential_profit_loss_amount).toBeInTheDocument();
@@ -105,22 +105,22 @@ describe('TurbosCardBody', () => {
             <TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' is_open_positions is_sold />
         );
 
-        const profit_loss_header = screen.getByText('Profit/Loss');
+        const profit_loss_header = screen.getByText(`${mockCardLabels().PROFIT_LOSS}`);
         expect(profit_loss_header).toBeInTheDocument();
         const profit_loss_amount = screen.getByText('1,044.00');
         expect(profit_loss_amount).toBeInTheDocument();
 
-        const payout_header = screen.getByText('Payout');
+        const payout_header = screen.getByText(`${mockCardLabels().PAYOUT}`);
         expect(payout_header).toBeInTheDocument();
         const payout_amount = screen.getByText('1,046.80');
         expect(payout_amount).toBeInTheDocument();
 
-        const buy_price_header = screen.getByText('Buy price');
+        const buy_price_header = screen.getByText(`${mockCardLabels().BUY_PRICE}`);
         expect(buy_price_header).toBeInTheDocument();
         const buy_price_amount = screen.getByText('1,054.00');
         expect(buy_price_amount).toBeInTheDocument();
 
-        const take_profit_header = screen.getByText('Take profit');
+        const take_profit_header = screen.getByText(`${mockCardLabels().TAKE_PROFIT}`);
         expect(take_profit_header).toBeInTheDocument();
         const take_profit_amount = screen.getByText('-');
         expect(take_profit_amount).toBeInTheDocument();

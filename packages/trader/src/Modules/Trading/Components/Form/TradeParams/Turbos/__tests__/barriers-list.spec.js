@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import BarriersList from '../barriers-list';
 
 const turbos_barrier_choices = ['16', '33', '40'];
+const classname = 'trade-container__barriers-table__item';
 const mockClickCallback = jest.fn();
 const mockHoverCallback = jest.fn();
 
@@ -12,8 +13,8 @@ describe('Barriers List component', () => {
     beforeEach(() => {
         render(
             <BarriersList
-                active_item_classname='trade-container__barriers-table__item--selected'
-                base_classname='trade-container__barriers-table__item'
+                active_item_classname={`${classname}--selected`}
+                base_classname={classname}
                 selected_item={turbos_barrier_choices[0]}
                 className='trade-container__barriers-table__list'
                 list={turbos_barrier_choices}
@@ -28,13 +29,11 @@ describe('Barriers List component', () => {
     });
 
     it('Selected barrier should have a proper className', () => {
-        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass(
-            'trade-container__barriers-table__item trade-container__barriers-table__item--selected'
-        );
+        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass(`${classname} ${classname}--selected`);
     });
 
     it('Not selected barriers options should have a proper className', () => {
-        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass('trade-container__barriers-table__item');
+        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass(classname);
     });
 
     it('After clicking on second option clickHandler should be called', () => {

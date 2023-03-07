@@ -19,6 +19,7 @@ import Purchase from '../../Containers/purchase.jsx';
 import 'Sass/app/_common/mobile-widget.scss';
 import classNames from 'classnames';
 import PayoutPerPoint from '../Elements/Turbos/payout-per-point.jsx';
+import TradeTypeTabs from './TradeParams/Turbos/trade-type-tabs.jsx';
 
 const CollapsibleTradeParams = ({
     form_components,
@@ -50,7 +51,7 @@ const CollapsibleTradeParams = ({
     return (
         <Collapsible position='top' is_collapsed={is_collapsed} onClick={onClick}>
             <div className='trade-params__contract-type-container'>
-                <ContractType />
+                {!is_turbos && <ContractType />}
                 {is_multiplier && <MultiplierOptionsWidget />}
             </div>
             {isVisible('last_digit') && (
@@ -63,6 +64,13 @@ const CollapsibleTradeParams = ({
                     <BarrierMobile />
                 </div>
             )}
+            {isVisible('trade_type_tabs') && (
+                <div className='trade-params__contract-type-container'>
+                    <ContractType />
+                    {is_turbos && <TradeTypeTabs />}
+                </div>
+            )}
+
             {isVisible('barrier_selector') && <BarrierSelector />}
             <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />
             {has_allow_equals && <AllowEqualsMobile collapsible='true' />}

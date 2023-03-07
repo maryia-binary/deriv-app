@@ -25,11 +25,6 @@ const mockCardLabels = () => ({
     POTENTIAL_PROFIT_LOSS: 'Potential profit/loss',
 });
 
-jest.mock('@deriv/shared', () => ({
-    ...jest.requireActual('@deriv/shared'),
-    isMobile: jest.fn(() => true),
-}));
-
 describe('TurbosCardBody', () => {
     const mock_props = {
         addToast: jest.fn(),

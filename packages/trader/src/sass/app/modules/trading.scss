@@ -552,6 +552,12 @@
         background-color: var(--general-section-1);
         border-color: var(--general-section-1);
         color: var(--text-general);
+        @include mobile {
+            width: 50%;
+            padding: 0;
+            margin-bottom: 0rem;
+            margin-top: 0.6rem;
+        }
     }
     &__deal-cancellation-popover {
         width: 28rem;

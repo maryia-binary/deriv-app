@@ -557,6 +557,10 @@
             padding: 0;
             margin-bottom: 0rem;
             margin-top: 0.6rem;
+            &--button {
+                height: 3.9rem;
+                bottom: 0.3rem;
+            }
         }
     }
     &__deal-cancellation-popover {

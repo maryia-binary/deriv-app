@@ -51,8 +51,9 @@ const CollapsibleTradeParams = ({
     return (
         <Collapsible position='top' is_collapsed={is_collapsed} onClick={onClick}>
             <div className='trade-params__contract-type-container'>
-                {!is_turbos && <ContractType />}
+                <ContractType />
                 {is_multiplier && <MultiplierOptionsWidget />}
+                {isVisible('trade_type_tabs') && <TradeTypeTabs />}
             </div>
             {isVisible('last_digit') && (
                 <div collapsible='true'>
@@ -64,13 +65,6 @@ const CollapsibleTradeParams = ({
                     <BarrierMobile />
                 </div>
             )}
-            {isVisible('trade_type_tabs') && (
-                <div className='trade-params__contract-type-container'>
-                    <ContractType />
-                    {is_turbos && <TradeTypeTabs />}
-                </div>
-            )}
-
             {isVisible('barrier_selector') && <BarrierSelector />}
             <MobileWidget is_collapsed={is_collapsed} toggleDigitsWidget={toggleDigitsWidget} />
             {has_allow_equals && <AllowEqualsMobile collapsible='true' />}

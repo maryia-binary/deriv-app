@@ -19,6 +19,7 @@ const TradeTypeTabs = ({ className, onChange, contract_type }) => {
                 id='dt_advanced_duration_toggle'
                 buttons_arr={tab_list}
                 name='contract_type'
+                className='trade-container__trade-type-tabs--button'
                 is_animated={true}
                 onChange={onChange}
                 value={tab_list.find(tab => tab.value === contract_type)?.value}

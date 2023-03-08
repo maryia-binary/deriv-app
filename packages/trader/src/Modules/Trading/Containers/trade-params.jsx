@@ -21,7 +21,7 @@ const TradeParams = ({ form_components, is_minimized }) => {
     return (
         <React.Fragment>
             {isVisible('duration') && <Duration key={'duration'} is_minimized={is_minimized} />}
-            {isVisible('trade_type_tabs') && <TradeTypeTabs key={'trade_type_tabs'} is_minimized={is_minimized} />}
+            {isVisible('trade_type_tabs') && <TradeTypeTabs key={'trade_type_tabs'} />}
             {isVisible('barrier') && <Barrier key={'barrier'} is_minimized={is_minimized} />}
             {isVisible('barrier_selector') && <BarrierSelector key={'barrier_selector'} />}
             {isVisible('last_digit') && <LastDigit key={'last_digit'} is_minimized={is_minimized} />}

@@ -12,19 +12,19 @@ jest.mock('Stores/connect.js', () => ({
 describe('Turbos Stake information', () => {
     const mock_props = {
         currency: 'USD',
-        has_stop_loss: true,
         max_stake: 0,
         min_stake: 100,
     };
 
     it('max_stake should not be rendered if has_stop_loss is equal to true and min_stake should be rendered in any case', () => {
-        const { rerender } = render(<TurbosInfo className='trade-container__turbos-trade-info' {...mock_props} />);
+        const { rerender } = render(
+            <TurbosInfo className='trade-container__turbos-trade-info' {...mock_props} has_stop_loss={true} />
+        );
 
         expect(screen.queryByText('Max. stake')).not.toBeInTheDocument();
         expect(screen.getByText('Min. stake')).toBeInTheDocument();
 
-        mock_props.has_stop_loss = false;
-        rerender(<TurbosInfo className='trade-container__turbos-trade-info' {...mock_props} />);
+        rerender(<TurbosInfo className='trade-container__turbos-trade-info' {...mock_props} has_stop_loss={false} />);
 
         [screen.getByText('Min. stake'), screen.getByText('Max. stake')].forEach(stake => {
             expect(stake).toBeInTheDocument();

@@ -43,8 +43,14 @@ describe('Barriers List component', () => {
     });
 
     it('After hover on third option hoverHandler should be called', () => {
-        userEvent.click(screen.getByTestId(turbos_barrier_choices[2]));
+        userEvent.hover(screen.getByTestId(turbos_barrier_choices[2]));
 
         expect(mockHoverCallback).toHaveBeenCalled();
+    });
+
+    it('After mouseLeave event on third option hoverHandler should be called with null', () => {
+        userEvent.unhover(screen.getByTestId(turbos_barrier_choices[2]));
+
+        expect(mockHoverCallback).toHaveBeenCalledWith(null);
     });
 });

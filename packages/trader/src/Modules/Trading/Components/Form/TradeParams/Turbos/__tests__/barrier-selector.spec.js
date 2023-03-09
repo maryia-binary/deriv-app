@@ -29,11 +29,19 @@ jest.mock('@deriv/components', () => {
     };
 });
 
+jest.mock('../trade-type-tabs', () => jest.fn(() => <div>Long</div>));
+
 describe('Barriers Selector', () => {
     let current_barrier;
     beforeEach(() => {
         render(<BarrierSelector {...mock_props} />);
         current_barrier = screen.getByTestId('current_barrier');
+    });
+
+    it('Barrier Selector component should have Trade Type Tabs inside it', () => {
+        const long_tab = screen.getByText('Long');
+
+        expect(long_tab).toBeInTheDocument();
     });
 
     it('The value of barrier_1 is chosen by default after first render', () => {

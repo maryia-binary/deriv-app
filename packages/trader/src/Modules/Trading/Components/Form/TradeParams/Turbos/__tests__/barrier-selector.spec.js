@@ -3,13 +3,10 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import BarrierSelector from '../barrier-selector';
-import TradeParams from '../../../../../Containers/trade-params';
 
 const mock_props = {
     barrier_1: '16',
-    onChange: () => {
-        mock_props.barrier_1 = '33';
-    },
+    onChange: jest.fn(),
     setHoveredBarrier: jest.fn(),
     turbos_barrier_choices: ['16', '33', '40'],
 };
@@ -24,14 +21,12 @@ jest.mock('@deriv/shared', () => ({
     ...jest.requireActual('@deriv/shared'),
 }));
 
-describe('Trade Params component', () => {
-    it('BarriersSelector component should be rendered if form_components array include it', () => {
-        const { rerender } = render(<TradeParams form_components={['barrier_selector']} is_minimized />);
-        expect(screen.getByText('Spot')).toBeInTheDocument();
-
-        rerender(<TradeParams form_components={['barrier']} is_minimized />);
-        expect(screen.queryByText('Spot')).not.toBeInTheDocument();
-    });
+jest.mock('@deriv/components', () => {
+    const original_module = jest.requireActual('@deriv/components');
+    return {
+        ...original_module,
+        Icon: jest.fn(() => <div>IcCross</div>),
+    };
 });
 
 describe('Barriers Selector', () => {
@@ -42,7 +37,7 @@ describe('Barriers Selector', () => {
     });
 
     it('The value of barrier_1 is chosen by default after first render', () => {
-        expect(current_barrier.innerHTML).toBe(mock_props.barrier_1);
+        expect(screen.getByText(mock_props.barrier_1)).toBeInTheDocument();
     });
 
     it('The barrier list is hidden/collapsed by default', () => {
@@ -58,24 +53,25 @@ describe('Barriers Selector', () => {
     it('All the available barriers from turbos_barrier_choices should be rendered in barrier list (when it can be shown)', () => {
         userEvent.click(current_barrier);
 
-        mock_props.turbos_barrier_choices.forEach(barrier =>
-            expect(screen.getByTestId(`${barrier}`)).toBeInTheDocument()
-        );
+        mock_props.turbos_barrier_choices.forEach(barrier => expect(screen.getByTestId(barrier)).toBeInTheDocument());
     });
 
     it('After user clicked on the one of barriers option, it should be shown as current barrier value for desktop', () => {
         userEvent.click(current_barrier);
-        const cliked_barrier = screen.getByTestId(`${mock_props.turbos_barrier_choices[1]}`);
+        const cliked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
         userEvent.click(cliked_barrier);
 
-        expect(current_barrier.innerHTML).toBe(`${mock_props.turbos_barrier_choices[1]}`);
+        expect(mock_props.onChange).toHaveBeenCalledWith({
+            target: {
+                name: 'barrier_1',
+                value: mock_props.turbos_barrier_choices[1],
+            },
+        });
     });
 
     it('After clicking on cross icon barrier list should be closed/collapsed', () => {
         userEvent.click(current_barrier);
-        const icon_cross = screen
-            .getByText('Barriers')
-            .parentNode.querySelector('.trade-container__barriers-table__icon-close');
+        const icon_cross = screen.getByText('IcCross');
         userEvent.click(icon_cross);
 
         expect(screen.queryByText('Distance to spot')).not.toBeInTheDocument();

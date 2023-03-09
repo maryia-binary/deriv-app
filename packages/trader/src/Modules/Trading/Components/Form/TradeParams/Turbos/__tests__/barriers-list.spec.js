@@ -29,21 +29,21 @@ describe('Barriers List component', () => {
     });
 
     it('Selected barrier should have a proper className', () => {
-        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass(`${classname} ${classname}--selected`);
+        expect(screen.getByTestId(turbos_barrier_choices[0])).toHaveClass(`${classname} ${classname}--selected`);
     });
 
     it('Not selected barriers options should have a proper className', () => {
-        expect(screen.getByTestId(`${turbos_barrier_choices[0]}`)).toHaveClass(classname);
+        expect(screen.getByTestId(turbos_barrier_choices[0])).toHaveClass(classname);
     });
 
     it('After clicking on second option clickHandler should be called', () => {
-        userEvent.click(screen.getByTestId(`${turbos_barrier_choices[1]}`));
+        userEvent.click(screen.getByTestId(turbos_barrier_choices[1]));
 
         expect(mockClickCallback).toHaveBeenCalled();
     });
 
     it('After hover on third option hoverHandler should be called', () => {
-        userEvent.click(screen.getByTestId(`${turbos_barrier_choices[2]}`));
+        userEvent.click(screen.getByTestId(turbos_barrier_choices[2]));
 
         expect(mockHoverCallback).toHaveBeenCalled();
     });

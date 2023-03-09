@@ -128,9 +128,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         </React.Fragment>
     ) : (
         <React.Fragment>
-            <div className='trade-container__trade-type-tabs'>
-                <TradeTypeTabs />
-            </div>
+            <TradeTypeTabs />
             <Fieldset
                 className='trade-container__fieldset trade-container__barriers'
                 header={localize('Barrier')}

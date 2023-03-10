@@ -24,6 +24,8 @@ export default class ContractTradeStore extends BaseStore {
     // Chart specific observables
     granularity = +LocalStore.get('contract_trade.granularity') || 0;
     chart_type = LocalStore.get('contract_trade.chart_type') || 'mountain';
+    prev_chart_type = '';
+    prev_granularity = null;
 
     // Accumulator barriers data:
     accumulator_barriers_data = {};
@@ -46,6 +48,8 @@ export default class ContractTradeStore extends BaseStore {
             removeContract: action.bound,
             accountSwitchListener: action.bound,
             onUnmount: override,
+            prev_chart_type: observable,
+            prev_granularity: observable,
             updateProposal: action.bound,
             last_contract: computed,
             clearError: action.bound,
@@ -94,31 +98,25 @@ export default class ContractTradeStore extends BaseStore {
             };
         };
 
-        if (previous_spot && pip_size) {
-            if (shortcode) {
-                // has an ongoing ACCU contract
-                const result = extractInfoFromShortcode(shortcode);
-                const contract_tick_size_barrier = +result.tick_size_barrier;
-                if (contract_tick_size_barrier) {
-                    updateAccumulatorBarriers(contract_tick_size_barrier);
-                }
-            } else {
-                // has no open ACCU contracts
-                updateAccumulatorBarriers(tick_size_barrier);
+        if (shortcode) {
+            // has an ongoing ACCU contract
+            const result = extractInfoFromShortcode(shortcode);
+            const contract_tick_size_barrier = +result.tick_size_barrier;
+            if (contract_tick_size_barrier) {
+                updateAccumulatorBarriers(contract_tick_size_barrier);
             }
+        } else {
+            // has no open ACCU contracts
+            updateAccumulatorBarriers(tick_size_barrier);
         }
     }
 
     updateChartType(type) {
-        const { contract_type } = JSON.parse(LocalStore.get('trade_store'));
-        if (contract_type === 'accumulator') return;
         LocalStore.set('contract_trade.chart_type', type);
         this.chart_type = type;
     }
 
     updateGranularity(granularity) {
-        const { contract_type } = JSON.parse(LocalStore.get('trade_store'));
-        if (contract_type === 'accumulator') return;
         const tick_chart_types = ['mountain', 'line', 'colored_line', 'spline', 'baseline'];
         if (granularity === 0 && tick_chart_types.indexOf(this.chart_type) === -1) {
             this.chart_type = 'mountain';

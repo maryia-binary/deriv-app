@@ -35,6 +35,7 @@ export default class ContractTradeStore extends BaseStore {
 
         makeObservable(this, {
             accumulator_barriers_data: observable.ref,
+            clearAccumulatorBarriersData: action.bound,
             contracts: observable.shallow,
             has_error: observable,
             error_message: observable,
@@ -54,6 +55,7 @@ export default class ContractTradeStore extends BaseStore {
             last_contract: computed,
             clearError: action.bound,
             getContractById: action.bound,
+            savePreviousChartMode: action.bound,
             should_highlight_current_spot: computed,
         });
 
@@ -64,6 +66,10 @@ export default class ContractTradeStore extends BaseStore {
     // -------------------
     // ----- Actions -----
     // -------------------
+
+    clearAccumulatorBarriersData() {
+        this.accumulator_barriers_data = {};
+    }
 
     updateAccumulatorBarriersAndSpots({
         previous_spot,
@@ -126,6 +132,11 @@ export default class ContractTradeStore extends BaseStore {
         if (this.granularity === 0) {
             this.root_store.notifications.removeNotificationMessage(switch_to_tick_chart);
         }
+    }
+
+    savePreviousChartMode(chart_type, granularity) {
+        this.prev_chart_type = chart_type;
+        this.prev_granularity = granularity;
     }
 
     applicable_contracts = () => {

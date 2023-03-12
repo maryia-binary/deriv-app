@@ -336,7 +336,7 @@ export default class TradeStore extends BaseStore {
                 }
                 this.setDefaultGrowthRate();
                 this.tick_size_barrier = 0;
-                this.root_store.contract_trade.accumulator_barriers_data = {};
+                this.root_store.contract_trade.clearAccumulatorBarriersData();
             }
         );
         reaction(
@@ -368,24 +368,6 @@ export default class TradeStore extends BaseStore {
                     // to be able to remove any existing Stop loss / Take profit validation errors
                     delete this.validation_rules.stop_loss;
                     delete this.validation_rules.take_profit;
-                }
-                const { prev_chart_type, prev_granularity, chart_type, granularity } =
-                    this.root_store.contract_trade || {};
-                // when accumulator is selected, we need to change chart type to mountain and granularity to 0
-                // and we need to restore previous chart type and granularity when accumulator is unselected
-                if (this.is_accumulator) {
-                    this.root_store.contract_trade.prev_chart_type = chart_type;
-                    this.root_store.contract_trade.prev_granularity = granularity;
-                    this.root_store.contract_trade.chart_type = 'mountain';
-                    this.root_store.contract_trade.granularity = 0;
-                } else if (
-                    prev_chart_type &&
-                    prev_granularity &&
-                    prev_chart_type !== chart_type &&
-                    prev_granularity !== granularity
-                ) {
-                    this.root_store.contract_trade.chart_type = prev_chart_type;
-                    this.root_store.contract_trade.granularity = prev_granularity;
                 }
             }
         );
@@ -908,6 +890,33 @@ export default class TradeStore extends BaseStore {
         // when switch back to Rise/Fall from another contract type i.e.
         if (obj_new_values.contract_type && obj_new_values.contract_type === 'rise_fall' && !!this.is_equal) {
             obj_new_values.contract_type = 'rise_fall_equal';
+        }
+        // when accumulator is selected, we need to change chart type to mountain and granularity to 0
+        // and we need to restore previous chart type and granularity when accumulator is unselected
+        const {
+            clearAccumulatorBarriersData,
+            prev_chart_type,
+            prev_granularity,
+            chart_type,
+            granularity,
+            savePreviousChartMode,
+            updateChartType,
+            updateGranularity,
+        } = this.root_store.contract_trade || {};
+        if (obj_new_values.contract_type === 'accumulator') {
+            clearAccumulatorBarriersData();
+            savePreviousChartMode(chart_type, granularity);
+            updateGranularity(0);
+            updateChartType('mountain');
+        } else if (
+            obj_new_values.contract_type &&
+            prev_chart_type &&
+            prev_granularity &&
+            prev_chart_type !== chart_type &&
+            prev_granularity !== granularity
+        ) {
+            updateGranularity(prev_granularity);
+            updateChartType(prev_chart_type);
         }
 
         if (/\bduration\b/.test(Object.keys(obj_new_values))) {

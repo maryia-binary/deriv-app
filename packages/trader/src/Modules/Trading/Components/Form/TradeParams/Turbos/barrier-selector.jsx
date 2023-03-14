@@ -30,7 +30,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 value: barrier,
             },
         });
-        setIsBarriersTableExpanded(!is_barriers_table_expanded);
+        setIsBarriersTableExpanded(false);
     };
 
     React.useEffect(() => {

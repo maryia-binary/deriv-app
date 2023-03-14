@@ -2,27 +2,17 @@ import React from 'react';
 import BarriersList from './barriers-list';
 import TradeTypeTabs from './trade-type-tabs.jsx';
 import { Button, Icon, MobileDialog, Text, Popover } from '@deriv/components';
-import { connect } from 'Stores/connect';
 import { CSSTransition } from 'react-transition-group';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { isMobile } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
+import { observer, useStore } from '@deriv/stores';
 
-type Ttarget = {
-    target: {
-        name: string;
-        value: string;
-    };
-};
-
-type TBarrierSelector = {
-    barrier_1: string;
-    onChange: (arg0: Ttarget) => void;
-    setHoveredBarrier: (barrier: string | null) => void;
-    turbos_barrier_choices: Array<string>;
-};
-
-const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrier_choices }: TBarrierSelector) => {
+const BarrierSelector = observer(() => {
+    const {
+        modules: { trade },
+    } = useStore();
+    const { barrier_1, onChange, setHoveredBarrier, turbos_barrier_choices } = trade;
     const [is_barriers_table_expanded, setIsBarriersTableExpanded] = React.useState(false);
     const [is_mobile_tooltip_visible, setIsMobileTooltipVisible] = React.useState(false);
     const [selected_barrier, setSelectedBarrier] = React.useState(barrier_1);
@@ -192,11 +182,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
             )}
         </React.Fragment>
     );
-};
+});
 
-export default connect(({ modules }) => ({
-    barrier_1: modules.trade.barrier_1,
-    onChange: modules.trade.onChange,
-    setHoveredBarrier: modules.trade.setHoveredBarrier,
-    turbos_barrier_choices: modules.trade.turbos_barrier_choices,
-}))(BarrierSelector);
+export default BarrierSelector;

@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import BarriersList from './barriers-list.jsx';
+import BarriersList from './barriers-list';
 import TradeTypeTabs from './trade-type-tabs.jsx';
 import { Button, Icon, MobileDialog, Text, Popover } from '@deriv/components';
 import { connect } from 'Stores/connect';
@@ -9,7 +8,21 @@ import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { isMobile } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 
-const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrier_choices }) => {
+type Ttarget = {
+    target: {
+        name: string;
+        value: string;
+    };
+};
+
+type TBarrierSelector = {
+    barrier_1: string;
+    onChange: (arg0: Ttarget) => void;
+    setHoveredBarrier: (barrier: string | null) => void;
+    turbos_barrier_choices: Array<string>;
+};
+
+const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrier_choices }: TBarrierSelector) => {
     const [is_barriers_table_expanded, setIsBarriersTableExpanded] = React.useState(false);
     const [is_mobile_tooltip_visible, setIsMobileTooltipVisible] = React.useState(false);
     const [selected_barrier, setSelectedBarrier] = React.useState(barrier_1);
@@ -22,7 +35,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
         setSelectedBarrier(barrier_1);
     };
 
-    const onBarrierClick = barrier => {
+    const onBarrierClick = (barrier: string) => {
         setHoveredBarrier(null);
         setSelectedBarrier(barrier);
         if (!isMobile()) {
@@ -69,7 +82,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
             <Popover
                 alignment='bottom'
                 icon='info'
-                zIndex={9999}
+                zIndex={'9999'}
                 message={header_tooltip_text}
                 is_open={is_mobile_tooltip_visible}
                 onClick={toggleMobileTooltip}
@@ -121,7 +134,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                     list={turbos_barrier_choices}
                     selected_item={selected_barrier}
                     onClick={onBarrierClick}
-                    onHover={barrier => setHoveredBarrier(barrier)}
+                    onHover={(barrier: string | null) => setHoveredBarrier(barrier)}
                 />
             </MobileDialog>
         </React.Fragment>
@@ -172,20 +185,13 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                             list={turbos_barrier_choices}
                             selected_item={selected_barrier}
                             onClick={onBarrierClick}
-                            onHover={barrier => setHoveredBarrier(barrier)}
+                            onHover={(barrier: string | null) => setHoveredBarrier(barrier)}
                         />
                     </Fieldset>
                 </CSSTransition>
             )}
         </React.Fragment>
     );
-};
-
-BarrierSelector.propTypes = {
-    barrier_1: PropTypes.string,
-    onChange: PropTypes.func,
-    setHoveredBarrier: PropTypes.func,
-    turbos_barrier_choices: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default connect(({ modules }) => ({

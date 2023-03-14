@@ -114,7 +114,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                     </Text>
                     <Text size='xs' className='trade-container__barriers-value' data-testid='current_barrier'>
                         {barrier_1}
-                        <Icon icon='IcChevronLeft' className='trade-container__barriers-value-arrow' />
+                        <Icon icon='IcChevronLeft' className='trade-container__barriers-value--arrow-right' />
                     </Text>
                 </div>
             </Fieldset>

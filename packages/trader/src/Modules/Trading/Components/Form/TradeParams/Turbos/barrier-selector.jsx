@@ -30,7 +30,7 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
                 value: barrier,
             },
         });
-        setIsBarriersTableExpanded(!is_barriers_table_expanded);
+        setIsBarriersTableExpanded(false);
     };
 
     React.useEffect(() => {
@@ -82,7 +82,6 @@ const BarrierSelector = ({ barrier_1, onChange, setHoveredBarrier, turbos_barrie
             <MobileDialog
                 title={barriers_header_mobile}
                 onClose={toggleBarriersTable}
-                has_content_scroll={false}
                 portal_element_id='modal_root'
                 wrapper_classname='contracts-modal-list'
                 visible={is_barriers_table_expanded}

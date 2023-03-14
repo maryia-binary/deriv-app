@@ -42,9 +42,9 @@ const BarriersList = ({ active_item_classname, base_classname, selected_item, cl
                 as='p'
                 className='trade-container__barriers-table__text'
             >
-                {localize('Distance to spot')}
+                {localize('Distance to current spot')}
             </Text>
-            <ThemedScrollbars height={isMobile() ? 'calc(100% - 5.5rem)' : null} autohide={false}>
+            <ThemedScrollbars autohide={false}>
                 <ul className={className}>{barriers_list}</ul>
             </ThemedScrollbars>
         </React.Fragment>

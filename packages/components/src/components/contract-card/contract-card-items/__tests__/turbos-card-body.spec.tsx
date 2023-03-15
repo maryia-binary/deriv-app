@@ -1,16 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { TContractInfo } from '@deriv/shared/src/utils/contract/contract-types';
 import TurbosCardBody from '../turbos-card-body';
 
-const contract_info = {
+const contract_info: TContractInfo = {
     contract_id: 1,
-    buy_price: '1044.00',
+    bid_price: 1044.02,
+    buy_price: 1044.0,
     profit: 50,
-    limit_order: null,
     barrier: '10904.80',
     current_spot_display_value: '1046.80',
-    sell_spot: '1046.80',
+    sell_spot: 1046.8,
     entry_spot: 1054,
+    is_valid_to_sell: 1,
 };
 
 const mockCardLabels = () => ({
@@ -30,14 +32,12 @@ describe('TurbosCardBody', () => {
         addToast: jest.fn(),
         connectWithContractUpdate: jest.fn(),
         contract_info,
-        contract_update: contract_info,
         currency: 'USD',
         current_focus: null,
         error_message_alignment: 'left',
         getCardLabels: mockCardLabels,
         getContractById: jest.fn(),
         is_sold: false,
-        is_turbos: true,
         is_open_positions: false,
         onMouseLeave: jest.fn(),
         removeToast: jest.fn(),

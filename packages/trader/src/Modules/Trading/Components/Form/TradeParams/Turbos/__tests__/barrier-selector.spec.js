@@ -63,8 +63,8 @@ describe('<BarrierSelector/>', () => {
     });
     it('onChange should be called with the new barrier option when it is clicked', () => {
         userEvent.click(current_barrier);
-        const cliked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
-        userEvent.click(cliked_barrier);
+        const clicked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
+        userEvent.click(clicked_barrier);
 
         expect(mock_props.onChange).toHaveBeenCalledWith({
             target: {
@@ -83,7 +83,7 @@ describe('<BarrierSelector/>', () => {
     it('barrier list should not be rendered when the new barrier option was clicked', () => {
         userEvent.click(current_barrier);
         const clicked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
-        userEvent.click(cliked_barrier);
+        userEvent.click(clicked_barrier);
 
         expect(screen.queryByText(barriers_list_header)).not.toBeInTheDocument();
     });

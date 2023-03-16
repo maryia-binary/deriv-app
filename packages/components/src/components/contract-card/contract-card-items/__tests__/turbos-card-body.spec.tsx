@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { render, screen } from '@testing-library/react';
 import { TContractInfo } from '@deriv/shared/src/utils/contract/contract-types';
 import TurbosCardBody from '../turbos-card-body';
@@ -32,6 +33,13 @@ describe('TurbosCardBody', () => {
         addToast: jest.fn(),
         connectWithContractUpdate: jest.fn(),
         contract_info,
+        contract_update: {
+            take_profit: {
+                display_name: 'Take profit',
+                order_amount: 0,
+                order_date: 1678948046,
+            },
+        },
         currency: 'USD',
         current_focus: null,
         error_message_alignment: 'left',
@@ -45,7 +53,15 @@ describe('TurbosCardBody', () => {
         status: 'profit',
         progress_slider_mobile_el: false,
     };
+    beforeAll(() => {
+        (ReactDOM.createPortal as jest.Mock) = jest.fn(component => {
+            return component;
+        });
+    });
 
+    afterAll(() => {
+        (ReactDOM.createPortal as jest.Mock).mockClear();
+    });
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
         render(<TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' />);
@@ -66,12 +82,12 @@ describe('TurbosCardBody', () => {
 
         const take_profit_header = screen.getByText(mockCardLabels().TAKE_PROFIT);
         expect(take_profit_header).toBeInTheDocument();
-        const take_profit_amount = screen.getByText('0.00');
+        const take_profit_amount = screen.getByText('0.02');
         expect(take_profit_amount).toBeInTheDocument();
 
         const total_profit_loss_header = screen.getByText(mockCardLabels().TOTAL_PROFIT_LOSS);
         expect(total_profit_loss_header).toBeInTheDocument();
-        const total_profit_loss_amount = screen.getByText('0.00');
+        const total_profit_loss_amount = screen.getByText('0.02');
         expect(total_profit_loss_amount).toBeInTheDocument();
     });
 
@@ -89,7 +105,7 @@ describe('TurbosCardBody', () => {
 
         const potential_profit_loss_header = screen.getByText(mockCardLabels().POTENTIAL_PROFIT_LOSS);
         expect(potential_profit_loss_header).toBeInTheDocument();
-        const potential_profit_loss_amount = screen.getByText('0.00');
+        const potential_profit_loss_amount = screen.getByText('0.02');
         expect(potential_profit_loss_amount).toBeInTheDocument();
     });
 

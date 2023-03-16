@@ -18,17 +18,6 @@ type TToastConfig = {
     type: string;
 };
 
-type TCardLabels = {
-    BARRIER_LEVEL: string;
-    BUY_PRICE: string;
-    CURRENT_PRICE: string;
-    STAKE: string;
-    TAKE_PROFIT: string;
-    TOTAL_PROFIT_LOSS: string;
-    PAYOUT: string;
-    PROFIT_LOSS: string;
-    POTENTIAL_PROFIT_LOSS: string;
-};
 type TTurbosCardBody = {
     addToast: (toast_config: TToastConfig) => void;
     connectWithContractUpdate?: (Component: React.ComponentType) => React.ComponentType;
@@ -37,7 +26,7 @@ type TTurbosCardBody = {
     currency: string;
     current_focus?: string | null;
     error_message_alignment?: string;
-    getCardLabels: () => TCardLabels;
+    getCardLabels: () => { [key: string]: string };
     getContractById: (contract_id: number) => TContractStore;
     is_sold: boolean;
     is_open_positions?: boolean;

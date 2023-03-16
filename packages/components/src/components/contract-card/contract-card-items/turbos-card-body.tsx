@@ -8,6 +8,7 @@ import MobileWrapper from '../../mobile-wrapper';
 import Money from '../../money';
 import { ResultStatusIcon } from '../result-overlay/result-overlay.jsx';
 import { TContractInfo, TGetContractUpdateConfig } from '@deriv/shared/src/utils/contract/contract-types';
+import { TContractStore } from '@deriv/shared/src/utils/helpers/validation-rules';
 
 type TToastConfig = {
     key?: string;
@@ -30,14 +31,14 @@ type TCardLabels = {
 };
 type TTurbosCardBody = {
     addToast: (toast_config: TToastConfig) => void;
-    connectWithContractUpdate?: any;
+    connectWithContractUpdate?: (Component: React.ComponentType) => React.ComponentType;
     contract_info: TContractInfo;
     contract_update?: TGetContractUpdateConfig['contract_update'];
     currency: string;
     current_focus?: string | null;
     error_message_alignment?: string;
     getCardLabels: () => TCardLabels;
-    getContractById: (contract_id: number) => any;
+    getContractById: (contract_id: number) => TContractStore;
     is_sold: boolean;
     is_open_positions?: boolean;
     onMouseLeave: () => void;

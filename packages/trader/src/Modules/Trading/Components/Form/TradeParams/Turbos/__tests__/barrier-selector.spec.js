@@ -82,7 +82,7 @@ describe('<BarrierSelector/>', () => {
     });
     it('barrier list should not be rendered when the new barrier option was clicked', () => {
         userEvent.click(current_barrier);
-        const cliked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
+        const clicked_barrier = screen.getByTestId(mock_props.turbos_barrier_choices[1]);
         userEvent.click(cliked_barrier);
 
         expect(screen.queryByText(barriers_list_header)).not.toBeInTheDocument();

@@ -59,9 +59,6 @@ describe('TurbosCardBody', () => {
         });
     });
 
-    afterAll(() => {
-        (ReactDOM.createPortal as jest.Mock).mockClear();
-    });
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
         render(<TurbosCardBody {...mock_props} />);

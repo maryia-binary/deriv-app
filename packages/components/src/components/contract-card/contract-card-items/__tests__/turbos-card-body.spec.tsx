@@ -64,7 +64,7 @@ describe('TurbosCardBody', () => {
     });
     // is_open_positions = false && is_sold = false
     it('renders stake amount correctly', () => {
-        render(<TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' />);
+        render(<TurbosCardBody {...mock_props} />);
         const stake_header = screen.getByText(mockCardLabels().STAKE);
         expect(stake_header).toBeInTheDocument();
         const stake_amount = screen.getByText('1,044.00');
@@ -93,15 +93,7 @@ describe('TurbosCardBody', () => {
 
     // is_open_positions = true && is_sold = false
     it('renders potential profit/loss correctly for open positions', () => {
-        render(
-            <TurbosCardBody
-                {...mock_props}
-                contract_info={contract_info}
-                currency='USD'
-                is_open_positions
-                is_sold={false}
-            />
-        );
+        render(<TurbosCardBody {...mock_props} is_open_positions />);
 
         const potential_profit_loss_header = screen.getByText(mockCardLabels().POTENTIAL_PROFIT_LOSS);
         expect(potential_profit_loss_header).toBeInTheDocument();
@@ -111,9 +103,7 @@ describe('TurbosCardBody', () => {
 
     // is_open_positions = true && is_sold = true
     it('renders headers when contract is sold', () => {
-        render(
-            <TurbosCardBody {...mock_props} contract_info={contract_info} currency='USD' is_open_positions is_sold />
-        );
+        render(<TurbosCardBody {...mock_props} is_open_positions is_sold />);
 
         const profit_loss_header = screen.getByText(mockCardLabels().PROFIT_LOSS);
         expect(profit_loss_header).toBeInTheDocument();

@@ -73,14 +73,21 @@ describe('<BarrierSelector/>', () => {
     });
     it('onChange should be called with the new barrier option when it is clicked', () => {
         userEvent.click(current_barrier);
-        const cliked_barrier = screen.getByTestId('33');
-        userEvent.click(cliked_barrier);
+        const clicked_barrier = screen.getByTestId('33');
+        userEvent.click(clicked_barrier);
         expect(mocked_root_store.modules?.trade.barrier_1).toBe('33');
     });
     it('barrier list should not be rendered when cross icon is clicked', () => {
         userEvent.click(current_barrier);
-        const icon_cross = screen.getByText('IcCross');
-        userEvent.click(icon_cross);
+        const icon_cross = screen.getAllByText('IcCross');
+        userEvent.click(icon_cross[0]);
+
+        expect(screen.queryByText(barriers_list_header)).not.toBeInTheDocument();
+    });
+    it('barrier list should not be rendered when the new barrier option was clicked', () => {
+        userEvent.click(current_barrier);
+        const clicked_barrier = screen.getByTestId('33');
+        userEvent.click(clicked_barrier);
 
         expect(screen.queryByText(barriers_list_header)).not.toBeInTheDocument();
     });

@@ -1,7 +1,7 @@
 import React from 'react';
 import BarriersList from './barriers-list';
-import TradeTypeTabs from './trade-type-tabs.jsx';
-import { Button, Icon, MobileDialog, Text, Popover } from '@deriv/components';
+import TradeTypeTabs from './trade-type-tabs';
+import { Icon, MobileDialog, Text, Popover } from '@deriv/components';
 import { CSSTransition } from 'react-transition-group';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { isMobile } from '@deriv/shared';
@@ -22,29 +22,18 @@ const BarrierSelector = observer(() => {
     const toggleBarriersTable = () => {
         setIsMobileTooltipVisible(false);
         setIsBarriersTableExpanded(!is_barriers_table_expanded);
-        setSelectedBarrier(barrier_1);
     };
 
     const onBarrierClick = (barrier: string) => {
         setHoveredBarrier(null);
         setSelectedBarrier(barrier);
-        if (!isMobile()) {
-            onChange({
-                target: {
-                    name: 'barrier_1',
-                    value: barrier,
-                },
-            });
-        }
-    };
-
-    const onButtonClick = () => {
         onChange({
             target: {
                 name: 'barrier_1',
-                value: selected_barrier,
+                value: barrier,
             },
         });
+        setIsBarriersTableExpanded(false);
     };
 
     React.useEffect(() => {
@@ -80,20 +69,6 @@ const BarrierSelector = observer(() => {
         </div>
     );
 
-    const barriers_footer_mobile = (
-        <div className='trade-container__barriers__footer'>
-            <Button
-                className='trade-container__barriers__footer__button'
-                type='submit'
-                text={localize('Select barrier')}
-                large
-                primary
-                is_disabled={selected_barrier === barrier_1}
-                onClick={onButtonClick}
-            />
-        </div>
-    );
-
     return isMobile() ? (
         <React.Fragment>
             <div className='mobile-widget' onClick={toggleBarriersTable}>
@@ -110,11 +85,9 @@ const BarrierSelector = observer(() => {
             <MobileDialog
                 title={barriers_header_mobile}
                 onClose={toggleBarriersTable}
-                has_content_scroll={true}
                 portal_element_id='modal_root'
                 wrapper_classname='contracts-modal-list'
                 visible={is_barriers_table_expanded}
-                footer={barriers_footer_mobile}
                 header_classname='trade-container__barriers-table__header'
             >
                 <BarriersList
@@ -143,6 +116,7 @@ const BarrierSelector = observer(() => {
                     </Text>
                     <Text size='xs' className='trade-container__barriers-value' data-testid='current_barrier'>
                         {barrier_1}
+                        <Icon icon='IcChevronLeft' className='trade-container__barriers-value--arrow-right' />
                     </Text>
                 </div>
             </Fieldset>

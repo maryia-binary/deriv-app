@@ -19,7 +19,7 @@ import Purchase from '../../Containers/purchase.jsx';
 import 'Sass/app/_common/mobile-widget.scss';
 import classNames from 'classnames';
 import PayoutPerPoint from '../Elements/Turbos/payout-per-point.jsx';
-import TradeTypeTabs from './TradeParams/Turbos/trade-type-tabs.jsx';
+import TradeTypeTabs from './TradeParams/Turbos/trade-type-tabs';
 
 const CollapsibleTradeParams = ({
     form_components,

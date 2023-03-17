@@ -4,11 +4,11 @@ import { Money, Text } from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import { observer, useStore } from '@deriv/stores';
 
-type TTTurbosInfo = {
+type TTurbosInfo = {
     className?: string;
 };
 
-const TurbosInfo = observer(({ className }: TTTurbosInfo) => {
+const TurbosInfo = observer(({ className }: TTurbosInfo) => {
     const {
         modules: { trade },
     } = useStore();

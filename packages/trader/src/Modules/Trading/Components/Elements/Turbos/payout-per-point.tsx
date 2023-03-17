@@ -26,7 +26,7 @@ const PayoutPerPoint = observer(() => {
                     icon='info'
                     is_bubble_hover_enabled
                     margin={0}
-                    zIndex={'9999'}
+                    zIndex='9999'
                     message={message}
                 />
             </div>

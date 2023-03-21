@@ -7,7 +7,7 @@ import { getCurrencyDisplayCode, getLocalizedBasis, isMobile } from '@deriv/shar
 import CancelDealInfo from './cancel-deal-info.jsx';
 
 const ValueMovement = ({ has_error_or_not_loaded, proposal_info, currency, has_increased, is_turbos, is_vanilla }) => (
-    <div className={is_vanilla ? 'strike--value-container' : ''}>
+    <div className='strike--value-container'>
         <div className={classNames('trade-container__price-info-value', { 'strike--info': is_vanilla })}>
             {!has_error_or_not_loaded && (
                 <Money

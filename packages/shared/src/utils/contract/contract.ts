@@ -157,4 +157,4 @@ export const shouldShowExpiration = (symbol: string) => /^cry/.test(symbol);
 
 export const shouldShowCancellation = (symbol: string) => !/^(cry|CRASH|BOOM|stpRNG|WLD|JD)/.test(symbol);
 
-export const getTurbosSubtype = (type: string) => type.slice(6)[0] + type.toLowerCase().slice(7);
+export const getTurbosSubtype = (type: string) => type[6] + type.toLowerCase().slice(7);

@@ -89,6 +89,18 @@ const ContractInfo = ({
                 />
             );
         }
+        if (['TURBOSLONG', 'TURBOSSHORT'].includes(type)) {
+            return (
+                <Localize
+                    i18n_default_text='<0>For {{title}}:</0> {{message}}'
+                    components={[<Text key={0} weight='bold' size='xxs' />]}
+                    values={{
+                        title: type === 'TURBOSLONG' ? localize('Long') : localize('Short'),
+                        message,
+                    }}
+                />
+            );
+        }
         return message;
     };
 

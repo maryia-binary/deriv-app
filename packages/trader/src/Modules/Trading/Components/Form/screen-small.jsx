@@ -86,11 +86,7 @@ const CollapsibleTradeParams = ({
                     <RiskManagementInfo />
                 </div>
             )}
-            {is_turbos && (
-                <div collapsible='true'>
-                    <PayoutPerPoint />
-                </div>
-            )}
+            {is_turbos && <PayoutPerPoint />}
             {is_vanilla ? (
                 <Purchase />
             ) : (

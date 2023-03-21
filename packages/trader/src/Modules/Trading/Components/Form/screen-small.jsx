@@ -69,7 +69,11 @@ const CollapsibleTradeParams = ({
                     <BarrierMobile />
                 </div>
             )}
-            {isVisible('barrier_selector') && <BarrierSelector />}
+            {isVisible('barrier_selector') && (
+                <div collapsible='true'>
+                    <BarrierSelector />
+                </div>
+            )}
             {isVisible('strike') && (
                 <div collapsible='true'>
                     <Strike />
@@ -82,7 +86,11 @@ const CollapsibleTradeParams = ({
                     <RiskManagementInfo />
                 </div>
             )}
-            {is_turbos && <PayoutPerPoint />}
+            {is_turbos && (
+                <div collapsible='true'>
+                    <PayoutPerPoint />
+                </div>
+            )}
             {is_vanilla ? (
                 <Purchase />
             ) : (

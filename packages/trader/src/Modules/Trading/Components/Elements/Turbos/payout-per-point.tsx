@@ -4,6 +4,7 @@ import { Money, Text, Popover } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { observer, useStore } from '@deriv/stores';
+import { getContractSubtype } from '@deriv/shared';
 
 const PayoutPerPoint = observer(() => {
     const {
@@ -20,11 +21,12 @@ const PayoutPerPoint = observer(() => {
             i18n_default_text='<0>For {{title}}: </0>{{message}}'
             components={[<Text key={0} weight='bold' size='xxs' />]}
             values={{
-                title: contract_type === 'turboslong' ? localize('Long') : localize('Short'),
+                title: getContractSubtype(contract_key),
                 message,
             }}
         />
     );
+
     return (
         <Fieldset className={classNames('payout-per-point')}>
             <div className='payout-per-point__text-popover'>

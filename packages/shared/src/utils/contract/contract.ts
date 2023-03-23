@@ -162,10 +162,10 @@ export const getContractSubtype = (type: string) => {
     switch (contract_type) {
         case 'VANILLALONGCALL':
         case 'VANILLALONGPUT':
-            return contract_type[11] + contract_type.toLowerCase().slice(12);
+            return contract_type[11] + type.toLowerCase().slice(12);
         case 'TURBOSLONG':
         case 'TURBOSSHORT':
-            return contract_type[6] + contract_type.toLowerCase().slice(7);
+            return contract_type[6] + type.toLowerCase().slice(7);
         default:
             return '';
     }

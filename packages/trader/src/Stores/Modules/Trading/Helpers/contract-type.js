@@ -116,7 +116,7 @@ export const ContractType = (() => {
 
         if (!contract_type) return {};
 
-        let barriers_options;
+        let barriers_options = [];
         if (getContractSubtype(contract_type) === 'Short') {
             barriers_options = short_barriers;
         } else if (getContractSubtype(contract_type) === 'Long') {
@@ -128,7 +128,7 @@ export const ContractType = (() => {
         const obj_trade_types = getTradeTypes(contract_type);
         const obj_start_dates = getStartDates(contract_type, start_date);
         const obj_start_type = getStartType(obj_start_dates.start_date);
-        const obj_barrier = getBarriers(contract_type, contract_expiry_type, barriers_options?.[0]);
+        const obj_barrier = getBarriers(contract_type, contract_expiry_type, barriers_options[0]);
         const obj_duration_unit = getDurationUnit(duration_unit, contract_type, obj_start_type.contract_start_type);
 
         const obj_duration_units_list = getDurationUnitsList(contract_type, obj_start_type.contract_start_type);
@@ -483,15 +483,14 @@ export const ContractType = (() => {
         trade_types: getPropertyValue(available_contract_types, [contract_type, 'config', 'trade_types']),
     });
 
-    const getBarriers = (contract_type, expiry_type, default_barrier_value) => {
+    const getBarriers = (contract_type, expiry_type, stored_barrier_value) => {
         const barriers = getPropertyValue(available_contract_types, [contract_type, 'config', 'barriers']) || {};
         const barrier_values = barriers[expiry_type] || {};
         const barrier_1 = barrier_values.barrier || barrier_values.high_barrier || '';
         const barrier_2 = barrier_values.low_barrier || '';
-
         return {
             barrier_count: barriers.count || 0,
-            barrier_1: default_barrier_value || barrier_1.toString(),
+            barrier_1: stored_barrier_value || barrier_1.toString(),
             barrier_2: barrier_2.toString(),
         };
     };
@@ -507,9 +506,9 @@ export const ContractType = (() => {
         };
     };
 
-    const getTurbosBarrierChoices = (contract_type, turbos_barriers) => ({
-        turbos_barrier_choices: turbos_barriers?.length
-            ? turbos_barriers
+    const getTurbosBarrierChoices = (contract_type, stored_turbos_barriers) => ({
+        turbos_barrier_choices: stored_turbos_barriers.length
+            ? stored_turbos_barriers
             : getPropertyValue(available_contract_types, [contract_type, 'config', 'barrier_choices']) || [],
     });
 

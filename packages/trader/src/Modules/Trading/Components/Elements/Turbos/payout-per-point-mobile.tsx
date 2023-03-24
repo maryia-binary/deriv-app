@@ -43,7 +43,7 @@ const PayoutPerPointMobile = observer(() => {
                 />
             </div>
             <Text size='xs' weight='bold' className='payout-per-point__currency'>
-                <Money amount={stake} currency={currency} show_currency decimals={5} />
+                <Money amount={stake} currency={currency} show_currency should_format={false} />
             </Text>
         </Fieldset>
     );

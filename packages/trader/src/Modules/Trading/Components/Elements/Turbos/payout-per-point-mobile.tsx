@@ -14,7 +14,7 @@ const PayoutPerPointMobile = observer(() => {
     const label = localize('Payout per point');
     const contract_key = contract_type?.toUpperCase();
     const stake = proposal_info?.[contract_key]?.number_of_contracts || 0;
-    const has_error_or_not_loaded = proposal_info.has_error || !proposal_info.id;
+    const has_error_or_not_loaded = proposal_info?.[contract_key]?.has_error || !proposal_info?.[contract_key]?.id;
     const has_increased = proposal_info?.[contract_key]?.has_increased;
     const message = proposal_info?.[contract_key]?.message;
     const payout_per_point_text = (

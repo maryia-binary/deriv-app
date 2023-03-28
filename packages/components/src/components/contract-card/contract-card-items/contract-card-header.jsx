@@ -31,16 +31,19 @@ const ContractCardHeader = ({
     const is_sold = !!contract_info.is_sold || is_contract_sold;
     const is_turbos = isTurbosContract(contract_type);
 
-    const contract_type_list_info = [
-        {
-            is_param_displayed: multiplier,
-            displayed_param: `x${multiplier}`,
-        },
-        {
-            is_param_displayed: isTurbosContract(contract_type),
-            displayed_param: getContractSubtype(contract_type),
-        },
-    ];
+    const contract_type_list_info = React.useMemo(
+        () => [
+            {
+                is_param_displayed: multiplier,
+                displayed_param: `x${multiplier}`,
+            },
+            {
+                is_param_displayed: isTurbosContract(contract_type),
+                displayed_param: getContractSubtype(contract_type),
+            },
+        ],
+        [multiplier, contract_type]
+    );
 
     const displayed_trade_param =
         contract_type_list_info.find(contract_type_item_info => contract_type_item_info.is_param_displayed)

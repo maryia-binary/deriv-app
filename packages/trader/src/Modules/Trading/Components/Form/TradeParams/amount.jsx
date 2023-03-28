@@ -113,7 +113,9 @@ const Amount = ({
         <Fieldset
             className='trade-container__fieldset center-text'
             header={
-                is_multiplier || is_turbos || (['high_low', 'vanilla'].includes(contract_type) && localize('Stake'))
+                is_multiplier || is_turbos || ['high_low', 'vanilla'].includes(contract_type)
+                    ? localize('Stake')
+                    : undefined
             }
             header_tooltip={setTooltipContent()}
         >

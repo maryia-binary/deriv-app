@@ -145,8 +145,8 @@ const ContractDrawerCard = ({
             <DesktopWrapper>{contract_card}</DesktopWrapper>
             <MobileWrapper>
                 <SwipeableContractDrawer
-                    onSwipedUp={has_swipeable_drawer && onSwipedUp}
-                    onSwipedDown={has_swipeable_drawer && onSwipedDown}
+                    onSwipedUp={has_swipeable_drawer ? onSwipedUp : undefined}
+                    onSwipedDown={has_swipeable_drawer ? onSwipedDown : undefined}
                 >
                     {has_swipeable_drawer && (
                         <Collapsible.ArrowButton onClick={toggleContractAuditDrawer} is_collapsed={is_collapsed} />

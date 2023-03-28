@@ -1,9 +1,10 @@
 import React from 'react';
 import { isMobile } from '@deriv/shared';
 import { localize } from '@deriv/translations';
-import { DesktopWrapper, MobileWrapper, Text, ThemedScrollbars, Icon } from '@deriv/components';
+import { DesktopWrapper, MobileWrapper, Text, Icon } from '@deriv/components';
 import { CSSTransition } from 'react-transition-group';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
+import BarrierBody from './barrier-body';
 
 type TBarriersLIst = {
     active_item_classname: string;
@@ -60,25 +61,6 @@ const BarriersList = ({
         );
     });
 
-    const list_body = (
-        <React.Fragment>
-            {subheader && (
-                <Text
-                    size={isMobile() ? 's' : 'xxs'}
-                    color='disabled'
-                    line_height='l'
-                    as='p'
-                    className='trade-container__barriers-table__text'
-                >
-                    {localize(subheader)}
-                </Text>
-            )}
-            <ThemedScrollbars autohide={false}>
-                <ul className={className}>{barriers_list}</ul>
-            </ThemedScrollbars>
-        </React.Fragment>
-    );
-
     return (
         <React.Fragment>
             <DesktopWrapper>
@@ -103,11 +85,13 @@ const BarriersList = ({
                                 <Icon icon='IcCross' />
                             </div>
                         </div>
-                        {list_body}
+                        <BarrierBody className={className} subheader={subheader} barriers_list={barriers_list} />
                     </Fieldset>
                 </CSSTransition>
             </DesktopWrapper>
-            <MobileWrapper>{list_body}</MobileWrapper>
+            <MobileWrapper>
+                <BarrierBody className={className} subheader={subheader} barriers_list={barriers_list} />
+            </MobileWrapper>
         </React.Fragment>
     );
 };

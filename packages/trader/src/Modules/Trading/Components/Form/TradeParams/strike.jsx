@@ -165,5 +165,5 @@ export default connect(({ modules, ui, common }) => ({
     start_date: modules.trade.start_date,
     expiry_date: modules.trade.expiry_date,
     server_time: common.server_time,
-    vanilla_trade_type: ui.vanilla_trade_type,
+    vanilla_trade_type: modules.trade.vanilla_trade_type,
 }))(Strike);

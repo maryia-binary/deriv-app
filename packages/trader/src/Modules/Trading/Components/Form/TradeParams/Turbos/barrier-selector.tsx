@@ -1,6 +1,5 @@
 import React from 'react';
 import BarriersList from './barriers-list';
-import TradeTypeTabs from './trade-type-tabs';
 import { DesktopWrapper, Icon, MobileDialog, MobileWrapper, Text, Popover } from '@deriv/components';
 import { CSSTransition } from 'react-transition-group';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
@@ -102,7 +101,6 @@ const BarrierSelector = observer(() => {
                 </MobileDialog>
             </MobileWrapper>
             <DesktopWrapper>
-                <TradeTypeTabs />
                 <Fieldset
                     className='trade-container__fieldset trade-container__barriers'
                     header={localize('Barrier')}

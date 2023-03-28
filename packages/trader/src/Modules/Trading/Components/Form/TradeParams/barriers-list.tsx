@@ -79,7 +79,7 @@ const BarriersList = ({
                     <Fieldset className='trade-container__fieldset trade-container__barriers-table'>
                         <div className='trade-container__barriers-table__header'>
                             <Text color='prominent' weight='bold' size='xs'>
-                                {localize(header)}
+                                {localize('{{header}}', { header })}
                             </Text>
                             <div className='trade-container__barriers-table__icon-close' onClick={onClickCross}>
                                 <Icon icon='IcCross' />

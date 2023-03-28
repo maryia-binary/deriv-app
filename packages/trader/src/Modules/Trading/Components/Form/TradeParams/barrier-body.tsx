@@ -20,7 +20,7 @@ const BarrierBody = ({ subheader, barriers_list, className }: TBarrierBody) => {
                     as='p'
                     className='trade-container__barriers-table__text'
                 >
-                    {localize(subheader)}
+                    {localize('{{subheader}}', { subheader })}
                 </Text>
             )}
             <ThemedScrollbars autohide={false}>

@@ -27,7 +27,7 @@ jest.mock('@deriv/stores', () => ({
 }));
 
 describe('Trade Type Tabs', () => {
-    it('should render only if contract_type is turbosshort, turboslong or vanillas', () => {
+    it('should render Long & Short tabs when contract_type is turboslong', () => {
         render(<TradeTypeTabs />);
         const long_tab = screen.getByText('Long');
         const short_tab = screen.getByText('Short');

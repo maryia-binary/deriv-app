@@ -29,7 +29,7 @@ const TradeParams = ({ form_components, is_minimized }) => {
             {isVisible('barrier') && <Barrier key={'barrier'} is_minimized={is_minimized} />}
             {isVisible('last_digit') && <LastDigit key={'last_digit'} is_minimized={is_minimized} />}
             {isVisible('accumulator') && <Accumulator key={'accumulator'} />}
-            {(isVisible('vanilla_trade_type') || isVisible('strike')) && (
+            {(isVisible('trade_type_tabs') || isVisible('strike') || isVisible('barrier_selector')) && (
                 <Fieldset className={classNames('trade-container__fieldset', 'trade-container__fieldset--no-padding')}>
                     {isVisible('trade_type_tabs') && <TradeTypeTabs key={'trade_type_tabs'} />}
                     {isVisible('strike') && <Strike key={'strike'} />}

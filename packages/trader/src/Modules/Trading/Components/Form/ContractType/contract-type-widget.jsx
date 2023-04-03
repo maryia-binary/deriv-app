@@ -168,7 +168,7 @@ const ContractTypeWidget = ({ is_equal, name, value, list, onChange, languageCha
     const selected_contract_index = () => {
         const contract_types_arr = list_with_category()?.flatMap(category => category.contract_types);
         return contract_types_arr
-            .filter(type => type.value !== 'rise_fall_equal')
+            .filter(type => type.value !== 'rise_fall_equal' && type.value !== 'turboslong')
             .findIndex(type => type.value === item?.value);
     };
 

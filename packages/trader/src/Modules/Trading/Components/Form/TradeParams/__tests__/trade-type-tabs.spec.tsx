@@ -6,13 +6,13 @@ import TradeTypeTabs from '../trade-type-tabs';
 import { StoreProvider, mockStore } from '@deriv/stores';
 
 describe('Trade Type Tabs', () => {
-    const mockRootStore = mockStore({
+    const mock_root_store = mockStore({
         modules: {
             trade: {
                 contract_type: 'turboslong',
                 onChange: jest.fn(() => {
-                    if (mockRootStore.modules) {
-                        mockRootStore.modules.trade.contract_type = 'turbosshort';
+                    if (mock_root_store.modules) {
+                        mock_root_store.modules.trade.contract_type = 'turbosshort';
                     }
                 }),
                 vanilla_trade_type: 'VANILLALONGCALL',
@@ -22,7 +22,7 @@ describe('Trade Type Tabs', () => {
 
     it('should render Long & Short tabs when contract_type = turboslong', () => {
         render(
-            <StoreProvider store={mockRootStore}>
+            <StoreProvider store={mock_root_store}>
                 <TradeTypeTabs />
             </StoreProvider>
         );
@@ -34,11 +34,11 @@ describe('Trade Type Tabs', () => {
     });
 
     it('should render Call & Put tabs when contract_type = vanilla, and vanilla_trade_type = VANILLALONGCALL', () => {
-        if (mockRootStore.modules) {
-            mockRootStore.modules.trade.contract_type = 'vanilla';
+        if (mock_root_store.modules) {
+            mock_root_store.modules.trade.contract_type = 'vanilla';
         }
         render(
-            <StoreProvider store={mockRootStore}>
+            <StoreProvider store={mock_root_store}>
                 <TradeTypeTabs />
             </StoreProvider>
         );
@@ -50,11 +50,11 @@ describe('Trade Type Tabs', () => {
     });
 
     it('should not render if contract_type is other than turbos or vanillas', () => {
-        if (mockRootStore.modules) {
-            mockRootStore.modules.trade.contract_type = 'invalid_type';
+        if (mock_root_store.modules) {
+            mock_root_store.modules.trade.contract_type = 'invalid_type';
         }
         render(
-            <StoreProvider store={mockRootStore}>
+            <StoreProvider store={mock_root_store}>
                 <TradeTypeTabs />
             </StoreProvider>
         );
@@ -66,11 +66,11 @@ describe('Trade Type Tabs', () => {
     });
 
     it('should call onChange when a tab is clicked', () => {
-        if (mockRootStore.modules) {
-            mockRootStore.modules.trade.contract_type = 'turboslong';
+        if (mock_root_store.modules) {
+            mock_root_store.modules.trade.contract_type = 'turboslong';
         }
         render(
-            <StoreProvider store={mockRootStore}>
+            <StoreProvider store={mock_root_store}>
                 <TradeTypeTabs />
             </StoreProvider>
         );
@@ -78,6 +78,6 @@ describe('Trade Type Tabs', () => {
         const short_tab = screen.getByText('Short');
         userEvent.click(short_tab);
 
-        expect(mockRootStore.modules?.trade.contract_type).toBe('turbosshort');
+        expect(mock_root_store.modules?.trade.contract_type).toBe('turbosshort');
     });
 });

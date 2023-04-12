@@ -103,7 +103,7 @@ describe('TurbosCardBody', () => {
 
         const buy_price_header = screen.getByText(mockCardLabels().BUY_PRICE);
         expect(buy_price_header).toBeInTheDocument();
-        const buy_price_amount = screen.getByText('1,054.00');
+        const buy_price_amount = screen.getByText('10,904.80');
         expect(buy_price_amount).toBeInTheDocument();
 
         const take_profit_header = screen.queryByText(mockCardLabels().TAKE_PROFIT);

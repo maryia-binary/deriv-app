@@ -1,0 +1,25 @@
+/*! For license information please see CFDDbviOnBoarding.js.LICENSE.txt */
+
+/*! For license information please see CFDPasswordManagerModal.js.LICENSE.txt */
+
+/*! For license information please see CFDPasswordModal.js.LICENSE.txt */
+
+/*! For license information please see CFDResetPasswordModal.js.LICENSE.txt */
+
+/*! For license information please see CFDTopUpDemoModal.js.LICENSE.txt */
+
+/*! For license information please see CompareAccountsModal.js.LICENSE.txt */
+
+/*! For license information please see JurisdictionModal.js.LICENSE.txt */
+
+/*! For license information please see file-uploader-container.js.LICENSE.txt */
+
+/*! For license information please see form-sub-header.js.LICENSE.txt */
+
+/*! For license information please see poi-poa-docs-submitted.js.LICENSE.txt */
+
+/*! For license information please see proof-of-identity-container-for-mt5.js.LICENSE.txt */
+
+/*! For license information please see reset-trading-password-modal.js.LICENSE.txt */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */

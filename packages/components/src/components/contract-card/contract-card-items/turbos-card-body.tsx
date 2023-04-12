@@ -87,11 +87,15 @@ const TurbosCardBody = ({
                     is_crypto={isCryptocurrency(currency)}
                     className='dc-contract-card__buy-price'
                 >
-                    <Money amount={is_sold ? entry_spot : barrier} currency={currency} />
+                    <Money
+                        amount={is_sold ? entry_spot : barrier}
+                        currency={currency}
+                        should_format={is_sold && false}
+                    />
                 </ContractCardItem>
                 {is_sold ? (
                     <ContractCardItem header={BARRIER_LEVEL} className='dc-contract-card__barrier-level'>
-                        <Money amount={barrier} currency={currency} />
+                        <Money amount={barrier} currency={currency} should_format={false} />
                     </ContractCardItem>
                 ) : (
                     <div className='dc-contract-card__limit-order-info'>

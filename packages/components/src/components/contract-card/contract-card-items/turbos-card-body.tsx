@@ -90,7 +90,7 @@ const TurbosCardBody = ({
                     <Money
                         amount={is_sold ? entry_spot : addComma(barrier)}
                         currency={currency}
-                        should_format={!!is_sold}
+                        should_format={is_sold}
                     />
                 </ContractCardItem>
                 {is_sold ? (

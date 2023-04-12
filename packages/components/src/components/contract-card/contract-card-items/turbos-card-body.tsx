@@ -77,7 +77,7 @@ const TurbosCardBody = ({
                     is_loss={is_sold && profit ? profit < 0 : false}
                     is_won={is_sold && profit ? profit > 0 : false}
                 >
-                    <Money amount={buy_price} currency={currency} />
+                    <Money amount={is_sold ? profit : buy_price} currency={currency} />
                 </ContractCardItem>
                 <ContractCardItem header={is_sold ? PAYOUT : CURRENT_PRICE} className='dc-contract-card__current-price'>
                     <Money currency={currency} amount={sell_spot || current_spot_display_value} />

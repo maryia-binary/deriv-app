@@ -1253,7 +1253,7 @@ export default class TradeStore extends BaseStore {
                     // Since on change of duration `proposal` API call is made which returns a new set of barrier values.
                     // The new list is set and the mid value is assigned
                     const index = Math.floor(this.barrier_choices.length / 2);
-                    this.barrier_1 = this.barrier_choices[index];
+                    this.barrier_1 = this.is_vanilla ? this.barrier_choices[index] : this.barrier_choices[0];
                     this.onChange({
                         target: {
                             name: 'barrier_1',

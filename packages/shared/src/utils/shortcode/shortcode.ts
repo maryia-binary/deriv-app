@@ -38,7 +38,7 @@ const multipliers_regex = new RegExp(`${base_pattern}_(\\d+)_(\\d+)`);
 const options_regex = new RegExp(`${base_pattern}_([A-Z\\d]+)_([A-Z\\d]+)_?([A-Z\\d]+)?`);
 
 // category_underlying_stake_starttime_endtime_barrier_numberofcontracts
-const turbos_vanillas_regex = new RegExp(`${base_pattern}_(\\d+)_(\\d+)_([A-Z0-9-\\d]+)_(\\d*\\.?\\d*)`);
+const turbos_vanillas_regex = new RegExp(`${base_pattern}_(\\d+)_([A-Z0-9\\d]+)_([A-Z0-9-\\d]+)_(\\d*\\.?\\d*)`);
 
 export const extractInfoFromShortcode = (shortcode: string): TInfoFromShortcode => {
     const info_from_shortcode = {

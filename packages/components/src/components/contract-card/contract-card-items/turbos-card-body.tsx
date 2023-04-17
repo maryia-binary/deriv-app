@@ -122,7 +122,7 @@ const TurbosCardBody = ({
                     </div>
                 </MobileWrapper>
             </div>
-            {!is_sold && !!profit && (
+            {!!profit && (
                 <ContractCardItem
                     className='dc-contract-card-item__total-profit-loss'
                     header={TOTAL_PROFIT_LOSS}

@@ -77,7 +77,7 @@ const TurbosCardBody = ({
                 >
                     <Money amount={buy_price} currency={currency} />
                 </ContractCardItem>
-                <ContractCardItem header={CONTRACT_VALUE} className='dc-contract-card__current-value'>
+                <ContractCardItem header={CONTRACT_VALUE} className='dc-contract-card__contract-value'>
                     <Money amount={contract_value} currency={currency} />
                 </ContractCardItem>
                 <ContractCardItem

@@ -1,0 +1,578 @@
+/*------------------------------------*
+ *  # Constants
+ *------------------------------------*/
+/* stylelint-disable color-no-hex */
+/* COLOR PALETTE */
+/* colors */
+/* alpha colors */
+/* gradient colors */
+/* Preserve legacy variables */
+/* Primary */
+/* stylelint-enable color-no-hex */
+/* Wallet gradient background */
+/* App Cards gradient background */
+/*------------------------------------*
+ *  # SASS Mixins and Functions
+ *------------------------------------*/
+/*
+ * SASS interpolation
+ */
+/*
+ * PX to EM
+ * @param $px - px value to be converted
+ * @param $base - base font size (in `em`)
+ * Note: 'em' values are calculate based on the element font-size
+ *       to properly converts 'px' to 'em', please pass in the element font-size with it
+ * Usage example:
+    padding: em(16px, 1.6em); // font-size in 'em'
+ */
+/*
+ * Set property by passing a property name, and values.
+ * @param $property name - padding, margin etc.
+ * @param $values        - values in `px` (space separated for multiple values)
+ * @param $font-size     - base font-size in `em`
+ * Usage example:
+   @include toEm(padding, 8px 16px 8px, 1.6em);
+ */
+/*
+ * Generate typefaces key-value pair of variable name and config
+ * Example:
+   --paragraph-center-bold-black: (14px, center, bold, black)
+ */
+/*
+ * Sets font-size, font-weight, color, text-transform, text-align and line-height
+ * Usage example:
+   @include setTypeface(16px, bold, black, uppercase);
+ */
+/*
+ * Set typefaces by passing a typeface variable name
+ * @param $var   - typeface variable
+ * @param $tt    - text-transform property
+ * @param $align - text-align property
+ * Usage example:
+   @include typeface(--paragraph-bold-black, uppercase, center);
+ */
+/*
+ * Range Slider Thumb styling is set here
+ */
+/*
+ * SVG icons colors
+ */
+/*
+ * Bar Spinner Animation
+ * @param $count    - number of bars
+ * @param $duration - duration of animation
+ * @param $phase    - each bar phase change delay
+ * Usage example:
+   @include createBarspinnerAnimation(5, 1.2s, 0,1);
+ */
+/*
+ * Tooltip colors
+ * @param $color - color property
+ * Usage example:
+   @include tooltipColor($COLOR_RED);
+ */
+/*
+ * Convert Tooltip colors
+ * @param $color - css color property
+ * Usage example:
+   @include convertTooltipColor(var(--status-default));
+ */
+/*
+    Constants
+*/
+/*
+    Variables
+*/
+/*
+    List of all typefaces variables in the format: --$FONT_SIZES-$TEXT_ALIGN-$FONT_WEIGHTS-COLORS.
+    See $FONT_SIZES, $TEXT_ALIGN, $FONT_WEIGHTS, $COLORS maps above for references.
+    Variables name example: --title-center-semibold-red
+ */
+/*
+    to use styles without modifier class on .inline-icon
+    use @extend
+
+    e.g. style icon on parent hover:
+        a:hover .inline-icon {
+            @extend %inline-icon.active;
+        }
+*/
+/**
+ * Define Breakpoints here.
+ */
+.da-icon-with-message {
+  margin-top: 8rem;
+  padding: 3.2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+
+.da-icon-with-message__text {
+  margin-top: 1rem; }
+
+.da-icon-with-message-full-width {
+  width: calc(100vw - 33rem); }
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .da-icon-with-message {
+    width: 100vw; } }
+
+.manual-poi-details {
+  margin: 0 -1rem;
+  max-width: 67.2rem;
+  height: 100%;
+  display: flex; }
+
+.manual-poi-details--mobile {
+  padding: 2.4rem 1.6rem; }
+
+.manual-poi-details h3 {
+  margin-bottom: 2.5rem; }
+
+.manual-poi-details__form {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+
+.manual-poi-details__fields-content {
+  flex: auto; }
+
+.manual-poi-details__fields-wrap {
+  display: flex;
+  margin-bottom: 0.7rem; }
+
+.manual-poi-details--mobile .manual-poi-details__fields-wrap {
+  flex-wrap: wrap; }
+
+.manual-poi-details__field {
+  margin-bottom: 3.5rem; }
+
+.manual-poi-details__field:first-of-type {
+  margin-right: 2.4rem; }
+
+.manual-poi-details--mobile .manual-poi-details__field:first-of-type {
+  margin-right: 0; }
+
+.manual-poi-details__divider {
+  height: 2px;
+  background-color: var(--general-section-1);
+  margin-bottom: 2.4rem; }
+
+.manual-poi-details__divider--m16 {
+  margin-bottom: 1.6rem; }
+
+.manual-poi-details__uploaders-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+
+.manual-poi-details__uploaders-wrap .dc-file-dropzone__message {
+  width: 100%;
+  max-width: none;
+  pointer-events: all; }
+
+.manual-poi-details__uploader {
+  position: relative;
+  width: 100%;
+  max-width: 32.4rem;
+  height: 25rem;
+  margin-bottom: 1.6rem; }
+
+.manual-poi-details--mobile .manual-poi-details__uploader {
+  max-width: none; }
+
+.manual-poi-details__uploader--full {
+  max-width: none; }
+
+.manual-poi-details__uploader-details {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  min-height: 19.2rem; }
+
+.manual-poi-details__uploader-details--preview {
+  padding: 0 2.4rem;
+  max-height: 20.3rem; }
+
+.manual-poi-details__uploader-details p {
+  margin-bottom: 2.4rem; }
+
+.manual-poi-details__uploader-details--preview p {
+  margin-bottom: 0; }
+
+.manual-poi-details__uploader-image {
+  position: relative;
+  width: 100%;
+  max-width: 27.6rem;
+  height: 16.6rem;
+  border-radius: 0.8rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin-bottom: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+
+.manual-poi-details__uploader-image--has-frame {
+  background-size: contain; }
+
+.manual-poi-details--mobile .manual-poi-details__uploader-image {
+  height: 13.4rem; }
+
+.manual-poi-details__uploader-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto; }
+
+.manual-poi-details__uploader-remove {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.25s linear; }
+
+.manual-poi-details__uploader-remove:hover {
+  transform: scale(1.25, 1.25); }
+
+.manual-poi-details__uploader-icon {
+  width: 12.8rem;
+  height: 7.9rem;
+  margin-bottom: 1.5rem; }
+
+.manual-poi-details__icons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1.7rem; }
+
+.manual-poi-details__icons-item {
+  flex: 0.25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 9.2rem; }
+
+.manual-poi-details--mobile .manual-poi-details__icons-item {
+  flex: none;
+  width: 50%;
+  min-height: 7.6rem; }
+
+.manual-poi-details__icons-item p {
+  max-width: 12.4rem; }
+
+.manual-poi-details--mobile .manual-poi-details__icons-item p {
+  max-width: 13.2rem; }
+
+.manual-poi-details__icons-item svg {
+  height: 4.8rem; }
+
+.manual-poi-details__btns {
+  height: 15.2rem;
+  flex: none;
+  border-top: 2px solid var(--general-section-1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8rem; }
+
+.manual-poi-details__btns .dc-btn:not(:last-of-type) {
+  margin-right: 0.8rem; }
+
+.manual-poi {
+  margin: 0 -1rem; }
+
+.manual-poi--mobile {
+  margin: 0;
+  padding: 4rem 0.6rem 0; }
+
+.manual-poi .dc-timeline__container {
+  flex: 1;
+  max-width: 63.4rem; }
+
+.manual-poi--mobile .dc-timeline__container {
+  max-width: none; }
+
+.manual-poi .dc-timeline__title {
+  font-size: var(--text-size-s);
+  line-height: 2.4rem;
+  margin: -4px 0 2.4rem; }
+
+.manual-poi .dc-card__wrapper:last-of-type {
+  margin-bottom: 4rem !important; }
+
+.manual-poi__card {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none; }
+
+.manual-poi__card .dc-icon {
+  flex: none; }
+
+.manual-poi__card-content {
+  margin: 0 0 0 2.4rem;
+  width: 100%; }
+
+.manual-poi--mobile .manual-poi__card-content {
+  margin: 0 0 0 1.6rem; }
+
+.manual-poi__card-content p {
+  max-width: 45.8rem; }
+
+.manual-poi--mobile .manual-poi__card-content p {
+  max-width: 15.2rem; }
+
+.manual-poi__card-content p:first-of-type {
+  margin-bottom: 0.8rem; }
+
+.manual-poi__card-icon {
+  flex: none; }
+
+.manual-poi__detail-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  cursor: pointer;
+  width: 100%;
+  grid-column-gap: 1rem;
+  align-content: start; }
+
+.manual-poi__upload-icons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  height: 10rem;
+  grid-gap: 1rem;
+  margin: 1rem 0 0; }
+
+@media (min-width: 1024px) {
+  .manual-poi__upload-icons {
+    grid-template-columns: repeat(4, 1fr); } }
+
+.manual-poi__upload-icons--no-margin {
+  margin: 0;
+  text-align: center;
+  align-items: center; }
+
+.manual-poi__upload-container {
+  position: relative;
+  width: 100%; }
+
+.manual-poi__image-preview {
+  width: 28.8rem;
+  height: 16rem;
+  background-image: var(--poi-background-image-upload-preview);
+  background-size: cover;
+  border-radius: 4px; }
+
+.manual-poi__image-preview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center; }
+
+.manual-poi__confirm-buttons {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(2, 1fr); }
+
+/*------------------------------------*
+ *  # Constants
+ *------------------------------------*/
+/* stylelint-disable color-no-hex */
+/* COLOR PALETTE */
+/* colors */
+/* alpha colors */
+/* gradient colors */
+/* Preserve legacy variables */
+/* Primary */
+/* stylelint-enable color-no-hex */
+/* Wallet gradient background */
+/* App Cards gradient background */
+/*------------------------------------*
+ *  # SASS Mixins and Functions
+ *------------------------------------*/
+/*
+ * SASS interpolation
+ */
+/*
+ * PX to EM
+ * @param $px - px value to be converted
+ * @param $base - base font size (in `em`)
+ * Note: 'em' values are calculate based on the element font-size
+ *       to properly converts 'px' to 'em', please pass in the element font-size with it
+ * Usage example:
+    padding: em(16px, 1.6em); // font-size in 'em'
+ */
+/*
+ * Set property by passing a property name, and values.
+ * @param $property name - padding, margin etc.
+ * @param $values        - values in `px` (space separated for multiple values)
+ * @param $font-size     - base font-size in `em`
+ * Usage example:
+   @include toEm(padding, 8px 16px 8px, 1.6em);
+ */
+/*
+ * Generate typefaces key-value pair of variable name and config
+ * Example:
+   --paragraph-center-bold-black: (14px, center, bold, black)
+ */
+/*
+ * Sets font-size, font-weight, color, text-transform, text-align and line-height
+ * Usage example:
+   @include setTypeface(16px, bold, black, uppercase);
+ */
+/*
+ * Set typefaces by passing a typeface variable name
+ * @param $var   - typeface variable
+ * @param $tt    - text-transform property
+ * @param $align - text-align property
+ * Usage example:
+   @include typeface(--paragraph-bold-black, uppercase, center);
+ */
+/*
+ * Range Slider Thumb styling is set here
+ */
+/*
+ * SVG icons colors
+ */
+/*
+ * Bar Spinner Animation
+ * @param $count    - number of bars
+ * @param $duration - duration of animation
+ * @param $phase    - each bar phase change delay
+ * Usage example:
+   @include createBarspinnerAnimation(5, 1.2s, 0,1);
+ */
+/*
+ * Tooltip colors
+ * @param $color - color property
+ * Usage example:
+   @include tooltipColor($COLOR_RED);
+ */
+/*
+ * Convert Tooltip colors
+ * @param $color - css color property
+ * Usage example:
+   @include convertTooltipColor(var(--status-default));
+ */
+/*
+    Constants
+*/
+/*
+    Variables
+*/
+/*
+    List of all typefaces variables in the format: --$FONT_SIZES-$TEXT_ALIGN-$FONT_WEIGHTS-COLORS.
+    See $FONT_SIZES, $TEXT_ALIGN, $FONT_WEIGHTS, $COLORS maps above for references.
+    Variables name example: --title-center-semibold-red
+ */
+/*
+    to use styles without modifier class on .inline-icon
+    use @extend
+
+    e.g. style icon on parent hover:
+        a:hover .inline-icon {
+            @extend %inline-icon.active;
+        }
+*/
+/**
+ * Define Breakpoints here.
+ */
+.reset-trading-password__description--is-centered {
+  margin: 0 auto;
+  max-width: 70%; }
+
+.reset-trading-password__confirm-button {
+  margin-top: 2.4rem; }
+
+.reset-trading-password__dialog .dc-dialog__dialog {
+  max-height: -moz-fit-content;
+  max-height: fit-content; }
+
+.reset-trading-password__dialog .dc-dialog__dialog .dc-dialog__content {
+  margin-bottom: 0; }
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .reset-trading-password__dialog {
+    padding: 0 1.6rem; } }
+
+.reset-trading-password__error {
+  max-width: 38.4rem;
+  min-height: 28.4rem;
+  padding-top: 2rem;
+  text-align: center; }
+
+.reset-trading-password__lead {
+  margin: 1.6rem 0 0; }
+
+.reset-trading-password__set-password {
+  display: flex;
+  justify-content: center;
+  flex-flow: nowrap column; }
+
+.reset-trading-password__set-password .reset-trading-password__heading {
+  margin-bottom: 2.4rem; }
+
+.reset-trading-password__password-success {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+
+.reset-trading-password__password-success .reset-trading-password__icon {
+  margin-bottom: 2.4rem; }
+
+.reset-trading-password__password-success .reset-trading-password__heading {
+  margin-bottom: 0.8rem; }
+
+.reset-trading-password__password-success .reset-trading-password__subtext {
+  margin-bottom: 2.4rem; }
+
+.reset-trading-password__residence-selection, .reset-trading-password__password-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: nowrap column; }
+
+.reset-trading-password__password-selection .reset-trading-password__heading {
+  margin-bottom: 3.3rem; }
+
+.reset-trading-password__heading {
+  margin-bottom: 0.8rem; }
+
+.reset-trading-password__text {
+  text-align: center;
+  margin-bottom: 3.3rem; }
+
+.reset-trading-password__subtext {
+  margin-bottom: 1.6rem; }
+
+.reset-trading-password__hint {
+  margin-bottom: 2.4rem; }
+
+.reset-trading-password__fieldset {
+  position: relative;
+  width: 100%; }
+
+@media (min-width: 1024px) {
+  .reset-trading-password__fieldset {
+    max-width: 30rem; } }
+
+.reset-trading-password__input-field {
+  margin-bottom: 1.2rem; }
+
+.reset-trading-password__password-field > label {
+  top: 0.9rem;
+  background-color: var(--general-main-2); }
+

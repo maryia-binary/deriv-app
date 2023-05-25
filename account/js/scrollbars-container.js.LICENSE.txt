@@ -15,9 +15,9 @@
   \*************************************************/
 
 /*!**************************************************!*\
-  !*** ./Components/scrollbars-container/index.js ***!
+  !*** ./Components/scrollbars-container/index.ts ***!
   \**************************************************/
 
 /*!******************************************************************!*\
-  !*** ./Components/scrollbars-container/scrollbars-container.jsx ***!
+  !*** ./Components/scrollbars-container/scrollbars-container.tsx ***!
   \******************************************************************/

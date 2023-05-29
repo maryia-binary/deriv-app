@@ -94,7 +94,7 @@ describe('getAccumulatorBarriers', () => {
             low_barrier: '',
         });
     });
-    it('should return correct barriers for a 0.0493582527% tick_size_barrier with a 2-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0493582527% tick_size_barrier with a 2-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000493582527, 5003, 2)).toEqual({
             high_barrier: '5005.470',
             low_barrier: '5000.530',
@@ -104,7 +104,7 @@ describe('getAccumulatorBarriers', () => {
             low_barrier: '5001.650',
         });
     });
-    it('should return correct barriers for a 0.0045868419% tick_size_barrier with a 2-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0045868419% tick_size_barrier with a 2-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000045868419, 6969, 2)).toEqual({
             high_barrier: '6969.320',
             low_barrier: '6968.680',
@@ -118,13 +118,13 @@ describe('getAccumulatorBarriers', () => {
             low_barrier: '6969.200',
         });
     });
-    it('should return correct barriers for a 0.0019945249% tick_size_barrier with a 3-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0019945249% tick_size_barrier with a 3-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000019945249, 12345.456, 3)).toEqual({
             high_barrier: '12345.7023',
             low_barrier: '12345.2097',
         });
     });
-    it('should return correct barriers for a 0.0388240062% tick_size_barrier with a 2-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0388240062% tick_size_barrier with a 2-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000388240062, 12335.62, 2)).toEqual({
             high_barrier: '12340.410',
             low_barrier: '12330.830',
@@ -138,7 +138,7 @@ describe('getAccumulatorBarriers', () => {
             low_barrier: '12324.953',
         });
     });
-    it('should return correct barriers for a 0.0409874388% tick_size_barrier with a 4-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0409874388% tick_size_barrier with a 4-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000409874388, 305325.23, 4)).toEqual({
             high_barrier: '305450.37500',
             low_barrier: '305200.08500',
@@ -148,7 +148,7 @@ describe('getAccumulatorBarriers', () => {
             low_barrier: '305207.43849',
         });
     });
-    it('should return correct barriers for a 0.0005325655% tick_size_barrier with a 3-pip_size previous_spot', () => {
+    it('should return correct barriers for a 0.0005325655% tick_size_barrier with a 3-pip_size spot', () => {
         expect(getAccumulatorBarriers(0.000005325655, 3546.234, 3)).toEqual({
             high_barrier: '3546.2529',
             low_barrier: '3546.2151',

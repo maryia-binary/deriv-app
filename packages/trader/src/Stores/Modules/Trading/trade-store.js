@@ -123,6 +123,7 @@ export default class TradeStore extends BaseStore {
 
     // Accumulator trade params
     accumulator_range_list = [];
+    barrier_spot_distance = 0;
     growth_rate = 0.03;
     maximum_payout = 0;
     maximum_ticks = 0;
@@ -205,6 +206,7 @@ export default class TradeStore extends BaseStore {
             barrier_1: observable,
             barrier_2: observable,
             barrier_count: observable,
+            barrier_spot_distance: observable,
             barriers: observable,
             basis_list: observable,
             basis: observable,
@@ -307,9 +309,9 @@ export default class TradeStore extends BaseStore {
             pushPurchaseDataToGtm: action.bound,
             refresh: action.bound,
             requestProposal: action.bound,
+            resetAccumulatorData: action.bound,
             resetErrorServices: action.bound,
             resetPreviousSymbol: action.bound,
-            resetAccumulatorData: action.bound,
             setActiveSymbols: action.bound,
             setAllowEqual: action.bound,
             setChartStatus: action.bound,
@@ -416,6 +418,7 @@ export default class TradeStore extends BaseStore {
 
     resetAccumulatorData() {
         if (this.tick_size_barrier) this.tick_size_barrier = 0;
+        if (this.barrier_spot_distance) this.barrier_spot_distance = 0;
         if (!isEmptyObject(this.root_store.contract_trade.accumulator_barriers_data)) {
             this.root_store.contract_trade.clearAccumulatorBarriersData();
         }
@@ -933,7 +936,6 @@ export default class TradeStore extends BaseStore {
         // when accumulator is selected, we need to change chart type to mountain and granularity to 0
         // and we need to restore previous chart type and granularity when accumulator is unselected
         const {
-            clearAccumulatorBarriersData,
             prev_chart_type,
             prev_granularity,
             chart_type,
@@ -943,7 +945,6 @@ export default class TradeStore extends BaseStore {
             updateGranularity,
         } = this.root_store.contract_trade || {};
         if (obj_new_values.contract_type === 'accumulator') {
-            clearAccumulatorBarriersData();
             savePreviousChartMode(chart_type, granularity);
             updateGranularity(0);
             updateChartType('mountain');
@@ -1151,25 +1152,34 @@ export default class TradeStore extends BaseStore {
             }
             this.stop_out = limit_order?.stop_out?.order_amount;
         }
-        if (this.is_accumulator && this.proposal_info && this.proposal_info.ACCU) {
-            const { maximum_ticks, ticks_stayed_in, tick_size_barrier, last_tick_epoch, maximum_payout } =
-                this.proposal_info.ACCU;
+        if (this.is_accumulator && this.proposal_info?.ACCU) {
+            const {
+                barrier_spot_distance,
+                maximum_ticks,
+                ticks_stayed_in,
+                tick_size_barrier,
+                last_tick_epoch,
+                maximum_payout,
+            } = this.proposal_info.ACCU;
             this.ticks_history_stats = getUpdatedTicksHistoryStats({
                 previous_ticks_history_stats: this.ticks_history_stats,
                 new_ticks_history_stats: ticks_stayed_in,
                 last_tick_epoch,
             });
+            this.barrier_spot_distance = barrier_spot_distance;
             this.maximum_ticks = maximum_ticks;
             this.maximum_payout = maximum_payout;
             this.tick_size_barrier = tick_size_barrier;
             const accumulator_barriers_data =
                 this.root_store.contract_trade.accumulator_barriers_data[this.symbol] || {};
-            if (!accumulator_barriers_data.accumulators_high_barrier) {
-                this.root_store.contract_trade.updateAccumulatorBarriersAndSpots({
+            if (!accumulator_barriers_data.accumulators_high_barrier && this.pip_size) {
+                this.root_store.contract_trade.updateAccumulatorBarriersData({
                     ...accumulator_barriers_data,
+                    barrier_spot_distance,
+                    current_symbol: this.symbol,
+                    from_proposal: true,
                     pip_size: this.pip_size,
                     symbol: this.symbol,
-                    current_symbol: this.symbol,
                     tick_size_barrier,
                 });
             }
@@ -1440,6 +1450,7 @@ export default class TradeStore extends BaseStore {
         if (this.prev_chart_layout) {
             this.prev_chart_layout.is_used = false;
         }
+        this.resetAccumulatorData();
     }
 
     prev_chart_layout = null;
@@ -1473,15 +1484,12 @@ export default class TradeStore extends BaseStore {
                 let accumulator_barriers_data = {
                     current_symbol: this.symbol,
                     tick_size_barrier: this.tick_size_barrier,
+                    barrier_spot_distance: this.barrier_spot_distance,
                 };
                 if ('tick' in args[0]) {
-                    const { current_spot, current_spot_time } =
-                        this.root_store.contract_trade.accumulator_barriers_data[this.symbol] || {};
                     const { epoch, pip_size, quote, symbol } = args[0].tick;
                     accumulator_barriers_data = {
                         ...accumulator_barriers_data,
-                        previous_spot: current_spot,
-                        previous_spot_time: current_spot_time,
                         current_spot: quote,
                         current_spot_time: epoch,
                         pip_size,
@@ -1492,8 +1500,6 @@ export default class TradeStore extends BaseStore {
                     const symbol = args[0].echo_req.ticks_history;
                     accumulator_barriers_data = {
                         ...accumulator_barriers_data,
-                        previous_spot: prices[prices.length - 2],
-                        previous_spot_time: times[times.length - 2],
                         current_spot: prices[prices.length - 1],
                         current_spot_time: times[times.length - 1],
                         pip_size: args[0].pip_size,
@@ -1502,7 +1508,7 @@ export default class TradeStore extends BaseStore {
                 } else {
                     return;
                 }
-                this.root_store.contract_trade.updateAccumulatorBarriersAndSpots(accumulator_barriers_data);
+                this.root_store.contract_trade.updateAccumulatorBarriersData(accumulator_barriers_data);
             }
         };
         if (req.subscribe === 1) {

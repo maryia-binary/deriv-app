@@ -258,6 +258,8 @@ const shadowed_text = ({ ctx, color, is_dark_theme, text, left, top, scale }) =>
     ctx.restore();
 };
 
+let count = 0;
+
 const TickContract = RawMarkerMaker(
     ({
         ctx: context,
@@ -325,6 +327,7 @@ const TickContract = RawMarkerMaker(
                 scale,
                 labels: accu_barriers_difference,
             });
+            count = 0;
             return;
         }
 
@@ -333,20 +336,28 @@ const TickContract = RawMarkerMaker(
             barrier_2 &&
             ((previous_tick && is_accumulator_contract && is_in_contract_details) || (!contract_type && start))
         ) {
+            if (has_crossed_accu_barriers || status === 'loss') {
+                count++;
+            }
+            let contract_shade = 'accu_contract_shade';
+            let stroke_color = 'won';
+            if ((count >= 1 && !has_crossed_accu_barriers) || status === 'loss') {
+                contract_shade = 'accu_shade';
+                stroke_color = 'open';
+            }
             // draw 2 barriers with a shade between them for an ongoing ACCU contract:
             draw_shaded_barriers({
                 ctx,
                 start_left: is_in_contract_details ? previous_tick.left : start.left,
                 fill_color: getColor({
-                    status:
-                        has_crossed_accu_barriers || status === 'lost' ? 'accu_shade_crossed' : 'accu_contract_shade',
+                    status: has_crossed_accu_barriers || status === 'lost' ? 'accu_shade_crossed' : contract_shade,
                     is_dark_theme,
                 }),
 
                 // we should show barrier lines in contract details even when they are outside of the chart:
                 has_persistent_borders: is_in_contract_details,
                 stroke_color: getColor({
-                    status: has_crossed_accu_barriers || status === 'lost' ? 'lost' : 'won',
+                    status: has_crossed_accu_barriers || status === 'lost' ? 'lost' : stroke_color,
                     is_dark_theme,
                 }),
                 top: barrier,

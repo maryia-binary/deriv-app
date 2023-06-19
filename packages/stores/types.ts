@@ -309,13 +309,48 @@ type TUiStore = {
     setShouldShowCooldownModal: (value: boolean) => void;
 };
 
+type TPortfolioPos = {
+    buy_price?: number;
+    contract_id?: number;
+    contract_type?: string;
+    entry_spot?: number | null;
+    longcode?: string;
+    payout?: number;
+    shortcode?: string;
+    transaction_id?: number;
+    transaction_ids?: {
+        buy: number;
+        sell: number;
+    };
+    limit_order?: {
+        stop_loss?: null | number;
+        take_profit?: null | number;
+    };
+    underlying?: string;
+};
+
+type TPortfolioPositions = {
+    contract_info: TPortfolioPos;
+    details: string;
+    display_name: string;
+    id?: number;
+    indicative: number;
+    payout: number;
+    purchase: number;
+    reference: number;
+    type?: string;
+    is_unsupported: boolean;
+    contract_update: TPortfolioPos['limit_order'];
+}[];
+
 export type TPortfolioStore = {
-    active_positions: TPortfolioStore['positions'];
+    active_positions: TPortfolioPositions;
     error: string;
-    getPositionById: (id: number) => TPortfolioStore['positions'][number];
+    getPositionById: (id: number) => TPortfolioPositions[number];
     is_accumulator: boolean;
     is_loading: boolean;
     is_multiplier: boolean;
+    is_turbos: boolean;
     onClickCancel: (contract_id?: number) => void;
     onClickSell: (contract_id?: number) => void;
     onMount: () => void;

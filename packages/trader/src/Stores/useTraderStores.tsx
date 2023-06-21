@@ -2,6 +2,11 @@ import React from 'react';
 import { useStore } from '@deriv/stores';
 import TradeStore from './Modules/Trading/trade-store';
 
+type TTextValueStrings = {
+    text: string;
+    value: string;
+};
+
 type TToastBoxListItem = {
     contract_category: string;
     contract_types: [
@@ -23,14 +28,45 @@ type TToastBoxObject = {
 type TOverrideTradeStore = Omit<
     TradeStore,
     | 'accumulator_range_list'
+    | 'barrier_count'
+    | 'barrier_1'
+    | 'barrier_2'
+    | 'basis_list'
+    | 'basis'
+    | 'cancellation_range_list'
     | 'contract_purchase_toast_box'
+    | 'contract_start_type'
     | 'clearContractPurchaseToastBox'
+    | 'duration_unit'
+    | 'duration_units_list'
+    | 'duration_min_max'
+    | 'expiry_type'
+    | 'form_components'
+    | 'multiplier_range_list'
     | 'proposal_info'
+    | 'start_date'
+    | 'start_dates_list'
     | 'ticks_history_stats'
+    | 'trade_types'
 > & {
-    accumulator_range_list?: number[];
+    accumulator_range_list: number[];
+    basis_list: Array<TTextValueStrings>;
+    basis: string;
+    contract_start_type: string;
+    barrier_count: number;
+    barrier_1: string;
+    barrier_2: string;
     contract_purchase_toast_box: TToastBoxObject;
     clearContractPurchaseToastBox: () => void;
+    duration_unit: string;
+    duration_units_list: Array<TTextValueStrings>;
+    duration_min_max: {
+        [key: string]: { min: number; max: number };
+    };
+    expiry_type: string;
+    form_components: string[];
+    multiplier_range_list: number[];
+    cancellation_range_list: Array<TTextValueStrings>;
     proposal_info: {
         [key: string]: {
             has_error?: boolean;
@@ -46,9 +82,12 @@ type TOverrideTradeStore = Omit<
             stake: string;
         };
     };
+    start_date: number;
+    start_dates_list: Array<{ text: string; value: number }>;
     ticks_history_stats: {
         ticks_stayed_in?: number[];
     };
+    trade_types: { [key: string]: string };
 };
 
 const TraderStoreContext = React.createContext<TOverrideTradeStore | null>(null);

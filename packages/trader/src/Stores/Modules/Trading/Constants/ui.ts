@@ -8,4 +8,4 @@ export const form_components = [
     { name: 'barrier', Component: Barrier },
     { name: 'last_digit', Component: LastDigit },
     { name: 'amount', Component: Amount },
-];
+] as const;

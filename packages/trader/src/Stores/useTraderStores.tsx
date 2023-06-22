@@ -46,6 +46,7 @@ type TOverrideTradeStore = Omit<
     | 'proposal_info'
     | 'start_date'
     | 'start_dates_list'
+    | 'start_time'
     | 'ticks_history_stats'
     | 'trade_types'
 > & {
@@ -84,6 +85,7 @@ type TOverrideTradeStore = Omit<
     };
     start_date: number;
     start_dates_list: Array<{ text: string; value: number }>;
+    start_time: moment.Moment | null;
     ticks_history_stats: {
         ticks_stayed_in?: number[];
     };

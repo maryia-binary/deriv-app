@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from '@deriv/stores';
 import TradeStore from './Modules/Trading/trade-store';
+import moment from 'moment';
 
 type TTextValueStrings = {
     text: string;
@@ -40,8 +41,12 @@ type TOverrideTradeStore = Omit<
     | 'duration_unit'
     | 'duration_units_list'
     | 'duration_min_max'
+    | 'expiry_date'
+    | 'expiry_time'
     | 'expiry_type'
     | 'form_components'
+    | 'market_close_times'
+    | 'market_open_times'
     | 'multiplier_range_list'
     | 'proposal_info'
     | 'start_date'
@@ -64,8 +69,12 @@ type TOverrideTradeStore = Omit<
     duration_min_max: {
         [key: string]: { min: number; max: number };
     };
-    expiry_type: string;
+    expiry_date: string | null;
+    expiry_time: string | null;
+    expiry_type: string | null;
     form_components: string[];
+    market_open_times: string[];
+    market_close_times: string[];
     multiplier_range_list: number[];
     cancellation_range_list: Array<TTextValueStrings>;
     proposal_info: {
@@ -83,9 +92,10 @@ type TOverrideTradeStore = Omit<
             stake: string;
         };
     };
+    sessions: Array<{ open: moment.Moment; close: moment.Moment }>;
     start_date: number;
     start_dates_list: Array<{ text: string; value: number }>;
-    start_time: moment.Moment | null;
+    start_time: string | null;
     ticks_history_stats: {
         ticks_stayed_in?: number[];
     };

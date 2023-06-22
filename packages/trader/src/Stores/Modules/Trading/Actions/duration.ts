@@ -2,16 +2,15 @@ import { getExpiryType, getDurationMinMaxValues } from '@deriv/shared';
 import { ContractType } from 'Stores/Modules/Trading/Helpers/contract-type';
 import { TTradeStore } from 'Types';
 
-type TAssertDurationParams = Pick<
-    TTradeStore,
-    'contract_expiry_type' | 'duration' | 'duration_min_max' | 'duration_unit'
->;
 type TOnChangeExpiry = (store: TTradeStore) => {
     contract_expiry_type: string;
     barrier_count?: number;
     barrier_1?: string;
     barrier_2?: string;
 };
+type TAssertDurationParams = Partial<
+    Pick<TTradeStore, 'contract_expiry_type' | 'duration' | 'duration_min_max' | 'duration_unit'>
+>;
 
 export const onChangeExpiry: TOnChangeExpiry = store => {
     const contract_expiry_type = getExpiryType(store);
@@ -38,20 +37,18 @@ export const onChangeContractType = (store: TTradeStore) => {
     };
 };
 
-const assertDuration = (
-    {
-        contract_expiry_type,
-        duration,
-        duration_min_max,
-        duration_unit,
-    }: TAssertDurationParams = {} as TAssertDurationParams
-) => {
-    const [min, max] = getDurationMinMaxValues(duration_min_max, contract_expiry_type, duration_unit);
+const assertDuration = ({
+    contract_expiry_type,
+    duration,
+    duration_min_max,
+    duration_unit,
+}: TAssertDurationParams = {}) => {
+    const [min, max] = getDurationMinMaxValues(duration_min_max ?? {}, contract_expiry_type ?? '', duration_unit ?? '');
 
-    if (min && duration < min) {
+    if (duration && min && duration < min) {
         return { duration: min };
     }
-    if (max && duration > max) {
+    if (duration && max && duration > max) {
         return { duration: max };
     }
     return {};

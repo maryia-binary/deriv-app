@@ -1,6 +1,23 @@
 import { localize } from '@deriv/translations';
 import { isHourValid, isMinuteValid, isTimeValid, toMoment } from '@deriv/shared';
 import { isSessionAvailable } from '../Helpers/start-date';
+import { TTradeStore } from 'Types';
+
+type TOptions = {
+    min?: number;
+    max?: number | string;
+    name1?: string;
+    name2?: string;
+    type?: string;
+    message?: string;
+    condition?: (store: TTradeStore) => boolean;
+    func?: (
+        value: TTradeStore['barrier_1'],
+        options: TOptions,
+        store: TTradeStore,
+        inputs?: Partial<TTradeStore>
+    ) => boolean;
+};
 
 const tradeSpecificBarrierCheck = (is_vanilla: boolean, input: number) => is_vanilla || input !== 0;
 
@@ -17,23 +34,33 @@ export const getValidationRules = () =>
                 [
                     'req',
                     {
-                        condition: store => store.barrier_count && store.form_components.indexOf('barrier') > -1,
+                        condition: (store: TTradeStore) =>
+                            store.barrier_count && store.form_components.indexOf('barrier') > -1,
                         message: localize('Barrier is a required field.'),
                     },
                 ],
-                ['barrier', { condition: store => store.barrier_count }],
+                ['barrier', { condition: (store: TTradeStore) => store.barrier_count }],
                 [
                     'custom',
                     {
-                        func: (value, options, store, inputs) =>
-                            store.barrier_count > 1 ? +value > +inputs.barrier_2 : true,
+                        func: (
+                            value: TTradeStore['barrier_1'],
+                            options: TOptions,
+                            store: TTradeStore,
+                            inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
+                        ) => (store.barrier_count > 1 ? +value > +inputs.barrier_2 : true),
                         message: localize('Higher barrier must be higher than lower barrier.'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store, inputs) =>
+                        func: (
+                            value: TTradeStore['barrier_1'],
+                            options: TOptions,
+                            store: TTradeStore,
+                            inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
+                        ) =>
                             /^[+-]/.test(inputs.barrier_1)
                                 ? tradeSpecificBarrierCheck(store.is_vanilla, +inputs.barrier_1)
                                 : true,
@@ -48,15 +75,21 @@ export const getValidationRules = () =>
                 [
                     'req',
                     {
-                        condition: store => store.barrier_count > 1 && store.form_components.indexOf('barrier') > -1,
+                        condition: (store: TTradeStore) =>
+                            store.barrier_count > 1 && store.form_components.indexOf('barrier') > -1,
                         message: localize('Barrier is a required field.'),
                     },
                 ],
-                ['barrier', { condition: store => store.barrier_count }],
+                ['barrier', { condition: (store: TTradeStore) => store.barrier_count }],
                 [
                     'custom',
                     {
-                        func: (value, options, store, inputs) =>
+                        func: (
+                            value: TTradeStore['barrier_2'],
+                            options: TOptions,
+                            store: TTradeStore,
+                            inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
+                        ) =>
                             (/^[+-]/g.test(inputs.barrier_1) && /^[+-]/g.test(value)) ||
                             (/^(?![+-])/g.test(inputs.barrier_1) && /^(?![+-])/g.test(value)),
                         message: localize('Both barriers should be relative or absolute'),
@@ -65,7 +98,12 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value, options, store, inputs) => +inputs.barrier_1 > +value,
+                        func: (
+                            value: TTradeStore['barrier_2'],
+                            options: TOptions,
+                            store: TTradeStore,
+                            inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
+                        ) => +inputs.barrier_1 > +value,
                         message: localize('Lower barrier must be lower than higher barrier.'),
                     },
                 ],
@@ -86,36 +124,39 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isTimeValid(value),
+                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isTimeValid(value ?? ''),
                         message: localize('Please enter the start time in the format "HH:MM".'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isHourValid(value),
+                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isHourValid(value ?? ''),
                         message: localize('Hour must be between 0 and 23.'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isMinuteValid(value),
+                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isMinuteValid(value ?? ''),
                         message: localize('Minute must be between 0 and 59.'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => {
+                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) => {
                             if (store.contract_start_type === 'spot') return true;
-                            if (!isTimeValid(value)) return false;
+                            if (!isTimeValid(value ?? '')) return false;
                             const start_moment = toMoment(store.start_date);
                             const start_moment_clone = start_moment.clone();
-                            const [h, m] = value.split(':');
+                            const [h, m] = value?.split(':') ?? [];
                             return isSessionAvailable(
                                 store.sessions,
-                                start_moment_clone.hour(h).minute(m),
+                                start_moment_clone.hour(+h).minute(+m),
                                 start_moment
                             );
                         },
@@ -129,36 +170,39 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isTimeValid(value),
+                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isTimeValid(value ?? ''),
                         message: localize('Please enter the start time in the format "HH:MM".'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isHourValid(value),
+                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isHourValid(value ?? ''),
                         message: localize('Hour must be between 0 and 23.'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => store.contract_start_type === 'spot' || isMinuteValid(value),
+                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                            store.contract_start_type === 'spot' || isMinuteValid(value ?? ''),
                         message: localize('Minute must be between 0 and 59.'),
                     },
                 ],
                 [
                     'custom',
                     {
-                        func: (value, options, store) => {
+                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) => {
                             if (store.contract_start_type === 'spot') return true;
-                            if (!isTimeValid(value)) return false;
+                            if (!isTimeValid(value ?? '')) return false;
                             const start_moment = toMoment(store.start_date);
                             const start_moment_clone = start_moment.clone();
-                            const [h, m] = value.split(':');
+                            const [h, m] = value?.split(':') ?? [];
                             return isSessionAvailable(
                                 store.sessions,
-                                start_moment_clone.hour(h).minute(m),
+                                start_moment_clone.hour(+h).minute(+m),
                                 start_moment
                             );
                         },
@@ -177,7 +221,7 @@ export const getMultiplierValidationRules = () =>
                 [
                     'req',
                     {
-                        condition: store => store.has_stop_loss && !store.stop_loss,
+                        condition: (store: TTradeStore) => store.has_stop_loss && !store.stop_loss,
                         message: localize('Please enter a stop loss amount.'),
                     },
                 ],
@@ -188,7 +232,7 @@ export const getMultiplierValidationRules = () =>
                 [
                     'req',
                     {
-                        condition: store => store.has_take_profit && !store.take_profit,
+                        condition: (store: TTradeStore) => store.has_take_profit && !store.take_profit,
                         message: localize('Please enter a take profit amount.'),
                     },
                 ],

@@ -26,19 +26,24 @@ type TToastBoxObject = {
     list?: TToastBoxListItem[];
 };
 
+type TContractTypesList = {
+    [key: string]: {
+        name: string;
+        categories: Array<{
+            text: string;
+            value: string;
+        }>;
+    };
+};
+
 type TOverrideTradeStore = Omit<
     TradeStore,
     | 'accumulator_range_list'
-    | 'barrier_count'
-    | 'barrier_1'
-    | 'barrier_2'
     | 'basis_list'
-    | 'basis'
     | 'cancellation_range_list'
     | 'contract_purchase_toast_box'
-    | 'contract_start_type'
+    | 'contract_types_list'
     | 'clearContractPurchaseToastBox'
-    | 'duration_unit'
     | 'duration_units_list'
     | 'duration_min_max'
     | 'expiry_date'
@@ -49,7 +54,7 @@ type TOverrideTradeStore = Omit<
     | 'market_open_times'
     | 'multiplier_range_list'
     | 'proposal_info'
-    | 'start_date'
+    | 'sessions'
     | 'start_dates_list'
     | 'start_time'
     | 'ticks_history_stats'
@@ -57,14 +62,9 @@ type TOverrideTradeStore = Omit<
 > & {
     accumulator_range_list: number[];
     basis_list: Array<TTextValueStrings>;
-    basis: string;
-    contract_start_type: string;
-    barrier_count: number;
-    barrier_1: string;
-    barrier_2: string;
     contract_purchase_toast_box: TToastBoxObject;
+    contract_types_list: TContractTypesList;
     clearContractPurchaseToastBox: () => void;
-    duration_unit: string;
     duration_units_list: Array<TTextValueStrings>;
     duration_min_max: {
         [key: string]: { min: number; max: number };
@@ -93,7 +93,6 @@ type TOverrideTradeStore = Omit<
         };
     };
     sessions: Array<{ open: moment.Moment; close: moment.Moment }>;
-    start_date: number;
     start_dates_list: Array<{ text: string; value: number }>;
     start_time: string | null;
     ticks_history_stats: {

@@ -1,14 +1,8 @@
 import { ContractType } from 'Stores/Modules/Trading/Helpers/contract-type';
 import { TTradeStore } from 'Types';
 
-type TContractTypesList = {
-    [key: string]: {
-        name: string;
-        categories: Array<{
-            text: string;
-            value: string;
-        }>;
-    };
+type TOnChangeContractTypeList = (store: TTradeStore) => {
+    contract_type: string;
 };
 
 type TContractValues = Pick<
@@ -31,10 +25,6 @@ type TContractValues = Pick<
     | 'multiplier_range_list'
     | 'cancellation_range_list'
 >;
-
-type TOnChangeContractTypeList = (params: { contract_types_list: TContractTypesList; contract_type: string }) => {
-    contract_type: string;
-};
 
 export const onChangeContractTypeList: TOnChangeContractTypeList = ({ contract_types_list, contract_type }) => {
     return ContractType.getContractType(contract_types_list, contract_type);

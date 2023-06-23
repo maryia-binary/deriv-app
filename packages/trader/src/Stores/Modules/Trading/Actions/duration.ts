@@ -19,6 +19,7 @@ export const onChangeExpiry: TOnChangeExpiry = store => {
     const obj_barriers =
         store.contract_expiry_type !== contract_expiry_type && // barrier value changes for tick/intraday/daily
         ContractType.getBarriers(store.contract_type, contract_expiry_type);
+
     return {
         contract_expiry_type,
         ...obj_barriers,

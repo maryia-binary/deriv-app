@@ -1,4 +1,4 @@
-type TBarrier = {
+export type TBarrier = {
     key?: string;
     title?: string;
     color: string;

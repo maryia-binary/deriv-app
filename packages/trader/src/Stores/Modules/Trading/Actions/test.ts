@@ -1,6 +1,5 @@
 import { TicksStreamResponse } from '@deriv/api-types';
 import { WS } from '@deriv/shared';
-import { TError } from 'Types';
 
 type TCallback = (data: string) => void;
 /* This action does not modify state directlly.
@@ -8,10 +7,15 @@ type TCallback = (data: string) => void;
  */
 let cb: TCallback;
 const ticksCallback = (response: TicksStreamResponse) => {
-    const data: string = response.error
-        ? (response.error as TError).message
-        : `${new Date(Number(response.tick?.epoch) * 1000).toUTCString()}: ${response.tick?.quote}`;
-    cb(data);
+    if (
+        response.error &&
+        typeof response.error === 'object' &&
+        'message' in response.error &&
+        typeof response.error.message === 'string'
+    ) {
+        return cb(response.error.message);
+    }
+    return cb(`${new Date(Number(response.tick?.epoch) * 1000).toUTCString()}: ${response.tick?.quote}`);
 };
 
 export const getTicks = function ({ symbol }: { symbol: string }, callback: TCallback) {

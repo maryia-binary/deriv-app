@@ -41,11 +41,11 @@ type TOverrideTradeStore = Omit<
     | 'accumulator_range_list'
     | 'basis_list'
     | 'cancellation_range_list'
+    | 'clearContractPurchaseToastBox'
     | 'contract_purchase_toast_box'
     | 'contract_types_list'
-    | 'clearContractPurchaseToastBox'
-    | 'duration_units_list'
     | 'duration_min_max'
+    | 'duration_units_list'
     | 'expiry_date'
     | 'expiry_time'
     | 'expiry_type'
@@ -62,13 +62,14 @@ type TOverrideTradeStore = Omit<
 > & {
     accumulator_range_list: number[];
     basis_list: Array<TTextValueStrings>;
+    cancellation_range_list: Array<TTextValueStrings>;
+    clearContractPurchaseToastBox: () => void;
     contract_purchase_toast_box: TToastBoxObject;
     contract_types_list: TContractTypesList;
-    clearContractPurchaseToastBox: () => void;
-    duration_units_list: Array<TTextValueStrings>;
     duration_min_max: {
         [key: string]: { min: number; max: number };
     };
+    duration_units_list: Array<TTextValueStrings>;
     expiry_date: string | null;
     expiry_time: string | null;
     expiry_type: string | null;
@@ -76,7 +77,6 @@ type TOverrideTradeStore = Omit<
     market_open_times: string[];
     market_close_times: string[];
     multiplier_range_list: number[];
-    cancellation_range_list: Array<TTextValueStrings>;
     proposal_info: {
         [key: string]: {
             has_error?: boolean;

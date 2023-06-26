@@ -14,9 +14,4 @@ export type TProposalTypeInfo = {
     stake: string;
 };
 
-export type TError = {
-    code: string | number;
-    message: string;
-};
-
 export type TTradeStore = ReturnType<typeof useTraderStore>;

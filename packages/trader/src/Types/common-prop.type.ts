@@ -1,5 +1,3 @@
-import { useTraderStore } from 'Stores/useTraderStores';
-
 export type TProposalTypeInfo = {
     has_error?: boolean;
     id: string;
@@ -13,10 +11,3 @@ export type TProposalTypeInfo = {
     returns?: string;
     stake: string;
 };
-
-export type TError = {
-    code: string | number;
-    message: string;
-};
-
-export type TTradeStore = ReturnType<typeof useTraderStore>;

@@ -9,6 +9,17 @@ import { observer, useStore } from '@deriv/stores';
 import { TProposalTypeInfo } from 'Types';
 import ContractInfo from 'Modules/Trading/Components/Form/Purchase/contract-info.jsx';
 
+const getSortedIndex = (type: string, index: number) => {
+    switch (getContractTypePosition(type)) {
+        case 'top':
+            return 0;
+        case 'bottom':
+            return 1;
+        default:
+            return index;
+    }
+};
+
 // @ts-expect-error returned value should be wraped with React.Fragmant (it's an array with components), but we can't do this as it causes issues.
 const Purchase = observer(({ is_market_closed }: { is_market_closed: boolean }) => {
     const {
@@ -43,16 +54,13 @@ const Purchase = observer(({ is_market_closed }: { is_market_closed: boolean }) 
     };
     const is_proposal_empty = isEmptyObject(proposal_info);
     const components = [];
-    Object.keys(trade_types).map((type, index) => {
-        const getSortedIndex = () => {
-            if (getContractTypePosition(type) === 'top') return 0;
-            if (getContractTypePosition(type) === 'bottom') return 1;
-            return index;
-        };
+
+    Object.keys(trade_types).forEach((type, index) => {
         const info = proposal_info?.[type] || {};
         const is_disabled = !is_trade_enabled || !info.id || !is_purchase_enabled;
+        const is_accum_or_mult_error = info?.has_error && !!info?.message;
         const is_proposal_error =
-            is_multiplier || (is_accumulator && !is_mobile) ? info?.has_error && !!info?.message : info?.has_error;
+            is_multiplier || (is_accumulator && !is_mobile) ? is_accum_or_mult_error : info?.has_error;
         const purchase_fieldset = (
             <div className='trade-params--mobile__payout-container'>
                 {is_vanilla && isMobile() && (
@@ -72,8 +80,8 @@ const Purchase = observer(({ is_market_closed }: { is_market_closed: boolean }) 
                     buy_info={purchase_info}
                     currency={currency}
                     info={info}
-                    key={index}
-                    index={getSortedIndex()}
+                    key={type}
+                    index={getSortedIndex(type, index)}
                     growth_rate={growth_rate}
                     has_cancellation={has_cancellation}
                     is_disabled={is_disabled}
@@ -94,19 +102,9 @@ const Purchase = observer(({ is_market_closed }: { is_market_closed: boolean }) 
             </div>
         );
 
-        if (!is_vanilla) {
-            switch (getContractTypePosition(type)) {
-                case 'top':
-                    components.unshift(purchase_fieldset);
-                    break;
-                case 'bottom':
-                    components.push(purchase_fieldset);
-                    break;
-                default:
-                    components.push(purchase_fieldset);
-                    break;
-            }
-        } else if (vanilla_trade_type === type) {
+        if (!is_vanilla && getContractTypePosition(type) === 'top') {
+            components.unshift(purchase_fieldset);
+        } else if ((!is_vanilla && getContractTypePosition(type) !== 'top') || vanilla_trade_type === type) {
             components.push(purchase_fieldset);
         }
     });

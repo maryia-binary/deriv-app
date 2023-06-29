@@ -43,9 +43,10 @@ export const isVanillaContract = (contract_type: string) => /VANILLA/i.test(cont
 
 export const isCryptoContract = (underlying: string) => /^cry/.test(underlying);
 
-export const TURBOSLONG = 'turboslong';
-
-export const TURBOSSHORT = 'turbosshort';
+export const TURBOS = {
+    LONG: 'turboslong',
+    SHORT: 'turbosshort',
+} as const;
 
 export const getCurrentTick = (contract_info: TContractInfo) => {
     const tick_stream = unique(contract_info.tick_stream || [], 'epoch');

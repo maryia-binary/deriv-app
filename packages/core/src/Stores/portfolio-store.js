@@ -18,8 +18,7 @@ import {
     getDurationUnitText,
     getEndTime,
     removeBarrier,
-    TURBOSLONG,
-    TURBOSSHORT,
+    TURBOS,
 } from '@deriv/shared';
 import { Money } from '@deriv/components';
 import { ChartBarrierStore } from './chart-barrier-store';
@@ -592,6 +591,6 @@ export default class PortfolioStore extends BaseStore {
     }
 
     get is_turbos() {
-        return this.contract_type === TURBOSLONG || this.contract_type === TURBOSSHORT;
+        return this.contract_type === TURBOS.LONG || this.contract_type === TURBOS.SHORT;
     }
 }

@@ -2,22 +2,7 @@ import { localize } from '@deriv/translations';
 import { isHourValid, isMinuteValid, isTimeValid, toMoment } from '@deriv/shared';
 import { isSessionAvailable } from '../Helpers/start-date';
 import { TTradeStore } from 'Types';
-
-type TOptions = {
-    min?: number;
-    max?: number | string;
-    name1?: string;
-    name2?: string;
-    type?: string;
-    message?: string;
-    condition?: (store: TTradeStore) => boolean;
-    func?: (
-        value: TTradeStore['barrier_1'],
-        options: TOptions,
-        store: TTradeStore,
-        inputs?: Partial<TTradeStore>
-    ) => boolean;
-};
+import type { TRuleOptions } from 'Utils/Validator/validator';
 
 const tradeSpecificBarrierCheck = (is_vanilla: boolean, input: number) => is_vanilla || input !== 0;
 
@@ -45,7 +30,7 @@ export const getValidationRules = () =>
                     {
                         func: (
                             value: TTradeStore['barrier_1'],
-                            options: TOptions,
+                            options: Partial<TRuleOptions>,
                             store: TTradeStore,
                             inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
                         ) => (store.barrier_count > 1 ? +value > +inputs.barrier_2 : true),
@@ -57,7 +42,7 @@ export const getValidationRules = () =>
                     {
                         func: (
                             value: TTradeStore['barrier_1'],
-                            options: TOptions,
+                            options: Partial<TRuleOptions>,
                             store: TTradeStore,
                             inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
                         ) =>
@@ -86,7 +71,7 @@ export const getValidationRules = () =>
                     {
                         func: (
                             value: TTradeStore['barrier_2'],
-                            options: TOptions,
+                            options: Partial<TRuleOptions>,
                             store: TTradeStore,
                             inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
                         ) =>
@@ -100,7 +85,7 @@ export const getValidationRules = () =>
                     {
                         func: (
                             value: TTradeStore['barrier_2'],
-                            options: TOptions,
+                            options: Partial<TRuleOptions>,
                             store: TTradeStore,
                             inputs: Pick<TTradeStore, 'barrier_1' | 'barrier_2'>
                         ) => +inputs.barrier_1 > +value,
@@ -124,7 +109,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['start_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isTimeValid(value ?? ''),
                         message: localize('Please enter the start time in the format "HH:MM".'),
                     },
@@ -132,7 +117,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['start_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isHourValid(value ?? ''),
                         message: localize('Hour must be between 0 and 23.'),
                     },
@@ -140,7 +125,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['start_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isMinuteValid(value ?? ''),
                         message: localize('Minute must be between 0 and 59.'),
                     },
@@ -148,7 +133,11 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['start_time'], options: TOptions, store: TTradeStore) => {
+                        func: (
+                            value: TTradeStore['start_time'],
+                            options: Partial<TRuleOptions>,
+                            store: TTradeStore
+                        ) => {
                             if (store.contract_start_type === 'spot') return true;
                             if (!isTimeValid(value ?? '')) return false;
                             const start_moment = toMoment(store.start_date);
@@ -170,7 +159,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['expiry_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isTimeValid(value ?? ''),
                         message: localize('Please enter the start time in the format "HH:MM".'),
                     },
@@ -178,7 +167,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['expiry_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isHourValid(value ?? ''),
                         message: localize('Hour must be between 0 and 23.'),
                     },
@@ -186,7 +175,7 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) =>
+                        func: (value: TTradeStore['expiry_time'], options: Partial<TRuleOptions>, store: TTradeStore) =>
                             store.contract_start_type === 'spot' || isMinuteValid(value ?? ''),
                         message: localize('Minute must be between 0 and 59.'),
                     },
@@ -194,7 +183,11 @@ export const getValidationRules = () =>
                 [
                     'custom',
                     {
-                        func: (value: TTradeStore['expiry_time'], options: TOptions, store: TTradeStore) => {
+                        func: (
+                            value: TTradeStore['expiry_time'],
+                            options: Partial<TRuleOptions>,
+                            store: TTradeStore
+                        ) => {
                             if (store.contract_start_type === 'spot') return true;
                             if (!isTimeValid(value ?? '')) return false;
                             const start_moment = toMoment(store.start_date);

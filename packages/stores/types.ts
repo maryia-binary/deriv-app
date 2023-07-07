@@ -309,6 +309,7 @@ type TClientStore = {
 
 type TCommonStoreError = {
     app_routing_history: TAppRoutingHistory[];
+    code?: string;
     header: string | JSX.Element;
     message: string | JSX.Element;
     redirect_label: string;
@@ -333,6 +334,7 @@ type TCommonStore = {
     changeSelectedLanguage: (key: string) => void;
     current_language: string;
     is_language_changing: boolean;
+    services_error: TCommonStoreError;
     setAppstorePlatform: (value: string) => void;
     app_routing_history: TAppRoutingHistory[];
     getExchangeRate: (from_currency: string, to_currency: string) => Promise<number>;
@@ -368,6 +370,7 @@ type TUiStore = {
     toggleCashier: () => void;
     toggleLanguageSettingsModal: () => void;
     toggleReadyToDepositModal: () => void;
+    toggleServicesErrorModal: (is_visible: boolean) => void;
     toggleSetCurrencyModal: () => void;
     removeToast: (key: string) => void;
     is_ready_to_deposit_modal_visible: boolean;

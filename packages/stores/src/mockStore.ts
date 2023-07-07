@@ -2,6 +2,18 @@ import merge from 'lodash.merge';
 import type { TStores } from '../types';
 
 const mock = (): TStores & { is_mock: boolean } => {
+    const common_store_error = {
+        app_routing_history: [],
+        header: '',
+        message: '',
+        type: '',
+        redirect_label: '',
+        redirect_to: '',
+        should_clear_error_on_click: false,
+        should_show_refresh: false,
+        redirectOnClick: jest.fn(),
+        setError: jest.fn(),
+    };
     return {
         is_mock: true,
         client: {
@@ -250,18 +262,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             setPrevAccountType: jest.fn(),
         },
         common: {
-            error: {
-                app_routing_history: [],
-                header: '',
-                message: '',
-                type: '',
-                redirect_label: '',
-                redirect_to: '',
-                should_clear_error_on_click: false,
-                should_show_refresh: false,
-                redirectOnClick: jest.fn(),
-                setError: jest.fn(),
-            },
+            error: common_store_error,
             is_from_derivgo: false,
             has_error: false,
             platform: '',
@@ -273,6 +274,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             is_network_online: false,
             server_time: undefined,
             is_language_changing: false,
+            services_error: common_store_error,
             setAppstorePlatform: jest.fn(),
             app_routing_history: [],
             getExchangeRate: jest.fn(),
@@ -303,6 +305,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             setPurchaseState: jest.fn(),
             shouldNavigateAfterChooseCrypto: jest.fn(),
             toggleLanguageSettingsModal: jest.fn(),
+            toggleServicesErrorModal: jest.fn(),
             toggleSetCurrencyModal: jest.fn(),
             addToast: jest.fn(),
             removeToast: jest.fn(),

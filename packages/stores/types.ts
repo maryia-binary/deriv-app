@@ -350,6 +350,7 @@ type TUiStore = {
     current_focus: string | null;
     disableApp: () => void;
     enableApp: () => void;
+    has_only_forward_starting_contracts: boolean;
     has_real_account_signup_ended: boolean;
     is_cashier_visible: boolean;
     is_closing_create_real_account_modal: boolean;
@@ -358,6 +359,7 @@ type TUiStore = {
     is_language_settings_modal_on: boolean;
     is_mobile: boolean;
     is_services_error_visible: boolean;
+    is_unsupported_contract_modal_visible: boolean;
     openRealAccountSignup: (
         value: 'maltainvest' | 'svg' | 'add_crypto' | 'choose' | 'add_fiat' | 'set_currency' | 'manage'
     ) => void;

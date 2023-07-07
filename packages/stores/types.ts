@@ -309,7 +309,6 @@ type TClientStore = {
 
 type TCommonStoreError = {
     app_routing_history: TAppRoutingHistory[];
-    code?: string;
     header: string | JSX.Element;
     message: string | JSX.Element;
     redirect_label: string;
@@ -318,6 +317,11 @@ type TCommonStoreError = {
     setError: (has_error: boolean, error: React.ReactNode | null) => void;
     should_clear_error_on_click: boolean;
     should_show_refresh: boolean;
+    type?: string;
+};
+type TCommonStoreServicesError = {
+    code: string;
+    message: string;
     type?: string;
 };
 
@@ -334,7 +338,7 @@ type TCommonStore = {
     changeSelectedLanguage: (key: string) => void;
     current_language: string;
     is_language_changing: boolean;
-    services_error: TCommonStoreError;
+    services_error: TCommonStoreServicesError;
     setAppstorePlatform: (value: string) => void;
     app_routing_history: TAppRoutingHistory[];
     getExchangeRate: (from_currency: string, to_currency: string) => Promise<number>;
@@ -353,6 +357,7 @@ type TUiStore = {
     is_reports_visible: boolean;
     is_language_settings_modal_on: boolean;
     is_mobile: boolean;
+    is_services_error_visible: boolean;
     openRealAccountSignup: (
         value: 'maltainvest' | 'svg' | 'add_crypto' | 'choose' | 'add_fiat' | 'set_currency' | 'manage'
     ) => void;

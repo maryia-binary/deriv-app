@@ -14,6 +14,7 @@ const mock = (): TStores & { is_mock: boolean } => {
         redirectOnClick: jest.fn(),
         setError: jest.fn(),
     };
+    const services_error = { code: '', message: '', type: '' };
     return {
         is_mock: true,
         client: {
@@ -274,7 +275,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             is_network_online: false,
             server_time: undefined,
             is_language_changing: false,
-            services_error: common_store_error,
+            services_error,
             setAppstorePlatform: jest.fn(),
             app_routing_history: [],
             getExchangeRate: jest.fn(),
@@ -290,6 +291,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             is_language_settings_modal_on: false,
             is_mobile: false,
             is_reports_visible: false,
+            is_services_error_visible: false,
             disableApp: jest.fn(),
             enableApp: jest.fn(),
             setCurrentFocus: jest.fn(),

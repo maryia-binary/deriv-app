@@ -359,6 +359,7 @@ type TUiStore = {
     notification_messages_ui: ElementType;
     setCurrentFocus: (value: string) => void;
     setDarkMode: (is_dark_mode_on: boolean) => boolean;
+    setHasOnlyForwardingContracts: (has_only_forward_starting_contracts: boolean) => void;
     setReportsTabIndex: (value: number) => void;
     setIsClosingCreateRealAccountModal: (value: boolean) => void;
     setRealAccountSignupEnd: (status: boolean) => void;

@@ -300,6 +300,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             has_real_account_signup_ended: false,
             notification_messages_ui: jest.fn(),
             openRealAccountSignup: jest.fn(),
+            setHasOnlyForwardingContracts: jest.fn(),
             setIsClosingCreateRealAccountModal: jest.fn(),
             setRealAccountSignupEnd: jest.fn(),
             setPurchaseState: jest.fn(),

@@ -19,17 +19,18 @@ import {
 import ServerTime from '_common/base/server_time';
 import { localize } from '@deriv/translations';
 import { isSessionAvailable } from './start-date';
+import { ContractsForSymbolResponse } from '@deriv/api-types';
 
 export const ContractType = (() => {
     let available_contract_types = {};
     let available_categories = {};
-    let contract_types;
+    let contract_types: ReturnType<typeof getContractTypesConfig>;
     const trading_events = {};
     const trading_times = {};
     let has_only_forward_starting_contracts = false;
 
-    const buildContractTypesConfig = symbol =>
-        WS.storage.contractsFor(symbol).then(r => {
+    const buildContractTypesConfig = (symbol: string) =>
+        WS.storage.contractsFor(symbol).then((r: Required<ContractsForSymbolResponse>) => {
             const has_contracts = getPropertyValue(r, ['contracts_for']);
             has_only_forward_starting_contracts =
                 has_contracts && !r.contracts_for.available.find(contract => contract.start_type !== 'forward');

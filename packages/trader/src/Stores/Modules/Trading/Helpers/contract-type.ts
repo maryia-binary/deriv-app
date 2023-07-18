@@ -19,11 +19,28 @@ import {
 import ServerTime from '_common/base/server_time';
 import { localize } from '@deriv/translations';
 import { isSessionAvailable } from './start-date';
-import { ContractsForSymbolResponse } from '@deriv/api-types';
+import { ContractsFor, ContractsForSymbolResponse } from '@deriv/api-types';
+import { TTradeStore } from '../../../../Types/common-prop.type';
+
+type TConfig = ReturnType<typeof getContractTypesConfig>[string]['config'] & {
+    has_spot?: boolean;
+    durations?: ReturnType<typeof buildDurationConfig>;
+    trade_types?: { [key: string]: string };
+    barriers?: ReturnType<typeof buildBarriersConfig>;
+    forward_starting_dates?: ReturnType<typeof buildForwardStartingConfig>;
+    growth_rate_range?: unknown[];
+    multiplier_range?: unknown[];
+    cancellation_range?: unknown[];
+};
+
+type TTextValueStrings = {
+    text: string;
+    value: string;
+};
 
 export const ContractType = (() => {
-    let available_contract_types = {};
-    let available_categories = {};
+    let available_contract_types: ReturnType<typeof getContractTypesConfig> = {};
+    let available_categories: ReturnType<typeof getContractCategoriesConfig> | Record<string, never> = {};
     let contract_types: ReturnType<typeof getContractTypesConfig>;
     const trading_events = {};
     const trading_times = {};
@@ -44,32 +61,32 @@ export const ContractType = (() => {
                     key =>
                         contract_types[key].trade_types.indexOf(contract.contract_type) !== -1 &&
                         (typeof contract_types[key].barrier_count === 'undefined' ||
-                            +contract_types[key].barrier_count === contract.barriers) // To distinguish betweeen Rise/Fall & Higher/Lower
+                            Number(contract_types[key].barrier_count) === contract.barriers) // To distinguish betweeen Rise/Fall & Higher/Lower
                 );
 
                 if (!type) return; // ignore unsupported contract types
 
                 if (!available_contract_types[type]) {
                     // extend contract_categories to include what is needed to create the contract list
-                    const sub_cats =
+                    const sub_cats: Array<string | TTextValueStrings> =
                         available_categories[
                             Object.keys(available_categories).find(
                                 key => available_categories[key].categories.indexOf(type) !== -1
-                            )
+                            ) ?? ''
                         ].categories;
 
                     if (!sub_cats) return;
 
-                    sub_cats[sub_cats.indexOf(type)] = { value: type, text: contract_types[type].title };
+                    sub_cats[(sub_cats as string[]).indexOf(type)] = { value: type, text: contract_types[type].title };
 
                     // populate available contract types
                     available_contract_types[type] = cloneObject(contract_types[type]);
                 }
-                const config = available_contract_types[type].config || {};
+                const config: TConfig = available_contract_types[type].config || {};
 
                 // set config values
                 config.has_spot = config.has_spot || contract.start_type === 'spot';
-                config.durations = !config.hide_duration && buildDurationConfig(contract, config.durations);
+                config.durations = config.hide_duration ? undefined : buildDurationConfig(contract, config.durations);
                 config.trade_types = buildTradeTypesConfig(contract, config.trade_types);
                 config.barriers = buildBarriersConfig(contract, config.barriers);
                 config.forward_starting_dates = buildForwardStartingConfig(contract, config.forward_starting_dates);
@@ -82,24 +99,27 @@ export const ContractType = (() => {
 
             // cleanup categories
             Object.keys(available_categories).forEach(key => {
-                available_categories[key].categories = available_categories[key].categories?.filter(
-                    item => typeof item === 'object'
-                );
+                available_categories[key].categories = (
+                    available_categories[key].categories as Array<string | TTextValueStrings>
+                )?.filter(item => typeof item === 'object');
                 if (available_categories[key].categories?.length === 0) {
                     delete available_categories[key];
                 }
             });
         });
 
-    const buildTradeTypesConfig = (contract, trade_types = {}) => {
-        trade_types[contract.contract_type] = contract.contract_display;
+    const buildTradeTypesConfig = (
+        contract: ContractsFor['available'][number],
+        trade_types: { [key: string]: string } = {}
+    ) => {
+        trade_types[contract.contract_type] = contract.contract_display ?? '';
         return trade_types;
     };
 
-    const getArrayDefaultValue = (arr_new_values, value) =>
+    const getArrayDefaultValue = (arr_new_values: string[], value: string) =>
         arr_new_values.indexOf(value) !== -1 ? value : arr_new_values[0];
 
-    const getContractValues = store => {
+    const getContractValues = (store: TTradeStore) => {
         const {
             contract_expiry_type,
             contract_type,

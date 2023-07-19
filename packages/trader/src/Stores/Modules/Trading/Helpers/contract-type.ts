@@ -48,7 +48,6 @@ type TConfig = ReturnType<typeof getContractTypesConfig>[string]['config'] & {
     multiplier_range?: number[];
     cancellation_range?: string[];
 };
-
 type TTextValueStrings = {
     text: string;
     value: string;
@@ -65,6 +64,21 @@ type TEvents =
     | [];
 
 export const ContractType = (() => {
+    type TContractValues = ReturnType<typeof getComponents> &
+        ReturnType<typeof getBasis> &
+        ReturnType<typeof getTradeTypes> &
+        ReturnType<typeof getStartDates> &
+        ReturnType<typeof getStartType> &
+        ReturnType<typeof getBarriers> &
+        ReturnType<typeof getDurationUnit> &
+        ReturnType<typeof getDurationUnitsList> &
+        ReturnType<typeof getDurationMinMax> &
+        ReturnType<typeof getAccumulatorRange> &
+        ReturnType<typeof getMultiplierRange> &
+        ReturnType<typeof getCancellation> &
+        ReturnType<typeof getExpiryType> &
+        ReturnType<typeof getEqualProps>;
+
     let available_contract_types: ReturnType<typeof getContractTypesConfig> = {};
     let available_categories: TAvailableCategories = {};
     let contract_types: ReturnType<typeof getContractTypesConfig>;
@@ -145,7 +159,7 @@ export const ContractType = (() => {
     const getArrayDefaultValue = (arr_new_values: Array<string | number>, value: string | number) =>
         arr_new_values.indexOf(value) !== -1 ? value : arr_new_values[0];
 
-    const getContractValues = (store: TTradeStore) => {
+    const getContractValues = (store: TTradeStore): TContractValues | Record<string, never> => {
         const {
             contract_expiry_type,
             contract_type,

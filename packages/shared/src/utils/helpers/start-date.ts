@@ -2,13 +2,6 @@ import moment from 'moment';
 import { toMoment } from '../date';
 import { ContractsFor } from '@deriv/api-types';
 
-type TForwardStartingDates = {
-    blackouts?: unknown[];
-    close?: string;
-    date: string;
-    open?: string;
-};
-
 type TConfig = {
     text: string;
     value: number;
@@ -20,7 +13,7 @@ type TConfig = {
 
 export const buildForwardStartingConfig = (
     contract: ContractsFor['available'][number],
-    forward_starting_dates?: TForwardStartingDates[] | TConfig
+    forward_starting_dates?: TConfig
 ) => {
     const forward_starting_config: TConfig = [];
 

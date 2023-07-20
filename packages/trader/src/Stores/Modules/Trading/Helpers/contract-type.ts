@@ -211,10 +211,7 @@ export const ContractType = (() => {
 
     const getContractType = (list: TAvailableCategories, contract_type: string) => {
         const arr_list: string[] = Object.keys(list || {})
-            .reduce(
-                (k, l) => [...k, ...(list[l].categories as TTextValueStrings[]).map(ct => ct.value)],
-                [] as string[]
-            )
+            .reduce<string[]>((k, l) => [...k, ...(list[l].categories as TTextValueStrings[]).map(ct => ct.value)], [])
             .filter(type => unsupported_contract_types_list.indexOf(type) === -1)
             .sort((a, b) => (a === 'multiplier' || b === 'multiplier' ? -1 : 0));
 
@@ -584,9 +581,9 @@ export const ContractType = (() => {
     const getBasis = (contract_type: string, basis: string) => {
         const arr_basis: string[] = getPropertyValue(available_contract_types, [contract_type, 'basis']) || [];
         const localized_basis = getLocalizedBasis();
-        const basis_list = arr_basis.reduce(
+        const basis_list = arr_basis.reduce<TTextValueStrings[]>(
             (cur, bas) => [...cur, { text: localized_basis[bas as keyof typeof localized_basis], value: bas }],
-            [] as TTextValueStrings[]
+            []
         );
 
         return {

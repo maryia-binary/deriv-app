@@ -1,7 +1,22 @@
 import { action, intercept, observable, reaction, toJS, when, makeObservable } from 'mobx';
 import { isProduction, isEmptyObject } from '@deriv/shared';
-
 import Validator from 'Utils/Validator';
+import { TCoreStores } from '@deriv/stores/types';
+
+type TValidationRules = { [key: string]: string[] | string } & {
+    [key: string]: {
+        trigger?: PropertyKey;
+        rules?: string[] | string;
+    };
+};
+
+type TBaseStoreOptions = {
+    root_store?: TCoreStores;
+    local_storage_properties?: string[];
+    session_storage_properties?: string[];
+    validation_rules?: TValidationRules;
+    store_name?: string;
+};
 
 /**
  * BaseStore class is the base class for all defined stores in the application. It handles some stuff such as:
@@ -54,7 +69,7 @@ export default class BaseStore {
      *     @property {Object}   validation_rules - An object that contains the validation rules for each property of the store.
      *     @property {String}   store_name - Explicit store name for browser application storage (to bypass minification)
      */
-    constructor(options = {}) {
+    constructor(options: TBaseStoreOptions = {}) {
         makeObservable(this, {
             validation_errors: observable,
             validation_rules: observable,
@@ -533,7 +548,7 @@ export default class BaseStore {
         this.disposeRealAccountSignupEnd();
     }
 
-    assertHasValidCache(loginid, ...reactions) {
+    assertHasValidCache(loginid: string, ...reactions: VoidFunction[]): void {
         // account was changed when this was unmounted.
         if (this.root_store.client.loginid !== loginid) {
             reactions.forEach(act => act());

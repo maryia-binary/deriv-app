@@ -2,17 +2,9 @@ import { action, intercept, observable, reaction, toJS, when, makeObservable } f
 import { isProduction, isEmptyObject } from '@deriv/shared';
 import Validator from 'Utils/Validator';
 import { TCoreStores } from '@deriv/stores/types';
+import { getValidationRules } from './Modules/Trading/Constants/validation-rules';
 
-type TListenerResponse = {
-    then: (func: VoidFunction) => void;
-};
-
-type TValidationRules = { [key: string]: string[] | string } & {
-    [key: string]: {
-        trigger?: string;
-        rules?: string[] | string;
-    };
-};
+type TValidationRules = ReturnType<typeof getValidationRules> | Record<string, never>;
 
 type TBaseStoreOptions = {
     root_store?: TCoreStores;
@@ -35,35 +27,27 @@ export default class BaseStore {
         LOCAL_STORAGE: Symbol('LOCAL_STORAGE'),
         SESSION_STORAGE: Symbol('SESSION_STORAGE'),
     });
-
-    validation_errors: { [key: string]: string[] } = {};
-
-    validation_rules: TValidationRules = {};
-
-    preSwitchAccountDisposer: null | (() => void) = null;
-    pre_switch_account_listener: null | (() => TListenerResponse) = null;
-
-    switchAccountDisposer: null | (() => void) = null;
-    switch_account_listener: null | (() => TListenerResponse) = null;
-
-    logoutDisposer: null | (() => void) = null;
-    logout_listener: null | (() => TListenerResponse) = null;
-    local_storage_properties: string[];
     clientInitDisposer: null | (() => void) = null;
-    client_init_listener: null | (() => TListenerResponse) = null;
-
+    client_init_listener: null | (() => Promise<void>) = null;
+    logoutDisposer: null | (() => void) = null;
+    logout_listener: null | (() => Promise<void>) = null;
+    local_storage_properties: string[];
     networkStatusChangeDisposer: null | (() => void) = null;
-    network_status_change_listener: null | ((is_online?: boolean) => TListenerResponse) = null;
+    network_status_change_listener: null | ((is_online?: boolean) => void) = null;
+    partial_fetch_time = 0;
+    preSwitchAccountDisposer: null | (() => void) = null;
+    pre_switch_account_listener: null | (() => Promise<void>) = null;
+    realAccountSignupEndedDisposer: null | (() => void) = null;
+    real_account_signup_ended_listener: null | (() => Promise<void>) = null;
+    root_store?: TCoreStores;
     session_storage_properties: string[];
     store_name = '';
+    switchAccountDisposer: null | (() => void) = null;
+    switch_account_listener: null | (() => Promise<void>) = null;
     themeChangeDisposer: null | (() => void) = null;
-    theme_change_listener: null | ((is_dark_mode_on?: boolean) => TListenerResponse) = null;
-
-    realAccountSignupEndedDisposer: null | (() => void) = null;
-    real_account_signup_ended_listener: null | (() => TListenerResponse) = null;
-    root_store?: TCoreStores;
-    partial_fetch_time = 0;
-
+    theme_change_listener: null | ((is_dark_mode_on?: boolean) => void) = null;
+    validation_errors: { [key: string]: string[] } = {};
+    validation_rules: TValidationRules = {};
     /**
      * Constructor of the base class that gets properties' name of child which should be saved in storages
      *
@@ -256,9 +240,9 @@ export default class BaseStore {
      * @param {object} rules
      *
      */
-    setValidationRules(rules: object = {}): void {
+    setValidationRules(rules: TValidationRules = {}): void {
         Object.keys(rules).forEach(key => {
-            this.addRule(key, rules[key as keyof typeof rules]);
+            this.addRule<keyof TValidationRules>(key as keyof TValidationRules, rules[key as keyof TValidationRules]);
         });
     }
 
@@ -269,11 +253,11 @@ export default class BaseStore {
      * @param {String} rules
      *
      */
-    addRule(property: string, rules: string) {
-        this.validation_rules[property as string] = rules;
+    addRule<T extends keyof TValidationRules>(property: T, rules: TValidationRules[T]) {
+        this.validation_rules[property] = rules;
 
-        intercept(this, property as keyof this, change => {
-            this.validateProperty(property, change.newValue as string);
+        intercept(this, property as unknown as keyof this, change => {
+            this.validateProperty(property, change.newValue);
             return change;
         });
     }
@@ -285,16 +269,21 @@ export default class BaseStore {
      * @param {object} value    - The value of the property, it can be undefined.
      *
      */
-    validateProperty(property: string, value: string) {
-        const trigger = this.validation_rules[property].trigger;
+    validateProperty<T extends BaseStore>(property: string, value: T[keyof T]) {
+        const validation_rules_for_property = this.validation_rules[property as keyof TValidationRules];
+        const trigger = 'trigger' in validation_rules_for_property ? validation_rules_for_property.trigger : undefined;
         const inputs = { [property]: value !== undefined ? value : this[property as keyof this] };
-        const validation_rules = { [property]: this.validation_rules[property].rules || [] };
+        const validation_rules = {
+            [property]: 'rules' in validation_rules_for_property ? validation_rules_for_property.rules : [],
+        };
 
         if (!!trigger && Object.hasOwnProperty.call(this, trigger)) {
+            const validation_rules_for_trigger = this.validation_rules[trigger as keyof TValidationRules];
             inputs[trigger] = this[trigger as keyof this];
-            validation_rules[trigger] = this.validation_rules[trigger].rules || [];
+            validation_rules[trigger] =
+                'rules' in validation_rules_for_trigger ? validation_rules_for_trigger.rules : [];
         }
-        // @ts-expect-error TODO: when Validator migrated to TS is merged to master, remove this comment
+        // @ts-expect-error TODO: remove this comment when Validator migrated to TS is merged to master
         const validator = new Validator(inputs, validation_rules, this);
 
         validator.isPassed();
@@ -312,7 +301,7 @@ export default class BaseStore {
         const validation_rules = Object.keys(this.validation_rules);
         const validation_errors = Object.keys(this.validation_errors);
         validation_rules.forEach(p => {
-            this.validateProperty(p, this[p as keyof this] as string);
+            this.validateProperty(p, this[p as keyof this]);
         });
 
         // Remove keys that are present in error, but not in rules:
@@ -323,7 +312,7 @@ export default class BaseStore {
         });
     }
 
-    onSwitchAccount(listener: null | (() => TListenerResponse)): void {
+    onSwitchAccount(listener: null | (() => Promise<void>)): void {
         if (listener) {
             this.switch_account_listener = listener;
 
@@ -352,7 +341,7 @@ export default class BaseStore {
         }
     }
 
-    onPreSwitchAccount(listener: null | (() => TListenerResponse)): void {
+    onPreSwitchAccount(listener: null | (() => Promise<void>)): void {
         if (listener) {
             this.pre_switch_account_listener = listener;
             this.preSwitchAccountDisposer = when(
@@ -380,7 +369,7 @@ export default class BaseStore {
         }
     }
 
-    onLogout(listener: null | (() => TListenerResponse)): void {
+    onLogout(listener: null | (() => Promise<void>)): void {
         this.logoutDisposer = when(
             () => !!this.root_store?.client.has_logged_out,
             async () => {
@@ -406,7 +395,7 @@ export default class BaseStore {
         this.logout_listener = listener;
     }
 
-    onClientInit(listener: null | (() => TListenerResponse)): void {
+    onClientInit(listener: null | (() => Promise<void>)): void {
         this.clientInitDisposer = when(
             () => !!this.root_store?.client.initialized_broadcast,
             async () => {
@@ -432,7 +421,7 @@ export default class BaseStore {
         this.client_init_listener = listener;
     }
 
-    onNetworkStatusChange(listener: null | (() => TListenerResponse)): void {
+    onNetworkStatusChange(listener: null | ((is_online?: boolean) => void)): void {
         this.networkStatusChangeDisposer = reaction(
             () => this.root_store?.common.is_network_online,
             is_online => {
@@ -451,7 +440,7 @@ export default class BaseStore {
         this.network_status_change_listener = listener;
     }
 
-    onThemeChange(listener: null | (() => TListenerResponse)): void {
+    onThemeChange(listener: null | ((is_dark_mode_on?: boolean) => void)): void {
         this.themeChangeDisposer = reaction(
             () => this.root_store?.ui.is_dark_mode_on,
             is_dark_mode_on => {
@@ -470,7 +459,7 @@ export default class BaseStore {
         this.theme_change_listener = listener;
     }
 
-    onRealAccountSignupEnd(listener: null | (() => TListenerResponse)): void {
+    onRealAccountSignupEnd(listener: null | (() => Promise<void>)): void {
         this.realAccountSignupEndedDisposer = when(
             () => !!this.root_store?.ui.has_real_account_signup_ended,
             () => {

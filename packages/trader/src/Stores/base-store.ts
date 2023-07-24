@@ -9,7 +9,7 @@ type TListenerResponse = {
 
 type TValidationRules = { [key: string]: string[] | string } & {
     [key: string]: {
-        trigger?: PropertyKey;
+        trigger?: string;
         rules?: string[] | string;
     };
 };
@@ -225,12 +225,12 @@ export default class BaseStore {
      *
      */
     retrieveFromStorage() {
-        const local_storage_snapshot = JSON.parse(localStorage.getItem(this.store_name, {}));
-        const session_storage_snapshot = JSON.parse(sessionStorage.getItem(this.store_name, {}));
+        const local_storage_snapshot = JSON.parse(String(localStorage.getItem(this.store_name)));
+        const session_storage_snapshot = JSON.parse(String(sessionStorage.getItem(this.store_name)));
 
         const snapshot = { ...local_storage_snapshot, ...session_storage_snapshot };
 
-        Object.keys(snapshot).forEach(k => (this[k] = snapshot[k]));
+        Object.keys(snapshot).forEach(k => (this[k as keyof this] = snapshot[k]));
     }
 
     /**
@@ -240,7 +240,7 @@ export default class BaseStore {
      * @param [{String}] messages - An array of strings that contains validation error messages for the particular property.
      *
      */
-    setValidationErrorMessages(propertyName, messages) {
+    setValidationErrorMessages(propertyName: string, messages: string[]) {
         const is_different = () =>
             !!this.validation_errors[propertyName]
                 .filter(x => !messages.includes(x))
@@ -256,9 +256,9 @@ export default class BaseStore {
      * @param {object} rules
      *
      */
-    setValidationRules(rules = {}) {
+    setValidationRules(rules: object = {}): void {
         Object.keys(rules).forEach(key => {
-            this.addRule(key, rules[key]);
+            this.addRule(key, rules[key as keyof typeof rules]);
         });
     }
 
@@ -269,11 +269,11 @@ export default class BaseStore {
      * @param {String} rules
      *
      */
-    addRule(property, rules) {
-        this.validation_rules[property] = rules;
+    addRule(property: string, rules: string) {
+        this.validation_rules[property as string] = rules;
 
-        intercept(this, property, change => {
-            this.validateProperty(property, change.newValue);
+        intercept(this, property as keyof this, change => {
+            this.validateProperty(property, change.newValue as string);
             return change;
         });
     }
@@ -285,13 +285,13 @@ export default class BaseStore {
      * @param {object} value    - The value of the property, it can be undefined.
      *
      */
-    validateProperty(property, value) {
+    validateProperty(property: string, value: string) {
         const trigger = this.validation_rules[property].trigger;
-        const inputs = { [property]: value !== undefined ? value : this[property] };
+        const inputs = { [property]: value !== undefined ? value : this[property as keyof this] };
         const validation_rules = { [property]: this.validation_rules[property].rules || [] };
 
         if (!!trigger && Object.hasOwnProperty.call(this, trigger)) {
-            inputs[trigger] = this[trigger];
+            inputs[trigger] = this[trigger as keyof this];
             validation_rules[trigger] = this.validation_rules[trigger].rules || [];
         }
 
@@ -312,7 +312,7 @@ export default class BaseStore {
         const validation_rules = Object.keys(this.validation_rules);
         const validation_errors = Object.keys(this.validation_errors);
         validation_rules.forEach(p => {
-            this.validateProperty(p, this[p]);
+            this.validateProperty(p, this[p as keyof this] as string);
         });
 
         // Remove keys that are present in error, but not in rules:
@@ -323,18 +323,18 @@ export default class BaseStore {
         });
     }
 
-    onSwitchAccount(listener) {
+    onSwitchAccount(listener: null | (() => TListenerResponse)): void {
         if (listener) {
             this.switch_account_listener = listener;
 
             this.switchAccountDisposer = when(
-                () => this.root_store.client.switch_broadcast,
+                () => !!this.root_store?.client.switch_broadcast,
                 () => {
                     try {
-                        const result = this.switch_account_listener();
+                        const result = this.switch_account_listener?.();
                         if (result && result.then && typeof result.then === 'function') {
                             result.then(() => {
-                                this.root_store.client.switchEndSignal();
+                                this.root_store?.client.switchEndSignal();
                                 this.onSwitchAccount(this.switch_account_listener);
                             });
                         } else {
@@ -352,17 +352,17 @@ export default class BaseStore {
         }
     }
 
-    onPreSwitchAccount(listener) {
+    onPreSwitchAccount(listener: null | (() => TListenerResponse)): void {
         if (listener) {
             this.pre_switch_account_listener = listener;
             this.preSwitchAccountDisposer = when(
-                () => this.root_store.client.pre_switch_broadcast,
+                () => !!this.root_store?.client.pre_switch_broadcast,
                 () => {
                     try {
                         const result = this.pre_switch_account_listener?.();
                         if (result && result.then && typeof result.then === 'function') {
                             result.then(() => {
-                                this.root_store.client.setPreSwitchAccount(false);
+                                this.root_store?.client.setPreSwitchAccount(false);
                                 this.onPreSwitchAccount(this.pre_switch_account_listener);
                             });
                         } else {
@@ -380,15 +380,15 @@ export default class BaseStore {
         }
     }
 
-    onLogout(listener) {
+    onLogout(listener: null | (() => TListenerResponse)): void {
         this.logoutDisposer = when(
-            () => this.root_store.client.has_logged_out,
+            () => !!this.root_store?.client.has_logged_out,
             async () => {
                 try {
-                    const result = this.logout_listener();
+                    const result = this.logout_listener?.();
                     if (result && result.then && typeof result.then === 'function') {
                         result.then(() => {
-                            this.root_store.client.setLogout(false);
+                            this.root_store?.client.setLogout(false);
                             this.onLogout(this.logout_listener);
                         });
                     } else {
@@ -406,15 +406,15 @@ export default class BaseStore {
         this.logout_listener = listener;
     }
 
-    onClientInit(listener) {
+    onClientInit(listener: null | (() => TListenerResponse)): void {
         this.clientInitDisposer = when(
-            () => this.root_store.client.initialized_broadcast,
+            () => !!this.root_store?.client.initialized_broadcast,
             async () => {
                 try {
-                    const result = this.client_init_listener();
+                    const result = this.client_init_listener?.();
                     if (result && result.then && typeof result.then === 'function') {
                         result.then(() => {
-                            this.root_store.client.setInitialized(false);
+                            this.root_store?.client.setInitialized(false);
                             this.onClientInit(this.client_init_listener);
                         });
                     } else {
@@ -432,12 +432,12 @@ export default class BaseStore {
         this.client_init_listener = listener;
     }
 
-    onNetworkStatusChange(listener) {
+    onNetworkStatusChange(listener: null | (() => TListenerResponse)): void {
         this.networkStatusChangeDisposer = reaction(
-            () => this.root_store.common.is_network_online,
+            () => this.root_store?.common.is_network_online,
             is_online => {
                 try {
-                    this.network_status_change_listener(is_online);
+                    this.network_status_change_listener?.(is_online);
                 } catch (error) {
                     // there is no listener currently active. so we can just ignore the error raised from treating
                     // a null object as a function. Although, in development mode, we throw a console error.
@@ -451,12 +451,12 @@ export default class BaseStore {
         this.network_status_change_listener = listener;
     }
 
-    onThemeChange(listener) {
+    onThemeChange(listener: null | (() => TListenerResponse)): void {
         this.themeChangeDisposer = reaction(
-            () => this.root_store.ui.is_dark_mode_on,
+            () => this.root_store?.ui.is_dark_mode_on,
             is_dark_mode_on => {
                 try {
-                    this.theme_change_listener(is_dark_mode_on);
+                    this.theme_change_listener?.(is_dark_mode_on);
                 } catch (error) {
                     // there is no listener currently active. so we can just ignore the error raised from treating
                     // a null object as a function. Although, in development mode, we throw a console error.
@@ -470,15 +470,15 @@ export default class BaseStore {
         this.theme_change_listener = listener;
     }
 
-    onRealAccountSignupEnd(listener) {
+    onRealAccountSignupEnd(listener: null | (() => TListenerResponse)): void {
         this.realAccountSignupEndedDisposer = when(
-            () => this.root_store.ui.has_real_account_signup_ended,
+            () => !!this.root_store?.ui.has_real_account_signup_ended,
             () => {
                 try {
-                    const result = this.real_account_signup_ended_listener();
+                    const result = this.real_account_signup_ended_listener?.();
                     if (result && result.then && typeof result.then === 'function') {
                         result.then(() => {
-                            this.root_store.ui.setRealAccountSignupEnd(false);
+                            this.root_store?.ui.setRealAccountSignupEnd(false);
                             this.onRealAccountSignupEnd(this.real_account_signup_ended_listener);
                         });
                     } else {
@@ -558,9 +558,9 @@ export default class BaseStore {
 
     assertHasValidCache(loginid: string, ...reactions: VoidFunction[]): void {
         // account was changed when this was unmounted.
-        if (this.root_store.client.loginid !== loginid) {
+        if (this.root_store?.client.loginid !== loginid) {
             reactions.forEach(act => act());
-            this.partial_fetch_time = false;
+            this.partial_fetch_time = 0;
         }
     }
 }

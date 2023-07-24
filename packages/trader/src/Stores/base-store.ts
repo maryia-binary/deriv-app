@@ -294,7 +294,7 @@ export default class BaseStore {
             inputs[trigger] = this[trigger as keyof this];
             validation_rules[trigger] = this.validation_rules[trigger].rules || [];
         }
-
+        // @ts-expect-error TODO: when Validator migrated to TS is merged to master, remove this comment
         const validator = new Validator(inputs, validation_rules, this);
 
         validator.isPassed();

@@ -3,6 +3,10 @@ import { isProduction, isEmptyObject } from '@deriv/shared';
 import Validator from 'Utils/Validator';
 import { TCoreStores } from '@deriv/stores/types';
 
+type TListenerResponse = {
+    then: (func: VoidFunction) => void;
+};
+
 type TValidationRules = { [key: string]: string[] | string } & {
     [key: string]: {
         trigger?: PropertyKey;
@@ -32,31 +36,32 @@ export default class BaseStore {
         SESSION_STORAGE: Symbol('SESSION_STORAGE'),
     });
 
-    validation_errors = {};
+    validation_errors: { [key: string]: string[] } = {};
 
-    validation_rules = {};
+    validation_rules: TValidationRules = {};
 
-    preSwitchAccountDisposer = null;
-    pre_switch_account_listener = null;
+    preSwitchAccountDisposer: null | (() => void) = null;
+    pre_switch_account_listener: null | (() => TListenerResponse) = null;
 
-    switchAccountDisposer = null;
-    switch_account_listener = null;
+    switchAccountDisposer: null | (() => void) = null;
+    switch_account_listener: null | (() => TListenerResponse) = null;
 
-    logoutDisposer = null;
-    logout_listener = null;
+    logoutDisposer: null | (() => void) = null;
+    logout_listener: null | (() => TListenerResponse) = null;
+    local_storage_properties: string[];
+    clientInitDisposer: null | (() => void) = null;
+    client_init_listener: null | (() => TListenerResponse) = null;
 
-    clientInitDisposer = null;
-    client_init_listener = null;
+    networkStatusChangeDisposer: null | (() => void) = null;
+    network_status_change_listener: null | ((is_online?: boolean) => TListenerResponse) = null;
+    session_storage_properties: string[];
+    store_name = '';
+    themeChangeDisposer: null | (() => void) = null;
+    theme_change_listener: null | ((is_dark_mode_on?: boolean) => TListenerResponse) = null;
 
-    networkStatusChangeDisposer = null;
-    network_status_change_listener = null;
-
-    themeChangeDisposer = null;
-    theme_change_listener = null;
-
-    realAccountSignupEndedDisposer = null;
-    real_account_signup_ended_listener = null;
-
+    realAccountSignupEndedDisposer: null | (() => void) = null;
+    real_account_signup_ended_listener: null | (() => TListenerResponse) = null;
+    root_store?: TCoreStores;
     partial_fetch_time = 0;
 
     /**
@@ -150,7 +155,7 @@ export default class BaseStore {
      *
      * @return {Object} Returns a cloned object of the store.
      */
-    getSnapshot(properties) {
+    getSnapshot(properties: string[]): object {
         let snapshot = toJS(this);
 
         if (!isEmptyObject(this.root_store)) {
@@ -158,7 +163,10 @@ export default class BaseStore {
         }
 
         if (properties && properties.length) {
-            snapshot = properties.reduce((result, p) => Object.assign(result, { [p]: snapshot[p] }), {});
+            snapshot = properties.reduce(
+                (result, p) => Object.assign(result, { [p]: snapshot[p as keyof this] }),
+                {} as this
+            );
         }
 
         return snapshot;
@@ -172,7 +180,7 @@ export default class BaseStore {
     setupReactionForLocalStorage() {
         if (this.local_storage_properties.length) {
             reaction(
-                () => this.local_storage_properties.map(i => this[i]),
+                () => this.local_storage_properties.map(i => this[i as keyof this]),
                 () => this.saveToStorage(this.local_storage_properties, BaseStore.STORAGES.LOCAL_STORAGE)
             );
         }
@@ -186,7 +194,7 @@ export default class BaseStore {
     setupReactionForSessionStorage() {
         if (this.session_storage_properties.length) {
             reaction(
-                () => this.session_storage_properties.map(i => this[i]),
+                () => this.session_storage_properties.map(i => this[i as keyof this]),
                 () => this.saveToStorage(this.session_storage_properties, BaseStore.STORAGES.SESSION_STORAGE)
             );
         }
@@ -199,7 +207,7 @@ export default class BaseStore {
      * @param {Symbol}   storage    - A symbol object that defines the storage which the snapshot should be stored in it.
      *
      */
-    saveToStorage(properties, storage) {
+    saveToStorage(properties: string[] = [], storage: symbol) {
         const snapshot = JSON.stringify(this.getSnapshot(properties), (key, value) => {
             if (value !== null) return value;
             return undefined;

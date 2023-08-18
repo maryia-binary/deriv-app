@@ -5,7 +5,7 @@ import { DesktopWrapper, MobileWrapper, Collapsible, ContractCard, useHover } fr
 import { isCryptoContract, isDesktop, getEndTime, getSymbolDisplayName } from '@deriv/shared';
 import { getCardLabels, getContractTypeDisplay } from 'Constants/contract';
 import { getMarketInformation } from 'Utils/Helpers/market-underlying';
-import { SwipeableContractDrawer } from './swipeable-components.jsx';
+import { SwipeableContractDrawer } from './swipeable-components';
 import MarketClosedContractOverlay from './market-closed-contract-overlay.jsx';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { observer, useStore } from '@deriv/stores';

@@ -15,7 +15,7 @@ import {
 import ContractAudit from 'App/Components/Elements/ContractAudit';
 import { PositionsCardLoader } from 'App/Components/Elements/ContentLoader';
 import ContractDrawerCard from './contract-drawer-card';
-import { SwipeableContractAudit } from './swipeable-components.jsx';
+import { SwipeableContractAudit } from './swipeable-components';
 import { observer, useStore } from '@deriv/stores';
 
 const ContractDrawer = observer(

@@ -6,7 +6,7 @@ import { isCryptoContract, isDesktop, getEndTime, getSymbolDisplayName } from '@
 import { getCardLabels, getContractTypeDisplay } from 'Constants/contract';
 import { getMarketInformation } from 'Utils/Helpers/market-underlying';
 import { SwipeableContractDrawer } from './swipeable-components';
-import MarketClosedContractOverlay from './market-closed-contract-overlay.jsx';
+import MarketClosedContractOverlay from './market-closed-contract-overlay';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { observer, useStore } from '@deriv/stores';
 

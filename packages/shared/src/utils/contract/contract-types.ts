@@ -1,7 +1,8 @@
-import { ContractUpdate, Portfolio1, ProposalOpenContract } from '@deriv/api-types';
+import { ContractUpdate, ContractUpdateHistory, Portfolio1, ProposalOpenContract } from '@deriv/api-types';
 
 export type TContractStore = {
     contract_info: TContractInfo;
+    contract_update_history: ContractUpdateHistory;
     contract_update_take_profit: number | string;
     contract_update_stop_loss: number | string;
     clearContractUpdateConfigValues: () => void;

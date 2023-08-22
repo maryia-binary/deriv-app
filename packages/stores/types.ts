@@ -14,6 +14,7 @@ import type {
     SetFinancialAssessmentRequest,
     SetFinancialAssessmentResponse,
     StatesList,
+    ContractUpdateHistory,
 } from '@deriv/api-types';
 import type { Moment } from 'moment';
 import type { RouteComponentProps } from 'react-router';
@@ -632,6 +633,7 @@ type TContractTradeStore = {
 
 type TContractStore = {
     contract_info: TPortfolioPosition['contract_info'];
+    contract_update_history: ContractUpdateHistory;
     contract_update_take_profit: number | string;
     contract_update_stop_loss: number | string;
     clearContractUpdateConfigValues: () => void;

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { DesktopWrapper, MobileWrapper, Collapsible, ContractCard, useHover } from '@deriv/components';
-import { isCryptoContract, isDesktop, getEndTime, getSymbolDisplayName } from '@deriv/shared';
+import { isCryptoContract, isDesktop, getEndTime, getSymbolDisplayName, toMoment } from '@deriv/shared';
 import { getCardLabels, getContractTypeDisplay } from 'Constants/contract';
 import { getMarketInformation } from 'Utils/Helpers/market-underlying';
 import { SwipeableContractDrawer } from './swipeable-components';
@@ -14,22 +14,22 @@ type TContractCardFooterProps = React.ComponentProps<typeof ContractCard.Footer>
 type TSwipeableContractDrawerProps = React.ComponentProps<typeof SwipeableContractDrawer>;
 
 type TContractDrawerCardProps = {
+    currency?: string;
     is_collapsed: boolean;
     is_market_closed: boolean;
     is_smarttrader_contract: boolean;
     result?: string;
+    server_time?: moment.Moment;
     toggleContractAuditDrawer: () => void;
 } & Pick<
     TContractCardBodyProps,
     | 'contract_info'
     | 'contract_update'
-    | 'currency'
     | 'is_accumulator'
     | 'is_mobile'
     | 'is_multiplier'
     | 'is_vanilla'
     | 'is_turbos'
-    | 'server_time'
     | 'status'
 > &
     Pick<TContractCardFooterProps, 'is_sell_requested' | 'onClickCancel' | 'onClickSell'> &
@@ -39,7 +39,7 @@ const ContractDrawerCard = observer(
     ({
         contract_info,
         contract_update,
-        currency,
+        currency = '',
         is_accumulator,
         is_collapsed,
         is_market_closed,
@@ -54,7 +54,7 @@ const ContractDrawerCard = observer(
         onSwipedUp,
         onSwipedDown,
         result,
-        server_time,
+        server_time = toMoment(),
         status,
         toggleContractAuditDrawer,
     }: TContractDrawerCardProps) => {

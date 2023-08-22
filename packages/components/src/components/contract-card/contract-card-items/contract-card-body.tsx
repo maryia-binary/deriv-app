@@ -34,7 +34,7 @@ export type TGeneralContractCardBodyProps = {
     onMouseLeave?: () => void;
     removeToast: (toast_id: string) => void;
     setCurrentFocus: (name: string) => void;
-    status?: string | null;
+    status?: string;
     toggleCancellationWarning: (state_change?: boolean) => void;
     progress_slider?: React.ReactNode;
     is_positions?: boolean;

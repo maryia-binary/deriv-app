@@ -116,7 +116,7 @@ const ContractDrawerCard = observer(
                 server_time={server_time}
                 setCurrentFocus={setCurrentFocus}
                 should_show_cancellation_warning={should_show_cancellation_warning}
-                status={status}
+                status={status ?? ''}
                 toggleCancellationWarning={toggleCancellationWarning}
             />
         );

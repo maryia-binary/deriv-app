@@ -637,6 +637,10 @@ type TContractStore = {
     contract_update_take_profit: number | string;
     contract_update_stop_loss: number | string;
     clearContractUpdateConfigValues: () => void;
+    digits_info: { [key: number]: { digit: number; spot: string } };
+    display_status: string;
+    is_digit_contract: boolean;
+    is_ended: boolean;
     has_contract_update_take_profit: boolean;
     has_contract_update_stop_loss: boolean;
     updateLimitOrder: () => void;

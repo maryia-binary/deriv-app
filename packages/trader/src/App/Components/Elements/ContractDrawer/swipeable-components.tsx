@@ -8,8 +8,8 @@ type TSwipeableContractAuditProps = React.PropsWithChildren<{
     onSwipedDown?: () => void;
 }>;
 type TSwipeableContractDrawerProps = React.PropsWithChildren<{
-    onSwipedDown: () => void;
-    onSwipedUp: () => void;
+    onSwipedDown?: () => void;
+    onSwipedUp?: () => void;
 }>;
 
 /**

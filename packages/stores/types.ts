@@ -159,10 +159,11 @@ type TMenuItem = {
 };
 
 type TAddToastProps = {
-    key: string;
-    content: string | React.ReactNode;
+    key?: string;
+    content: React.ReactNode;
     timeout?: number;
-    type: string;
+    is_bottom?: boolean;
+    type?: string;
 };
 
 type TButtonProps = {
@@ -465,7 +466,7 @@ type TUiStore = {
     is_ready_to_deposit_modal_visible: boolean;
     reports_route_tab_index: number;
     should_show_cancellation_warning: boolean;
-    toggleCancellationWarning: (state_change: boolean) => void;
+    toggleCancellationWarning: (state_change?: boolean) => void;
     toggleUnsupportedContractModal: (state_change: boolean) => void;
     toggleReports: (is_visible: boolean) => void;
     is_real_acc_signup_on: boolean;
@@ -541,13 +542,104 @@ type TPortfolioStore = {
     removePositionById: (id: number) => void;
 };
 
+type TAccumulatorBarriersData = {
+    current_spot: number;
+    current_spot_time: number;
+    tick_update_timestamp: number;
+    accumulators_high_barrier: string;
+    accumulators_low_barrier: string;
+    barrier_spot_distance: string;
+    previous_spot_time: number;
+};
+type TAccumulatorContractBarriersData = TAccumulatorBarriersData & {
+    should_update_contract_barriers: boolean;
+};
+type TAddContractParams = {
+    barrier: string;
+    contract_id: string;
+    contract_type: string;
+    start_time: number;
+    longcode: string;
+    underlying: string;
+    is_tick_contract: boolean;
+    limit_order: ProposalOpenContract['limit_order'];
+};
+
+type TContractTradeStore = {
+    accu_barriers_timeout_id: NodeJS.Timeout | null;
+    accumulator_barriers_data: Partial<TAccumulatorBarriersData>;
+    accumulator_contract_barriers_data: Partial<TAccumulatorContractBarriersData>;
+    clearAccumulatorBarriersData: (should_clear_contract_data_only?: boolean, should_clear_timeout?: boolean) => void;
+    contracts: TContractStore[];
+    has_crossed_accu_barriers: boolean;
+    has_error: boolean;
+    error_message: string;
+    granularity: string | number;
+    chart_type: string;
+    updateAccumulatorBarriersData: ({
+        accumulators_high_barrier,
+        accumulators_low_barrier,
+        barrier_spot_distance,
+        current_spot,
+        current_spot_time,
+        should_update_contract_barriers,
+        underlying,
+    }: Partial<TAccumulatorContractBarriersData & { underlying: string }>) => void;
+    updateChartType: (type: string) => void;
+    updateGranularity: (granularity: number) => void;
+    markers_array: Array<{
+        type: string;
+        contract_info: {
+            accu_barriers_difference:
+                | boolean
+                | {
+                      top: string;
+                      bottom: string;
+                      font: string;
+                  };
+            has_crossed_accu_barriers: boolean;
+            is_accumulator_trade_without_contract: boolean;
+        };
+        key: string;
+        price_array: [string, string];
+        epoch_array: [number];
+    }>;
+    addContract: ({
+        barrier,
+        contract_id,
+        contract_type,
+        start_time,
+        longcode,
+        underlying,
+        is_tick_contract,
+        limit_order,
+    }: TAddContractParams) => void;
+    removeContract: (data: { contract_id: string }) => void;
+    accountSwitchListener: () => Promise<void>;
+    onUnmount: () => void;
+    prev_chart_type: string;
+    prev_granularity: string | number | null;
+    updateProposal: (response: ProposalOpenContract) => void;
+    last_contract: TContractStore | Record<string, never>;
+    clearError: () => void;
+    getContractById: (contract_id?: number) => TContractStore;
+    savePreviousChartMode: (chart_type: string, granularity: string | number | null) => void;
+    setNewAccumulatorBarriersData: (
+        new_barriers_data: TAccumulatorBarriersData,
+        should_update_contract_barriers?: boolean
+    ) => void;
+};
+
 type TContractStore = {
-    getContractById: (id: number) => ProposalOpenContract;
     contract_info: TPortfolioPosition['contract_info'];
-    contract_update_stop_loss: string;
-    contract_update_take_profit: string;
-    has_contract_update_stop_loss: boolean;
+    contract_update_take_profit: number | string;
+    contract_update_stop_loss: number | string;
+    clearContractUpdateConfigValues: () => void;
     has_contract_update_take_profit: boolean;
+    has_contract_update_stop_loss: boolean;
+    updateLimitOrder: () => void;
+    validation_errors: { contract_update_stop_loss: string[]; contract_update_take_profit: string[] };
+    onChange: (param: { name: string; value: string | number | boolean }) => void;
 };
 
 type TMenuStore = {
@@ -636,7 +728,7 @@ export type TCoreStores = {
     menu: TMenuStore;
     ui: TUiStore;
     portfolio: TPortfolioStore;
-    contract_trade: TContractStore;
+    contract_trade: TContractTradeStore;
     // This should be `any` as this property will be handled in each package.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     modules: Record<string, any>;

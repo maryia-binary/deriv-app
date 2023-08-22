@@ -24,10 +24,10 @@ type TDigitsWrapper = TDigits & {
     onLastDigitSpot?: (params: TOnLastDigitSpot) => void;
 };
 type TDigits = Pick<TContractStore, 'contract_info' | 'digits_info'> & {
+    digits_array?: number[];
     display_status?: TContractStore['display_status'];
     is_digit_contract?: TContractStore['is_digit_contract'];
     is_ended?: TContractStore['is_ended'];
-    digits_array?: number[];
     is_trade_page?: boolean;
     onDigitChange?: TTraderStore['onChange'];
     selected_digit?: TTraderStore['last_digit'];
@@ -43,9 +43,9 @@ type TTickData =
     | {
           ask: TTickStream['tick'];
           bid: TTickStream['tick'];
+          current_tick: number;
           epoch: TTickStream['epoch'];
           pip_size?: number;
-          current_tick: number;
       };
 
 const DigitsWrapper = ({

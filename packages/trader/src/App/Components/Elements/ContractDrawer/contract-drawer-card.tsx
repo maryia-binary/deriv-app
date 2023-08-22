@@ -28,12 +28,12 @@ type TContractDrawerCardProps = {
     | 'is_accumulator'
     | 'is_mobile'
     | 'is_multiplier'
-    | 'is_vanilla'
     | 'is_turbos'
+    | 'is_vanilla'
     | 'status'
 > &
     Pick<TContractCardFooterProps, 'is_sell_requested' | 'onClickCancel' | 'onClickSell'> &
-    Pick<TSwipeableContractDrawerProps, 'onSwipedUp' | 'onSwipedDown'>;
+    Pick<TSwipeableContractDrawerProps, 'onSwipedDown' | 'onSwipedUp'>;
 
 const ContractDrawerCard = observer(
     ({

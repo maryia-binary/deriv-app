@@ -567,27 +567,30 @@ type TAddContractParams = {
 };
 
 type TContractTradeStore = {
+    accountSwitchListener: () => Promise<void>;
     accu_barriers_timeout_id: NodeJS.Timeout | null;
     accumulator_barriers_data: Partial<TAccumulatorBarriersData>;
     accumulator_contract_barriers_data: Partial<TAccumulatorContractBarriersData>;
+    addContract: ({
+        barrier,
+        contract_id,
+        contract_type,
+        start_time,
+        longcode,
+        underlying,
+        is_tick_contract,
+        limit_order,
+    }: TAddContractParams) => void;
+    chart_type: string;
     clearAccumulatorBarriersData: (should_clear_contract_data_only?: boolean, should_clear_timeout?: boolean) => void;
+    clearError: () => void;
     contracts: TContractStore[];
+    error_message: string;
+    getContractById: (contract_id?: number) => TContractStore;
+    granularity: string | number;
     has_crossed_accu_barriers: boolean;
     has_error: boolean;
-    error_message: string;
-    granularity: string | number;
-    chart_type: string;
-    updateAccumulatorBarriersData: ({
-        accumulators_high_barrier,
-        accumulators_low_barrier,
-        barrier_spot_distance,
-        current_spot,
-        current_spot_time,
-        should_update_contract_barriers,
-        underlying,
-    }: Partial<TAccumulatorContractBarriersData & { underlying: string }>) => void;
-    updateChartType: (type: string) => void;
-    updateGranularity: (granularity: number) => void;
+    last_contract: TContractStore | Record<string, never>;
     markers_array: Array<{
         type: string;
         contract_info: {
@@ -605,47 +608,44 @@ type TContractTradeStore = {
         price_array: [string, string];
         epoch_array: [number];
     }>;
-    addContract: ({
-        barrier,
-        contract_id,
-        contract_type,
-        start_time,
-        longcode,
-        underlying,
-        is_tick_contract,
-        limit_order,
-    }: TAddContractParams) => void;
-    removeContract: (data: { contract_id: string }) => void;
-    accountSwitchListener: () => Promise<void>;
     onUnmount: () => void;
     prev_chart_type: string;
     prev_granularity: string | number | null;
-    updateProposal: (response: ProposalOpenContract) => void;
-    last_contract: TContractStore | Record<string, never>;
-    clearError: () => void;
-    getContractById: (contract_id?: number) => TContractStore;
+    removeContract: (data: { contract_id: string }) => void;
     savePreviousChartMode: (chart_type: string, granularity: string | number | null) => void;
     setNewAccumulatorBarriersData: (
         new_barriers_data: TAccumulatorBarriersData,
         should_update_contract_barriers?: boolean
     ) => void;
+    updateAccumulatorBarriersData: ({
+        accumulators_high_barrier,
+        accumulators_low_barrier,
+        barrier_spot_distance,
+        current_spot,
+        current_spot_time,
+        should_update_contract_barriers,
+        underlying,
+    }: Partial<TAccumulatorContractBarriersData & { underlying: string }>) => void;
+    updateChartType: (type: string) => void;
+    updateGranularity: (granularity: number) => void;
+    updateProposal: (response: ProposalOpenContract) => void;
 };
 
 type TContractStore = {
+    clearContractUpdateConfigValues: () => void;
     contract_info: TPortfolioPosition['contract_info'];
     contract_update_history: ContractUpdateHistory;
     contract_update_take_profit: number | string;
     contract_update_stop_loss: number | string;
-    clearContractUpdateConfigValues: () => void;
     digits_info: { [key: number]: { digit: number; spot: string } };
     display_status: string;
-    is_digit_contract: boolean;
-    is_ended: boolean;
     has_contract_update_take_profit: boolean;
     has_contract_update_stop_loss: boolean;
+    is_digit_contract: boolean;
+    is_ended: boolean;
+    onChange: (param: { name: string; value: string | number | boolean }) => void;
     updateLimitOrder: () => void;
     validation_errors: { contract_update_stop_loss: string[]; contract_update_take_profit: string[] };
-    onChange: (param: { name: string; value: string | number | boolean }) => void;
 };
 
 type TMenuStore = {

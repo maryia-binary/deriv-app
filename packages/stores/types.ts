@@ -721,6 +721,16 @@ type TTradersHubStore = {
     showTopUpModal: () => void;
 };
 
+type TContractReplay = {
+    contract_store: {
+        contract_info: TPortfolioPosition['contract_info'];
+        digits_info: { [key: number]: { digit: number; spot: string } };
+        display_status: string;
+        is_digit_contract: boolean;
+        is_ended: boolean;
+    };
+};
+
 /**
  * This is the type that contains all the `core` package stores
  */
@@ -738,7 +748,7 @@ export type TCoreStores = {
     traders_hub: TTradersHubStore;
     gtm: Record<string, unknown>;
     pushwoosh: Record<string, unknown>;
-    contract_replay: Record<string, unknown>;
+    contract_replay: TContractReplay;
     chart_barrier_store: Record<string, unknown>;
     active_symbols: Record<string, unknown>;
 };

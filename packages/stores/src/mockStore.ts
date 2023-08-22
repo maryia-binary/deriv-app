@@ -483,7 +483,15 @@ const mock = (): TStores & { is_mock: boolean } => {
         },
         gtm: {},
         pushwoosh: {},
-        contract_replay: {},
+        contract_replay: {
+            contract_store: {
+                contract_info: {},
+                digits_info: {},
+                display_status: '',
+                is_digit_contract: false,
+                is_ended: false,
+            },
+        },
         chart_barrier_store: {},
         active_symbols: {},
     };

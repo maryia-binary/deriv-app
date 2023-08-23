@@ -574,3 +574,15 @@ describe('getContractStatus', () => {
         ).toBe('won');
     });
 });
+
+describe('getLocalizedTurbosSubtype', () => {
+    it('should return an empty string for non-turbos contracts', () => {
+        expect(ContractUtils.getLocalizedTurbosSubtype('CALL')).toBe('');
+    });
+    it('should return "Long" for TURBOSLONG contract', () => {
+        expect(ContractUtils.getLocalizedTurbosSubtype('TURBOSLONG')).toBe('Long');
+    });
+    it('should return "Short" for TURBOSSHORT contract', () => {
+        expect(ContractUtils.getLocalizedTurbosSubtype('TURBOSSHORT')).toBe('Short');
+    });
+});

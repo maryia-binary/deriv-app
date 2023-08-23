@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { localize } from '@deriv/translations';
 import { unique } from '../object';
 import { capitalizeFirstLetter } from '../string/string_util';
 import { TContractInfo, TDigitsInfo, TLimitOrder, TTickItem } from './contract-types';
@@ -207,7 +208,12 @@ export const shouldShowExpiration = (symbol = '') => symbol.startsWith('cry');
 
 export const shouldShowCancellation = (symbol = '') => !/^(cry|CRASH|BOOM|stpRNG|WLD|JD)/.test(symbol);
 
-export const getContractSubtype = (type: string) =>
+export const getContractSubtype = (type = '') =>
     /(VANILLALONG|TURBOS)/i.test(type)
         ? capitalizeFirstLetter(type.replace(/(VANILLALONG|TURBOS)/i, '').toLowerCase())
         : '';
+
+export const getLocalizedTurbosSubtype = (contract_type = '') => {
+    if (!isTurbosContract(contract_type)) return '';
+    return getContractSubtype(contract_type) === 'Long' ? localize('Long') : localize('Short');
+};

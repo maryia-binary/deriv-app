@@ -1,5 +1,6 @@
 import moment from 'moment';
-import { localize } from '@deriv/translations';
+import React from 'react';
+import { Localize } from '@deriv/translations';
 import { unique } from '../object';
 import { capitalizeFirstLetter } from '../string/string_util';
 import { TContractInfo, TDigitsInfo, TLimitOrder, TTickItem } from './contract-types';
@@ -215,5 +216,9 @@ export const getContractSubtype = (type = '') =>
 
 export const getLocalizedTurbosSubtype = (contract_type = '') => {
     if (!isTurbosContract(contract_type)) return '';
-    return getContractSubtype(contract_type) === 'Long' ? localize('Long') : localize('Short');
+    return getContractSubtype(contract_type) === 'Long' ? (
+        <Localize i18n_default_text='Long' />
+    ) : (
+        <Localize i18n_default_text='Short' />
+    );
 };

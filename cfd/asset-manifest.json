@@ -3,7 +3,7 @@
   "CFDStore.js": "/cfd/js/CFDStore.js",
   "CompareAccountsModal.js": "/cfd/js/CompareAccountsModal.js",
   "JurisdictionModal.js": "/cfd/js/JurisdictionModal.js",
-  "CFDPasswordModal.css": "/cfd/css/cfd.main.244795d68b4f36bc3f92.css",
+  "CFDPasswordModal.css": "/cfd/css/cfd.main.f6f18ca1896988abc21e.css",
   "CFDPasswordModal.js": "/cfd/js/CFDPasswordModal.js",
   "CFDDbviOnBoarding.js": "/cfd/js/CFDDbviOnBoarding.js",
   "CFDResetPasswordModal.js": "/cfd/js/CFDResetPasswordModal.js",
@@ -15,8 +15,8 @@
   "CFDFinancialStpRealAccountSignup.js": "/cfd/js/CFDFinancialStpRealAccountSignup.js",
   "getDXTradeWebTerminalLink.js": "/cfd/js/getDXTradeWebTerminalLink.js",
   "getDerivEzWebTerminalLink.js": "/cfd/js/getDerivEzWebTerminalLink.js",
-  "cfd-app.css": "/cfd/css/cfd.cfd-app.1294e6b84481f5ebb47f.css",
-  "cfd-app.js": "/cfd/js/cfd.cfd-app.814492b3b64bd0eab84a.js",
+  "cfd-app.css": "/cfd/css/cfd.cfd-app.2d4a0fbffcde41fc2028.css",
+  "cfd-app.js": "/cfd/js/cfd.cfd-app.26b2c180d8528fbfd2ad.js",
   "404.js": "/cfd/js/cfd.404.49e9299f9820e9435cb4.js",
-  "cfd/js/cfd.vendors-node_modules_classnames_index_js-node_modules_formik_dist_formik_esm_js-node_modules_-2808e5.js": "/cfd/js/cfd.vendors-node_modules_classnames_index_js-node_modules_formik_dist_formik_esm_js-node_modules_-2808e5.a738efc3a161eb91af1b.js"
+  "cfd/js/cfd.vendors-node_modules_classnames_index_js-node_modules_formik_dist_formik_esm_js-node_modules_-2808e5.js": "/cfd/js/cfd.vendors-node_modules_classnames_index_js-node_modules_formik_dist_formik_esm_js-node_modules_-2808e5.1b109cabcbc4e2a5898f.js"
 }

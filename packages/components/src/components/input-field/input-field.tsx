@@ -41,7 +41,7 @@ type TInputField = {
     is_autocomplete_disabled?: boolean;
     is_disabled?: boolean;
     is_error_tooltip_hidden?: boolean;
-    is_float: boolean;
+    is_float?: boolean;
     is_hj_whitelisted?: boolean;
     is_incrementable_on_long_press?: boolean;
     is_incrementable?: boolean;
@@ -55,7 +55,7 @@ type TInputField = {
     min_value?: number;
     name: string;
     onBlur?: React.FocusEventHandler<HTMLInputElement>;
-    onChange: (e: TChangeEvent) => void;
+    onChange?: (e: TChangeEvent) => void;
     onClick?: React.MouseEventHandler<HTMLInputElement>;
     onClickInputWrapper?: React.MouseEventHandler<HTMLDivElement>;
     placeholder?: string;
@@ -170,7 +170,7 @@ const InputField = ({
             }
         }
 
-        onChange(e);
+        onChange?.(e);
         if (callback) {
             callback(e);
         }
@@ -269,7 +269,7 @@ const InputField = ({
             if (is_signed && /^\d+/.test(formatted_value) && +formatted_value > 0) {
                 formatted_value = `+${formatted_value}`;
             }
-            onChange({ target: { value: formatted_value, name } });
+            onChange?.({ target: { value: formatted_value, name } });
         }
     };
 

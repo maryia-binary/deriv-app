@@ -53,7 +53,7 @@ type TInputField = {
     max_length?: number;
     max_value?: number;
     min_value?: number;
-    name: string;
+    name?: string;
     onBlur?: React.FocusEventHandler<HTMLInputElement>;
     onChange?: (e: TChangeEvent) => void;
     onClick?: React.MouseEventHandler<HTMLInputElement>;
@@ -62,7 +62,7 @@ type TInputField = {
     prefix?: string;
     required?: boolean;
     setCurrentFocus: (name: string | null) => void;
-    type: string;
+    type?: string;
     unit?: string;
     value: number | string;
 };
@@ -105,7 +105,7 @@ const InputField = ({
     max_length,
     max_value,
     min_value,
-    name,
+    name = '',
     format,
     onBlur,
     onChange,
@@ -115,7 +115,7 @@ const InputField = ({
     prefix,
     required,
     setCurrentFocus,
-    type,
+    type = '',
     unit,
     value,
     data_testid,

@@ -52,7 +52,7 @@ const Calendar: React.MemoExoticComponent<
                 date_format = 'YYYY-MM-DD',
                 disabled_days,
                 events,
-                footer,
+                footer = '',
                 has_today_btn,
                 has_range_selection,
                 keep_open,
@@ -61,7 +61,7 @@ const Calendar: React.MemoExoticComponent<
                 onChangeCalendarMonth,
                 onHover,
                 onSelect,
-                start_date,
+                start_date = '',
                 value,
                 should_show_today,
             },
@@ -203,7 +203,7 @@ const Calendar: React.MemoExoticComponent<
                         date_format={date_format}
                         disabled_days={disabled_days}
                         isPeriodDisabled={isPeriodDisabled}
-                        start_date={start_date ?? ''}
+                        start_date={start_date}
                         selected_date={selected_date}
                         updateSelected={updateSelected}
                         events={events}
@@ -213,7 +213,7 @@ const Calendar: React.MemoExoticComponent<
                         onMouseLeave={onMouseLeave}
                         should_show_today={!!should_show_today}
                     />
-                    <Footer footer={footer ?? ''} has_today_btn={has_today_btn} onClick={setToday} />
+                    <Footer footer={footer} has_today_btn={has_today_btn} onClick={setToday} />
                 </div>
             );
         }

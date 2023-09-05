@@ -122,7 +122,7 @@ const TradingDatePicker = observer(({ id, is_24_hours_contract, mode, name }: TT
     };
 
     const onChangeCalendarMonth = React.useCallback(
-        // do not move this callback up. it will cause infinite loop
+        // Do not move this callback up. It will cause infinite loop.
         async (e = toMoment().format('YYYY-MM-DD')) => {
             const new_market_events: TMarketEvent[] = [];
             let new_disabled_days: number[] = [];
@@ -140,6 +140,7 @@ const TradingDatePicker = observer(({ id, is_24_hours_contract, mode, name }: TT
                     descrip: evt.descrip,
                 });
             });
+
             if (isMounted()) {
                 setDisabledDays(new_disabled_days);
                 setMarketEvents(new_market_events);
@@ -168,7 +169,7 @@ const TradingDatePicker = observer(({ id, is_24_hours_contract, mode, name }: TT
                     display_format='DD MMM YYYY'
                     show_leading_icon
                     error={validation_errors?.[name]?.length ? '' : undefined}
-                    mode={mode ?? ''}
+                    mode={mode}
                     max_date={getMaxDateDuration()}
                     min_date={getMinDateExpiry()}
                     name={name}

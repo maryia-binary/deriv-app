@@ -19,7 +19,7 @@ import ContractType from 'Modules/Trading/Containers/contract-type.jsx';
 import MobileWidget from 'Modules/Trading/Components/Elements/mobile-widget.jsx';
 import Purchase from 'Modules/Trading/Containers/purchase';
 import RiskManagementInfo from 'Modules/Trading/Components/Elements/Multiplier/risk-management-info.jsx';
-import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/take-profit.jsx';
+import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/take-profit';
 import 'Sass/app/_common/mobile-widget.scss';
 import classNames from 'classnames';
 import AccumulatorsStats from 'Modules/Contract/Components/AccumulatorsStats';

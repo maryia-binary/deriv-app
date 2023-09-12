@@ -1,6 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 import { InputWithCheckbox } from '@deriv/components';
-import { localize } from '@deriv/translations';
+import { Localize, localize } from '@deriv/translations';
 import Fieldset from 'App/Components/Form/fieldset.jsx';
 import { isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
@@ -9,8 +10,8 @@ import { TTradeStore } from 'Types';
 
 type TStopLossProps = {
     has_stop_loss?: boolean;
-    onChangeMultiple?: (props: Partial<TTradeStore>) => Promise<void> | void;
-    onChange?: (e: { target: { name: string; value: unknown } }) => Promise<void> | void;
+    onChange?: (e: { target: { name: string; value: unknown } }) => void;
+    onChangeMultiple?: (props: Partial<TTradeStore>) => void;
     stop_loss?: string;
     validation_errors?: { [key: string]: string[] };
 };
@@ -48,7 +49,9 @@ const StopLoss = observer((props: TStopLossProps) => {
                 removeToast={removeToast}
                 classNameInlinePrefix='trade-container__currency'
                 classNameInput='trade-container__input'
-                className={isDesktop() ? 'trade-container__amount trade-container__amount--multipliers' : undefined}
+                className={classNames({
+                    'trade-container__amount trade-container__amount--multipliers': isDesktop(),
+                })}
                 currency={currency}
                 current_focus={current_focus ?? ''}
                 defaultChecked={has_stop_loss}
@@ -61,7 +64,9 @@ const StopLoss = observer((props: TStopLossProps) => {
                 name='stop_loss'
                 onChange={changeValue}
                 setCurrentFocus={setCurrentFocus}
-                tooltip_label={localize('Your contract will be closed automatically if your loss reaches this amount.')}
+                tooltip_label={
+                    <Localize i18n_default_text='Your contract will be closed automatically if your loss reaches this amount.' />
+                }
                 tooltip_alignment='left'
                 error_message_alignment='left'
                 value={stop_loss ?? ''}

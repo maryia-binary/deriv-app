@@ -8,7 +8,7 @@ import Duration from 'Modules/Trading/Components/Form/TradeParams/Duration';
 import LastDigit from 'Modules/Trading/Components/Form/TradeParams/last-digit.jsx';
 import CancelDeal from 'Modules/Trading/Components/Form/TradeParams/Multiplier/cancel-deal';
 import Accumulator from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulator.jsx';
-import StopLoss from 'Modules/Trading/Components/Form/TradeParams/Multiplier/stop-loss.jsx';
+import StopLoss from 'Modules/Trading/Components/Form/TradeParams/Multiplier/stop-loss';
 import TakeProfit from 'Modules/Trading/Components/Form/TradeParams/Multiplier/take-profit.jsx';
 import Expiration from 'Modules/Trading/Components/Form/TradeParams/Multiplier/expiration';
 import AccumulatorsInfoDisplay from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-info-display.jsx';

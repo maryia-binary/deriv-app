@@ -32,7 +32,7 @@ type TInputWithCheckbox = {
     tooltip_alignment?: TPosition;
     error_message_alignment: string;
     value: number | string;
-    is_disabled: boolean;
+    is_disabled?: boolean;
 };
 const InputWithCheckbox = ({
     addToast,

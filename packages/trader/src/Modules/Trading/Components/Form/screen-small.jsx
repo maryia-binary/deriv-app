@@ -11,7 +11,7 @@ import {
 import {
     AccumulatorOptionsWidget,
     MultiplierOptionsWidget,
-} from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets.jsx';
+} from 'Modules/Trading/Components/Form/TradeParams/Multiplier/widgets';
 import AccumulatorsAmountMobile from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-amount-mobile.jsx';
 import AccumulatorsInfoDisplay from 'Modules/Trading/Components/Form/TradeParams/Accumulator/accumulators-info-display.jsx';
 import { BarrierMobile, LastDigitMobile } from 'Modules/Trading/Containers/trade-params-mobile';

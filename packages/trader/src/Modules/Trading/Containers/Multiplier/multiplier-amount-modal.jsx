@@ -4,7 +4,7 @@ import { useIsMounted, WS } from '@deriv/shared';
 import { localize, Localize } from '@deriv/translations';
 import { requestPreviewProposal } from 'Stores/Modules/Trading/Helpers/preview-proposal';
 import AmountMobile from 'Modules/Trading/Components/Form/TradeParams/amount-mobile.jsx';
-import MultipliersInfo from 'Modules/Trading/Components/Form/TradeParams/Multiplier/info.jsx';
+import MultipliersInfo from 'Modules/Trading/Components/Form/TradeParams/Multiplier/info';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 

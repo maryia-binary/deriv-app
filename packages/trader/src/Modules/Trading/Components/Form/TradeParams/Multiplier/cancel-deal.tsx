@@ -85,7 +85,7 @@ const CancelDeal = observer(() => {
             </div>
             {has_cancellation && (
                 <Dropdown
-                    id='dt_cancellation_range'
+                    test_id='dt_cancellation_range'
                     className='trade-container__multiplier-dropdown'
                     is_alignment_left
                     is_nativepicker={false}

@@ -7,8 +7,8 @@ import RouteWithSubRoutes from './route-with-sub-routes';
 const BinaryRoutes = (props: TBinaryRoutesProps) => (
     <React.Suspense fallback={<div />}>
         <Switch>
-            {getRoutesConfig().map((route: TRouteConfig, idx: number) => (
-                <RouteWithSubRoutes key={idx} {...route} {...props} />
+            {getRoutesConfig().map((route: TRouteConfig) => (
+                <RouteWithSubRoutes key={route.getTitle?.()} {...route} {...props} />
             ))}
         </Switch>
     </React.Suspense>

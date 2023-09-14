@@ -11,9 +11,9 @@ import {
 } from '@deriv/shared';
 import { getLanguage } from '@deriv/translations';
 import Page404 from 'Modules/Page404';
-import { TBinaryRoutes, TRouteConfig } from 'Types';
+import { TBinaryRoutesProps, TRouteConfig } from 'Types';
 
-type TRouteWithSubRoutesProps = TRouteConfig & TBinaryRoutes;
+type TRouteWithSubRoutesProps = TRouteConfig & TBinaryRoutesProps;
 
 const RouteWithSubRoutes = (route: TRouteWithSubRoutesProps) => {
     const validateRoute = (pathname: string) => {

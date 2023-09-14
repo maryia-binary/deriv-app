@@ -2,7 +2,7 @@ import { TCoreStores } from '@deriv/stores/types';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 
-export type TBinaryRoutes = {
+export type TBinaryRoutesProps = {
     is_logged_in: boolean;
     is_logging_in: boolean;
     passthrough?: {

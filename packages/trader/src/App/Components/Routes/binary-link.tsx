@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { findRouteByPath, normalizePath } from './helpers';
 import getRoutesConfig from '../../Constants/routes-config';
 
-type TBinaryLink = React.PropsWithChildren<{
+type TBinaryLinkProps = React.PropsWithChildren<{
     active_class?: string;
     to?: string;
 }>;
@@ -11,7 +11,7 @@ type TBinaryLink = React.PropsWithChildren<{
 // TODO: solve circular dependency problem
 // when binary link is imported into components present in routes config
 // or into their descendants
-const BinaryLink = ({ active_class, to, children, ...props }: TBinaryLink) => {
+const BinaryLink = ({ active_class, to, children, ...props }: TBinaryLinkProps) => {
     const path = normalizePath(to);
     const route = findRouteByPath(path, getRoutesConfig());
 

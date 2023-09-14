@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import getRoutesConfig from 'App/Constants/routes-config';
-import { TBinaryRoutes, TRouteConfig } from 'Types';
+import { TBinaryRoutesProps, TRouteConfig } from 'Types';
 import RouteWithSubRoutes from './route-with-sub-routes';
 
-const BinaryRoutes = (props: TBinaryRoutes) => (
+const BinaryRoutes = (props: TBinaryRoutesProps) => (
     <React.Suspense fallback={<div />}>
         <Switch>
             {getRoutesConfig().map((route: TRouteConfig, idx: number) => (

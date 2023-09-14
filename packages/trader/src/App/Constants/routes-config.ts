@@ -1,9 +1,9 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { routes, moduleLoader } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import Trade from 'Modules/Trading';
 import { TRouteConfig } from 'Types';
-import { RouteComponentProps } from 'react-router';
 
 const ContractDetails = React.lazy(
     () =>

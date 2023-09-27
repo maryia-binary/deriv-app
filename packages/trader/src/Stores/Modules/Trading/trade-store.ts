@@ -1106,7 +1106,6 @@ export default class TradeStore extends BaseStore {
 
             // TODO: handle barrier updates on proposal api
             // const is_barrier_changed = 'barrier_1' in new_state || 'barrier_2' in new_state;
-            // @ts-expect-error TODO: check if TS error is gone after TOverrideTradeStore is removed
             await processTradeParams(this, new_state);
 
             this.updateStore({

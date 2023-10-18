@@ -1,14 +1,14 @@
 {
   "trader.js": "/trader/js/trader.js",
-  "trader-app.css": "/trader/css/trader.trader-app.11bb53be487e78a4f56c.css",
-  "trader-app.js": "/trader/js/trader.trader-app.9936955ad8ebf2d96759.js",
-  "trade-modals.js": "/trader/js/trader.trade-modals.0927ee1ba44a3cefed2d.js",
-  "error-component.js": "/trader/js/trader.error-component.36c0742f0e2c06dfd86a.js",
-  "contract.js": "/trader/js/trader.contract.27f59d393acac45e8a69.js",
-  "screen-small.css": "/trader/css/trader.screen-small.fac5b1583a23b4983cb1.css",
-  "screen-small.js": "/trader/js/trader.screen-small.29c945d62eaa5719206c.js",
-  "screen-large.js": "/trader/js/trader.screen-large.9977d562d9c3cafb18b3.js",
-  "settings-chart.js": "/trader/js/trader.settings-chart.fc2a6ea1b879b205c036.js",
+  "trader-app.css": "/trader/css/trader.trader-app.c1d3dc688966f74dab87.css",
+  "trader-app.js": "/trader/js/trader.trader-app.4c0b83ab049c6c78010e.js",
+  "trade-modals.js": "/trader/js/trader.trade-modals.14b4326d9b209dc6dc45.js",
+  "error-component.js": "/trader/js/trader.error-component.9c9fb22385840711e1f1.js",
+  "contract.js": "/trader/js/trader.contract.488e53a2583fea90f859.js",
+  "screen-small.css": "/trader/css/trader.screen-small.86e4b91383b2060f4af7.css",
+  "screen-small.js": "/trader/js/trader.screen-small.6e8eb9cac563233ff521.js",
+  "screen-large.js": "/trader/js/trader.screen-large.ae3d81259f0b24b3803a.js",
+  "settings-chart.js": "/trader/js/trader.settings-chart.0f964a42caf6b8ac50b6.js",
   "trader/js/trader.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-1ff7d4.js": "/trader/js/trader.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-1ff7d4.ceb4780d69d62a2a3af7.js",
-  "trader/js/trader.src_Modules_Trading_Components_Form_TradeParams_Accumulator_accumulators-info-display_tsx-src-9fe6fd.js": "/trader/js/trader.src_Modules_Trading_Components_Form_TradeParams_Accumulator_accumulators-info-display_tsx-src-9fe6fd.ace5f24be569149b8706.js"
+  "trader/js/trader.src_Modules_Trading_Components_Form_TradeParams_Accumulator_accumulators-info-display_tsx-src-9fe6fd.js": "/trader/js/trader.src_Modules_Trading_Components_Form_TradeParams_Accumulator_accumulators-info-display_tsx-src-9fe6fd.22eda5f290aa2e35caa1.js"
 }

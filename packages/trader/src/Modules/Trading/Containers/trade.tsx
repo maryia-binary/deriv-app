@@ -1,21 +1,19 @@
+// @ts-nocheck
 import React from 'react';
 import classNames from 'classnames';
 import { DesktopWrapper, Div100vhContainer, MobileWrapper, SwipeableWrapper } from '@deriv/components';
-import { getDecimalPlaces, isDesktop, isMobile } from '@deriv/shared';
+import { isDesktop } from '@deriv/shared';
+import { observer, useStore } from '@deriv/stores';
+import { useTraderStore } from 'Stores/useTraderStores';
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import PositionsDrawer from 'App/Components/Elements/PositionsDrawer';
 import MarketIsClosedOverlay from 'App/Components/Elements/market-is-closed-overlay';
 import Test from './test.jsx';
-import { ChartBottomWidgets, ChartTopWidgets, DigitsWidget } from './chart-widgets.jsx';
-import FormLayout from '../Components/Form/form-layout';
-import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
-import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
-import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets.jsx';
-import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
-import { useTraderStore } from 'Stores/useTraderStores';
-import { observer, useStore } from '@deriv/stores';
+import { ChartTopWidgets, DigitsWidget } from './chart-widgets.jsx';
+import FormLayout from '../Components/Form/form-layout.js';
+import TradeChart from './trade-chart';
 
-const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }) => {
+const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }: any) => {
     React.useEffect(() => {
         setTick(tick);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,6 +57,7 @@ const Trade = observer(() => {
         has_only_forward_starting_contracts: is_market_unavailable_visible,
         should_show_multipliers_onboarding,
         is_dark_mode_on: is_dark_theme,
+        is_mobile,
     } = ui;
     const { is_eu } = client;
     const { network_status } = common;
@@ -67,8 +66,8 @@ const Trade = observer(() => {
     const [tick, setTick] = React.useState({});
     const [try_synthetic_indices, setTrySyntheticIndices] = React.useState(false);
     const [try_open_markets, setTryOpenMarkets] = React.useState(false);
-    const [category, setCategory] = React.useState(null);
-    const [subcategory, setSubcategory] = React.useState(null);
+    const [category, setCategory] = React.useState<string>();
+    const [subcategory, setSubcategory] = React.useState<string>();
     const [swipe_index, setSwipeIndex] = React.useState(0);
     const charts_ref = React.useRef();
 
@@ -80,6 +79,7 @@ const Trade = observer(() => {
         }
         return null;
     }, [try_synthetic_indices, try_open_markets, category, subcategory]);
+    // console.log(is_eu bool, category str, subcategory str, open_market null)
 
     React.useEffect(() => {
         onMount();
@@ -100,11 +100,12 @@ const Trade = observer(() => {
     }, [onMount, onUnmount, getFirstOpenMarket, is_synthetics_available]);
 
     React.useEffect(() => {
-        if (isMobile()) {
+        if (is_mobile) {
             setDigits([]);
         }
         setTrySyntheticIndices(false);
         setTryOpenMarkets(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [symbol, setDigits, setTrySyntheticIndices, is_synthetics_available]);
 
     React.useEffect(() => {
@@ -119,11 +120,11 @@ const Trade = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const bottomWidgets = React.useCallback(({ digits: d, tick: t }) => {
+    const bottomWidgets = React.useCallback(({ digits: d, tick: t }: any) => {
         return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
     }, []);
 
-    const onChangeSwipeableIndex = index => {
+    const onChangeSwipeableIndex = (index: number) => {
         setMobileDigitView(index === 0);
         setIsDigitsWidgetActive(index === 0);
         setSwipeIndex(index);
@@ -142,6 +143,7 @@ const Trade = observer(() => {
     const topWidgets = React.useCallback(
         ({ ...params }) => (
             <ChartTopWidgets
+                // @ts-expect-error TODO: check if TS error is gone after ChartTopWidgets is migrated to ts
                 open_market={open_market}
                 open={try_synthetic_indices || try_open_markets}
                 charts_ref={charts_ref}
@@ -151,7 +153,7 @@ const Trade = observer(() => {
         [open_market, try_synthetic_indices, try_open_markets]
     );
 
-    const form_wrapper_class = isMobile() ? 'mobile-wrapper' : 'sidebar__container desktop-only';
+    const form_wrapper_class = is_mobile ? 'mobile-wrapper' : 'sidebar__container desktop-only';
     const chart_height_offset = React.useMemo(() => {
         if (is_accumulator) return '295px';
         if (is_turbos) return '300px';
@@ -179,12 +181,12 @@ const Trade = observer(() => {
             >
                 <NotificationMessages />
                 <React.Suspense
-                    fallback={<ChartLoader is_dark={is_dark_theme} is_visible={!symbol || is_chart_loading} />}
+                    fallback={<ChartLoader is_dark={is_dark_theme} is_visible={!symbol || !!is_chart_loading} />}
                 >
                     <DesktopWrapper>
                         <div className={classNames('chart-container__wrapper', { 'vanilla-trade-chart': is_vanilla })}>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <ChartTrade
+                            <TradeChart
                                 topWidgets={topWidgets}
                                 charts_ref={charts_ref}
                                 is_accumulator={is_accumulator}
@@ -205,8 +207,9 @@ const Trade = observer(() => {
                             is_swipe_disabled={swipe_index === 1}
                             className={classNames({ 'vanilla-trade-chart': is_vanilla })}
                         >
+                            {/* @ts-expect-error TODO: check if TS error is gone after DigitsWidget is migrated to ts */}
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
-                            <ChartTrade
+                            <TradeChart
                                 topWidgets={topWidgets}
                                 charts_ref={charts_ref}
                                 bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
@@ -242,188 +245,3 @@ const Trade = observer(() => {
 });
 
 export default Trade;
-
-// CHART (ChartTrade)--------------------------------------------------------
-
-/* eslint-disable */
-import SmartChartSwitcher from './smart-chart-switcher.jsx';
-
-const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChartSwitcher innerRef={ref} {...props} />);
-
-// ChartMarkers --------------------------
-const ChartMarkers = observer(config => {
-    const { ui, client, contract_trade } = useStore();
-    const { markers_array, granularity } = contract_trade;
-    const { is_dark_mode_on: is_dark_theme } = ui;
-    const { currency } = client;
-    return markers_array.map(marker => {
-        const Marker = AllMarkers[marker.type];
-        return (
-            <Marker
-                key={marker.key}
-                is_dark_theme={is_dark_theme}
-                granularity={granularity}
-                currency={currency}
-                config={config}
-                {...marker}
-            />
-        );
-    });
-});
-
-const ChartTrade = observer(props => {
-    const { is_accumulator, end_epoch, topWidgets, charts_ref } = props;
-    const { client, ui, common, contract_trade, portfolio } = useStore();
-    const {
-        accumulator_barriers_data,
-        accumulator_contract_barriers_data,
-        chart_type,
-        granularity,
-        markers_array,
-        has_crossed_accu_barriers,
-        updateGranularity,
-        updateChartType,
-    } = contract_trade;
-    const { all_positions } = portfolio;
-    const { is_chart_layout_default, is_chart_countdown_visible, is_dark_mode_on, is_positions_drawer_on } = ui;
-    const { is_socket_opened, current_language } = common;
-    const { currency, is_beta_chart, should_show_eu_content } = client;
-    const {
-        chartStateChange,
-        is_trade_enabled,
-        main_barrier_flattened: main_barrier,
-        barriers_flattened: extra_barriers,
-        show_digits_stats,
-        symbol,
-        exportLayout,
-        setChartStatus,
-        chart_layout,
-        wsForget,
-        wsForgetStream,
-        wsSendRequest,
-        wsSubscribe,
-        active_symbols,
-        has_alternative_source,
-    } = useTraderStore();
-
-    const settings = {
-        assetInformation: false, // ui.is_chart_asset_info_visible,
-        countdown: is_chart_countdown_visible,
-        isHighestLowestMarkerEnabled: false, // TODO: Pending UI,
-        language: current_language.toLowerCase(),
-        position: is_chart_layout_default ? 'bottom' : 'left',
-        theme: is_dark_mode_on ? 'dark' : 'light',
-        ...(is_accumulator ? { whitespace: 190, minimumLeftBars: isMobile() ? 3 : undefined } : {}),
-    };
-
-    const { current_spot, current_spot_time } = accumulator_barriers_data || {};
-
-    const bottomWidgets = React.useCallback(
-        ({ digits, tick }) => (
-            <ChartBottomWidgets digits={digits} tick={tick} show_accumulators_stats={is_accumulator} is_trade_page />
-        ),
-        [is_accumulator]
-    );
-
-    const getMarketsOrder = active_symbols => {
-        const synthetic_index = 'synthetic_index';
-
-        const has_synthetic_index = !!active_symbols.find(s => s.market === synthetic_index);
-        return active_symbols
-            .slice()
-            .sort((a, b) => (a.display_name < b.display_name ? -1 : 1))
-            .map(s => s.market)
-            .reduce(
-                (arr, market) => {
-                    if (arr.indexOf(market) === -1) arr.push(market);
-                    return arr;
-                },
-                has_synthetic_index ? [synthetic_index] : []
-            );
-    };
-
-    const barriers = main_barrier ? [main_barrier, ...extra_barriers] : extra_barriers;
-
-    // max ticks to display for mobile view for tick chart
-    const max_ticks = granularity === 0 ? 8 : 24;
-
-    if (!symbol || active_symbols.length === 0) return null;
-
-    return (
-        <SmartChartWithRef
-            ref={charts_ref}
-            barriers={barriers}
-            contracts_array={markers_array}
-            bottomWidgets={(is_accumulator || show_digits_stats) && isDesktop() ? bottomWidgets : props.bottomWidgets}
-            crosshair={isMobile() ? 0 : undefined}
-            crosshairTooltipLeftAllow={560}
-            showLastDigitStats={isDesktop() ? show_digits_stats : false}
-            chartControlsWidgets={null}
-            chartStatusListener={v => setChartStatus(!v)}
-            chartType={chart_type}
-            initialData={{
-                activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
-            }}
-            chartData={{
-                activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
-            }}
-            feedCall={{
-                activeSymbols: false,
-            }}
-            enabledNavigationWidget={isDesktop()}
-            enabledChartFooter={false}
-            id='trade'
-            isMobile={isMobile()}
-            maxTick={isMobile() ? max_ticks : undefined}
-            granularity={show_digits_stats || is_accumulator ? 0 : granularity}
-            requestAPI={wsSendRequest}
-            requestForget={wsForget}
-            requestForgetStream={wsForgetStream}
-            requestSubscribe={wsSubscribe}
-            settings={settings}
-            should_show_eu_content={should_show_eu_content}
-            allowTickChartTypeOnly={show_digits_stats || is_accumulator}
-            stateChangeListener={chartStateChange}
-            symbol={symbol}
-            topWidgets={is_trade_enabled ? topWidgets : null}
-            isConnectionOpened={is_socket_opened}
-            clearChart={false}
-            toolbarWidget={() => {
-                if (is_beta_chart) {
-                    return (
-                        <ToolbarWidgetsBeta updateChartType={updateChartType} updateGranularity={updateGranularity} />
-                    );
-                } else
-                    return <ToolbarWidgets updateChartType={updateChartType} updateGranularity={updateGranularity} />;
-            }}
-            importedLayout={chart_layout}
-            onExportLayout={exportLayout}
-            shouldFetchTradingTimes={!end_epoch}
-            hasAlternativeSource={has_alternative_source}
-            getMarketsOrder={getMarketsOrder}
-            should_zoom_out_on_yaxis={is_accumulator}
-            yAxisMargin={{
-                top: isMobile() ? 76 : 106,
-            }}
-            isLive={true}
-            leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}
-            is_beta={is_beta_chart}
-        >
-            {!is_beta_chart && <ChartMarkers />}
-            {is_accumulator && (
-                <AccumulatorsChartElements
-                    all_positions={all_positions}
-                    current_spot={current_spot}
-                    current_spot_time={current_spot_time}
-                    has_crossed_accu_barriers={has_crossed_accu_barriers}
-                    should_show_profit_text={
-                        !!accumulator_contract_barriers_data.accumulators_high_barrier &&
-                        getDecimalPlaces(currency) <= 2
-                    }
-                    symbol={symbol}
-                    is_beta_chart={is_beta_chart}
-                />
-            )}
-        </SmartChartWithRef>
-    );
-});

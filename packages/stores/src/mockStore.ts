@@ -368,6 +368,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             setAppContentsScrollRef: jest.fn(),
             shouldNavigateAfterChooseCrypto: jest.fn(),
             simple_duration_unit: 't',
+            should_show_multipliers_onboarding: false,
             toggleHistoryTab: jest.fn(),
             toggleLanguageSettingsModal: jest.fn(),
             togglePositionsDrawer: jest.fn(),

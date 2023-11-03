@@ -8,7 +8,6 @@ import { useTraderStore } from 'Stores/useTraderStores';
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import PositionsDrawer from 'App/Components/Elements/PositionsDrawer';
 import MarketIsClosedOverlay from 'App/Components/Elements/market-is-closed-overlay';
-import Test from './test';
 import { ChartTopWidgets, DigitsWidget } from './chart-widgets';
 import FormLayout from '../Components/Form/form-layout';
 import TradeChart from './trade-chart';
@@ -63,13 +62,12 @@ const Trade = observer(() => {
     const { network_status } = common;
 
     const [digits, setDigits] = React.useState([]);
-    const [tick, setTick] = React.useState({});
+    const [tick, setTick] = React.useState<any>({});
     const [try_synthetic_indices, setTrySyntheticIndices] = React.useState(false);
     const [try_open_markets, setTryOpenMarkets] = React.useState(false);
     const [category, setCategory] = React.useState<string>();
     const [subcategory, setSubcategory] = React.useState<string>();
     const [swipe_index, setSwipeIndex] = React.useState(0);
-    const charts_ref = React.useRef();
 
     const open_market = React.useMemo(() => {
         if (try_synthetic_indices) {
@@ -123,7 +121,7 @@ const Trade = observer(() => {
         return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
     }, []);
 
-    const onChangeSwipeableIndex = (index: number) => {
+    const onChangeSwipeableIndex = (index?: number) => {
         setMobileDigitView(index === 0);
         setIsDigitsWidgetActive(index === 0);
         setSwipeIndex(index);
@@ -141,12 +139,7 @@ const Trade = observer(() => {
 
     const topWidgets = React.useCallback(
         ({ ...params }) => (
-            <ChartTopWidgets
-                open_market={open_market}
-                open={try_synthetic_indices || try_open_markets}
-                charts_ref={charts_ref}
-                {...params}
-            />
+            <ChartTopWidgets open_market={open_market} open={try_synthetic_indices || try_open_markets} {...params} />
         ),
         [open_market, try_synthetic_indices, try_open_markets]
     );
@@ -184,11 +177,7 @@ const Trade = observer(() => {
                     <DesktopWrapper>
                         <div className={classNames('chart-container__wrapper', { 'vanilla-trade-chart': is_vanilla })}>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <TradeChart
-                                topWidgets={topWidgets}
-                                charts_ref={charts_ref}
-                                is_accumulator={is_accumulator}
-                            />
+                            <TradeChart topWidgets={topWidgets} is_accumulator={is_accumulator} />
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -208,7 +197,6 @@ const Trade = observer(() => {
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
                                 topWidgets={topWidgets}
-                                charts_ref={charts_ref}
                                 bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
                                 is_accumulator={is_accumulator}
                             />

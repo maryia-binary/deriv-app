@@ -4,14 +4,11 @@ import { isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { ChartBottomWidgets } from './chart-widgets';
-import SmartChartSwitcher from './smart-chart-switcher.jsx';
+import SmartChartSwitcher from './smart-chart-switcher';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
-
-const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChartSwitcher innerRef={ref} {...props} />);
-SmartChartWithRef.displayName = 'SmartChartWithRef';
 
 const ChartMarkers = observer(config => {
     const { ui, client, contract_trade } = useStore();
@@ -34,7 +31,7 @@ const ChartMarkers = observer(config => {
 });
 
 const TradeChart = observer((props: any) => {
-    const { is_accumulator, end_epoch, topWidgets, charts_ref } = props;
+    const { is_accumulator, end_epoch, topWidgets } = props;
     const { client, ui, common, contract_trade, portfolio } = useStore();
     const {
         accumulator_barriers_data,
@@ -112,8 +109,7 @@ const TradeChart = observer((props: any) => {
     if (!symbol || active_symbols.length === 0) return null;
 
     return (
-        <SmartChartWithRef
-            ref={charts_ref}
+        <SmartChartSwitcher
             barriers={barriers}
             contracts_array={markers_array}
             bottomWidgets={(is_accumulator || show_digits_stats) && isDesktop() ? bottomWidgets : props.bottomWidgets}
@@ -186,7 +182,7 @@ const TradeChart = observer((props: any) => {
                     is_beta_chart={is_beta_chart}
                 />
             )}
-        </SmartChartWithRef>
+        </SmartChartSwitcher>
     );
 });
 export default TradeChart;

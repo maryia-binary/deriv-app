@@ -1,14 +1,14 @@
 import React from 'react';
 import { usePrevious } from '@deriv/components';
 import { getDurationPeriod, getDurationUnitText, getEndTime, getPlatformRedirect, isDesktop } from '@deriv/shared';
-import SmartChartSwitcher from '../../Trading/Containers/smart-chart-switcher.jsx';
-import { ChartBottomWidgets, ChartTopWidgets } from './contract-replay-widget';
 import ChartMarker from 'Modules/SmartChart/Components/Markers/marker';
 import DelayedAccuBarriersMarker from 'Modules/SmartChart/Components/Markers/delayed-accu-barriers-marker';
 import allMarkers from 'Modules/SmartChart/Components/all-markers.jsx';
 import ChartMarkerBeta from 'Modules/SmartChartBeta/Components/Markers/marker.jsx';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
+import { ChartBottomWidgets, ChartTopWidgets } from './contract-replay-widget';
+import SmartChartSwitcher from '../../Trading/Containers/smart-chart-switcher';
 
 const ReplayChart = observer(
     ({

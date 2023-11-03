@@ -8,6 +8,7 @@ import SmartChartSwitcher from './smart-chart-switcher.jsx';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
+import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
 
 const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChartSwitcher innerRef={ref} {...props} />);
 SmartChartWithRef.displayName = 'SmartChartWithRef';

@@ -215,9 +215,6 @@ const Trade = observer(() => {
                         </SwipeableWrapper>
                     </MobileWrapper>
                 </React.Suspense>
-
-                {/* Remove Test component for debugging below for production release */}
-                <Test />
             </Div100vhContainer>
             <div className={form_wrapper_class}>
                 {is_market_closed && !is_market_unavailable_visible && (

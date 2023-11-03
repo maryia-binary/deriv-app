@@ -227,7 +227,6 @@ const Trade = observer(() => {
                     <MarketIsClosedOverlay
                         is_eu={is_eu}
                         is_synthetics_trading_market_available={is_synthetics_trading_market_available}
-                        {...(is_eu && category)}
                         onClick={onTryOtherMarkets}
                         onMarketOpen={prepareTradeStore}
                         symbol={symbol}

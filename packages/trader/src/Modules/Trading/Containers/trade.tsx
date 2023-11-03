@@ -8,9 +8,9 @@ import { useTraderStore } from 'Stores/useTraderStores';
 import ChartLoader from 'App/Components/Elements/chart-loader';
 import PositionsDrawer from 'App/Components/Elements/PositionsDrawer';
 import MarketIsClosedOverlay from 'App/Components/Elements/market-is-closed-overlay';
-import Test from './test.jsx';
-import { ChartTopWidgets, DigitsWidget } from './chart-widgets.jsx';
-import FormLayout from '../Components/Form/form-layout.js';
+import Test from './test';
+import { ChartTopWidgets, DigitsWidget } from './chart-widgets';
+import FormLayout from '../Components/Form/form-layout';
 import TradeChart from './trade-chart';
 
 const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }: any) => {
@@ -79,7 +79,6 @@ const Trade = observer(() => {
         }
         return null;
     }, [try_synthetic_indices, try_open_markets, category, subcategory]);
-    // console.log(is_eu bool, category str, subcategory str, open_market null)
 
     React.useEffect(() => {
         onMount();
@@ -143,7 +142,6 @@ const Trade = observer(() => {
     const topWidgets = React.useCallback(
         ({ ...params }) => (
             <ChartTopWidgets
-                // @ts-expect-error TODO: check if TS error is gone after ChartTopWidgets is migrated to ts
                 open_market={open_market}
                 open={try_synthetic_indices || try_open_markets}
                 charts_ref={charts_ref}
@@ -207,7 +205,6 @@ const Trade = observer(() => {
                             is_swipe_disabled={swipe_index === 1}
                             className={classNames({ 'vanilla-trade-chart': is_vanilla })}
                         >
-                            {/* @ts-expect-error TODO: check if TS error is gone after DigitsWidget is migrated to ts */}
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
                                 topWidgets={topWidgets}

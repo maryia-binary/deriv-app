@@ -1,10 +1,11 @@
 import { toJS } from 'mobx';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { observer, useStore } from '@deriv/stores';
 
-const styles = {
+type TStyles = Record<string, React.CSSProperties>;
+
+const styles: TStyles = {
     container: {
         fontSize: '10px',
         lineHeight: '15px',
@@ -39,24 +40,24 @@ const Test = observer(() => {
         client: Object.entries(stores.client),
         ui: Object.entries(stores.ui),
         portfolio: Object.entries(stores.portfolio),
-    };
+    } as any;
 
     const [is_visible, setIsVisible] = React.useState(false);
     const [store, setStore] = React.useState('trade');
 
     React.useEffect(() => {
-        document.addEventListener('keyup', stateVisibility, false);
+        document.addEventListener('keyup', stateVisibility as unknown as EventListenerOrEventListenerObject, false);
         return () => {
-            document.removeEventListener('keyup', stateVisibility);
+            document.removeEventListener('keyup', stateVisibility as unknown as EventListenerOrEventListenerObject);
         };
     });
 
-    const stateVisibility = e => {
+    const stateVisibility = (e: React.KeyboardEvent<HTMLElement>) => {
         // Ctrl + s
         if (e.ctrlKey && e.keyCode === 83) setIsVisible(!is_visible);
     };
 
-    const renderStoreContent = ([k, v]) => {
+    const renderStoreContent = ([k, v]: any) => {
         return (
             k !== 'root_store' &&
             typeof v !== 'function' && (
@@ -77,7 +78,7 @@ const Test = observer(() => {
                     <p
                         key={storage}
                         onClick={() => setStore(storage)}
-                        style={{ ...tab, fontWeight: storage === store && 'bold' }}
+                        style={{ ...tab, fontWeight: storage === store ? 'bold' : undefined }}
                     >
                         {storage}
                     </p>
@@ -87,9 +88,5 @@ const Test = observer(() => {
         </code>
     );
 });
-
-Test.propTypes = {
-    entries: PropTypes.array,
-};
 
 export default Test;

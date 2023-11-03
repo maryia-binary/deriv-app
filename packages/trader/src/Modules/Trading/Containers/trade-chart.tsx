@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 import { isDesktop } from '@deriv/shared';
-import { ChartBottomWidgets } from './contract-replay-widget.jsx';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
+import { ChartBottomWidgets } from './chart-widgets';
 import SmartChartSwitcher from './smart-chart-switcher.jsx';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
-import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets.jsx';
+import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
 
 const SmartChartWithRef = React.forwardRef((props, ref) => <SmartChartSwitcher innerRef={ref} {...props} />);
@@ -154,8 +154,8 @@ const TradeChart = observer((props: any) => {
                     return (
                         <ToolbarWidgetsBeta updateChartType={updateChartType} updateGranularity={updateGranularity} />
                     );
-                } else
-                    return <ToolbarWidgets updateChartType={updateChartType} updateGranularity={updateGranularity} />;
+                }
+                return <ToolbarWidgets updateChartType={updateChartType} updateGranularity={updateGranularity} />;
             }}
             importedLayout={chart_layout}
             onExportLayout={exportLayout}

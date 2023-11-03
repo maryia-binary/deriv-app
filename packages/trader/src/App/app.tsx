@@ -13,7 +13,7 @@ import TraderProviders from '../trader-providers';
 type Apptypes = {
     passthrough: {
         root_store: TCoreStores;
-        WS: unknown;
+        WS: object;
     };
 };
 

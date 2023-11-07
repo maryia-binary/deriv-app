@@ -42,7 +42,7 @@ app
     │   │   │   ├── trade.tsx
     │   │   │   └── trade-params.tsx
     │   │   ├── Helpers/
-    │   │   └── index.js
+    │   │   └── index.ts
     │   └── Contract/
     │       ├── Components/
     │       ├── Containers/

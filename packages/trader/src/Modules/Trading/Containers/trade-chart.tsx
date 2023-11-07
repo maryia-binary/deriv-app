@@ -9,15 +9,15 @@ import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accum
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
-import { TBottomWidgets } from './trade';
+import { TBottomWidgetsParams } from './trade';
 
-type TTradeChart = {
+type TTradeChartProps = {
     is_accumulator: boolean;
-    topWidgets: (params: Record<string, never>) => React.ReactNode;
-    bottomWidgets?: (props: TBottomWidgets) => React.ReactNode;
+    topWidgets: () => React.ReactElement;
+    bottomWidgets?: (props: TBottomWidgetsParams) => React.ReactElement;
 };
 
-const TradeChart = observer((props: TTradeChart) => {
+const TradeChart = observer((props: TTradeChartProps) => {
     const { is_accumulator, topWidgets } = props;
     const { client, ui, common, contract_trade, portfolio } = useStore();
     const {
@@ -54,7 +54,7 @@ const TradeChart = observer((props: TTradeChart) => {
     } = useTraderStore();
 
     const settings = {
-        assetInformation: false, // ui.is_chart_asset_info_visible,
+        // assetInformation: false, // ui.is_chart_asset_info_visible,
         countdown: is_chart_countdown_visible,
         isHighestLowestMarkerEnabled: false, // TODO: Pending UI,
         language: current_language.toLowerCase(),
@@ -66,7 +66,7 @@ const TradeChart = observer((props: TTradeChart) => {
     const { current_spot, current_spot_time } = accumulator_barriers_data || {};
 
     const getBottomWidgets = React.useCallback(
-        ({ digits, tick }: TBottomWidgets) => (
+        ({ digits, tick }: TBottomWidgetsParams) => (
             <ChartBottomWidgets digits={digits} tick={tick} show_accumulators_stats={is_accumulator} />
         ),
         [is_accumulator]
@@ -123,7 +123,7 @@ const TradeChart = observer((props: TTradeChart) => {
             id='trade'
             isMobile={is_mobile}
             maxTick={is_mobile ? max_ticks : undefined}
-            granularity={show_digits_stats || is_accumulator ? 0 : granularity}
+            granularity={show_digits_stats || is_accumulator ? 0 : Number(granularity)}
             requestAPI={wsSendRequest}
             requestForget={wsForget}
             requestForgetStream={wsForgetStream}
@@ -133,7 +133,7 @@ const TradeChart = observer((props: TTradeChart) => {
             allowTickChartTypeOnly={show_digits_stats || is_accumulator}
             stateChangeListener={chartStateChange}
             symbol={symbol}
-            topWidgets={is_trade_enabled ? topWidgets : null}
+            topWidgets={is_trade_enabled ? topWidgets : undefined}
             isConnectionOpened={is_socket_opened}
             clearChart={false}
             toolbarWidget={() => {

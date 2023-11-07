@@ -258,6 +258,20 @@ type TActionProps = TButtonProps & {
     route?: string;
 };
 
+type TChartStateChangeOption = {
+    indicator_type_name?: string;
+    indicators_category_name?: string;
+    isClosed?: boolean;
+    is_favorite?: boolean;
+    is_info_open?: boolean;
+    is_open?: boolean;
+    chart_type_name?: string;
+    search_string?: string;
+    symbol?: string;
+    symbol_category?: string;
+    time_interval_name?: string;
+};
+
 type TNotificationMessage = {
     action?: TActionProps;
     className?: string;
@@ -988,7 +1002,7 @@ type TContractReplay = {
               }>;
     };
     chart_state: string;
-    chartStateChange: (state: string, option: Record<string, unknown>) => void;
+    chartStateChange: (state: string, option?: TChartStateChangeOption) => void;
     error_code?: string;
     error_message?: string;
     has_error: boolean;
@@ -1043,7 +1057,7 @@ export type TCoreStores = {
     gtm: TGtmStore;
     pushwoosh: Record<string, unknown>;
     contract_replay: TContractReplay;
-    chart_barrier_store: Record<string, unknown>;
+    chart_barrier_store: TBarriers[number];
     active_symbols: TActiveSymbolsStore;
 };
 

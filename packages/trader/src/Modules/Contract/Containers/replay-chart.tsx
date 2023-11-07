@@ -90,11 +90,11 @@ const ReplayChart = observer(
                 id='replay'
                 is_beta={is_beta_chart}
                 barriers={barriers_array}
-                bottomWidgets={isBottomWidgetVisible() ? ChartBottomWidgets : null}
+                bottomWidgets={isBottomWidgetVisible() ? ChartBottomWidgets : undefined}
                 chartControlsWidgets={null}
                 chartType={chart_type}
                 endEpoch={end_epoch}
-                margin={margin || null}
+                margin={margin}
                 isMobile={is_mobile}
                 enabledNavigationWidget={isDesktop()}
                 enabledChartFooter={false}
@@ -115,7 +115,7 @@ const ReplayChart = observer(
                 isConnectionOpened={is_socket_opened}
                 isStaticChart={
                     // forcing chart reload when start_epoch changes to an earlier epoch for ACCU closed contract:
-                    is_accumulator_contract && end_epoch && Number(start_epoch) < Number(prev_start_epoch)
+                    !!is_accumulator_contract && !!end_epoch && Number(start_epoch) < Number(prev_start_epoch)
                 }
                 shouldFetchTradingTimes={false}
                 should_zoom_out_on_yaxis={is_accumulator_contract}

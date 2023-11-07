@@ -12,11 +12,11 @@ import { ChartTopWidgets, DigitsWidget } from './chart-widgets';
 import FormLayout from '../Components/Form/form-layout';
 import TradeChart from './trade-chart';
 
-export type TBottomWidgets = {
+export type TBottomWidgetsParams = {
     digits: number[];
     tick: TickSpotData | null;
 };
-type TBottomWidgetsMobile = TBottomWidgets & {
+type TBottomWidgetsMobile = TBottomWidgetsParams & {
     setTick: (tick: TickSpotData | null) => void;
     setDigits: (digits: number[]) => void;
 };
@@ -126,7 +126,7 @@ const Trade = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const getBottomWidgets = React.useCallback(({ digits: d, tick: t }: TBottomWidgets) => {
+    const bottomWidgets = React.useCallback(({ digits: d, tick: t }: TBottomWidgetsParams) => {
         return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
     }, []);
 
@@ -146,10 +146,8 @@ const Trade = observer(() => {
         }
     };
 
-    const getTopWidgets = React.useCallback(
-        (params: Record<string, never>) => (
-            <ChartTopWidgets open_market={open_market} open={try_synthetic_indices || try_open_markets} {...params} />
-        ),
+    const topWidgets = React.useCallback(
+        () => <ChartTopWidgets open_market={open_market} open={try_synthetic_indices || try_open_markets} />,
         [open_market, try_synthetic_indices, try_open_markets]
     );
 
@@ -186,7 +184,7 @@ const Trade = observer(() => {
                     <DesktopWrapper>
                         <div className={classNames('chart-container__wrapper', { 'vanilla-trade-chart': is_vanilla })}>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <TradeChart topWidgets={getTopWidgets} is_accumulator={is_accumulator} />
+                            <TradeChart topWidgets={topWidgets} is_accumulator={is_accumulator} />
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -205,8 +203,8 @@ const Trade = observer(() => {
                         >
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
-                                topWidgets={getTopWidgets}
-                                bottomWidgets={show_digits_stats ? getBottomWidgets : undefined}
+                                topWidgets={topWidgets}
+                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
                                 is_accumulator={is_accumulator}
                             />
                         </SwipeableWrapper>

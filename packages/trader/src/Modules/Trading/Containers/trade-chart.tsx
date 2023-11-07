@@ -7,7 +7,7 @@ import { ChartBottomWidgets } from './chart-widgets';
 import SmartChartSwitcher from './smart-chart-switcher';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
-import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
+import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
 import { TBottomWidgetsParams } from './trade';
 
@@ -139,10 +139,20 @@ const TradeChart = observer((props: TTradeChartProps) => {
             toolbarWidget={() => {
                 if (is_beta_chart) {
                     return (
-                        <ToolbarWidgetsBeta updateChartType={updateChartType} updateGranularity={updateGranularity} />
+                        <ToolbarWidgetsBeta
+                            updateChartType={updateChartType}
+                            updateGranularity={updateGranularity}
+                            is_mobile={is_mobile}
+                        />
                     );
                 }
-                return <ToolbarWidgets updateChartType={updateChartType} updateGranularity={updateGranularity} />;
+                return (
+                    <ToolbarWidgets
+                        updateChartType={updateChartType}
+                        updateGranularity={updateGranularity}
+                        is_mobile={is_mobile}
+                    />
+                );
             }}
             importedLayout={chart_layout}
             onExportLayout={exportLayout}

@@ -8,7 +8,7 @@ configure({ enforceActions: 'observed' });
 
 let root_store: TCoreStores;
 
-const initStore = (core_store: TCoreStores, websocket: object) => {
+const initStore = (core_store: TCoreStores, websocket: Record<string, unknown>) => {
     if (root_store) return root_store;
 
     ServerTime.init(core_store.common);

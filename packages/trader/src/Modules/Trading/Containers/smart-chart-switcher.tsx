@@ -15,7 +15,7 @@ import {
     TradingTimesRequest,
 } from '@deriv/api-types';
 import { useStore } from '@deriv/stores';
-import { TBottomWidgetsParams } from './trade';
+import type { TBottomWidgetsParams } from './trade';
 import type { TChartLayout, TChartStateChangeOption } from 'Stores/Modules/Trading/trade-store';
 
 type TMarkersArray = ReturnType<typeof useStore>['contract_trade']['markers_array'];

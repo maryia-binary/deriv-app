@@ -9,12 +9,12 @@ import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accum
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
-import { TBottomWidgetsParams } from './trade';
+import type { TBottomWidgetsParams } from './trade';
 
 type TTradeChartProps = {
+    bottomWidgets?: (props: TBottomWidgetsParams) => React.ReactElement;
     is_accumulator: boolean;
     topWidgets: () => React.ReactElement;
-    bottomWidgets?: (props: TBottomWidgetsParams) => React.ReactElement;
 };
 
 const TradeChart = observer((props: TTradeChartProps) => {
@@ -25,32 +25,32 @@ const TradeChart = observer((props: TTradeChartProps) => {
         accumulator_contract_barriers_data,
         chart_type,
         granularity,
-        markers_array,
         has_crossed_accu_barriers,
-        updateGranularity,
+        markers_array,
         updateChartType,
+        updateGranularity,
     } = contract_trade;
     const { all_positions } = portfolio;
-    const { is_chart_layout_default, is_chart_countdown_visible, is_dark_mode_on, is_mobile, is_positions_drawer_on } =
+    const { is_chart_countdown_visible, is_chart_layout_default, is_dark_mode_on, is_mobile, is_positions_drawer_on } =
         ui;
-    const { is_socket_opened, current_language } = common;
+    const { current_language, is_socket_opened } = common;
     const { currency, is_beta_chart, should_show_eu_content } = client;
     const {
+        active_symbols,
+        barriers_flattened: extra_barriers,
         chartStateChange,
+        chart_layout,
+        exportLayout,
+        has_alternative_source,
         is_trade_enabled,
         main_barrier_flattened: main_barrier,
-        barriers_flattened: extra_barriers,
+        setChartStatus,
         show_digits_stats,
         symbol,
-        exportLayout,
-        setChartStatus,
-        chart_layout,
         wsForget,
         wsForgetStream,
         wsSendRequest,
         wsSubscribe,
-        active_symbols,
-        has_alternative_source,
     } = useTraderStore();
 
     const settings = {
@@ -97,83 +97,83 @@ const TradeChart = observer((props: TTradeChartProps) => {
 
     return (
         <SmartChartSwitcher
+            allowTickChartTypeOnly={show_digits_stats || is_accumulator}
             barriers={barriers}
-            contracts_array={markers_array}
             bottomWidgets={
                 (is_accumulator || show_digits_stats) && isDesktop() ? getBottomWidgets : props.bottomWidgets
             }
-            crosshair={is_mobile ? 0 : undefined}
-            crosshairTooltipLeftAllow={560}
-            showLastDigitStats={isDesktop() ? show_digits_stats : false}
             chartControlsWidgets={null}
-            chartStatusListener={(v: boolean) => setChartStatus(!v)}
-            chartType={chart_type}
-            initialData={{
-                activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
-            }}
             chartData={{
                 activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
             }}
+            chartStatusListener={(v: boolean) => setChartStatus(!v)}
+            chartType={chart_type}
+            clearChart={false}
+            contracts_array={markers_array}
+            crosshair={is_mobile ? 0 : undefined}
+            crosshairTooltipLeftAllow={560}
             feedCall={{
                 activeSymbols: false,
             }}
             enabledNavigationWidget={isDesktop()}
             enabledChartFooter={false}
-            id='trade'
-            isMobile={is_mobile}
-            maxTick={is_mobile ? max_ticks : undefined}
+            getMarketsOrder={getMarketsOrder}
             granularity={show_digits_stats || is_accumulator ? 0 : Number(granularity)}
+            hasAlternativeSource={has_alternative_source}
+            id='trade'
+            importedLayout={chart_layout}
+            initialData={{
+                activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
+            }}
+            isConnectionOpened={is_socket_opened}
+            isLive={true}
+            isMobile={is_mobile}
+            is_beta={is_beta_chart}
+            leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}
+            maxTick={is_mobile ? max_ticks : undefined}
+            onExportLayout={exportLayout}
             requestAPI={wsSendRequest}
             requestForget={wsForget}
             requestForgetStream={wsForgetStream}
             requestSubscribe={wsSubscribe}
             settings={settings}
+            shouldFetchTradingTimes
             should_show_eu_content={should_show_eu_content}
-            allowTickChartTypeOnly={show_digits_stats || is_accumulator}
+            should_zoom_out_on_yaxis={is_accumulator}
+            showLastDigitStats={isDesktop() ? show_digits_stats : false}
             stateChangeListener={chartStateChange}
             symbol={symbol}
-            topWidgets={is_trade_enabled ? topWidgets : undefined}
-            isConnectionOpened={is_socket_opened}
-            clearChart={false}
             toolbarWidget={() => {
                 if (is_beta_chart) {
                     return (
                         <ToolbarWidgetsBeta
+                            is_mobile={is_mobile}
                             updateChartType={updateChartType}
                             updateGranularity={updateGranularity}
-                            is_mobile={is_mobile}
                         />
                     );
                 }
                 return (
                     <ToolbarWidgets
+                        is_mobile={is_mobile}
                         updateChartType={updateChartType}
                         updateGranularity={updateGranularity}
-                        is_mobile={is_mobile}
                     />
                 );
             }}
-            importedLayout={chart_layout}
-            onExportLayout={exportLayout}
-            shouldFetchTradingTimes
-            hasAlternativeSource={has_alternative_source}
-            getMarketsOrder={getMarketsOrder}
-            should_zoom_out_on_yaxis={is_accumulator}
+            topWidgets={is_trade_enabled ? topWidgets : undefined}
             yAxisMargin={{
                 top: is_mobile ? 76 : 106,
             }}
-            isLive={true}
-            leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}
-            is_beta={is_beta_chart}
         >
             {!is_beta_chart &&
                 markers_array.map(marker => {
                     const Marker = AllMarkers[marker.type as keyof typeof AllMarkers];
                     return (
                         <Marker
-                            is_dark_theme={is_dark_mode_on}
-                            granularity={granularity}
                             currency={currency}
+                            granularity={granularity}
+                            is_dark_theme={is_dark_mode_on}
                             {...marker}
                             key={marker.key}
                         />
@@ -185,13 +185,13 @@ const TradeChart = observer((props: TTradeChartProps) => {
                     current_spot={current_spot}
                     current_spot_time={current_spot_time}
                     has_crossed_accu_barriers={has_crossed_accu_barriers}
+                    is_beta_chart={is_beta_chart}
+                    is_mobile={is_mobile}
                     should_show_profit_text={
                         !!accumulator_contract_barriers_data.accumulators_high_barrier &&
                         getDecimalPlaces(currency) <= 2
                     }
                     symbol={symbol}
-                    is_beta_chart={is_beta_chart}
-                    is_mobile={is_mobile}
                 />
             )}
         </SmartChartSwitcher>

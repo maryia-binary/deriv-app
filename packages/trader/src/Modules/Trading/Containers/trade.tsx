@@ -41,31 +41,31 @@ const Trade = observer(() => {
     const {
         form_components,
         getFirstOpenMarket,
-        should_show_active_symbols_loading,
+        is_accumulator,
         is_chart_loading,
         is_market_closed,
         is_trade_enabled,
+        is_turbos,
+        is_synthetics_available,
+        is_synthetics_trading_market_available,
+        is_vanilla,
         onChange,
         onMount,
         onUnmount,
         prepareTradeStore,
         setContractTypes,
-        setMobileDigitView,
         setIsDigitsWidgetActive,
+        setMobileDigitView,
+        should_show_active_symbols_loading,
         show_digits_stats,
-        is_accumulator,
         symbol,
-        is_synthetics_available,
-        is_synthetics_trading_market_available,
-        is_turbos,
-        is_vanilla,
     } = useTraderStore();
     const {
-        notification_messages_ui: NotificationMessages,
         has_only_forward_starting_contracts: is_market_unavailable_visible,
-        should_show_multipliers_onboarding,
         is_dark_mode_on: is_dark_theme,
         is_mobile,
+        notification_messages_ui: NotificationMessages,
+        should_show_multipliers_onboarding,
     } = ui;
     const { is_eu } = client;
     const { network_status } = common;
@@ -160,10 +160,10 @@ const Trade = observer(() => {
 
     return (
         <div
-            id='trade_container'
             className={classNames('trade-container', {
                 [`trade-container--${is_accumulator ? 'accumulators' : 'turbos'}`]: is_accumulator || is_turbos,
             })}
+            id='trade_container'
         >
             <DesktopWrapper>
                 <PositionsDrawer />
@@ -172,10 +172,10 @@ const Trade = observer(() => {
                     with toolbars covering screen height,
                     using css vh is not returning correct screen height */}
             <Div100vhContainer
-                id='chart_container'
                 className='chart-container'
-                is_disabled={isDesktop()}
                 height_offset={chart_height_offset}
+                id='chart_container'
+                is_disabled={isDesktop()}
             >
                 <NotificationMessages />
                 <React.Suspense
@@ -190,7 +190,7 @@ const Trade = observer(() => {
                     <MobileWrapper>
                         <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
                         <SwipeableWrapper
-                            onChange={onChangeSwipeableIndex}
+                            className={classNames({ 'vanilla-trade-chart': is_vanilla })}
                             is_disabled={
                                 !show_digits_stats ||
                                 !is_trade_enabled ||
@@ -199,13 +199,13 @@ const Trade = observer(() => {
                                 should_show_active_symbols_loading
                             }
                             is_swipe_disabled={swipe_index === 1}
-                            className={classNames({ 'vanilla-trade-chart': is_vanilla })}
+                            onChange={onChangeSwipeableIndex}
                         >
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
-                                topWidgets={topWidgets}
-                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
                                 is_accumulator={is_accumulator}
+                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
+                                topWidgets={topWidgets}
                             />
                         </SwipeableWrapper>
                     </MobileWrapper>

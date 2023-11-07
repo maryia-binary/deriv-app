@@ -1,6 +1,6 @@
-// @ts-nocheck
 import React from 'react';
-import { isDesktop } from '@deriv/shared';
+import { ActiveSymbols } from '@deriv/api-types';
+import { getDecimalPlaces, isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { ChartBottomWidgets } from './chart-widgets';
@@ -9,29 +9,16 @@ import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accum
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets.jsx';
 import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
+import { TBottomWidgets } from './trade';
 
-const ChartMarkers = observer(config => {
-    const { ui, client, contract_trade } = useStore();
-    const { markers_array, granularity } = contract_trade;
-    const { is_dark_mode_on: is_dark_theme } = ui;
-    const { currency } = client;
-    return markers_array.map(marker => {
-        const Marker = AllMarkers[marker.type];
-        return (
-            <Marker
-                key={marker.key}
-                is_dark_theme={is_dark_theme}
-                granularity={granularity}
-                currency={currency}
-                config={config}
-                {...marker}
-            />
-        );
-    });
-});
+type TTradeChart = {
+    is_accumulator: boolean;
+    topWidgets: (params: Record<string, never>) => React.ReactNode;
+    bottomWidgets?: (props: TBottomWidgets) => React.ReactNode;
+};
 
-const TradeChart = observer((props: any) => {
-    const { is_accumulator, end_epoch, topWidgets } = props;
+const TradeChart = observer((props: TTradeChart) => {
+    const { is_accumulator, topWidgets } = props;
     const { client, ui, common, contract_trade, portfolio } = useStore();
     const {
         accumulator_barriers_data,
@@ -44,7 +31,8 @@ const TradeChart = observer((props: any) => {
         updateChartType,
     } = contract_trade;
     const { all_positions } = portfolio;
-    const { is_chart_layout_default, is_chart_countdown_visible, is_dark_mode_on, is_positions_drawer_on } = ui;
+    const { is_chart_layout_default, is_chart_countdown_visible, is_dark_mode_on, is_mobile, is_positions_drawer_on } =
+        ui;
     const { is_socket_opened, current_language } = common;
     const { currency, is_beta_chart, should_show_eu_content } = client;
     const {
@@ -72,19 +60,19 @@ const TradeChart = observer((props: any) => {
         language: current_language.toLowerCase(),
         position: is_chart_layout_default ? 'bottom' : 'left',
         theme: is_dark_mode_on ? 'dark' : 'light',
-        ...(is_accumulator ? { whitespace: 190, minimumLeftBars: isMobile() ? 3 : undefined } : {}),
+        ...(is_accumulator ? { whitespace: 190, minimumLeftBars: is_mobile ? 3 : undefined } : {}),
     };
 
     const { current_spot, current_spot_time } = accumulator_barriers_data || {};
 
-    const bottomWidgets = React.useCallback(
-        ({ digits, tick }) => (
-            <ChartBottomWidgets digits={digits} tick={tick} show_accumulators_stats={is_accumulator} is_trade_page />
+    const getBottomWidgets = React.useCallback(
+        ({ digits, tick }: TBottomWidgets) => (
+            <ChartBottomWidgets digits={digits} tick={tick} show_accumulators_stats={is_accumulator} />
         ),
         [is_accumulator]
     );
 
-    const getMarketsOrder = active_symbols => {
+    const getMarketsOrder = (active_symbols: ActiveSymbols): string[] => {
         const synthetic_index = 'synthetic_index';
 
         const has_synthetic_index = !!active_symbols.find(s => s.market === synthetic_index);
@@ -112,12 +100,14 @@ const TradeChart = observer((props: any) => {
         <SmartChartSwitcher
             barriers={barriers}
             contracts_array={markers_array}
-            bottomWidgets={(is_accumulator || show_digits_stats) && isDesktop() ? bottomWidgets : props.bottomWidgets}
-            crosshair={isMobile() ? 0 : undefined}
+            bottomWidgets={
+                (is_accumulator || show_digits_stats) && isDesktop() ? getBottomWidgets : props.bottomWidgets
+            }
+            crosshair={is_mobile ? 0 : undefined}
             crosshairTooltipLeftAllow={560}
             showLastDigitStats={isDesktop() ? show_digits_stats : false}
             chartControlsWidgets={null}
-            chartStatusListener={v => setChartStatus(!v)}
+            chartStatusListener={(v: boolean) => setChartStatus(!v)}
             chartType={chart_type}
             initialData={{
                 activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
@@ -131,8 +121,8 @@ const TradeChart = observer((props: any) => {
             enabledNavigationWidget={isDesktop()}
             enabledChartFooter={false}
             id='trade'
-            isMobile={isMobile()}
-            maxTick={isMobile() ? max_ticks : undefined}
+            isMobile={is_mobile}
+            maxTick={is_mobile ? max_ticks : undefined}
             granularity={show_digits_stats || is_accumulator ? 0 : granularity}
             requestAPI={wsSendRequest}
             requestForget={wsForget}
@@ -156,18 +146,30 @@ const TradeChart = observer((props: any) => {
             }}
             importedLayout={chart_layout}
             onExportLayout={exportLayout}
-            shouldFetchTradingTimes={!end_epoch}
+            shouldFetchTradingTimes
             hasAlternativeSource={has_alternative_source}
             getMarketsOrder={getMarketsOrder}
             should_zoom_out_on_yaxis={is_accumulator}
             yAxisMargin={{
-                top: isMobile() ? 76 : 106,
+                top: is_mobile ? 76 : 106,
             }}
             isLive={true}
             leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}
             is_beta={is_beta_chart}
         >
-            {!is_beta_chart && <ChartMarkers />}
+            {!is_beta_chart &&
+                markers_array.map(marker => {
+                    const Marker = AllMarkers[marker.type as keyof typeof AllMarkers];
+                    return (
+                        <Marker
+                            is_dark_theme={is_dark_mode_on}
+                            granularity={granularity}
+                            currency={currency}
+                            {...marker}
+                            key={marker.key}
+                        />
+                    );
+                })}
             {is_accumulator && (
                 <AccumulatorsChartElements
                     all_positions={all_positions}

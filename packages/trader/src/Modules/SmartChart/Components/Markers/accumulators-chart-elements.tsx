@@ -1,22 +1,16 @@
 import { filterByContractType } from 'App/Components/Elements/PositionsDrawer/helpers/positions-helper';
 import React from 'react';
+import { useStore } from '@deriv/stores';
 import AccumulatorsProfitLossTooltip from './accumulators-profit-loss-tooltip';
-import { ProposalOpenContract } from '@deriv/api-types';
 import ChartMarkerBeta from 'Modules/SmartChartBeta/Components/Markers/marker.jsx';
 import ChartMarker from './marker';
 
-type TPositions = {
-    contract_info: Omit<
-        React.ComponentProps<typeof AccumulatorsProfitLossTooltip>,
-        'className' | 'alignment' | 'should_show_profit_text'
-    > &
-        Required<Pick<ProposalOpenContract, 'underlying' | 'shortcode' | 'contract_id' | 'contract_type'>>;
-};
+type TPortfolioStore = ReturnType<typeof useStore>['portfolio'];
 
 type TAccumulatorsChartElements = {
-    all_positions: TPositions[];
-    current_spot: number;
-    current_spot_time: number;
+    all_positions: TPortfolioStore['all_positions'];
+    current_spot?: number;
+    current_spot_time?: number;
     has_crossed_accu_barriers: boolean;
     should_show_profit_text: React.ComponentProps<typeof AccumulatorsProfitLossTooltip>['should_show_profit_text'];
     symbol: string;
@@ -50,7 +44,7 @@ const AccumulatorsChartElements = ({
                         is_beta_chart={is_beta_chart}
                     />
                 ))}
-            {has_crossed_accu_barriers && !!current_spot_time && (
+            {has_crossed_accu_barriers && !!current_spot_time && !!current_spot && (
                 <ChartMarkerComponent
                     marker_config={{
                         ContentComponent: 'div',

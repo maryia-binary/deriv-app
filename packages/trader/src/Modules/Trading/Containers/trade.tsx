@@ -12,7 +12,7 @@ import { ChartTopWidgets, DigitsWidget } from './chart-widgets';
 import FormLayout from '../Components/Form/form-layout';
 import TradeChart from './trade-chart';
 
-type TBottomWidgets = {
+export type TBottomWidgets = {
     digits: number[];
     tick: TickSpotData | null;
 };
@@ -126,7 +126,7 @@ const Trade = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const BottomWidgets = React.useCallback(({ digits: d, tick: t }: TBottomWidgets) => {
+    const getBottomWidgets = React.useCallback(({ digits: d, tick: t }: TBottomWidgets) => {
         return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
     }, []);
 
@@ -146,8 +146,8 @@ const Trade = observer(() => {
         }
     };
 
-    const topWidgets = React.useCallback(
-        ({ ...params }) => (
+    const getTopWidgets = React.useCallback(
+        (params: Record<string, never>) => (
             <ChartTopWidgets open_market={open_market} open={try_synthetic_indices || try_open_markets} {...params} />
         ),
         [open_market, try_synthetic_indices, try_open_markets]
@@ -186,7 +186,7 @@ const Trade = observer(() => {
                     <DesktopWrapper>
                         <div className={classNames('chart-container__wrapper', { 'vanilla-trade-chart': is_vanilla })}>
                             <ChartLoader is_visible={is_chart_loading || should_show_active_symbols_loading} />
-                            <TradeChart topWidgets={topWidgets} is_accumulator={is_accumulator} />
+                            <TradeChart topWidgets={getTopWidgets} is_accumulator={is_accumulator} />
                         </div>
                     </DesktopWrapper>
                     <MobileWrapper>
@@ -205,8 +205,8 @@ const Trade = observer(() => {
                         >
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
-                                topWidgets={topWidgets}
-                                bottomWidgets={show_digits_stats ? BottomWidgets : undefined}
+                                topWidgets={getTopWidgets}
+                                bottomWidgets={show_digits_stats ? getBottomWidgets : undefined}
                                 is_accumulator={is_accumulator}
                             />
                         </SwipeableWrapper>

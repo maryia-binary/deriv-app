@@ -54,7 +54,6 @@ const TradeChart = observer((props: TTradeChartProps) => {
     } = useTraderStore();
 
     const settings = {
-        // assetInformation: false, // ui.is_chart_asset_info_visible,
         countdown: is_chart_countdown_visible,
         isHighestLowestMarkerEnabled: false, // TODO: Pending UI,
         language: current_language.toLowerCase(),

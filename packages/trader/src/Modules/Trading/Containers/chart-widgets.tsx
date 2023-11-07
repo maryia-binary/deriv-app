@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import Digits from 'Modules/Contract/Components/Digits';
 import AccumulatorsStats from 'Modules/Contract/Components/AccumulatorsStats';

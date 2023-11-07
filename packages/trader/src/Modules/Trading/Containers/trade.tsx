@@ -1,7 +1,7 @@
-// @ts-nocheck
 import React from 'react';
 import classNames from 'classnames';
 import { DesktopWrapper, Div100vhContainer, MobileWrapper, SwipeableWrapper } from '@deriv/components';
+import { TickSpotData } from '@deriv/api-types';
 import { isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
@@ -12,7 +12,16 @@ import { ChartTopWidgets, DigitsWidget } from './chart-widgets';
 import FormLayout from '../Components/Form/form-layout';
 import TradeChart from './trade-chart';
 
-const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }: any) => {
+type TBottomWidgets = {
+    digits: number[];
+    tick: TickSpotData | null;
+};
+type TBottomWidgetsMobile = TBottomWidgets & {
+    setTick: (tick: TickSpotData | null) => void;
+    setDigits: (digits: number[]) => void;
+};
+
+const BottomWidgetsMobile = ({ tick, digits, setTick, setDigits }: TBottomWidgetsMobile) => {
     React.useEffect(() => {
         setTick(tick);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,13 +70,13 @@ const Trade = observer(() => {
     const { is_eu } = client;
     const { network_status } = common;
 
-    const [digits, setDigits] = React.useState([]);
-    const [tick, setTick] = React.useState<any>({});
+    const [digits, setDigits] = React.useState<number[]>([]);
+    const [tick, setTick] = React.useState<null | TickSpotData>(null);
     const [try_synthetic_indices, setTrySyntheticIndices] = React.useState(false);
     const [try_open_markets, setTryOpenMarkets] = React.useState(false);
     const [category, setCategory] = React.useState<string>();
     const [subcategory, setSubcategory] = React.useState<string>();
-    const [swipe_index, setSwipeIndex] = React.useState(0);
+    const [swipe_index, setSwipeIndex] = React.useState<number | undefined>(0);
 
     const open_market = React.useMemo(() => {
         if (try_synthetic_indices) {
@@ -117,7 +126,7 @@ const Trade = observer(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [should_show_multipliers_onboarding, is_chart_loading]);
 
-    const bottomWidgets = React.useCallback(({ digits: d, tick: t }: any) => {
+    const BottomWidgets = React.useCallback(({ digits: d, tick: t }: TBottomWidgets) => {
         return <BottomWidgetsMobile digits={d} tick={t} setTick={setTick} setDigits={setDigits} />;
     }, []);
 
@@ -197,7 +206,7 @@ const Trade = observer(() => {
                             {show_digits_stats && <DigitsWidget digits={digits} tick={tick} />}
                             <TradeChart
                                 topWidgets={topWidgets}
-                                bottomWidgets={show_digits_stats ? bottomWidgets : undefined}
+                                bottomWidgets={show_digits_stats ? BottomWidgets : undefined}
                                 is_accumulator={is_accumulator}
                             />
                         </SwipeableWrapper>

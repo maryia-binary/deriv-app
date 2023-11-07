@@ -182,6 +182,7 @@ const TradeChart = observer((props: TTradeChart) => {
                     }
                     symbol={symbol}
                     is_beta_chart={is_beta_chart}
+                    is_mobile={is_mobile}
                 />
             )}
         </SmartChartSwitcher>

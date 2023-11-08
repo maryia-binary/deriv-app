@@ -73,8 +73,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
 
     const getMarketsOrder = (active_symbols: ActiveSymbols): string[] => {
         const synthetic_index = 'synthetic_index';
-
-        const has_synthetic_index = !!active_symbols.find(s => s.market === synthetic_index);
+        const has_synthetic_index = active_symbols.some(s => s.market === synthetic_index);
         return active_symbols
             .slice()
             .sort((a, b) => (a.display_name < b.display_name ? -1 : 1))
@@ -93,7 +92,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
     // max ticks to display for mobile view for tick chart
     const max_ticks = granularity === 0 ? 8 : 24;
 
-    if (!symbol || active_symbols.length === 0) return null;
+    if (!symbol || !active_symbols.length) return null;
 
     return (
         <SmartChartSwitcher
@@ -126,7 +125,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
                 activeSymbols: JSON.parse(JSON.stringify(active_symbols)),
             }}
             isConnectionOpened={is_socket_opened}
-            isLive={true}
+            isLive
             isMobile={is_mobile}
             is_beta={is_beta_chart}
             leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}

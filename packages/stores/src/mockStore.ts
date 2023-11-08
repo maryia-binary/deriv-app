@@ -631,7 +631,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             removeAccountSwitcherListener: jest.fn(),
             setAccountSwitcherListener: jest.fn(),
         },
-        chart_barrier_store: {} as unknown as TCoreStores['chart_barrier_store'],
+        chart_barrier_store: {} as TCoreStores['chart_barrier_store'],
         active_symbols: {
             active_symbols: [],
             setActiveSymbols: jest.fn(),

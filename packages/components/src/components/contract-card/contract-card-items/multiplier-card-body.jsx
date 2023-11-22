@@ -131,7 +131,7 @@ const MultiplierCardBody = ({
                 is_loss={total_profit < 0}
                 is_won={total_profit > 0}
             >
-                <Money amount={Math.abs(total_profit)} currency={currency} />
+                <Money amount={total_profit} currency={currency} />
                 <div
                     className={classNames('dc-contract-card__indicative--movement', {
                         'dc-contract-card__indicative--movement-complete': is_sold,

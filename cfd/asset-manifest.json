@@ -1,7 +1,6 @@
 {
   "cfd.js": "/cfd/js/cfd.js",
   "CFDStore.js": "/cfd/js/CFDStore.js",
-  "CompareAccountsModal.js": "/cfd/js/CompareAccountsModal.js",
   "JurisdictionModal.js": "/cfd/js/JurisdictionModal.js",
   "CFDPasswordModal.css": "/cfd/css/cfd.main.70680f7eed52d2ee6f7f.css",
   "CFDPasswordModal.js": "/cfd/js/CFDPasswordModal.js",
@@ -11,13 +10,14 @@
   "CFDTopUpDemoModal.js": "/cfd/js/CFDTopUpDemoModal.js",
   "MT5TradeModal.js": "/cfd/js/MT5TradeModal.js",
   "TradeModal.js": "/cfd/js/TradeModal.js",
+  "MT5MigrationModal.css": "/cfd/css/cfd.main.4286f0201ca906b5109b.css",
+  "MT5MigrationModal.js": "/cfd/js/MT5MigrationModal.js",
   "CFDPasswordManagerModal.js": "/cfd/js/CFDPasswordManagerModal.js",
   "CFDFinancialStpRealAccountSignup.js": "/cfd/js/CFDFinancialStpRealAccountSignup.js",
   "getDXTradeWebTerminalLink.js": "/cfd/js/getDXTradeWebTerminalLink.js",
   "getCTraderWebTerminalLink.js": "/cfd/js/getCTraderWebTerminalLink.js",
-  "getDerivEzWebTerminalLink.js": "/cfd/js/getDerivEzWebTerminalLink.js",
-  "cfd-app.css": "/cfd/css/cfd.cfd-app.b646b2a040a1b54ef9ac.css",
-  "cfd-app.js": "/cfd/js/cfd.cfd-app.d95adc4c03fb8f43533d.js",
+  "cfd-app.css": "/cfd/css/cfd.cfd-app.a495e9a3d11dea979ea4.css",
+  "cfd-app.js": "/cfd/js/cfd.cfd-app.931f4f983cceb4d7c106.js",
   "404.js": "/cfd/js/cfd.404.49e9299f9820e9435cb4.js",
-  "cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-179be8.js": "/cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-179be8.bea551f4dab7920aac94.js"
+  "cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-dc98af.js": "/cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-dc98af.131c7fa78d4b436905b7.js"
 }

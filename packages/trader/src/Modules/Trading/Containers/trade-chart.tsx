@@ -4,11 +4,9 @@ import { isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { ChartBottomWidgets } from './chart-widgets';
-import SmartChartSwitcher from './smart-chart-switcher';
+import { SmartChart } from 'Modules/SmartChart/index.js';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
-import ToolbarWidgetsBeta from '../../SmartChartBeta/Components/toolbar-widgets';
-import AllMarkers from '../../SmartChart/Components/all-markers.jsx';
 import type { TBottomWidgetsParams } from './trade';
 
 type TTradeChartProps = {
@@ -35,7 +33,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
     const { is_chart_countdown_visible, is_chart_layout_default, is_dark_mode_on, is_mobile, is_positions_drawer_on } =
         ui;
     const { current_language, is_socket_opened } = common;
-    const { currency, is_beta_chart, should_show_eu_content } = client;
+    const { should_show_eu_content } = client;
     const {
         active_symbols,
         barriers_flattened: extra_barriers,
@@ -97,7 +95,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
     if (!symbol || !active_symbols.length) return null;
 
     return (
-        <SmartChartSwitcher
+        <SmartChart
             allowTickChartTypeOnly={show_digits_stats || is_accumulator}
             barriers={barriers}
             bottomWidgets={
@@ -129,7 +127,6 @@ const TradeChart = observer((props: TTradeChartProps) => {
             isConnectionOpened={is_socket_opened}
             isLive
             isMobile={is_mobile}
-            is_beta={is_beta_chart}
             leftMargin={isDesktop() && is_positions_drawer_on ? 328 : 80}
             maxTick={is_mobile ? max_ticks : undefined}
             onExportLayout={exportLayout}
@@ -145,15 +142,6 @@ const TradeChart = observer((props: TTradeChartProps) => {
             stateChangeListener={chartStateChange}
             symbol={symbol}
             toolbarWidget={() => {
-                if (is_beta_chart) {
-                    return (
-                        <ToolbarWidgetsBeta
-                            is_mobile={is_mobile}
-                            updateChartType={updateChartType}
-                            updateGranularity={updateGranularity}
-                        />
-                    );
-                }
                 return (
                     <ToolbarWidgets
                         is_mobile={is_mobile}
@@ -167,32 +155,18 @@ const TradeChart = observer((props: TTradeChartProps) => {
                 top: is_mobile ? 76 : 106,
             }}
         >
-            {!is_beta_chart &&
-                markers_array.map(marker => {
-                    const Marker = AllMarkers[marker.type as keyof typeof AllMarkers];
-                    return (
-                        <Marker
-                            currency={currency}
-                            granularity={granularity}
-                            is_dark_theme={is_dark_mode_on}
-                            {...marker}
-                            key={marker.key}
-                        />
-                    );
-                })}
             {is_accumulator && (
                 <AccumulatorsChartElements
                     all_positions={all_positions}
                     current_spot={current_spot}
                     current_spot_time={current_spot_time}
                     has_crossed_accu_barriers={has_crossed_accu_barriers}
-                    is_beta_chart={is_beta_chart}
                     is_mobile={is_mobile}
                     should_show_profit_text={!!accumulator_contract_barriers_data.accumulators_high_barrier}
                     symbol={symbol}
                 />
             )}
-        </SmartChartSwitcher>
+        </SmartChart>
     );
 });
 export default TradeChart;

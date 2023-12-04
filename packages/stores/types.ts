@@ -825,8 +825,8 @@ type TContractTradeStore = {
         should_update_contract_barriers,
         underlying,
     }: Partial<TAccumulatorContractBarriersData & { underlying: string }>) => void;
-    updateChartType: (type: string) => void;
-    updateGranularity: (granularity: number | null) => void;
+    updateChartType: (type?: string) => void;
+    updateGranularity: (granularity?: number | null) => void;
     updateProposal: (response: ProposalOpenContract) => void;
 };
 

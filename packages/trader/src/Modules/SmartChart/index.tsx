@@ -94,10 +94,13 @@ export type TOpenMarket = {
     market?: string | null;
 };
 
-type TChartTitleProps = {
+type TPropsWithPortalNodeId = {
+    portalNodeId?: string;
+};
+
+type TChartTitleProps = TPropsWithPortalNodeId & {
     containerId?: string;
     enabled?: boolean;
-    portalNodeId?: string;
     searchInputClassName?: string;
     open?: boolean;
     open_market?: TOpenMarket | null;
@@ -105,8 +108,7 @@ type TChartTitleProps = {
     onChange?: (e: { target: { name: string; value: unknown } }) => Promise<void>;
 };
 
-type TChartModeProps = {
-    portalNodeId?: string;
+type TChartModeProps = TPropsWithPortalNodeId & {
     onChartType: (chartType?: string) => void;
     onGranularity: (granularity?: number) => void;
 };
@@ -130,10 +132,6 @@ type TFastMarkerProps = React.PropsWithChildren<{
     yPositioner?: string;
     overlap_y_axis?: boolean;
 }>;
-
-type TPropsWithPortalNodeId = {
-    portalNodeId?: string;
-};
 
 type TSmartChartProps = React.PropsWithChildren<{
     allowTickChartTypeOnly?: boolean;

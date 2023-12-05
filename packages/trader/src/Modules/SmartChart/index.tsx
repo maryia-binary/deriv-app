@@ -40,7 +40,7 @@ type TLanguage = {
 type TNotification = {
     category: string;
     text: string;
-    type?: 'info' | 'warning' | 'success' | 'error' | 'warning';
+    type?: 'info' | 'warning' | 'success' | 'error';
 };
 
 type TOHLCData = {

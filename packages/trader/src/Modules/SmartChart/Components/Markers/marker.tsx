@@ -22,7 +22,7 @@ const ChartMarker = ({ marker_config, marker_content_props }: TChartMarker) => {
     // TODO:
     //  - rename x to epoch
     //  - rename y to price
-    const onRef = (ref?: TRef) => {
+    const onRef = (ref?: TRef | null) => {
         if (ref) {
             // NOTE: null price means vertical line.
             if (!marker_props.y) {

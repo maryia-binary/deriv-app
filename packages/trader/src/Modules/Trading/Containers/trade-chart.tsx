@@ -4,7 +4,7 @@ import { isDesktop } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { ChartBottomWidgets } from './chart-widgets';
-import { SmartChart } from 'Modules/SmartChart/index.js';
+import { SmartChart } from 'Modules/SmartChart';
 import AccumulatorsChartElements from '../../SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from '../../SmartChart/Components/toolbar-widgets';
 import type { TBottomWidgetsParams } from './trade';

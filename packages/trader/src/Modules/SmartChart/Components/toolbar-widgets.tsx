@@ -5,13 +5,13 @@ import { ChartMode, DrawTools, Share, StudyLegend, Views, ToolbarWidget } from '
 type TToolbarWidgetsProps = {
     is_mobile?: boolean;
     position?: string;
-    updateChartType: (type: string) => void;
-    updateGranularity: (granularity: number) => void;
+    updateChartType: (type?: string) => void;
+    updateGranularity: (granularity?: number) => void;
 };
 
 const ToolbarWidgets = ({ is_mobile, position, updateChartType, updateGranularity }: TToolbarWidgetsProps) => {
     return (
-        <ToolbarWidget position={position || (is_mobile ? 'bottom' : null)}>
+        <ToolbarWidget position={position || (is_mobile ? 'bottom' : '')}>
             <ChartMode portalNodeId='modal_root' onChartType={updateChartType} onGranularity={updateGranularity} />
             {isDesktop() && <StudyLegend portalNodeId='modal_root' searchInputClassName='data-hj-whitelist' />}
             {isDesktop() && <Views portalNodeId='modal_root' searchInputClassName='data-hj-whitelist' />}

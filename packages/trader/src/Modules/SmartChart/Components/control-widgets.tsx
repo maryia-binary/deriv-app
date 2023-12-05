@@ -12,8 +12,8 @@ const ControlWidgets = observer(() => {
         <DesktopWrapper>
             <ChartMode
                 portalNodeId='modal_root'
-                onChartType={(type: string) => updateChartType(type)}
-                onGranularity={(granularity: number) => updateGranularity(granularity)}
+                onChartType={(type?: string) => updateChartType(type)}
+                onGranularity={(granularity?: number) => updateGranularity(granularity)}
             />
             <StudyLegend portalNodeId='modal_root' searchInputClassName='data-hj-whitelist' />
             <DrawTools portalNodeId='modal_root' />

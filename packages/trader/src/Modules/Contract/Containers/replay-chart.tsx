@@ -111,7 +111,7 @@ const ReplayChart = observer(
                 contractInfo={contract_info}
                 contracts_array={getContractsArray()}
                 isLive={!has_ended}
-                startWithDataFitMode={true}
+                startWithDataFitMode
             >
                 {markers_array.map(({ content_config, marker_config, react_key }) => (
                     <ChartMarker

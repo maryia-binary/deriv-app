@@ -223,7 +223,7 @@ type TDerivChartsModule = TDerivChartComponents & {
     setSmartChartsPublicPath: (path?: string) => void;
 };
 
-let module: Promise<TDerivChartsModule>;
+let module: Promise<TDerivChartsModule> | undefined;
 
 const init = () => {
     module = moduleLoader(() => {
@@ -241,7 +241,7 @@ const load = (component_name: keyof TDerivChartComponents) => () => {
     if (!module) {
         init();
     }
-    return module.then(module => {
+    return (module as Promise<TDerivChartsModule>).then(module => {
         return { default: module[component_name] };
     });
 };

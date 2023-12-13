@@ -1,6 +1,6 @@
 import React from 'react';
 import Loadable from 'react-loadable';
-import { DesktopWrapper, InputField, MobileWrapper, useOnClickOutside } from '@deriv/components';
+import { Button, DesktopWrapper, InputField, MobileWrapper, useOnClickOutside } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { daysFromTodayTo, toMoment } from '@deriv/shared';
 import CompositeCalendarMobile from './composite-calendar-mobile';
@@ -133,6 +133,10 @@ const CompositeCalendar = observer((props: TCompositeCalendar) => {
 
     const isPeriodDisabledFrom = (date: moment.Moment) => date.unix() > to;
 
+    const handleDownloadClick = () => {
+        //
+    };
+
     return (
         <React.Fragment>
             <DesktopWrapper>
@@ -156,6 +160,13 @@ const CompositeCalendar = observer((props: TCompositeCalendar) => {
                         onClick={() => showCalendar('to')}
                         setCurrentFocus={setCurrentFocus}
                         value={getToDateLabel()}
+                    />
+                    <Button
+                        className='composite-calendar__download'
+                        onClick={handleDownloadClick}
+                        has_effect
+                        primary
+                        text={localize('Download')}
                     />
                 </div>
                 {show_to && (

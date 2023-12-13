@@ -17,6 +17,9 @@
         background-color: var(--general-main-1);
         z-index: 98;
     }
+    &__download {
+        margin-left: 0.8rem;
+    }
     &__input-fields {
         display: flex;
         border-radius: $BORDER_RADIUS;

@@ -133,8 +133,14 @@ const CompositeCalendar = observer((props: TCompositeCalendar) => {
 
     const isPeriodDisabledFrom = (date: moment.Moment) => date.unix() > to;
 
-    const handleDownloadClick = () => {
-        //
+    const handleDownloadClick = async () => {
+        // const response = await WS.send({
+        //     request_report: 1,
+        //     report_type: 'profit_table',
+        //     date_from: from ?? 1,
+        //     date_to: to,
+        // });
+        // console.log(response);
     };
 
     return (

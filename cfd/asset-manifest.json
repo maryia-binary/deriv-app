@@ -2,7 +2,7 @@
   "cfd.js": "/cfd/js/cfd.js",
   "CFDStore.js": "/cfd/js/CFDStore.js",
   "JurisdictionModal.js": "/cfd/js/JurisdictionModal.js",
-  "CFDPasswordModal.css": "/cfd/css/cfd.main.70680f7eed52d2ee6f7f.css",
+  "CFDPasswordModal.css": "/cfd/css/cfd.main.91859cd5c2a67f17959f.css",
   "CFDPasswordModal.js": "/cfd/js/CFDPasswordModal.js",
   "CFDDbviOnBoarding.js": "/cfd/js/CFDDbviOnBoarding.js",
   "CFDResetPasswordModal.js": "/cfd/js/CFDResetPasswordModal.js",
@@ -10,14 +10,14 @@
   "CFDTopUpDemoModal.js": "/cfd/js/CFDTopUpDemoModal.js",
   "MT5TradeModal.js": "/cfd/js/MT5TradeModal.js",
   "TradeModal.js": "/cfd/js/TradeModal.js",
-  "MT5MigrationModal.css": "/cfd/css/cfd.main.4286f0201ca906b5109b.css",
+  "MT5MigrationModal.css": "/cfd/css/cfd.main.2648d5b39e15acffa3ed.css",
   "MT5MigrationModal.js": "/cfd/js/MT5MigrationModal.js",
   "CFDPasswordManagerModal.js": "/cfd/js/CFDPasswordManagerModal.js",
   "CFDFinancialStpRealAccountSignup.js": "/cfd/js/CFDFinancialStpRealAccountSignup.js",
   "getDXTradeWebTerminalLink.js": "/cfd/js/getDXTradeWebTerminalLink.js",
   "getCTraderWebTerminalLink.js": "/cfd/js/getCTraderWebTerminalLink.js",
-  "cfd-app.css": "/cfd/css/cfd.cfd-app.a495e9a3d11dea979ea4.css",
-  "cfd-app.js": "/cfd/js/cfd.cfd-app.931f4f983cceb4d7c106.js",
-  "404.js": "/cfd/js/cfd.404.49e9299f9820e9435cb4.js",
-  "cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-dc98af.js": "/cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-dc98af.131c7fa78d4b436905b7.js"
+  "cfd-app.css": "/cfd/css/cfd.cfd-app.19800df74c1eec8cf812.css",
+  "cfd-app.js": "/cfd/js/cfd.cfd-app.ceebee7e039f5acd8d7c.js",
+  "404.js": "/cfd/js/cfd.404.38c9079360219103602c.js",
+  "cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-518e2e.js": "/cfd/js/cfd.vendors-node_modules_deriv_deriv-api_dist_DerivAPIBasic_js-node_modules_classnames_index_js-n-518e2e.dcde44877fcc83fea3e8.js"
 }

@@ -84,9 +84,10 @@ describe('<VideoPlayer />', () => {
         userEvent.click(player_progress_bar);
         expect(screen.getByText(icon_play)).toBeInTheDocument();
 
-        // a click upon overlay on desktop should resume playing:
-        expect(screen.getByText(icon_replay)).toBeInTheDocument();
-        userEvent.click(screen.getByText(icon_replay));
+        // a click upon replay overlay on desktop should resume playing:
+        const replay_button = screen.getByText(icon_replay);
+        expect(replay_button).toBeInTheDocument();
+        userEvent.click(replay_button);
         expect(screen.getByText(icon_pause)).toBeInTheDocument();
     });
     it('should render the component for mobile browsers except for Safari', () => {
@@ -100,9 +101,10 @@ describe('<VideoPlayer />', () => {
         expect(screen.queryByText(icon_pause)).not.toBeInTheDocument();
         expect(screen.getByText(icon_play)).toBeInTheDocument();
 
-        // a tap upon overlay on mobile should not resume playing while the video is not ended:
-        expect(screen.getByText(icon_replay)).toBeInTheDocument();
-        userEvent.click(screen.getByText(icon_replay));
+        // a tap upon replay overlay on mobile should not resume playing while the video is not ended:
+        const replay_button = screen.getByText(icon_replay);
+        expect(replay_button).toBeInTheDocument();
+        userEvent.click(replay_button);
         expect(screen.getByText(icon_play)).toBeInTheDocument();
     });
     it('should render the component on mobile for Safari', () => {

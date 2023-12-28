@@ -3,6 +3,12 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import VideoPlayer from '../video-player';
 import userEvent from '@testing-library/user-event';
 
+type TMockedStreamProps = {
+    onLoadedMetaData: () => void;
+    streamRef: React.MutableRefObject<HTMLVideoElement>;
+    src: string;
+};
+
 const default_playback_rate = 'Normal';
 const player_data_testid = 'dt_video_player';
 const video_data_testid = 'dt_video';
@@ -23,33 +29,23 @@ jest.mock('@deriv/components', () => ({
 
 jest.mock('@cloudflare/stream-react', () => ({
     ...jest.requireActual('@cloudflare/stream-react'),
-    Stream: jest.fn(
-        ({
-            onLoadedMetaData,
-            streamRef,
-            src,
-        }: {
-            onLoadedMetaData: () => void;
-            streamRef: React.MutableRefObject<HTMLVideoElement>;
-            src: string;
-        }) => {
-            return (
-                <video
-                    data-testid='dt_video'
-                    onLoadedData={onLoadedMetaData}
-                    src={src}
-                    ref={() => {
-                        streamRef.current = {
-                            duration: 50,
-                            currentTime: 0,
-                            pause: () => undefined,
-                            play: () => Promise.resolve(),
-                        } as HTMLVideoElement;
-                    }}
-                />
-            );
-        }
-    ),
+    Stream: jest.fn(({ onLoadedMetaData, streamRef, src }: TMockedStreamProps) => {
+        return (
+            <video
+                data-testid='dt_video'
+                onLoadedData={onLoadedMetaData}
+                src={src}
+                ref={() => {
+                    streamRef.current = {
+                        duration: 50,
+                        currentTime: 0,
+                        pause: () => undefined,
+                        play: () => Promise.resolve(),
+                    } as HTMLVideoElement;
+                }}
+            />
+        );
+    }),
 }));
 
 describe('<VideoPlayer />', () => {

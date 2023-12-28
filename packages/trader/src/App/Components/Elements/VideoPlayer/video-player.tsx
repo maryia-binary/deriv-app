@@ -156,7 +156,7 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
         }, 500);
     };
 
-    const onLoadedMetadata = () => {
+    const onLoadedMetaData = () => {
         if (!video_ref.current || !progress_bar_filled_ref.current) return;
 
         setVideoDuration(video_ref.current.duration);
@@ -231,7 +231,7 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
                 streamRef={video_ref}
                 width='100%'
                 onEnded={onEnded}
-                onLoadedMetaData={onLoadedMetadata}
+                onLoadedMetaData={onLoadedMetaData}
                 playbackRate={playback_rate}
                 volume={volume}
             />

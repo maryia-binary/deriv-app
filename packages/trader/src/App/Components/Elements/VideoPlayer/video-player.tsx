@@ -32,8 +32,8 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
     const progress_bar_ref = React.useRef<HTMLDivElement>(null);
     const progress_dot_ref = React.useRef<HTMLSpanElement>(null);
     const animation_ref = React.useRef(0);
-    const play_on_rewind_timer_ref = React.useRef<ReturnType<typeof setTimeout>>();
-    const replay_timer_ref = React.useRef<ReturnType<typeof setTimeout>>();
+    const play_on_rewind_timeout = React.useRef<ReturnType<typeof setTimeout>>();
+    const replay_animation_timeout = React.useRef<ReturnType<typeof setTimeout>>();
     const is_dragging = React.useRef(false);
 
     const togglePlay = React.useCallback(
@@ -52,7 +52,7 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
                 cancelAnimationFrame(animation_ref.current);
             } else {
                 video_ref.current.play();
-                replay_timer_ref.current = setTimeout(() => {
+                replay_animation_timeout.current = setTimeout(() => {
                     setIsAnimated(true);
                 }, 100);
             }
@@ -154,7 +154,7 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
         progress_bar_filled_ref.current.style.setProperty('width', `${new_width}%`);
         video_ref.current.currentTime = (Number(video_ref.current.duration) * new_width) / 100;
 
-        play_on_rewind_timer_ref.current = setTimeout(() => {
+        play_on_rewind_timeout.current = setTimeout(() => {
             video_ref?.current?.play();
             setIsPlaying(true);
             setIsAnimated(true);
@@ -214,8 +214,8 @@ const VideoPlayer = ({ src, is_mobile, data_testid }: TVideoPlayerProps) => {
                 document.removeEventListener('mouseup', dragEndHandler);
             }
 
-            clearTimeout(play_on_rewind_timer_ref.current);
-            clearTimeout(replay_timer_ref.current);
+            clearTimeout(play_on_rewind_timeout.current);
+            clearTimeout(replay_animation_timeout.current);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -11,7 +11,7 @@ export type TEmptyMessageProps = {
 
 const EmptyMessage = ({ isClosedTab, onRedirectToTrade, noMatchesFound }: TEmptyMessageProps) => (
     <div className={`empty-message__${isClosedTab ? 'closed' : 'open'}`}>
-        <div className='icon'>
+        <div className='icon' data-testid='dt_empty_state_icon'>
             {/* The icon is not final, adding the correct one to quill-icons is being discussed. */}
             <IllustrativeEtfIcon iconSize='2xl' />
         </div>

@@ -5,10 +5,12 @@ import { TPortfolioPosition } from '@deriv/stores/types';
 import { ContractCardList } from 'AppV2/Components/ContractCard';
 import Filter from 'AppV2/Components/Filter';
 import type { TContractCardListProps } from 'AppV2/Components/ContractCard/contract-card-list';
+import { Loading } from '@deriv/components';
 
 type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> &
-    Pick<TContractCardListProps, 'currency' | 'onClickCancel' | 'onClickSell' | 'serverTime'> & {
+    Pick<TContractCardListProps, 'currency' | 'onClickCancel' | 'onClickSell'> & {
         contractTypeFilter: string[] | [];
+        isLoading?: boolean;
         noMatchesFound?: boolean;
         positions?: TPortfolioPosition[];
         setContractTypeFilter: React.Dispatch<React.SetStateAction<string[]>>;
@@ -17,12 +19,14 @@ type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> &
 const PositionsContent = ({
     contractTypeFilter,
     isClosedTab,
+    isLoading,
     noMatchesFound,
     onRedirectToTrade,
     positions = [],
     setContractTypeFilter,
     ...rest
 }: TPositionsContentProps) => {
+    if (isLoading) return <Loading />;
     return (
         <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
             <div className='positions-page__container'>

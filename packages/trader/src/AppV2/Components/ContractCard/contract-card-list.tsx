@@ -17,7 +17,6 @@ export type TContractCardListProps = {
     onClickCancel?: (contractId: number) => void;
     onClickSell?: (contractId: number) => void;
     positions?: TPortfolioPosition[];
-    serverTime?: moment.Moment;
 };
 
 const ContractCardList = ({ onClickCancel, onClickSell, positions = [], ...rest }: TContractCardListProps) => {

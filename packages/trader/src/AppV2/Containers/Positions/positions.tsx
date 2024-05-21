@@ -283,8 +283,6 @@ const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
     const { currency } = client;
     const { onClickCancel, onClickSell } = portfolio;
     const { data, is_loading, onMount } = useReportsStore().profit_table;
-    // TODO: remove this line
-    // eslint-disable-next-line no-console
     const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
 
     const tabs = [

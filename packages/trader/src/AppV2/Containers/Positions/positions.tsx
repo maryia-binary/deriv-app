@@ -6,10 +6,13 @@ import { observer, useStore } from '@deriv/stores';
 import { filterPositions } from '../../Utils/positions-utils';
 import PositionsContent from './positions-content';
 import { useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
+import useClosedPositions from 'AppV2/Hooks/useClosedPositions';
 
 type TPositionsProps = {
     onRedirectToTrade?: () => void;
 };
+
+export type TClosedPositions = ReturnType<typeof useClosedPositions>['closedPositions'];
 
 // TODO: Remove after real data is available
 const mockedActivePositions = [
@@ -277,7 +280,8 @@ const mockedActivePositions = [
 
 const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
     const [contractTypeFilter, setContractTypeFilter] = React.useState<string[]>([]);
-    const [filteredPositions, setFilteredPositions] = React.useState<Array<TPortfolioPosition>>(mockedActivePositions);
+    const [filteredPositions, setFilteredPositions] =
+        React.useState<Array<TPortfolioPosition | Record<string, never>>>(mockedActivePositions);
     const [noMatchesFound, setNoMatchesFound] = React.useState(false);
     const { client, portfolio } = useStore();
     const { currency } = client;
@@ -312,7 +316,7 @@ const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
                     isClosedTab
                     isLoading={is_loading}
                     noMatchesFound={noMatchesFound}
-                    positions={filteredPositions}
+                    positions={filteredPositions as TPortfolioPosition[]}
                     setContractTypeFilter={setContractTypeFilter}
                     contractTypeFilter={contractTypeFilter}
                 />
@@ -327,14 +331,14 @@ const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
 
     React.useEffect(() => {
         if (contractTypeFilter.length) {
-            const result = filterPositions(closedPositions as any, contractTypeFilter);
+            const result = filterPositions(closedPositions as unknown as TPortfolioPosition[], contractTypeFilter);
             setNoMatchesFound(!result.length);
-            setFilteredPositions(result);
-        } else setFilteredPositions(closedPositions as any);
+            setFilteredPositions(result as unknown as TPortfolioPosition[]);
+        } else setFilteredPositions(closedPositions as unknown as TPortfolioPosition[]);
     }, [contractTypeFilter, closedPositions]);
 
     React.useEffect(() => {
-        if (!is_loading) setFilteredPositions(closedPositions as any);
+        if (!is_loading) setFilteredPositions(closedPositions as unknown as TPortfolioPosition[]);
     }, [is_loading, closedPositions]);
 
     return (

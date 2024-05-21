@@ -58,7 +58,7 @@ const ContractCardList = ({ onClickCancel, onClickSell, positions = [], ...rest 
                 const totalProfit = isMultiplierContract(contract_type) ? getTotalProfit(contract_info) : profit;
                 return (
                     <ContractCard
-                        key={id}
+                        key={id ?? contract_info.contract_id}
                         {...contract_info}
                         {...rest}
                         currentTick={currentTick}

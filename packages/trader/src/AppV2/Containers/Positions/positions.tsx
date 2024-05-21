@@ -6,13 +6,10 @@ import { observer, useStore } from '@deriv/stores';
 import { filterPositions } from '../../Utils/positions-utils';
 import PositionsContent from './positions-content';
 import { useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
-import useClosedPositions from 'AppV2/Hooks/useClosedPositions';
 
 type TPositionsProps = {
     onRedirectToTrade?: () => void;
 };
-
-export type TClosedPositions = ReturnType<typeof useClosedPositions>['closedPositions'];
 
 // TODO: Remove after real data is available
 const mockedActivePositions = [
@@ -280,8 +277,9 @@ const mockedActivePositions = [
 
 const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
     const [contractTypeFilter, setContractTypeFilter] = React.useState<string[]>([]);
-    const [filteredPositions, setFilteredPositions] =
-        React.useState<Array<TPortfolioPosition | Record<string, never>>>(mockedActivePositions);
+    const [filteredPositions, setFilteredPositions] = React.useState<Array<TPortfolioPosition | Record<string, never>>>(
+        []
+    );
     const [noMatchesFound, setNoMatchesFound] = React.useState(false);
     const { client, portfolio } = useStore();
     const { currency } = client;

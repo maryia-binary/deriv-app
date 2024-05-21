@@ -2,6 +2,7 @@ import React from 'react';
 import type { TWebSocket } from 'Types';
 import initStore from 'App/init-store';
 import type { TCoreStores } from '@deriv/stores/types';
+import ModulesProvider from 'Stores/Providers/modules-providers';
 import TraderProviders from '../trader-providers';
 import BottomNav from './Components/BottomNav';
 import Trade from './Containers/Trade';
@@ -9,7 +10,7 @@ import Markets from './Containers/Markets';
 import Positions from './Containers/Positions';
 import Menu from './Containers/Menu';
 import 'Sass/app.scss';
-import '@deriv-com/quill-ui/quill.css';
+import '@deriv-com/quill-tokens/dist/quill.css';
 
 type Apptypes = {
     passthrough: {
@@ -28,12 +29,14 @@ const App = ({ passthrough }: Apptypes) => {
 
     return (
         <TraderProviders store={root_store}>
-            <BottomNav selectedItemIdx={currentPageIdx} setSelectedItemIdx={setCurrentPageIdx}>
-                <Trade />
-                <Markets />
-                <Positions onRedirectToTrade={() => setCurrentPageIdx(0)} />
-                <Menu />
-            </BottomNav>
+            <ModulesProvider store={root_store}>
+                <BottomNav selectedItemIdx={currentPageIdx} setSelectedItemIdx={setCurrentPageIdx}>
+                    <Trade />
+                    <Markets />
+                    <Positions onRedirectToTrade={() => setCurrentPageIdx(0)} />
+                    <Menu />
+                </BottomNav>
+            </ModulesProvider>
         </TraderProviders>
     );
 };

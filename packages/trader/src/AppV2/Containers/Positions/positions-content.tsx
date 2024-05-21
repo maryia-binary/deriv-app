@@ -3,29 +3,37 @@ import EmptyMessage from 'AppV2/Components/EmptyMessage';
 import { TEmptyMessageProps } from 'AppV2/Components/EmptyMessage/empty-message';
 import { TPortfolioPosition } from '@deriv/stores/types';
 import { ContractCardList } from 'AppV2/Components/ContractCard';
-import { observer } from 'mobx-react';
-import { useStore } from '@deriv/stores';
+import Filter from 'AppV2/Components/Filter';
+import type { TContractCardListProps } from 'AppV2/Components/ContractCard/contract-card-list';
 
-type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> & {
-    positions?: TPortfolioPosition[];
-};
+type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> &
+    Pick<TContractCardListProps, 'currency' | 'onClickCancel' | 'onClickSell' | 'serverTime'> & {
+        contractTypeFilter: string[] | [];
+        noMatchesFound?: boolean;
+        positions?: TPortfolioPosition[];
+        setContractTypeFilter: React.Dispatch<React.SetStateAction<string[]>>;
+    };
 
-const PositionsContent = observer(({ isClosedTab, onRedirectToTrade, positions = [] }: TPositionsContentProps) => {
-    const { client, common, portfolio } = useStore();
-    const { currency } = client;
-    const { server_time } = common;
-    const { onClickCancel, onClickSell } = portfolio;
-    const noMatchesFound = false; // TODO: Implement noMatchesFound state change based on filter results
+const PositionsContent = ({
+    contractTypeFilter,
+    isClosedTab,
+    noMatchesFound,
+    onRedirectToTrade,
+    positions = [],
+    setContractTypeFilter,
+    ...rest
+}: TPositionsContentProps) => {
     return (
         <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
+            <div className='positions-page__container'>
+                <div className='positions-page__filter__wrapper'>
+                    {(!!positions.length || (!positions.length && noMatchesFound)) && (
+                        <Filter setContractTypeFilter={setContractTypeFilter} contractTypeFilter={contractTypeFilter} />
+                    )}
+                </div>
+            </div>
             {positions.length ? (
-                <ContractCardList
-                    currency={currency}
-                    onCancel={onClickCancel}
-                    onClose={onClickSell}
-                    positions={positions}
-                    serverTime={server_time}
-                />
+                <ContractCardList positions={positions} {...rest} />
             ) : (
                 <EmptyMessage
                     isClosedTab={isClosedTab}
@@ -35,6 +43,6 @@ const PositionsContent = observer(({ isClosedTab, onRedirectToTrade, positions =
             )}
         </div>
     );
-});
+};
 
 export default PositionsContent;

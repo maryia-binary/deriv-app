@@ -12,15 +12,15 @@ import { TPortfolioPosition } from '@deriv/stores/types';
 import React from 'react';
 import ContractCard from './contract-card';
 
-type TContractCardListProps = {
+export type TContractCardListProps = {
     currency?: string;
-    onCancel?: (contractId: number) => void;
-    onClose?: (contractId: number) => void;
+    onClickCancel?: (contractId: number) => void;
+    onClickSell?: (contractId: number) => void;
     positions?: TPortfolioPosition[];
     serverTime?: moment.Moment;
 };
 
-const ContractCardList = ({ currency, onCancel, onClose, positions = [], serverTime }: TContractCardListProps) => {
+const ContractCardList = ({ onClickCancel, onClickSell, positions = [], ...rest }: TContractCardListProps) => {
     // TODO: make it work not only with an open position data but also with a profit_table transaction data
     const timeoutIds = React.useRef<Array<ReturnType<typeof setTimeout>>>([]);
 
@@ -35,7 +35,7 @@ const ContractCardList = ({ currency, onCancel, onClose, positions = [], serverT
 
     const handleClose = (id: number, shouldCancel?: boolean) => {
         const timeoutId = setTimeout(() => {
-            shouldCancel ? onCancel?.(id) : onClose?.(id);
+            shouldCancel ? onClickCancel?.(id) : onClickSell?.(id);
         }, 160);
         timeoutIds.current.push(timeoutId);
     };
@@ -61,7 +61,7 @@ const ContractCardList = ({ currency, onCancel, onClose, positions = [], serverT
                     <ContractCard
                         key={id}
                         {...contract_info}
-                        currency={currency}
+                        {...rest}
                         currentTick={currentTick}
                         isMultiplier={isMultiplier}
                         isValidToCancel={validToCancel}
@@ -69,7 +69,6 @@ const ContractCardList = ({ currency, onCancel, onClose, positions = [], serverT
                         onCancel={() => id && handleClose?.(id, true)}
                         onClose={() => id && handleClose?.(id)}
                         redirectTo={getContractPath(id)}
-                        serverTime={serverTime}
                         symbolName={display_name}
                         totalProfit={totalProfit}
                         tradeTypeName={tradeTypeName}

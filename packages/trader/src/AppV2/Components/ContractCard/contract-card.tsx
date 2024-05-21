@@ -10,7 +10,7 @@ import { BinaryLink } from 'App/Components/Routes';
 
 type TContractCardProps = Pick<
     TPortfolioPosition['contract_info'],
-    'buy_price' | 'contract_type' | 'is_sold' | 'profit'
+    'buy_price' | 'contract_type' | 'sell_time' | 'profit'
 > &
     TContractCardDurationProps & {
         className?: string;
@@ -41,7 +41,6 @@ const ContractCard = ({
     contract_type,
     currency,
     buy_price,
-    is_sold,
     isValidToCancel,
     isValidToSell,
     onCancel,
@@ -49,6 +48,7 @@ const ContractCard = ({
     onClose,
     profit,
     redirectTo,
+    sell_time,
     symbolName,
     totalProfit,
     tradeTypeName,
@@ -78,7 +78,7 @@ const ContractCard = ({
     return (
         <div className={classNames('contract-card-wrapper', { deleted: isDeleted })}>
             <BinaryLink
-                {...swipeHandlers}
+                {...(sell_time ? {} : swipeHandlers)}
                 onClick={onClick}
                 className={classNames('contract-card', className, {
                     [`show-buttons${isValidToCancel ? '--has-cancel-button' : ''}`]: shouldShowButtons,
@@ -104,7 +104,7 @@ const ContractCard = ({
                         </CaptionText>
                     </div>
                     <div className='status-and-profit'>
-                        {is_sold ? (
+                        {sell_time ? (
                             <CaptionText aria-label='status' className='status'>
                                 {getCardLabels().CLOSED}
                             </CaptionText>
@@ -116,26 +116,28 @@ const ContractCard = ({
                         </Text>
                     </div>
                 </div>
-                <div className='buttons'>
-                    {isValidToCancel && (
+                {!sell_time && (
+                    <div className='buttons'>
+                        {isValidToCancel && (
+                            <button
+                                className={classNames('icon', 'cancel')}
+                                aria-label='cancel'
+                                disabled={Number(profit) >= 0}
+                                onClick={e => handleClose(e, true)}
+                            >
+                                <CaptionText bold>{getCardLabels().CANCEL}</CaptionText>
+                            </button>
+                        )}
                         <button
-                            className={classNames('icon', 'cancel')}
-                            aria-label='cancel'
-                            disabled={Number(profit) >= 0}
-                            onClick={e => handleClose(e, true)}
+                            className={classNames('icon', 'close')}
+                            aria-label='close'
+                            disabled={!isValidToSell}
+                            onClick={handleClose}
                         >
-                            <CaptionText bold>{getCardLabels().CANCEL}</CaptionText>
+                            <CaptionText bold>{getCardLabels().CLOSE}</CaptionText>
                         </button>
-                    )}
-                    <button
-                        className={classNames('icon', 'close')}
-                        aria-label='close'
-                        disabled={!isValidToSell}
-                        onClick={handleClose}
-                    >
-                        <CaptionText bold>{getCardLabels().CLOSE}</CaptionText>
-                    </button>
-                </div>
+                    </div>
+                )}
             </BinaryLink>
         </div>
     );

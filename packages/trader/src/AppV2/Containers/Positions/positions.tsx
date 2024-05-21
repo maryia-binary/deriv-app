@@ -282,7 +282,6 @@ const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
     const { client, portfolio } = useStore();
     const { currency } = client;
     const { onClickCancel, onClickSell } = portfolio;
-
     const { data, is_loading, onMount } = useReportsStore().profit_table;
     // TODO: remove this line
     // eslint-disable-next-line no-console
@@ -335,6 +334,10 @@ const Positions = observer(({ onRedirectToTrade }: TPositionsProps) => {
             setFilteredPositions(result);
         } else setFilteredPositions(closedPositions as any);
     }, [contractTypeFilter, closedPositions]);
+
+    React.useEffect(() => {
+        if (!is_loading) setFilteredPositions(closedPositions as any);
+    }, [is_loading, closedPositions]);
 
     return (
         <div className='positions-page'>

@@ -46,6 +46,10 @@
         height: 2.4rem;
         padding: 0 0.8rem;
         border-radius: var(--semantic-borderRadius-sm);
+
+        .dc-remaining-time {
+            font-size: unset;
+        }
     }
     .status-and-profit {
         justify-content: space-between;

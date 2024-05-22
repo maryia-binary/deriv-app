@@ -134,7 +134,7 @@ const ContractCard = ({
                         ) : (
                             <ContractCardDuration
                                 currentTick={currentTick}
-                                isMultiplier={isMultiplier}
+                                hasNoAutoExpiry={isMultiplier}
                                 tick_count={tick_count}
                                 {...contractInfo}
                             />

@@ -4,6 +4,7 @@ import { CaptionText, Text } from '@deriv-com/quill-ui';
 import { useSwipeable } from 'react-swipeable';
 import { IconTradeTypes, Money } from '@deriv/components';
 import {
+    TContractInfo,
     getCardLabels,
     getCurrentTick,
     getMarketName,
@@ -14,16 +15,16 @@ import {
     isValidToCancel,
     isValidToSell,
 } from '@deriv/shared';
-import { TPortfolioPosition } from '@deriv/stores/types';
 import { ContractCardDuration, TContractCardDurationProps } from './contract-card-duration';
 import { BinaryLink } from 'App/Components/Routes';
+import { TClosedPosition } from 'AppV2/Containers/Positions/positions-content';
 
 type TContractCardProps = TContractCardDurationProps & {
     className?: string;
-    contractInfo: TPortfolioPosition['contract_info'];
+    contractInfo: TContractInfo | TClosedPosition['contract_info'];
     currency?: string;
     hasActionButtons?: boolean;
-    id?: number;
+    id?: number | null;
     isSellRequested?: boolean;
     onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
     onCancel?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
@@ -54,32 +55,23 @@ const ContractCard = ({
 }: TContractCardProps) => {
     const [isDeleted, setIsDeleted] = React.useState(false);
     const [shouldShowButtons, setShouldShowButtons] = React.useState(false);
-    const {
-        buy_price,
-        contract_type,
-        display_name,
-        profit,
-        // @ts-expect-error migrate to ts
-        profit_loss,
-        sell_time,
-        shortcode,
-        tick_count,
-        // @ts-expect-error migrate to ts
-        underlying_symbol,
-    } = contractInfo;
+    const { buy_price, contract_type, display_name, sell_time, shortcode } = contractInfo;
     const contract_main_title = getTradeTypeName(contract_type ?? '', {
         isHighLow: isHighLow({ shortcode }),
         showMainTitle: true,
     });
-    const currentTick = tick_count ? getCurrentTick(contractInfo) : null;
+    const currentTick = 'tick_count' in contractInfo && contractInfo.tick_count ? getCurrentTick(contractInfo) : null;
     const tradeTypeName = `${contract_main_title} ${getTradeTypeName(contract_type ?? '', {
         isHighLow: isHighLow({ shortcode }),
     })}`.trim();
-    const symbolName = display_name || getMarketName(underlying_symbol);
+    const symbolName =
+        'underlying_symbol' in contractInfo ? getMarketName(contractInfo.underlying_symbol ?? '') : display_name;
     const isMultiplier = isMultiplierContract(contract_type);
-    const totalProfit = isMultiplierContract(contract_type) ? getTotalProfit(contractInfo) : profit ?? profit_loss;
-    const validToCancel = isValidToCancel(contractInfo);
-    const validToSell = isValidToSell(contractInfo) && !isSellRequested;
+    const totalProfit = isMultiplierContract(contract_type)
+        ? getTotalProfit(contractInfo as TContractInfo)
+        : (contractInfo as TContractInfo).profit ?? (contractInfo as TClosedPosition['contract_info']).profit_loss;
+    const validToCancel = isValidToCancel(contractInfo as TContractInfo);
+    const validToSell = isValidToSell(contractInfo as TContractInfo) && !isSellRequested;
 
     const handleSwipe = (direction: string) => {
         const isLeft = direction === DIRECTION.LEFT;
@@ -135,7 +127,6 @@ const ContractCard = ({
                             <ContractCardDuration
                                 currentTick={currentTick}
                                 hasNoAutoExpiry={isMultiplier}
-                                tick_count={tick_count}
                                 {...contractInfo}
                             />
                         )}
@@ -150,7 +141,7 @@ const ContractCard = ({
                             <button
                                 className={classNames('icon', 'cancel')}
                                 aria-label='cancel'
-                                disabled={Number(profit) >= 0}
+                                disabled={Number(totalProfit) >= 0}
                                 onClick={e => handleClose(e, true)}
                             >
                                 <CaptionText bold>{getCardLabels().CANCEL}</CaptionText>

@@ -3,13 +3,14 @@ import { TPortfolioPosition } from '@deriv/stores/types';
 import React from 'react';
 import ContractCard from './contract-card';
 import classNames from 'classnames';
+import { TClosedPosition } from 'AppV2/Containers/Positions/positions-content';
 
 export type TContractCardListProps = {
     currency?: string;
     hasButtonsDemo?: boolean;
     onClickCancel?: (contractId: number) => void;
     onClickSell?: (contractId: number) => void;
-    positions?: TPortfolioPosition[];
+    positions?: (TPortfolioPosition | TClosedPosition)[];
     setHasButtonsDemo?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -21,7 +22,6 @@ const ContractCardList = ({
     positions = [],
     setHasButtonsDemo,
 }: TContractCardListProps) => {
-    // TODO: make it work not only with an open position data but also with a profit_table transaction data
     const closedCardsTimeouts = React.useRef<Array<ReturnType<typeof setTimeout>>>([]);
 
     React.useEffect(() => {
@@ -33,6 +33,7 @@ const ContractCardList = ({
             }
             if (demoTimeout) clearTimeout(demoTimeout);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClose = (id: number, shouldCancel?: boolean) => {
@@ -49,17 +50,18 @@ const ContractCardList = ({
                 'contract-card-list--has-buttons-demo': hasButtonsDemo && !positions[0].contract_info.sell_time,
             })}
         >
-            {positions.map(({ id, is_sell_requested, contract_info }) => {
+            {positions.map(position => {
+                const { contract_id: id } = position.contract_info;
                 return (
                     <ContractCard
-                        key={id ?? contract_info.contract_id}
-                        contractInfo={contract_info}
+                        key={id}
+                        contractInfo={position.contract_info}
                         currency={currency}
-                        id={id ?? contract_info.contract_id}
-                        isSellRequested={is_sell_requested}
+                        id={id}
+                        isSellRequested={(position as TPortfolioPosition).is_sell_requested}
                         onCancel={() => id && handleClose?.(id, true)}
                         onClose={() => id && handleClose?.(id)}
-                        redirectTo={getContractPath(id ?? contract_info.contract_id)}
+                        redirectTo={id ? getContractPath(id) : undefined}
                     />
                 );
             })}

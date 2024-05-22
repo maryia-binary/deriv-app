@@ -7,11 +7,15 @@ import Filter from 'AppV2/Components/Filter';
 import { Loading } from '@deriv/components';
 import { observer, useStore } from '@deriv/stores';
 import { filterPositions } from '../../Utils/positions-utils';
-import { useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
+import { TReportsStore, useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
 
 type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> & {
     hasButtonsDemo?: boolean;
     setHasButtonsDemo?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type TClosedPosition = {
+    contract_info: TReportsStore['profit_table']['data'][number];
 };
 
 // TODO: Remove after real data is available
@@ -280,8 +284,7 @@ const mockedActivePositions = [
 const PositionsContent = observer(
     ({ hasButtonsDemo, isClosedTab, onRedirectToTrade, setHasButtonsDemo }: TPositionsContentProps) => {
         const [contractTypeFilter, setContractTypeFilter] = React.useState<string[]>([]);
-        const [filteredPositions, setFilteredPositions] = React.useState<TPortfolioPosition[]>([]);
-        const [positions, setPositions] = React.useState<TPortfolioPosition[]>([]);
+        const [filteredPositions, setFilteredPositions] = React.useState<(TPortfolioPosition | TClosedPosition)[]>([]);
         const [noMatchesFound, setNoMatchesFound] = React.useState(false);
 
         const { client, portfolio } = useStore();
@@ -289,18 +292,12 @@ const PositionsContent = observer(
         const { onClickCancel, onClickSell } = portfolio;
         const { data, is_loading: isLoading, onMount } = useReportsStore().profit_table;
         const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
+        const positions = isClosedTab ? closedPositions : mockedActivePositions;
 
         React.useEffect(() => {
             isClosedTab && onMount();
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-
-        React.useEffect(() => {
-            if (!isLoading)
-                setPositions(
-                    isClosedTab ? (closedPositions as unknown as TPortfolioPosition[]) : mockedActivePositions
-                );
-        }, [isLoading, isClosedTab, closedPositions]);
 
         React.useEffect(() => {
             if (contractTypeFilter.length) {

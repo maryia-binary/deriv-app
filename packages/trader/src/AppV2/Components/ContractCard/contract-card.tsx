@@ -3,28 +3,32 @@ import classNames from 'classnames';
 import { CaptionText, Text } from '@deriv-com/quill-ui';
 import { useSwipeable } from 'react-swipeable';
 import { IconTradeTypes, Money } from '@deriv/components';
-import { getCardLabels } from '@deriv/shared';
+import {
+    getCardLabels,
+    getCurrentTick,
+    getMarketName,
+    getTotalProfit,
+    getTradeTypeName,
+    isHighLow,
+    isMultiplierContract,
+    isValidToCancel,
+    isValidToSell,
+} from '@deriv/shared';
 import { TPortfolioPosition } from '@deriv/stores/types';
 import { ContractCardDuration, TContractCardDurationProps } from './contract-card-duration';
 import { BinaryLink } from 'App/Components/Routes';
 
-type TContractCardProps = Pick<
-    TPortfolioPosition['contract_info'],
-    'buy_price' | 'contract_type' | 'sell_time' | 'profit'
-> &
-    TContractCardDurationProps & {
-        className?: string;
-        currency?: string;
-        isValidToCancel?: boolean;
-        isValidToSell?: boolean;
-        onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
-        onCancel?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
-        onClose?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
-        redirectTo?: string;
-        symbolName?: string;
-        totalProfit?: string | number;
-        tradeTypeName?: string;
-    };
+type TContractCardProps = TContractCardDurationProps & {
+    className?: string;
+    contractInfo: TPortfolioPosition['contract_info'];
+    currency?: string;
+    id?: number;
+    isSellRequested?: boolean;
+    onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
+    onCancel?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+    onClose?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+    redirectTo?: string;
+};
 
 const DIRECTION = {
     LEFT: 'left',
@@ -38,24 +42,42 @@ const swipeConfig = {
 
 const ContractCard = ({
     className,
-    contract_type,
+    contractInfo,
     currency,
-    buy_price,
-    isValidToCancel,
-    isValidToSell,
+    isSellRequested,
     onCancel,
     onClick,
     onClose,
-    profit,
     redirectTo,
-    sell_time,
-    symbolName,
-    totalProfit,
-    tradeTypeName,
-    ...rest
 }: TContractCardProps) => {
     const [isDeleted, setIsDeleted] = React.useState(false);
     const [shouldShowButtons, setShouldShowButtons] = React.useState(false);
+    const {
+        buy_price,
+        contract_type,
+        display_name,
+        profit,
+        // @ts-expect-error migrate to ts
+        profit_loss,
+        sell_time,
+        shortcode,
+        tick_count,
+        // @ts-expect-error migrate to ts
+        underlying_symbol,
+    } = contractInfo;
+    const contract_main_title = getTradeTypeName(contract_type ?? '', {
+        isHighLow: isHighLow({ shortcode }),
+        showMainTitle: true,
+    });
+    const currentTick = tick_count ? getCurrentTick(contractInfo) : null;
+    const tradeTypeName = `${contract_main_title} ${getTradeTypeName(contract_type ?? '', {
+        isHighLow: isHighLow({ shortcode }),
+    })}`.trim();
+    const symbolName = display_name || getMarketName(underlying_symbol);
+    const isMultiplier = isMultiplierContract(contract_type);
+    const totalProfit = isMultiplierContract(contract_type) ? getTotalProfit(contractInfo) : profit ?? profit_loss;
+    const validToCancel = isValidToCancel(contractInfo);
+    const validToSell = isValidToSell(contractInfo) && !isSellRequested;
 
     const handleSwipe = (direction: string) => {
         const isLeft = direction === DIRECTION.LEFT;
@@ -79,14 +101,14 @@ const ContractCard = ({
         <div className={classNames('contract-card-wrapper', { deleted: isDeleted })}>
             <BinaryLink
                 {...(sell_time ? {} : swipeHandlers)}
-                onClick={onClick}
                 className={classNames('contract-card', className, {
-                    [`show-buttons${isValidToCancel ? '--has-cancel-button' : ''}`]: shouldShowButtons,
+                    [`show-buttons${validToCancel ? '--has-cancel-button' : ''}`]: shouldShowButtons,
                     lost: Number(totalProfit) < 0,
                     won: Number(totalProfit) > 0,
                 })}
-                to={redirectTo}
+                onClick={onClick}
                 onDragStart={e => e.preventDefault()}
+                to={redirectTo}
             >
                 <div className='body'>
                     <div className='details'>
@@ -105,11 +127,14 @@ const ContractCard = ({
                     </div>
                     <div className='status-and-profit'>
                         {sell_time ? (
-                            <CaptionText aria-label='status' className='status'>
-                                {getCardLabels().CLOSED}
-                            </CaptionText>
+                            <CaptionText className='status'>{getCardLabels().CLOSED}</CaptionText>
                         ) : (
-                            <ContractCardDuration {...rest} />
+                            <ContractCardDuration
+                                currentTick={currentTick}
+                                isMultiplier={isMultiplier}
+                                tick_count={tick_count}
+                                {...contractInfo}
+                            />
                         )}
                         <Text className='total-profit' size='sm'>
                             <Money amount={totalProfit} currency={currency} has_sign show_currency />
@@ -118,7 +143,7 @@ const ContractCard = ({
                 </div>
                 {!sell_time && (
                     <div className='buttons'>
-                        {isValidToCancel && (
+                        {validToCancel && (
                             <button
                                 className={classNames('icon', 'cancel')}
                                 aria-label='cancel'
@@ -131,7 +156,7 @@ const ContractCard = ({
                         <button
                             className={classNames('icon', 'close')}
                             aria-label='close'
-                            disabled={!isValidToSell}
+                            disabled={!validToSell}
                             onClick={handleClose}
                         >
                             <CaptionText bold>{getCardLabels().CLOSE}</CaptionText>

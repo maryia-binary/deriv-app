@@ -1,13 +1,4 @@
-import {
-    getContractPath,
-    getCurrentTick,
-    getTotalProfit,
-    getTradeTypeName,
-    isHighLow,
-    isMultiplierContract,
-    isValidToCancel,
-    isValidToSell,
-} from '@deriv/shared';
+import { getContractPath } from '@deriv/shared';
 import { TPortfolioPosition } from '@deriv/stores/types';
 import React from 'react';
 import ContractCard from './contract-card';
@@ -19,7 +10,7 @@ export type TContractCardListProps = {
     positions?: TPortfolioPosition[];
 };
 
-const ContractCardList = ({ onClickCancel, onClickSell, positions = [], ...rest }: TContractCardListProps) => {
+const ContractCardList = ({ currency, onClickCancel, onClickSell, positions = [] }: TContractCardListProps) => {
     // TODO: make it work not only with an open position data but also with a profit_table transaction data
     const timeoutIds = React.useRef<Array<ReturnType<typeof setTimeout>>>([]);
 
@@ -43,34 +34,16 @@ const ContractCardList = ({ onClickCancel, onClickSell, positions = [], ...rest 
     return (
         <div className='contract-card-list'>
             {positions.map(({ id, is_sell_requested, contract_info }) => {
-                const { contract_type, display_name, profit, shortcode } = contract_info;
-                const contract_main_title = getTradeTypeName(contract_type ?? '', {
-                    isHighLow: isHighLow({ shortcode }),
-                    showMainTitle: true,
-                });
-                const currentTick = contract_info.tick_count ? getCurrentTick(contract_info) : null;
-                const tradeTypeName = `${contract_main_title} ${getTradeTypeName(contract_type ?? '', {
-                    isHighLow: isHighLow({ shortcode }),
-                })}`.trim();
-                const isMultiplier = isMultiplierContract(contract_type);
-                const validToCancel = isValidToCancel(contract_info);
-                const validToSell = isValidToSell(contract_info) && !is_sell_requested;
-                const totalProfit = isMultiplierContract(contract_type) ? getTotalProfit(contract_info) : profit;
                 return (
                     <ContractCard
                         key={id ?? contract_info.contract_id}
-                        {...contract_info}
-                        {...rest}
-                        currentTick={currentTick}
-                        isMultiplier={isMultiplier}
-                        isValidToCancel={validToCancel}
-                        isValidToSell={validToSell}
+                        contractInfo={contract_info}
+                        currency={currency}
+                        id={id ?? contract_info.contract_id}
+                        isSellRequested={is_sell_requested}
                         onCancel={() => id && handleClose?.(id, true)}
                         onClose={() => id && handleClose?.(id)}
-                        redirectTo={getContractPath(id)}
-                        symbolName={display_name}
-                        totalProfit={totalProfit}
-                        tradeTypeName={tradeTypeName}
+                        redirectTo={getContractPath(id ?? contract_info.contract_id)}
                     />
                 );
             })}

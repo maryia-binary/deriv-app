@@ -34,13 +34,15 @@
     }
     .details,
     .status-and-profit,
+    .status,
     &-duration {
         display: flex;
         gap: 0.8rem;
         align-items: center;
     }
-    &-duration {
-        background-color: color-mix(in sRGB, var(--component-textIcon-normal-default) 4%, transparent);
+    &-duration,
+    .status {
+        background-color: var(--core-color-opacity-black-75);
         height: 2.4rem;
         padding: 0 0.8rem;
         border-radius: var(--semantic-borderRadius-sm);
@@ -106,6 +108,10 @@
         button:not(:disabled) {
             background-color: var(--core-color-solid-cherry-700);
         }
+        .status {
+            color: var(--core-color-solid-red-900);
+            background-color: var(--core-color-opacity-red-100);
+        }
     }
     &.won {
         .total-profit {
@@ -113,6 +119,10 @@
         }
         button:not(:disabled) {
             background-color: var(--core-color-solid-emerald-700);
+        }
+        .status {
+            color: var(--core-color-solid-green-900);
+            background-color: var(--core-color-opacity-green-100);
         }
     }
     &.show-buttons {

@@ -10,13 +10,14 @@ export type TContractCardDurationProps = Pick<
     TPortfolioPosition['contract_info'],
     'expiry_time' | 'purchase_time' | 'tick_count'
 > & {
-    currentTick: number | null;
+    currentTick?: number | null;
     isMultiplier?: boolean;
 };
 
 export const ContractCardDuration = observer(
     ({ currentTick, expiry_time, isMultiplier, purchase_time, tick_count }: TContractCardDurationProps) => {
         const { server_time } = useStore().common;
+        if (!expiry_time) return null;
         return (
             // TODO: when Tag is exported from quill-ui, use <Tag
             //     className='contract-card-duration'

@@ -290,9 +290,13 @@ const PositionsContent = observer(
         const { client, portfolio } = useStore();
         const { currency } = client;
         const { onClickCancel, onClickSell } = portfolio;
-        const { data, is_loading: isLoading, onMount } = useReportsStore().profit_table;
+        const { data, is_empty, is_loading: isLoading, onMount } = useReportsStore().profit_table;
         const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
-        const positions = isClosedTab ? closedPositions : mockedActivePositions;
+        const positions = React.useMemo(
+            () => (isClosedTab ? closedPositions : mockedActivePositions),
+            [isClosedTab, closedPositions]
+        );
+        const shouldShowEmptyMessage = (isClosedTab ? is_empty : !filteredPositions.length) || noMatchesFound;
 
         React.useEffect(() => {
             isClosedTab && onMount();
@@ -311,7 +315,7 @@ const PositionsContent = observer(
         return (
             <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
                 <div className='positions-page__container'>
-                    {(!!filteredPositions.length || (!filteredPositions.length && noMatchesFound)) && (
+                    {!shouldShowEmptyMessage && (
                         <div className='positions-page__filter__wrapper'>
                             <Filter
                                 setContractTypeFilter={setContractTypeFilter}
@@ -320,7 +324,13 @@ const PositionsContent = observer(
                         </div>
                     )}
                 </div>
-                {filteredPositions.length ? (
+                {shouldShowEmptyMessage ? (
+                    <EmptyMessage
+                        isClosedTab={isClosedTab}
+                        onRedirectToTrade={onRedirectToTrade}
+                        noMatchesFound={noMatchesFound}
+                    />
+                ) : (
                     <ContractCardList
                         currency={currency}
                         hasButtonsDemo={hasButtonsDemo}
@@ -328,12 +338,6 @@ const PositionsContent = observer(
                         onClickSell={isClosedTab ? undefined : onClickSell}
                         positions={filteredPositions}
                         setHasButtonsDemo={setHasButtonsDemo}
-                    />
-                ) : (
-                    <EmptyMessage
-                        isClosedTab={isClosedTab}
-                        onRedirectToTrade={onRedirectToTrade}
-                        noMatchesFound={noMatchesFound}
                     />
                 )}
             </div>

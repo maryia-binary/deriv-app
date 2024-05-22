@@ -30,7 +30,9 @@ export const ContractCardDuration = observer(
             // TODO: when <Tag /> is exported from quill-ui, use it instead
             <div className='contract-card-duration'>
                 <LabelPairedStopwatchCaptionRegularIcon />
-                <CaptionText className='duration'>{getDisplayedDuration()}</CaptionText>
+                <CaptionText as='div' className='duration'>
+                    {getDisplayedDuration()}
+                </CaptionText>
             </div>
         );
     }

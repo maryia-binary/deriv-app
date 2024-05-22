@@ -9,7 +9,10 @@ import { observer, useStore } from '@deriv/stores';
 import { filterPositions } from '../../Utils/positions-utils';
 import { useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
 
-type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'>;
+type TPositionsContentProps = Omit<TEmptyMessageProps, 'noMatchesFound'> & {
+    hasButtonsDemo?: boolean;
+    setHasButtonsDemo?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 // TODO: Remove after real data is available
 const mockedActivePositions = [
@@ -275,63 +278,71 @@ const mockedActivePositions = [
     },
 ] as TPortfolioPosition[];
 
-const PositionsContent = observer(({ isClosedTab, onRedirectToTrade }: TPositionsContentProps) => {
-    const [contractTypeFilter, setContractTypeFilter] = React.useState<string[]>([]);
-    const [filteredPositions, setFilteredPositions] = React.useState<TPortfolioPosition[]>([]);
-    const [positions, setPositions] = React.useState<TPortfolioPosition[]>([]);
-    const [noMatchesFound, setNoMatchesFound] = React.useState(false);
+const PositionsContent = observer(
+    ({ hasButtonsDemo, isClosedTab, onRedirectToTrade, setHasButtonsDemo }: TPositionsContentProps) => {
+        const [contractTypeFilter, setContractTypeFilter] = React.useState<string[]>([]);
+        const [filteredPositions, setFilteredPositions] = React.useState<TPortfolioPosition[]>([]);
+        const [positions, setPositions] = React.useState<TPortfolioPosition[]>([]);
+        const [noMatchesFound, setNoMatchesFound] = React.useState(false);
 
-    const { client, portfolio } = useStore();
-    const { currency } = client;
-    const { onClickCancel, onClickSell } = portfolio;
-    const { data, is_loading: isLoading, onMount } = useReportsStore().profit_table;
-    const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
+        const { client, portfolio } = useStore();
+        const { currency } = client;
+        const { onClickCancel, onClickSell } = portfolio;
+        const { data, is_loading: isLoading, onMount } = useReportsStore().profit_table;
+        const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
 
-    React.useEffect(() => {
-        onMount();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        React.useEffect(() => {
+            isClosedTab && onMount();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
 
-    React.useEffect(() => {
-        if (!isLoading)
-            setPositions(isClosedTab ? (closedPositions as unknown as TPortfolioPosition[]) : mockedActivePositions);
-    }, [isLoading, isClosedTab, closedPositions, mockedActivePositions]);
+        React.useEffect(() => {
+            if (!isLoading)
+                setPositions(
+                    isClosedTab ? (closedPositions as unknown as TPortfolioPosition[]) : mockedActivePositions
+                );
+        }, [isLoading, isClosedTab, closedPositions]);
 
-    React.useEffect(() => {
-        if (contractTypeFilter.length) {
-            const result = filterPositions(positions, contractTypeFilter);
-            setNoMatchesFound(!result.length);
-            setFilteredPositions(result);
-        } else setFilteredPositions(positions);
-    }, [contractTypeFilter, positions]);
+        React.useEffect(() => {
+            if (contractTypeFilter.length) {
+                const result = filterPositions(positions, contractTypeFilter);
+                setNoMatchesFound(!result.length);
+                setFilteredPositions(result);
+            } else setFilteredPositions(positions);
+        }, [contractTypeFilter, positions]);
 
-    if (isLoading) return <Loading />;
-
-    return (
-        <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
-            <div className='positions-page__container'>
-                {(!!filteredPositions.length || (!filteredPositions.length && noMatchesFound)) && (
-                    <div className='positions-page__filter__wrapper'>
-                        <Filter setContractTypeFilter={setContractTypeFilter} contractTypeFilter={contractTypeFilter} />
-                    </div>
+        if (isLoading) return <Loading />;
+        return (
+            <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
+                <div className='positions-page__container'>
+                    {(!!filteredPositions.length || (!filteredPositions.length && noMatchesFound)) && (
+                        <div className='positions-page__filter__wrapper'>
+                            <Filter
+                                setContractTypeFilter={setContractTypeFilter}
+                                contractTypeFilter={contractTypeFilter}
+                            />
+                        </div>
+                    )}
+                </div>
+                {filteredPositions.length ? (
+                    <ContractCardList
+                        currency={currency}
+                        hasButtonsDemo={hasButtonsDemo}
+                        onClickCancel={isClosedTab ? undefined : onClickCancel}
+                        onClickSell={isClosedTab ? undefined : onClickSell}
+                        positions={filteredPositions}
+                        setHasButtonsDemo={setHasButtonsDemo}
+                    />
+                ) : (
+                    <EmptyMessage
+                        isClosedTab={isClosedTab}
+                        onRedirectToTrade={onRedirectToTrade}
+                        noMatchesFound={noMatchesFound}
+                    />
                 )}
             </div>
-            {filteredPositions.length ? (
-                <ContractCardList
-                    positions={filteredPositions}
-                    currency={currency}
-                    onClickCancel={isClosedTab ? undefined : onClickCancel}
-                    onClickSell={isClosedTab ? undefined : onClickSell}
-                />
-            ) : (
-                <EmptyMessage
-                    isClosedTab={isClosedTab}
-                    onRedirectToTrade={onRedirectToTrade}
-                    noMatchesFound={noMatchesFound}
-                />
-            )}
-        </div>
-    );
-});
+        );
+    }
+);
 
 export default PositionsContent;

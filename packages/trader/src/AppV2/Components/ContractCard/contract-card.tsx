@@ -22,6 +22,7 @@ type TContractCardProps = TContractCardDurationProps & {
     className?: string;
     contractInfo: TPortfolioPosition['contract_info'];
     currency?: string;
+    hasActionButtons?: boolean;
     id?: number;
     isSellRequested?: boolean;
     onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
@@ -44,6 +45,7 @@ const ContractCard = ({
     className,
     contractInfo,
     currency,
+    hasActionButtons = true,
     isSellRequested,
     onCancel,
     onClick,
@@ -102,7 +104,8 @@ const ContractCard = ({
             <BinaryLink
                 {...(sell_time ? {} : swipeHandlers)}
                 className={classNames('contract-card', className, {
-                    [`show-buttons${validToCancel ? '--has-cancel-button' : ''}`]: shouldShowButtons,
+                    'show-buttons': shouldShowButtons,
+                    'has-cancel-button': validToCancel,
                     lost: Number(totalProfit) < 0,
                     won: Number(totalProfit) > 0,
                 })}
@@ -141,7 +144,7 @@ const ContractCard = ({
                         </Text>
                     </div>
                 </div>
-                {!sell_time && (
+                {!sell_time && hasActionButtons && (
                     <div className='buttons'>
                         {validToCancel && (
                             <button

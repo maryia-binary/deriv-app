@@ -45,7 +45,8 @@ const PositionsContent = observer(
         );
         const hasNoPositions = isClosedTab ? is_empty : is_active_empty;
         const shouldShowEmptyMessage = hasNoPositions || noMatchesFound;
-        const shouldShowContractCards = isClosedTab || (filteredPositions[0]?.contract_info as TContractInfo)?.status;
+        const shouldShowContractCards =
+            isClosedTab || (filteredPositions.length && (filteredPositions[0]?.contract_info as TContractInfo)?.status);
 
         React.useEffect(() => {
             isClosedTab ? onClosedTabMount() : onOpenTabMount();
@@ -66,7 +67,7 @@ const PositionsContent = observer(
             }
         };
 
-        if (isLoading || !shouldShowContractCards) return <Loading />;
+        if (isLoading || (!shouldShowContractCards && !shouldShowEmptyMessage)) return <Loading />;
         return (
             <div className={`positions-page__${isClosedTab ? 'closed' : 'open'}`}>
                 <div className='positions-page__container'>

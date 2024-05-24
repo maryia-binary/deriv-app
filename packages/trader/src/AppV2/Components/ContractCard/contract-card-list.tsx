@@ -47,9 +47,10 @@ const ContractCardList = ({
                         key={id}
                         contractInfo={position.contract_info}
                         currency={currency}
+                        hasActionButtons={!!onClickSell}
                         isSellRequested={(position as TPortfolioPosition).is_sell_requested}
-                        onCancel={onClickCancel ? () => id && onClickCancel(id) : undefined}
-                        onClose={onClickSell ? () => id && onClickSell(id) : undefined}
+                        onCancel={() => id && onClickCancel?.(id)}
+                        onClose={() => id && onClickSell?.(id)}
                         redirectTo={id ? getContractPath(id) : undefined}
                         serverTime={serverTime}
                     />

@@ -25,6 +25,7 @@ type TContractCardProps = TContractCardStatusTimerProps & {
     className?: string;
     contractInfo: TContractInfo | TClosedPosition['contract_info'];
     currency?: string;
+    hasActionButtons?: boolean;
     isSellRequested?: boolean;
     onClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
     onCancel?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
@@ -47,6 +48,7 @@ const ContractCard = ({
     className,
     contractInfo,
     currency,
+    hasActionButtons,
     isSellRequested,
     onCancel,
     onClick,
@@ -95,16 +97,16 @@ const ContractCard = ({
     };
 
     React.useEffect(() => {
-        if (isSold && onClose) {
+        if (isSold && hasActionButtons) {
             setIsDeleted(true);
         }
-    }, [isSold, onClose]);
+    }, [isSold, hasActionButtons]);
 
     if (!contract_type) return null;
     return (
         <div className={classNames('contract-card-wrapper', { deleted: isDeleted })}>
             <BinaryLink
-                {...(onClose ? swipeHandlers : {})}
+                {...(hasActionButtons ? swipeHandlers : {})}
                 className={classNames('contract-card', className, {
                     'show-buttons': shouldShowButtons,
                     'has-cancel-button': validToCancel,
@@ -143,7 +145,7 @@ const ContractCard = ({
                         </Text>
                     </div>
                 </div>
-                {onClose && (
+                {hasActionButtons && (
                     <div className='buttons'>
                         {validToCancel && (
                             <button

@@ -25,26 +25,13 @@ const ContractCardList = ({
     serverTime,
     setHasButtonsDemo,
 }: TContractCardListProps) => {
-    const closedCardsTimeouts = React.useRef<Array<ReturnType<typeof setTimeout>>>([]);
-
     React.useEffect(() => {
-        const timers = closedCardsTimeouts.current;
-        const demoTimeout = setTimeout(() => setHasButtonsDemo?.(false), 720);
+        const demoTimeout = setTimeout(() => setHasButtonsDemo?.(false), 720); // 720 is the length of demo animation
         return () => {
-            if (timers.length) {
-                timers.forEach(id => clearTimeout(id));
-            }
             if (demoTimeout) clearTimeout(demoTimeout);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleClose = (id: number, shouldCancel?: boolean) => {
-        const timeoutId = setTimeout(() => {
-            shouldCancel ? onClickCancel?.(id) : onClickSell?.(id);
-        }, 160);
-        closedCardsTimeouts.current.push(timeoutId);
-    };
 
     if (!positions.length) return null;
     return (
@@ -61,8 +48,8 @@ const ContractCardList = ({
                         contractInfo={position.contract_info}
                         currency={currency}
                         isSellRequested={(position as TPortfolioPosition).is_sell_requested}
-                        onCancel={() => id && handleClose?.(id, true)}
-                        onClose={() => id && handleClose?.(id)}
+                        onCancel={onClickCancel ? () => id && onClickCancel(id) : undefined}
+                        onClose={onClickSell ? () => id && onClickSell(id) : undefined}
                         redirectTo={id ? getContractPath(id) : undefined}
                         serverTime={serverTime}
                     />

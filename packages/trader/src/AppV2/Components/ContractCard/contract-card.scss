@@ -81,6 +81,8 @@
         inset-inline-end: 0;
         inset-block-end: 0;
         transform: translateX(100%);
+        opacity: var(--core-opacity-50);
+        transition: opacity var(--core-motion-duration-200) var(--motion-easing-inandout);
 
         button {
             width: var(--core-size-3600);
@@ -215,6 +217,12 @@
                     }
                 }
             }
+        }
+    }
+    &.show-buttons,
+    &-list--has-buttons-demo {
+        .buttons {
+            opacity: var(--core-opacity-1300);
         }
     }
 }

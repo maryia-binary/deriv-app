@@ -27,7 +27,7 @@ export const ContractCardStatusTimer = ({
         if (tick_count) {
             return `${currentTick ?? 0}/${tick_count} ${getCardLabels().TICKS.toLowerCase()}`;
         }
-        return <RemainingTime end_time={date_expiry} getCardLabels={getCardLabels} start_time={serverTime} />;
+        return <RemainingTime as='span' end_time={date_expiry} getCardLabels={getCardLabels} start_time={serverTime} />;
     };
     if (!date_expiry || serverTime.unix() > +date_expiry || isSold) {
         return <Tag className='status' label={getCardLabels().CLOSED} variant='custom' color='custom' size='sm' />;

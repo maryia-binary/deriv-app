@@ -7,8 +7,9 @@ import { EmptyPositions, TEmptyPositionsProps } from 'AppV2/Components/EmptyPosi
 import { TPortfolioPosition } from '@deriv/stores/types';
 import { ContractCardList } from 'AppV2/Components/ContractCard';
 import { ContractTypeFilter, TimeFilter } from 'AppV2/Components/Filter';
-import { filterPositions } from '../../Utils/positions-utils';
+import { filterPositions, getTotalPositionsProfit } from '../../Utils/positions-utils';
 import { TReportsStore, useReportsStore } from '../../../../../reports/src/Stores/useReportsStores';
+import TotalProfitLoss from './total-profit-loss';
 
 type TPositionsContentProps = Omit<TEmptyPositionsProps, 'noMatchesFound'> & {
     hasButtonsDemo?: boolean;
@@ -27,7 +28,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
     const [noMatchesFound, setNoMatchesFound] = React.useState(false);
 
     const { common, client, portfolio } = useStore();
-    const { server_time = moment() } = isClosedTab ? {} : common;
+    const { server_time = moment() } = isClosedTab ? {} : common; // Server time is required for cards update in Open positions
     const { currency } = client;
     const { active_positions, is_active_empty, onClickCancel, onClickSell, onMount: onOpenTabMount } = portfolio;
     const {
@@ -97,6 +98,13 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
                     </div>
                 )}
             </div>
+            {shouldShowContractCards && (
+                <TotalProfitLoss
+                    currency={currency}
+                    hasBottomAlignment={isClosedTab}
+                    totalProfitLoss={getTotalPositionsProfit(filteredPositions)}
+                />
+            )}
             {shouldShowEmptyMessage ? (
                 <EmptyPositions isClosedTab={isClosedTab} noMatchesFound={noMatchesFound} />
             ) : (

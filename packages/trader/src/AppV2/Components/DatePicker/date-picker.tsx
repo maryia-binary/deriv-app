@@ -4,17 +4,17 @@ import { toMoment } from '@deriv/shared';
 import { Localize } from '@deriv/translations';
 
 type TDateRangePicker = {
+    handleDateChange: (values: { to?: moment.Moment; from?: moment.Moment; is_batch?: boolean }) => void;
     isOpen?: boolean;
     onClose: () => void;
-    setSelectedDateRangeString: React.Dispatch<React.SetStateAction<string | undefined>>;
-    handleDateChange: (values: { to?: moment.Moment; from?: moment.Moment; is_batch?: boolean }) => void;
+    setCustomTimeRangeFilter: (newCustomTimeFilter?: string | undefined) => void;
 };
-const DateRangePicker = ({ isOpen, onClose, setSelectedDateRangeString, handleDateChange }: TDateRangePicker) => {
+const DateRangePicker = ({ handleDateChange, isOpen, onClose, setCustomTimeRangeFilter }: TDateRangePicker) => {
     const [chosenRangeString, setChosenRangeString] = React.useState<string>();
     const [chosenRange, setChosenRange] = React.useState<(string | null | Date)[] | null | Date>([]);
 
     const onApply = () => {
-        setSelectedDateRangeString(chosenRangeString);
+        setCustomTimeRangeFilter(chosenRangeString);
         if (Array.isArray(chosenRange) && chosenRange.length)
             handleDateChange({ from: toMoment(chosenRange[0]), to: toMoment(chosenRange[1]) });
         onClose();
@@ -26,24 +26,25 @@ const DateRangePicker = ({ isOpen, onClose, setSelectedDateRangeString, handleDa
                 <ActionSheet.Header title={<Localize i18n_default_text='Choose a date range' />} />
                 <ActionSheet.Content>
                     <DatePicker
+                        className='date-picker__action-sheet'
                         selectRange
                         onFormattedDate={value => setChosenRangeString(value)}
-                        className='date-picker__action-sheet'
                         onChange={value => setChosenRange(value)}
                         optionsConfig={{
                             day: '2-digit',
                             month: 'short',
                             year: 'numeric',
                         }}
+                        tileDisabled={({ date }) => Date.parse(date.toDateString()) > Date.parse(toMoment().toString())}
                     />
                 </ActionSheet.Content>
                 <ActionSheet.Footer
+                    alignment='vertical'
+                    isPrimaryButtonDisabled={!chosenRangeString}
                     primaryAction={{
                         content: 'Apply',
                         onAction: onApply,
                     }}
-                    alignment='vertical'
-                    isPrimaryButtonDisabled={!chosenRangeString}
                 />
             </ActionSheet.Portal>
         </ActionSheet.Root>

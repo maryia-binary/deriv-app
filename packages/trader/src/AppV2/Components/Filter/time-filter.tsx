@@ -7,27 +7,25 @@ import CustomDateFilterButton from './custom-time-filter-button';
 import DateRangePicker from 'AppV2/Components/DatePicker';
 
 type TTimeFilter = {
+    customTimeRangeFilter?: string;
     handleDateChange: (values: { to?: moment.Moment; from?: moment.Moment; is_batch?: boolean }) => void;
-    chosenTimeFilter?: string;
-    setChosenTimeFilter: React.Dispatch<React.SetStateAction<string | undefined>>;
-    selectedRangeDateString?: string;
-    setSelectedDateRangeString: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setTimeFilter: (newTimeFilter?: string | undefined) => void;
+    setCustomTimeRangeFilter: (newCustomTimeFilter?: string | undefined) => void;
     setNoMatchesFound: React.Dispatch<React.SetStateAction<boolean>>;
+    timeFilter?: string;
 };
 
-// TODO: replace strings with numbers when types in Quill be changed
 const timeFilterList = [
     {
         value: '0',
         label: <Localize i18n_default_text='All time' />,
     },
-    // TODO: Fix today and yesterday
     {
-        value: '1',
+        value: 'Today',
         label: <Localize i18n_default_text='Today' />,
     },
     {
-        value: '2',
+        value: 'Yesterday',
         label: <Localize i18n_default_text='Yesterday' />,
     },
     {
@@ -49,17 +47,19 @@ const timeFilterList = [
 ];
 
 const TimeFilter = ({
+    customTimeRangeFilter,
     handleDateChange,
-    chosenTimeFilter,
-    setChosenTimeFilter,
-    selectedRangeDateString,
-    setSelectedDateRangeString,
+    setTimeFilter,
+    setCustomTimeRangeFilter,
     setNoMatchesFound,
+    timeFilter,
 }: TTimeFilter) => {
     const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
     const [showDatePicker, setShowDatePicker] = React.useState(false);
 
     const defaultCheckedTime = '0';
+    const selectedRadioButtonValue = customTimeRangeFilter || timeFilter || defaultCheckedTime;
+    const isChipSelected = !!(customTimeRangeFilter || timeFilter);
 
     const onRadioButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -67,23 +67,35 @@ const TimeFilter = ({
             onReset();
             return;
         }
-        setChosenTimeFilter(value);
+        setTimeFilter(value);
         setIsDropdownOpen(false);
-        handleDateChange({
-            from: Number(value) ? toMoment().startOf('day').subtract(Number(value), 'day').add(1, 's') : undefined,
-            to: toMoment().endOf('day'),
-            is_batch: true,
-        });
+
+        if (value === 'Today') {
+            handleDateChange({
+                from: toMoment().startOf('day'),
+                to: toMoment().endOf('day'),
+                is_batch: true,
+            });
+        } else if (value === 'Yesterday') {
+            handleDateChange({
+                from: toMoment().subtract(1, 'days').startOf('day'),
+                to: toMoment().subtract(1, 'days').endOf('day'),
+                is_batch: true,
+            });
+        } else {
+            handleDateChange({
+                from: Number(value) ? toMoment().startOf('day').subtract(Number(value), 'day').add(1, 's') : undefined,
+                to: toMoment().endOf('day'),
+                is_batch: true,
+            });
+        }
     };
 
     const onReset = () => {
-        setChosenTimeFilter('');
-        setSelectedDateRangeString('');
+        setTimeFilter('');
+        setCustomTimeRangeFilter('');
         setIsDropdownOpen(false);
         handleDateChange({
-            from: Number(defaultCheckedTime)
-                ? toMoment().startOf('day').subtract(Number(defaultCheckedTime), 'day').add(1, 's')
-                : undefined,
             to: toMoment().endOf('day'),
             is_batch: true,
         });
@@ -91,17 +103,16 @@ const TimeFilter = ({
     };
 
     const chipLabelFormatting = () =>
-        selectedRangeDateString ||
-        timeFilterList.find(item => item.value === (chosenTimeFilter || defaultCheckedTime))?.label;
+        customTimeRangeFilter || timeFilterList.find(item => item.value === (timeFilter || defaultCheckedTime))?.label;
 
     return (
         <React.Fragment>
             <Chip
-                label={chipLabelFormatting()}
                 dropdown
                 isDropdownOpen={isDropdownOpen}
+                label={chipLabelFormatting()}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                selected={!!(selectedRangeDateString || chosenTimeFilter)}
+                selected={isChipSelected}
                 size='sm'
             />
             <ActionSheet.Root isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} position='left'>
@@ -109,36 +120,37 @@ const TimeFilter = ({
                     <ActionSheet.Header title={<Localize i18n_default_text='Filter by trade types' />} />
                     <ActionSheet.Content className='filter__item__wrapper'>
                         <RadioGroup
-                            selected={selectedRangeDateString || chosenTimeFilter || defaultCheckedTime}
-                            onToggle={onRadioButtonChange}
-                            size='sm'
                             className='filter__item--radio'
+                            onToggle={onRadioButtonChange}
+                            selected={selectedRadioButtonValue}
+                            size='sm'
                         >
                             {timeFilterList.map(({ value, label }) => (
                                 <RadioGroup.Item value={value} label={label} key={value} radioButtonPosition='right' />
                             ))}
                         </RadioGroup>
                         <CustomDateFilterButton
+                            customTimeRangeFilter={customTimeRangeFilter}
                             setShowDatePicker={setShowDatePicker}
-                            selectedRangeDateString={selectedRangeDateString}
                         />
                     </ActionSheet.Content>
                     <ActionSheet.Footer
+                        alignment='vertical'
+                        // TODO: Replace btn name with localize after quill type updates
                         secondaryAction={{
                             content: 'Reset',
                             onAction: onReset,
                         }}
-                        alignment='vertical'
                         shouldCloseOnSecondaryButtonClick={false}
                     />
                 </ActionSheet.Portal>
             </ActionSheet.Root>
             {showDatePicker && (
                 <DateRangePicker
+                    handleDateChange={handleDateChange}
                     isOpen={showDatePicker}
                     onClose={() => setShowDatePicker(false)}
-                    setSelectedDateRangeString={setSelectedDateRangeString}
-                    handleDateChange={handleDateChange}
+                    setCustomTimeRangeFilter={setCustomTimeRangeFilter}
                 />
             )}
         </React.Fragment>

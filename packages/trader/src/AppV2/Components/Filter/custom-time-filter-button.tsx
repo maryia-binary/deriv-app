@@ -4,18 +4,18 @@ import { LabelPairedChevronRightSmBoldIcon } from '@deriv/quill-icons';
 import { Localize } from '@deriv/translations';
 
 type TCustomDateFilterButton = {
+    customTimeRangeFilter?: string;
     setShowDatePicker: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedRangeDateString?: string;
 };
 
-const CustomDateFilterButton = ({ setShowDatePicker, selectedRangeDateString }: TCustomDateFilterButton) => (
+const CustomDateFilterButton = ({ customTimeRangeFilter, setShowDatePicker }: TCustomDateFilterButton) => (
     <button className='custom-time-filter__wrapper' onClick={() => setShowDatePicker(true)}>
         <Text size='md' className='custom-time-filter__label'>
             <Localize i18n_default_text='Custom' />
         </Text>
-        {selectedRangeDateString && (
+        {customTimeRangeFilter && (
             <Text size='sm' color='quill-typography__color--subtle'>
-                {selectedRangeDateString}
+                {customTimeRangeFilter}
             </Text>
         )}
         <LabelPairedChevronRightSmBoldIcon className='custom-time-filter__icon' />

@@ -34,6 +34,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
     const { active_positions, is_active_empty, onClickCancel, onClickSell, onMount: onOpenTabMount } = portfolio;
     const {
         data,
+        handleScroll,
         is_empty,
         is_loading: isLoading,
         onMount: onClosedTabMount,
@@ -119,7 +120,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
             ) : (
                 shouldShowContractCards &&
                 (isClosedTab ? (
-                    <ContractCardsSections positions={filteredPositions} />
+                    <ContractCardsSections positions={filteredPositions} onScroll={handleScroll} />
                 ) : (
                     <ContractCardList
                         currency={currency}

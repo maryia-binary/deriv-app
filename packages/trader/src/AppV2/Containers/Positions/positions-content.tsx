@@ -51,17 +51,6 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
     const shouldShowContractCards =
         isClosedTab || (filteredPositions.length && (filteredPositions[0]?.contract_info as TContractInfo)?.status);
 
-    React.useEffect(() => {
-        isClosedTab ? onClosedTabMount() : onOpenTabMount();
-
-        return () => {
-            isClosedTab && onClosedTabUnmount();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    React.useEffect(() => setFilteredPositions(positions), [positions]);
-
     const handleTradeTypeFilterChange = (filterValues: string[]) => {
         setContractTypeFilter(filterValues);
         if (filterValues.length) {
@@ -73,6 +62,20 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
             setFilteredPositions(positions);
         }
     };
+
+    const contractCards = isClosedTab ? (
+        <ContractCardsSections positions={filteredPositions} onScroll={handleScroll} />
+    ) : (
+        <ContractCardList
+            currency={currency}
+            hasButtonsDemo={hasButtonsDemo}
+            onClickCancel={isClosedTab ? undefined : onClickCancel}
+            onClickSell={isClosedTab ? undefined : onClickSell}
+            positions={filteredPositions}
+            setHasButtonsDemo={setHasButtonsDemo}
+            serverTime={server_time}
+        />
+    );
 
     React.useEffect(() => {
         if (isClosedTab) {
@@ -86,6 +89,17 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
             }
         }
     }, [customTimeRangeFilter, timeFilter, isClosedTab, positions, contractTypeFilter]);
+
+    React.useEffect(() => {
+        isClosedTab ? onClosedTabMount() : onOpenTabMount();
+
+        return () => {
+            isClosedTab && onClosedTabUnmount();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => setFilteredPositions(positions), [positions]);
 
     if (isLoading || (!shouldShowContractCards && !shouldShowEmptyMessage)) return <Loading />;
     return (
@@ -118,20 +132,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
             {shouldShowEmptyMessage ? (
                 <EmptyPositions isClosedTab={isClosedTab} noMatchesFound={noMatchesFound} />
             ) : (
-                shouldShowContractCards &&
-                (isClosedTab ? (
-                    <ContractCardsSections positions={filteredPositions} onScroll={handleScroll} />
-                ) : (
-                    <ContractCardList
-                        currency={currency}
-                        hasButtonsDemo={hasButtonsDemo}
-                        onClickCancel={isClosedTab ? undefined : onClickCancel}
-                        onClickSell={isClosedTab ? undefined : onClickSell}
-                        positions={filteredPositions}
-                        setHasButtonsDemo={setHasButtonsDemo}
-                        serverTime={server_time}
-                    />
-                ))
+                shouldShowContractCards && contractCards
             )}
         </div>
     );

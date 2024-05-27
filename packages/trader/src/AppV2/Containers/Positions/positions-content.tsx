@@ -37,6 +37,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
         is_empty,
         is_loading: isLoading,
         onMount: onClosedTabMount,
+        onUnmount: onClosedTabUnmount,
         handleDateChange,
     } = useReportsStore().profit_table;
     const closedPositions = React.useMemo(() => data.map(d => ({ contract_info: d })), [data]);
@@ -51,6 +52,10 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
 
     React.useEffect(() => {
         isClosedTab ? onClosedTabMount() : onOpenTabMount();
+
+        return () => {
+            isClosedTab && onClosedTabUnmount();
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

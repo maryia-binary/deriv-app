@@ -72,7 +72,7 @@ const ContractCard = ({
     const symbolName =
         'underlying_symbol' in contractInfo ? getMarketName(contractInfo.underlying_symbol ?? '') : display_name;
     const isMultiplier = isMultiplierContract(contract_type);
-    const isSold = isEnded(contractInfo as TContractInfo);
+    const isSold = !!sell_time || isEnded(contractInfo as TContractInfo);
     const totalProfit = getProfit(contractInfo);
     const validToCancel = isValidToCancel(contractInfo as TContractInfo);
     const validToSell = isValidToSell(contractInfo as TContractInfo) && !isSellRequested;
@@ -140,7 +140,7 @@ const ContractCard = ({
                         <ContractCardStatusTimer
                             currentTick={currentTick}
                             hasNoAutoExpiry={isMultiplier}
-                            isSold={!!sell_time || isSold}
+                            isSold={isSold}
                             serverTime={serverTime}
                             {...contractInfo}
                         />

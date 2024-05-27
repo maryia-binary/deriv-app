@@ -169,14 +169,15 @@
         position: relative;
         width: inherit;
         overflow: hidden;
-        min-height: 10.4rem; // equal to __item's height of 104px, must be an exact value for item deletion transition to work
+        flex-shrink: 0;
+        max-height: 10.4rem; // Update carefully: max-height in exact units is needed for transition below to work
         box-shadow: var(--core-elevation-shadow-130);
         border-radius: var(--semantic-borderRadius-md);
 
         &.deleted {
             opacity: var(--core-opacity-50);
             max-height: 0;
-            transition: max-height 0.3s, opacity 0.3s;
+            transition: max-height 0.3s, opacity 0.1s;
             transition-timing-function: var(--motion-easing-out);
         }
     }

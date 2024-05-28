@@ -76,6 +76,8 @@ const ContractCard = ({
     const totalProfit = getProfit(contractInfo);
     const validToCancel = isValidToCancel(contractInfo as TContractInfo);
     const validToSell = isValidToSell(contractInfo as TContractInfo) && !isSellRequested;
+    const isCancelButtonPressed = isSellRequested && isCanceling;
+    const isCloseButtonPressed = isSellRequested && isClosing;
 
     const handleSwipe = (direction: string) => {
         const isLeft = direction === DIRECTION.LEFT;
@@ -153,11 +155,11 @@ const ContractCard = ({
                     <div className='buttons'>
                         {validToCancel && (
                             <button
-                                className={classNames({ loading: isSellRequested && isCanceling })}
+                                className={classNames({ loading: isCancelButtonPressed })}
                                 disabled={Number((contractInfo as TContractInfo).profit) >= 0 || isSellRequested}
                                 onClick={e => handleClose(e, true)}
                             >
-                                {isSellRequested && isCanceling ? (
+                                {isCancelButtonPressed ? (
                                     <div className='circle-loader' data-testid='dt_button_loader' />
                                 ) : (
                                     <CaptionText bold as='div' className='label'>
@@ -167,11 +169,11 @@ const ContractCard = ({
                             </button>
                         )}
                         <button
-                            className={classNames({ loading: isSellRequested && isClosing })}
+                            className={classNames({ loading: isCloseButtonPressed })}
                             disabled={!validToSell}
                             onClick={handleClose}
                         >
-                            {isSellRequested && isClosing ? (
+                            {isCloseButtonPressed ? (
                                 <div className='circle-loader' data-testid='dt_button_loader' />
                             ) : (
                                 <CaptionText bold as='div' className='label'>

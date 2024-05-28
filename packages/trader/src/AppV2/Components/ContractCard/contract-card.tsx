@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { CaptionText, Text } from '@deriv-com/quill-ui';
 import { useSwipeable } from 'react-swipeable';
 import { IconTradeTypes, Money } from '@deriv/components';
@@ -110,10 +110,10 @@ const ContractCard = ({
 
     if (!contract_type) return null;
     return (
-        <div className={classNames(`${className}-wrapper`, { deleted: isDeleted })}>
+        <div className={clsx(`${className}-wrapper`, isDeleted && 'deleted')}>
             <BinaryLink
                 {...(hasActionButtons ? swipeHandlers : {})}
-                className={classNames(className, {
+                className={clsx(className, {
                     'show-buttons': shouldShowButtons,
                     'has-cancel-button': validToCancel,
                     lost: Number(totalProfit) < 0,
@@ -155,7 +155,7 @@ const ContractCard = ({
                     <div className='buttons'>
                         {validToCancel && (
                             <button
-                                className={classNames({ loading: isCancelButtonPressed })}
+                                className={clsx(isCancelButtonPressed && 'loading')}
                                 disabled={Number((contractInfo as TContractInfo).profit) >= 0 || isSellRequested}
                                 onClick={e => handleClose(e, true)}
                             >
@@ -169,7 +169,7 @@ const ContractCard = ({
                             </button>
                         )}
                         <button
-                            className={classNames({ loading: isCloseButtonPressed })}
+                            className={clsx(isCloseButtonPressed && 'loading')}
                             disabled={!validToSell}
                             onClick={handleClose}
                         >

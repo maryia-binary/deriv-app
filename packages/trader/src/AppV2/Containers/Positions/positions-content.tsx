@@ -48,7 +48,7 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
     const hasNoPositions = isClosedTab ? is_empty && !timeFilter && !customTimeRangeFilter : is_active_empty;
     const shouldShowEmptyMessage = hasNoPositions || noMatchesFound;
     const shouldShowContractCards =
-        filteredPositions.length && (isClosedTab || (filteredPositions[0]?.contract_info as TContractInfo)?.status);
+        !!filteredPositions.length && (isClosedTab || (filteredPositions[0]?.contract_info as TContractInfo)?.status);
 
     const handleTradeTypeFilterChange = (filterValues: string[]) => {
         setContractTypeFilter(filterValues);
@@ -136,17 +136,19 @@ const PositionsContent = observer(({ hasButtonsDemo, isClosedTab, setHasButtonsD
                     />
                 </div>
             )}
-            {shouldShowContractCards && (
-                <TotalProfitLoss
-                    currency={currency}
-                    hasBottomAlignment={isClosedTab}
-                    totalProfitLoss={getTotalPositionsProfit(filteredPositions)}
-                />
-            )}
             {shouldShowEmptyMessage ? (
                 <EmptyPositions isClosedTab={isClosedTab} noMatchesFound={noMatchesFound} />
             ) : (
-                shouldShowContractCards && contractCards
+                shouldShowContractCards && (
+                    <React.Fragment>
+                        <TotalProfitLoss
+                            currency={currency}
+                            hasBottomAlignment={isClosedTab}
+                            totalProfitLoss={getTotalPositionsProfit(filteredPositions)}
+                        />
+                        {contractCards}
+                    </React.Fragment>
+                )
             )}
         </div>
     );

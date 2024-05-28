@@ -345,7 +345,7 @@ describe('ContractCard', () => {
         expect(screen.getByRole('button', { name: CANCEL })).toBeEnabled();
         expect(screen.getByRole('button', { name: CLOSE })).toBeDisabled();
     });
-    it('should render a card for an open Accumulators position with a Close button only and remaining number of ticks', () => {
+    it('should render a card for an open Accumulators position with a Close button only and ticks progress', () => {
         render(
             mockedContractCard({
                 ...mockProps,

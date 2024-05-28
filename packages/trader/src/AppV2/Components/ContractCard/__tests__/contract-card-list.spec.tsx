@@ -11,12 +11,12 @@ const cancelButton = 'Cancel';
 const closeButton = 'Close';
 
 jest.mock('../contract-card', () =>
-    jest.fn((props: React.ComponentProps<typeof ContractCard>) => (
+    jest.fn(({ onCancel, onClose }: React.ComponentProps<typeof ContractCard>) => (
         <div>
             {contractCard}
             <>
-                <button onClick={props.onCancel}>{cancelButton}</button>
-                <button onClick={props.onClose}>{closeButton}</button>
+                <button onClick={onCancel}>{cancelButton}</button>
+                <button onClick={onClose}>{closeButton}</button>
             </>
         </div>
     ))

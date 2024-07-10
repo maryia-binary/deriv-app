@@ -32,7 +32,7 @@
 
             &--minimized {
                 background-color: var(--core-color-solid-slate-50);
-                margin: var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400);
+                padding: var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400);
                 align-items: center;
                 flex-direction: row;
                 justify-content: unset;
@@ -76,10 +76,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 0px var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400);
+            padding: 0px var(--core-spacing-400) var(--core-spacing-400) var(--core-spacing-400);
             gap: var(--core-spacing-400);
             position: sticky;
-            bottom: var(--core-spacing-400);
+            bottom: 0;
         }
     }
 

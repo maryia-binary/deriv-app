@@ -4,12 +4,29 @@ import { LabelPairedPresentationScreenSmRegularIcon } from '@deriv/quill-icons';
 import { Localize, localize } from '@deriv/translations';
 import BottomNav from 'AppV2/Components/BottomNav';
 
+const HEIGHT = {
+    ADVANCED_FOOTER: 136,
+    BOTTOM_NAV: 56,
+    HEADER: 48,
+    PADDING: 24,
+};
+
 const Trade = () => {
+    const chart_ref = React.useRef<HTMLDivElement>(null);
+
     const mock_trade_params = [
         { label: <Localize i18n_default_text='Duration' />, value: localize('1 minute') },
         { label: <Localize i18n_default_text='Stake' />, value: '10.00 USD' },
         { label: <Localize i18n_default_text='Allow equals' />, value: '-' },
     ];
+
+    React.useEffect(() => {
+        if (chart_ref.current) {
+            const calculated_height =
+                window.innerHeight - HEIGHT.HEADER - HEIGHT.BOTTOM_NAV - HEIGHT.ADVANCED_FOOTER - HEIGHT.PADDING;
+            chart_ref.current.style.setProperty('height', `${calculated_height}px`);
+        }
+    }, []);
 
     return (
         <BottomNav>
@@ -42,7 +59,9 @@ const Trade = () => {
                         ))}
                     </div>
                 </section>
-                <section className='section__chart'>Awesome Chart Placeholder</section>
+                <section className='section__chart' ref={chart_ref}>
+                    Awesome Chart Placeholder
+                </section>
             </div>
             <section className='section__trade-params__options__wrapper section__trade-params__options__wrapper--minimized'>
                 {mock_trade_params.map(({ label, value }) => (

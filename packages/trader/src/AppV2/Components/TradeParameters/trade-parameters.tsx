@@ -22,10 +22,9 @@ const TradeParameters = ({ chart_ref, is_minimized, trade_parameters_list }: TTr
         if (current_chart_ref) {
             const chart_bottom_Y = current_chart_ref.getBoundingClientRect().bottom;
             const container_bottom_Y = window.innerHeight - HEIGHT.BOTTOM_NAV;
-            if (chart_bottom_Y < container_bottom_Y && !is_minimized_visible) {
+            if (chart_bottom_Y < container_bottom_Y) {
                 setIsMinimizedVisible(true);
-                current_chart_ref.scrollIntoView(true);
-            } else if (chart_bottom_Y >= container_bottom_Y) {
+            } else {
                 setIsMinimizedVisible(false);
             }
         }
@@ -46,9 +45,8 @@ const TradeParameters = ({ chart_ref, is_minimized, trade_parameters_list }: TTr
         <React.Fragment>
             {is_minimized ? (
                 <CSSTransition
-                    appear
                     in={is_minimized_visible}
-                    timeout={0}
+                    timeout={100}
                     classNames={{
                         appear: 'trade-params__options__wrapper--minimized--enter',
                         enter: 'trade-params__options__wrapper--minimized--enter',

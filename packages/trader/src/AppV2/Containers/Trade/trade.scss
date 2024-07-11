@@ -1,36 +1,44 @@
-.section {
-    &__wrapper {
-        background-color: var(--core-color-solid-slate-75);
-        position: relative;
-        padding: var(--core-spacing-400);
+.trade {
+    &__trade-types,
+    &__assets {
+        padding: var(--core-spacing-400) var(--core-spacing-800);
+    }
+    &__trade-types {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         gap: var(--core-spacing-400);
+        overflow-x: auto;
+        min-height: var(--core-spacing-1600);
+        white-space: nowrap;
+        scrollbar-width: none;
     }
+    &__assets {
+        background-color: var(--component-field-bg-fill-default);
 
-    &__chart {
-        border-radius: var(--core-borderRadius-400);
-        background-color: var(--core-color-solid-slate-50);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        .dc-dropdown {
+            &__container {
+                width: 26rem;
+            }
+            &__display {
+                height: var(--core-spacing-2100);
+            }
+        }
     }
-
-    // TODO: temporary placeholder
-    &__contract-type {
-        height: 4.8rem;
-        background-color: var(--core-color-solid-slate-50);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    // TODO: temporary placeholder
-    &__asset-type {
-        height: 5.8rem;
-        background-color: var(--core-color-solid-slate-75);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .section {
+        &__wrapper {
+            background-color: var(--core-color-solid-slate-75);
+            position: relative;
+            padding: var(--core-spacing-400);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--core-spacing-400);
+        }
+        &__chart {
+            border-radius: var(--core-borderRadius-400);
+            background-color: var(--core-color-solid-slate-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 }

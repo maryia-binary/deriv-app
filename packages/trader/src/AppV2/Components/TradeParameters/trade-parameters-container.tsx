@@ -4,19 +4,20 @@ import { CSSTransition } from 'react-transition-group';
 import { HEIGHT } from 'AppV2/Utils/layout-utils';
 import { Text } from '@deriv-com/quill-ui';
 import Guide from '../Guide';
-import TradeParams from './trade-params';
 
-type TTradeParameters = {
+type TTradeParametersContainer = {
     chart_ref?: React.RefObject<HTMLDivElement>;
     is_minimized?: boolean;
 };
 
-const TradeParameters = ({ chart_ref, is_minimized }: TTradeParameters) => {
+const TradeParametersContainer = ({
+    chart_ref,
+    children,
+    is_minimized,
+}: React.PropsWithChildren<TTradeParametersContainer>) => {
     const [is_minimized_visible, setIsMinimizedVisible] = React.useState(false);
 
     const onScroll = React.useCallback(() => {
-        if (!is_minimized) return;
-
         const current_chart_ref = chart_ref?.current;
 
         if (current_chart_ref) {
@@ -55,7 +56,7 @@ const TradeParameters = ({ chart_ref, is_minimized }: TTradeParameters) => {
                     }}
                     unmountOnExit
                 >
-                    <TradeParams is_minimized={is_minimized} />
+                    {children}
                 </CSSTransition>
             ) : (
                 <section className='trade-params'>
@@ -65,11 +66,11 @@ const TradeParameters = ({ chart_ref, is_minimized }: TTradeParameters) => {
                         </Text>
                         <Guide has_label />
                     </div>
-                    <TradeParams is_minimized={is_minimized} />
+                    {children}
                 </section>
             )}
         </React.Fragment>
     );
 };
 
-export default TradeParameters;
+export default TradeParametersContainer;

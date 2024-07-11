@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Text, TextField } from '@deriv-com/quill-ui';
-import { LabelPairedPresentationScreenSmRegularIcon } from '@deriv/quill-icons';
 import { Localize, localize } from '@deriv/translations';
 import BottomNav from 'AppV2/Components/BottomNav';
+import PurchaseButton from 'AppV2/Components/PurchaseButton';
+import TradeParameters from 'AppV2/Components/TradeParameters';
 
 const HEIGHT = {
     ADVANCED_FOOTER: 136,
@@ -35,72 +35,13 @@ const Trade = () => {
             {/* TODO: temporary, until Asset selection component will be merged */}
             <section className='section__asset-type'>Asset selection</section>
             <div className='section__wrapper'>
-                <section className='section__trade-params'>
-                    <div className='section__trade-params__title'>
-                        <Text>Set your trade</Text>
-                        {/* TODO: temporary, until Guide component will be merged */}
-                        <Button
-                            color='black'
-                            icon={<LabelPairedPresentationScreenSmRegularIcon />}
-                            label={<Localize i18n_default_text='Guide' />}
-                            variant='secondary'
-                        />
-                    </div>
-                    <div className='section__trade-params__options__wrapper'>
-                        {mock_trade_params.map(({ label, value }) => (
-                            <TextField
-                                variant='fill'
-                                readOnly
-                                label={label}
-                                value={value}
-                                key={value}
-                                className='section__trade-params__option'
-                            />
-                        ))}
-                    </div>
-                </section>
+                <TradeParameters trade_parameters_list={mock_trade_params} />
                 <section className='section__chart' ref={chart_ref}>
                     Awesome Chart Placeholder
                 </section>
             </div>
-            <section className='section__trade-params__options__wrapper section__trade-params__options__wrapper--minimized'>
-                {mock_trade_params.map(({ label, value }) => (
-                    <TextField
-                        variant='fill'
-                        readOnly
-                        label={label}
-                        value={value}
-                        key={value}
-                        className='section__trade-params__option section__trade-params__option--minimized'
-                    />
-                ))}
-            </section>
-            <section className='section__purchase-button__wrapper'>
-                <Button
-                    color='purchase'
-                    size='lg'
-                    label={<Localize i18n_default_text='Rise' />}
-                    fullWidth
-                    className='section__purchase-button'
-                >
-                    <p className='section__purchase-button__payout'>
-                        <span>{localize('Payout')}</span>
-                        <span>19.55 USD</span>
-                    </p>
-                </Button>
-                <Button
-                    color='sell'
-                    size='lg'
-                    label={<Localize i18n_default_text='Fall' />}
-                    fullWidth
-                    className='section__purchase-button'
-                >
-                    <p className='section__purchase-button__payout'>
-                        <span>19.55 USD</span>
-                        <span>{localize('Payout')}</span>
-                    </p>
-                </Button>
-            </section>
+            <TradeParameters trade_parameters_list={mock_trade_params} is_minimized />
+            <PurchaseButton />
         </BottomNav>
     );
 };

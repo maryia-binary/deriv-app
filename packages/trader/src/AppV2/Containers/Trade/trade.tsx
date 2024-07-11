@@ -9,15 +9,11 @@ import { TRADE_TYPES, unsupported_contract_types_list } from '@deriv/shared';
 import { observer } from 'mobx-react';
 import PurchaseButton from 'AppV2/Components/PurchaseButton';
 import TradeParameters from 'AppV2/Components/TradeParameters';
-
-const HEIGHT = {
-    ADVANCED_FOOTER: 136,
-    BOTTOM_NAV: 56,
-    HEADER: 48,
-    PADDING: 24,
-};
+import { HEIGHT } from 'AppV2/Utils/layout-utils';
 
 const Trade = observer(() => {
+    const chart_ref = React.useRef<HTMLDivElement>(null);
+
     const { active_symbols, contract_type, contract_types_list, onMount, onChange, onUnmount, symbol } =
         useTraderStore();
     const filtered_contract_types = getAvailableContractTypes(
@@ -62,7 +58,7 @@ const Trade = observer(() => {
     return (
         <BottomNav>
             {symbols.length && trade_types.length ? (
-                <div className='trade'>
+                <React.Fragment>
                     <div className='trade__trade-types'>
                         {trade_types.map(({ text, value }) => (
                             <Chip.Selectable
@@ -77,15 +73,19 @@ const Trade = observer(() => {
                     <div className='trade__assets'>
                         <Dropdown list={symbols} name='symbol' onChange={onChange} value={symbol} />
                     </div>
-                    <div className='section__wrapper'>
+                    <div className='trade__section__wrapper'>
                         <TradeParameters trade_parameters_list={mock_trade_params} />
-                        <section className='section__chart' style={{ height: calculated_chart_height }}>
+                        <section
+                            className='trade__section__chart'
+                            style={{ height: calculated_chart_height }}
+                            ref={chart_ref}
+                        >
                             Awesome Chart Placeholder
                         </section>
                     </div>
-                    <TradeParameters trade_parameters_list={mock_trade_params} is_minimized />
+                    <TradeParameters trade_parameters_list={mock_trade_params} is_minimized chart_ref={chart_ref} />
                     <PurchaseButton />
-                </div>
+                </React.Fragment>
             ) : (
                 <Loading.DTraderV2 />
             )}

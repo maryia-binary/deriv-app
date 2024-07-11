@@ -1,17 +1,17 @@
 import React from 'react';
 import { Localize } from '@deriv/translations';
 import { CSSTransition } from 'react-transition-group';
-import { TextField, Text } from '@deriv-com/quill-ui';
 import { HEIGHT } from 'AppV2/Utils/layout-utils';
+import { Text } from '@deriv-com/quill-ui';
 import Guide from '../Guide';
+import TradeParams from './trade-params';
 
 type TTradeParameters = {
     chart_ref?: React.RefObject<HTMLDivElement>;
     is_minimized?: boolean;
-    trade_parameters_list: { label: React.ReactNode; value: string | number }[];
 };
 
-const TradeParameters = ({ chart_ref, is_minimized, trade_parameters_list }: TTradeParameters) => {
+const TradeParameters = ({ chart_ref, is_minimized }: TTradeParameters) => {
     const [is_minimized_visible, setIsMinimizedVisible] = React.useState(false);
 
     const onScroll = React.useCallback(() => {
@@ -55,18 +55,7 @@ const TradeParameters = ({ chart_ref, is_minimized, trade_parameters_list }: TTr
                     }}
                     unmountOnExit
                 >
-                    <div className='trade-params__options__wrapper trade-params__options__wrapper--minimized'>
-                        {trade_parameters_list.map(({ label, value }) => (
-                            <TextField
-                                variant='fill'
-                                readOnly
-                                label={label}
-                                value={value}
-                                key={value}
-                                className='trade-params__option trade-params__option--minimized'
-                            />
-                        ))}
-                    </div>
+                    <TradeParams is_minimized={is_minimized} />
                 </CSSTransition>
             ) : (
                 <section className='trade-params'>
@@ -76,18 +65,7 @@ const TradeParameters = ({ chart_ref, is_minimized, trade_parameters_list }: TTr
                         </Text>
                         <Guide has_label />
                     </div>
-                    <div className='trade-params__options__wrapper'>
-                        {trade_parameters_list.map(({ label, value }) => (
-                            <TextField
-                                variant='fill'
-                                readOnly
-                                label={label}
-                                value={value}
-                                key={value}
-                                className='trade-params__option'
-                            />
-                        ))}
-                    </div>
+                    <TradeParams is_minimized={is_minimized} />
                 </section>
             )}
         </React.Fragment>

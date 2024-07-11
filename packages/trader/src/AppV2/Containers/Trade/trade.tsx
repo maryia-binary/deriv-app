@@ -1,5 +1,6 @@
 import React from 'react';
-import { Chip, InputDropdown, Text } from '@deriv-com/quill-ui';
+import { Dropdown } from '@deriv/components';
+import { Chip, Text } from '@deriv-com/quill-ui';
 import BottomNav from 'AppV2/Components/BottomNav';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { getAvailableContractTypes } from 'Modules/Trading/Helpers/contract-type';
@@ -59,7 +60,7 @@ const Trade = observer(() => {
                 ))}
             </div>
             <div className='trade__assets'>
-                <InputDropdown onSelectOption={onSymbolSelect} options={symbols} value={symbol} variant='fill' />
+                <Dropdown list={symbols} name='symbol' onChange={onChange} value={symbol} />
             </div>
         </BottomNav>
     );

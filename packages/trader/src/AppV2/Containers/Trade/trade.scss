@@ -14,11 +14,13 @@
     &__assets {
         background-color: var(--component-field-bg-fill-default);
 
-        .dropdown__wrapper {
-            width: 26rem;
-        }
-        .quill-input__wrapper__size--md {
-            height: 4.2rem;
+        .dc-dropdown {
+            &__container {
+                width: 26rem;
+            }
+            &__display {
+                height: var(--core-spacing-2100);
+            }
         }
     }
 }

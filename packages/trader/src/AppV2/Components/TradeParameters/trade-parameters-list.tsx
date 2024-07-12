@@ -11,6 +11,7 @@ import GrowthRate from './GrowthRate';
 import TakeProfit from './TakeProfit';
 import AccumulatorsInformation from './AccumulatorsInformation';
 import TradeTypeTabs from './TradeTypeTabs';
+import Strike from './Strike';
 
 type TTradeParametersList = {
     is_minimized?: boolean;
@@ -55,7 +56,7 @@ const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) =>
             {isVisible('duration') && (
                 <Duration duration={duration} duration_unit={duration_unit} is_minimized={is_minimized} />
             )}
-            {/* {isVisible('strike') && <Strike />} */}
+            {isVisible('strike') && <Strike barrier_1={barrier_1} is_minimized={is_minimized} />}
             {/* {isVisible('payout_per_point') && <PayoutPerPointSelector />} */}
             {isVisible('barrier') && <Barrier barrier_1={barrier_1} is_minimized={is_minimized} />}
             {isVisible('growth_rate') && (

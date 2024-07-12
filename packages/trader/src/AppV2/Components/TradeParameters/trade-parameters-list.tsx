@@ -9,6 +9,7 @@ import Stake from './Stake';
 import Barrier from './Barrier';
 import GrowthRate from './GrowthRate';
 import TakeProfit from './TakeProfit';
+import AccumulatorsInformation from './AccumulatorsInformation';
 
 type TTradeParametersList = {
     is_minimized?: boolean;
@@ -26,12 +27,15 @@ const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) =>
         duration,
         duration_unit,
         expiry_type,
+        growth_rate,
+        has_open_accu_contract,
         is_equal,
         onChange,
         symbol,
-        growth_rate,
-        has_open_accu_contract,
+        maximum_payout,
+        maximum_ticks,
     } = useTraderStore();
+
     const isVisible = (component_key: string) => {
         return getTradeParams(symbol)[contract_type].includes(component_key);
     };
@@ -82,7 +86,14 @@ const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) =>
             )}
             {/* {isVisible('risk_management') && <RiskManagement />} */}
             {/* {isVisible('expiration') && <Expiration />} */}
-            {/* {isVisible('accu_info_display') && <AccumulatorsInfoDisplay />} */}
+            {isVisible('accu_info_display') && (
+                <AccumulatorsInformation
+                    currency={currency}
+                    is_minimized={is_minimized}
+                    maximum_payout={maximum_payout}
+                    maximum_ticks={maximum_ticks}
+                />
+            )}
             {/* {isVisible('mult_info_display') && <MultipliersInfoDisplay />} */}
         </div>
     );

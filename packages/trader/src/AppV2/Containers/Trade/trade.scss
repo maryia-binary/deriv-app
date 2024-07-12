@@ -1,7 +1,13 @@
 .trade {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--core-color-solid-slate-75);
+    padding: 0 var(--core-spacing-400);
+    gap: var(--core-spacing-400);
+
     &__trade-types,
     &__assets {
-        padding: var(--core-spacing-400) var(--core-spacing-800);
+        padding: 0 var(--core-spacing-800);
     }
 
     &__trade-types {
@@ -14,8 +20,6 @@
     }
 
     &__assets {
-        background-color: var(--component-field-bg-fill-default);
-
         .dc-dropdown {
             &__container {
                 width: 26rem;
@@ -28,9 +32,7 @@
 
     &__section {
         &__wrapper {
-            background-color: var(--core-color-solid-slate-75);
             position: relative;
-            padding: var(--core-spacing-400);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -40,9 +42,14 @@
 
     &__chart {
         border-radius: var(--core-borderRadius-400);
-        background-color: var(--core-color-solid-slate-50);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+        .smartcharts {
+            position: relative;
+
+            .cq-top-ui-widgets {
+                // hiding the chart assets dropdown:
+                display: none;
+            }
+        }
     }
 }

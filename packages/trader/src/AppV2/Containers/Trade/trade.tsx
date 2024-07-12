@@ -8,12 +8,25 @@ import PurchaseButton from 'AppV2/Components/PurchaseButton';
 import { HEIGHT } from 'AppV2/Utils/layout-utils';
 import { getTradeTypesList } from 'AppV2/Utils/trade-types-utils';
 import { TradeParametersContainer, TradeParametersList } from 'AppV2/Components/TradeParameters';
+import { isAccumulatorContract } from '@deriv/shared';
+import CurrentSpot from 'AppV2/Components/CurrentSpot';
+import { TradeChart } from '../Chart';
+import { isDigitTradeType } from 'Modules/Trading/Helpers/digits';
 
 const Trade = observer(() => {
     const chart_ref = React.useRef<HTMLDivElement>(null);
 
-    const { active_symbols, contract_type, contract_types_list, onMount, onChange, onUnmount, symbol } =
-        useTraderStore();
+    const {
+        active_symbols,
+        contract_type,
+        contract_types_list,
+        has_barrier,
+        onMount,
+        onChange,
+        onUnmount,
+        symbol,
+        tick_data,
+    } = useTraderStore();
 
     const trade_types = getTradeTypesList(contract_types_list);
     const symbols = active_symbols.map(({ display_name, symbol: underlying }) => ({
@@ -49,7 +62,7 @@ const Trade = observer(() => {
     return (
         <BottomNav>
             {symbols.length && trade_types.length ? (
-                <React.Fragment>
+                <div className='trade'>
                     <div className='trade__trade-types'>
                         {trade_types.map(({ text, value }) => (
                             <Chip.Selectable
@@ -64,19 +77,23 @@ const Trade = observer(() => {
                     <div className='trade__assets'>
                         <Dropdown list={symbols} name='symbol' onChange={onChange} value={symbol} />
                     </div>
+                    {isDigitTradeType(contract_type) && <CurrentSpot current_spot={tick_data?.current_spot} />}
                     <div className='trade__section__wrapper'>
                         <TradeParametersContainer>
                             <TradeParametersList />
                         </TradeParametersContainer>
                         <section className='trade__chart' style={{ height: calculated_chart_height }} ref={chart_ref}>
-                            Awesome Chart Placeholder
+                            <TradeChart
+                                has_barrier={has_barrier}
+                                is_accumulator={isAccumulatorContract(contract_type)}
+                            />
                         </section>
                     </div>
                     <TradeParametersContainer chart_ref={chart_ref} is_minimized>
                         <TradeParametersList is_minimized />
                     </TradeParametersContainer>
                     <PurchaseButton />
-                </React.Fragment>
+                </div>
             ) : (
                 <Loading.DTraderV2 />
             )}

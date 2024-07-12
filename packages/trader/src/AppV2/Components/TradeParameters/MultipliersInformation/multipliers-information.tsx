@@ -8,7 +8,7 @@ type TMultipliersInformationProps = {
     is_minimized?: boolean;
 } & Pick<ReturnType<typeof useTraderStore>, 'currency' | 'commission' | 'stop_out'>;
 
-const MultipliersInformation = ({ currency, is_minimized, commission, stop_out }: TMultipliersInformationProps) => {
+const MultipliersInformation = ({ currency, commission, is_minimized, stop_out }: TMultipliersInformationProps) => {
     const content = [
         {
             label: <Localize i18n_default_text='Commission' />,

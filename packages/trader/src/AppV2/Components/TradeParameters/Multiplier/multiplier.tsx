@@ -8,7 +8,7 @@ type TMultiplierProps = {
     is_minimized?: boolean;
 } & Pick<ReturnType<typeof useTraderStore>, 'multiplier'>;
 
-const Multiplier = ({ multiplier, is_minimized }: TMultiplierProps) => {
+const Multiplier = ({ is_minimized, multiplier }: TMultiplierProps) => {
     return (
         <TextField
             variant='fill'

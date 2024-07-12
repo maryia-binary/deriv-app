@@ -7,6 +7,7 @@ import AllowEquals from './AllowEquals';
 import Duration from './Duration';
 import Stake from './Stake';
 import Barrier from './Barrier';
+import TradeTypeTabs from './TradeTypeTabs';
 
 type TTradeParametersList = {
     is_minimized?: boolean;
@@ -39,7 +40,9 @@ const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) =>
                 is_minimized && 'trade-params__options__wrapper--minimized'
             )}
         >
-            {/* {isVisible('trade_type_tabs') && <TradeTypeTabs />} */}
+            {isVisible('trade_type_tabs') && (
+                <TradeTypeTabs contract_type={contract_type} is_minimized={is_minimized} onChange={onChange} />
+            )}
             {/* {isVisible('last_digit') && <LastDigit />} */}
             {isVisible('duration') && (
                 <Duration duration={duration} duration_unit={duration_unit} is_minimized={is_minimized} />

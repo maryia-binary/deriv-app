@@ -12,6 +12,11 @@
     &--single {
         align-items: center;
         justify-content: center;
+
+        .purchase-button__information__wrapper {
+            justify-content: center;
+            gap: var(--core-spacing-400);
+        }
     }
 
     &--loading {
@@ -29,11 +34,6 @@
 
             &--reverse {
                 flex-direction: row-reverse;
-            }
-
-            &--single {
-                justify-content: center;
-                gap: var(--core-spacing-400);
             }
         }
     }

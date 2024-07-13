@@ -5,16 +5,24 @@ import { getLocalizedBasis } from '@deriv/shared';
 import { Money } from '@deriv/components';
 
 type TPurchaseButtonContent = {
+    current_stake?: number | null;
     info: ReturnType<typeof useTraderStore>['proposal_info'][0];
     is_reverse?: boolean;
 } & Pick<
     ReturnType<typeof useTraderStore>,
-    'contract_type' | 'currency' | 'is_accumulator' | 'is_multiplier' | 'is_vanilla_fx' | 'is_vanilla' | 'is_turbos'
+    | 'currency'
+    | 'has_open_accu_contract'
+    | 'is_accumulator'
+    | 'is_multiplier'
+    | 'is_vanilla_fx'
+    | 'is_vanilla'
+    | 'is_turbos'
 >;
 
 const PurchaseButtonContent = ({
-    contract_type,
     currency,
+    current_stake,
+    has_open_accu_contract,
     info,
     is_accumulator,
     is_multiplier,
@@ -24,13 +32,17 @@ const PurchaseButtonContent = ({
     is_reverse,
 }: TPurchaseButtonContent) => {
     const localized_basis = getLocalizedBasis();
-    const amount = is_multiplier ? info.stake : info?.obj_contract_basis?.value;
 
+    const getAmount = () => {
+        if (is_multiplier) return info.stake;
+        if (is_accumulator) return has_open_accu_contract ? Number(current_stake) : info.maximum_payout;
+        return info?.obj_contract_basis?.value;
+    };
     const getTextBasis = () => {
         if (is_turbos || (is_vanilla && !is_vanilla_fx)) return localized_basis.payout_per_point;
         if (is_vanilla_fx) return localized_basis.payout_per_pip;
         if (is_multiplier) return localized_basis.stake;
-        // if (is_accumulator) return '';
+        if (is_accumulator) return has_open_accu_contract ? localized_basis.current_stake : localized_basis.max_payout;
         return localized_basis.payout;
     };
 
@@ -41,17 +53,8 @@ const PurchaseButtonContent = ({
                 is_reverse && 'purchase-button__information__wrapper--reverse'
             )}
         >
-            {!is_accumulator && (
-                <React.Fragment>
-                    <span>{getTextBasis()}</span>
-                    <Money
-                        amount={amount}
-                        currency={currency}
-                        should_format={!is_turbos && !is_vanilla}
-                        show_currency
-                    />
-                </React.Fragment>
-            )}
+            <span>{getTextBasis()}</span>
+            <Money amount={getAmount()} currency={currency} should_format={!is_turbos && !is_vanilla} show_currency />
         </p>
     );
 };

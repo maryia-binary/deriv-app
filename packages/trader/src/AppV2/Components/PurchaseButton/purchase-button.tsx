@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { observer } from 'mobx-react';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { Button } from '@deriv-com/quill-ui';
-import { getContractTypeDisplay } from '@deriv/shared';
+import { getContractTypeDisplay, isEmptyObject } from '@deriv/shared';
 import PurchaseButtonContent from './purchase-button-content';
 import { TTradeStore } from 'Types';
 
@@ -33,8 +33,19 @@ const PurchaseButton = observer(() => {
         trade_types,
         validation_errors,
     } = useTraderStore();
-
+    //TODO: add error handling when design will be ready
     const is_high_low = /^high_low$/.test(contract_type.toLowerCase());
+    const is_proposal_empty = isEmptyObject(proposal_info);
+    const is_disabled = !is_trade_enabled || !is_purchase_enabled || is_proposal_empty;
+    const purchase_button_content_props = {
+        contract_type,
+        currency,
+        is_accumulator,
+        is_multiplier,
+        is_turbos,
+        is_vanilla_fx,
+        is_vanilla,
+    };
     const trade_types_array = Object.keys(trade_types);
 
     const isLoading = (info: TTradeStore['proposal_info'][string]) => {
@@ -45,7 +56,6 @@ const PurchaseButton = observer(() => {
     if (trade_types_array.length === 1) {
         const info = proposal_info?.[trade_types_array[0]] || {};
         const is_loading = isLoading(info);
-        const is_disabled = !is_trade_enabled || !is_purchase_enabled;
 
         return (
             <div className='purchase-button__wrapper'>
@@ -59,20 +69,9 @@ const PurchaseButton = observer(() => {
                     fullWidth
                     className='purchase-button purchase-button--single'
                     isLoading={is_loading}
-                    disabled={is_disabled && !is_loading}
+                    disabled={(is_disabled || !info.id) && !is_loading}
                 >
-                    {!is_loading && (
-                        <PurchaseButtonContent
-                            contract_type={contract_type}
-                            currency={currency}
-                            info={info}
-                            is_accumulator={is_accumulator}
-                            is_multiplier={is_multiplier}
-                            is_turbos={is_turbos}
-                            is_vanilla_fx={is_vanilla_fx}
-                            is_vanilla={is_vanilla}
-                        />
-                    )}
+                    {!is_loading && <PurchaseButtonContent {...purchase_button_content_props} info={info} />}
                 </Button>
             </div>
         );
@@ -83,7 +82,6 @@ const PurchaseButton = observer(() => {
             {trade_types_array.map((trade_type, index) => {
                 const info = proposal_info?.[trade_type] || {};
                 const is_loading = isLoading(info);
-                const is_disabled = !is_trade_enabled || !info.id || !is_purchase_enabled;
 
                 return (
                     <Button
@@ -94,19 +92,13 @@ const PurchaseButton = observer(() => {
                         fullWidth
                         className={clsx('purchase-button', is_loading && 'purchase-button--loading')}
                         isLoading={is_loading}
-                        disabled={is_disabled && !is_loading}
+                        disabled={(is_disabled || !info.id) && !is_loading}
                     >
                         {!is_loading && (
                             <PurchaseButtonContent
-                                contract_type={contract_type}
-                                currency={currency}
+                                {...purchase_button_content_props}
                                 info={info}
-                                is_accumulator={is_accumulator}
-                                is_multiplier={is_multiplier}
                                 is_reverse={!!index}
-                                is_turbos={is_turbos}
-                                is_vanilla_fx={is_vanilla_fx}
-                                is_vanilla={is_vanilla}
                             />
                         )}
                     </Button>

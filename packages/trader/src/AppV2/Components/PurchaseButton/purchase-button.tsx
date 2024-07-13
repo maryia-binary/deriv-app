@@ -3,9 +3,10 @@ import clsx from 'clsx';
 import { observer } from 'mobx-react';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { Button } from '@deriv-com/quill-ui';
+import { useDevice } from '@deriv-com/ui';
 import { getContractTypeDisplay, isEmptyObject } from '@deriv/shared';
-import PurchaseButtonContent from './purchase-button-content';
 import { TTradeStore } from 'Types';
+import PurchaseButtonContent from './purchase-button-content';
 
 const PurchaseButton = observer(() => {
     // const {
@@ -26,13 +27,14 @@ const PurchaseButton = observer(() => {
         is_vanilla_fx,
         is_vanilla,
         // onHoverPurchase,
-        // onPurchase: onClickPurchase,
+        onPurchase,
         proposal_info,
         // purchase_info,
         // symbol,
         trade_types,
         validation_errors,
     } = useTraderStore();
+    const { isMobile } = useDevice();
     //TODO: add error handling when design will be ready
     const is_high_low = /^high_low$/.test(contract_type.toLowerCase());
     const is_proposal_empty = isEmptyObject(proposal_info);
@@ -70,6 +72,7 @@ const PurchaseButton = observer(() => {
                     className='purchase-button purchase-button--single'
                     isLoading={is_loading}
                     disabled={(is_disabled || !info.id) && !is_loading}
+                    onClick={() => onPurchase(info.id, info.stake, trade_types_array[0], isMobile)}
                 >
                     {!is_loading && <PurchaseButtonContent {...purchase_button_content_props} info={info} />}
                 </Button>
@@ -93,6 +96,7 @@ const PurchaseButton = observer(() => {
                         className={clsx('purchase-button', is_loading && 'purchase-button--loading')}
                         isLoading={is_loading}
                         disabled={(is_disabled || !info.id) && !is_loading}
+                        onClick={() => onPurchase(info.id, info.stake, trade_type, isMobile)}
                     >
                         {!is_loading && (
                             <PurchaseButtonContent

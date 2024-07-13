@@ -5,13 +5,17 @@
     height: var(--core-size-2800);
     gap: 0;
 
-    &:nth-child(2) {
+    &:nth-child(2):not(.purchase-button--loading) {
         align-items: flex-start;
     }
 
     &--single {
         align-items: center;
         justify-content: center;
+    }
+
+    &--loading {
+        align-items: center;
     }
 
     &__information {

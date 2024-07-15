@@ -55,10 +55,18 @@ const PurchaseButtonContent = ({
                 is_reverse && 'purchase-button__information__wrapper--reverse'
             )}
         >
-            <CaptionText as='span' size='sm' className='purchase-button__information__item'>
+            <CaptionText
+                as='span'
+                size='sm'
+                className={clsx(!has_open_accu_contract && 'purchase-button__information__item')}
+            >
                 {getTextBasis()}
             </CaptionText>
-            <CaptionText as='span' size='sm' className='purchase-button__information__item'>
+            <CaptionText
+                as='span'
+                size='sm'
+                className={clsx(!has_open_accu_contract && 'purchase-button__information__item')}
+            >
                 <Money
                     amount={getAmount()}
                     currency={currency}

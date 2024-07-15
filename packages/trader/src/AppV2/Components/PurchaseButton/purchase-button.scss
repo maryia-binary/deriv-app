@@ -29,12 +29,14 @@
             display: inline-flex;
             justify-content: space-between;
             align-items: center;
-            font-size: var(--core-fontSize-50);
-            line-height: var(--core-lineHeight-100);
 
             &--reverse {
                 flex-direction: row-reverse;
             }
+        }
+
+        &__item {
+            color: var(--core-color-solid-slate-50);
         }
     }
 

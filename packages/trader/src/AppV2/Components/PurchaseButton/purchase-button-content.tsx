@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { CaptionText } from '@deriv-com/quill-ui';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { getLocalizedBasis } from '@deriv/shared';
 import { Money } from '@deriv/components';
@@ -47,15 +48,25 @@ const PurchaseButtonContent = ({
     };
 
     return (
-        <p
+        <CaptionText
+            size='sm'
             className={clsx(
                 'purchase-button__information__wrapper',
                 is_reverse && 'purchase-button__information__wrapper--reverse'
             )}
         >
-            <span>{getTextBasis()}</span>
-            <Money amount={getAmount()} currency={currency} should_format={!is_turbos && !is_vanilla} show_currency />
-        </p>
+            <CaptionText as='span' size='sm' className='purchase-button__information__item'>
+                {getTextBasis()}
+            </CaptionText>
+            <CaptionText as='span' size='sm' className='purchase-button__information__item'>
+                <Money
+                    amount={getAmount()}
+                    currency={currency}
+                    should_format={!is_turbos && !is_vanilla}
+                    show_currency
+                />
+            </CaptionText>
+        </CaptionText>
     );
 };
 

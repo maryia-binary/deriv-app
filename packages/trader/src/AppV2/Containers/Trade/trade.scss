@@ -6,6 +6,9 @@
     gap: var(--core-spacing-400);
 
     &__trade-types {
+        position: relative;
+        width: 100vw;
+        inset-inline-start: calc(-1 * var(--core-spacing-400));
         padding: var(--core-spacing-400) var(--core-spacing-800);
         background-color: var(--core-color-solid-slate-50);
         display: flex;
@@ -15,7 +18,6 @@
         white-space: nowrap;
         scrollbar-width: none;
     }
-
     &__assets {
         padding: 0 var(--core-spacing-800);
 
@@ -28,7 +30,6 @@
             }
         }
     }
-
     &__section {
         &__wrapper {
             position: relative;
@@ -38,7 +39,6 @@
             gap: var(--core-spacing-400);
         }
     }
-
     &__chart {
         border-radius: var(--core-borderRadius-400);
         overflow: hidden;

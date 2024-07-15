@@ -1,57 +1,49 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Dropdown, Loading } from '@deriv/components';
-import { Chip, Text } from '@deriv-com/quill-ui';
+import { Loading } from '@deriv/components';
 import { useTraderStore } from 'Stores/useTraderStores';
 import BottomNav from 'AppV2/Components/BottomNav';
 import PurchaseButton from 'AppV2/Components/PurchaseButton';
 import { HEIGHT } from 'AppV2/Utils/layout-utils';
 import { getTradeTypesList } from 'AppV2/Utils/trade-types-utils';
 import { TradeParametersContainer, TradeParametersList } from 'AppV2/Components/TradeParameters';
-import { isAccumulatorContract } from '@deriv/shared';
 import CurrentSpot from 'AppV2/Components/CurrentSpot';
 import { TradeChart } from '../Chart';
 import { isDigitTradeType } from 'Modules/Trading/Helpers/digits';
+import TemporaryTradeTypes from './trade-types';
+import TemporaryAssets from './assets';
 
 const Trade = observer(() => {
     const chart_ref = React.useRef<HTMLDivElement>(null);
 
-    const {
-        active_symbols,
-        contract_type,
-        contract_types_list,
-        has_barrier,
-        onMount,
-        onChange,
-        onUnmount,
-        symbol,
-        tick_data,
-    } = useTraderStore();
+    const { active_symbols, contract_type, contract_types_list, onMount, onChange, onUnmount, symbol } =
+        useTraderStore();
 
-    const trade_types = getTradeTypesList(contract_types_list);
-    const symbols = active_symbols.map(({ display_name, symbol: underlying }) => ({
-        text: display_name,
-        value: underlying,
-    }));
+    const trade_types = React.useMemo(() => getTradeTypesList(contract_types_list), [contract_types_list]);
+    const symbols = React.useMemo(
+        () =>
+            active_symbols.map(({ display_name, symbol: underlying }) => ({
+                text: display_name,
+                value: underlying,
+            })),
+        [active_symbols]
+    );
 
-    const isTradeTypeSelected = (value: string) =>
-        [contract_type, value].every(type => type.startsWith('vanilla')) ||
-        [contract_type, value].every(type => type.startsWith('turbos')) ||
-        [contract_type, value].every(type => type.startsWith('rise_fall')) ||
-        contract_type === value;
-
-    const calculated_chart_height =
+    const dynamic_chart_height =
         window.innerHeight - HEIGHT.HEADER - HEIGHT.BOTTOM_NAV - HEIGHT.ADVANCED_FOOTER - HEIGHT.PADDING;
 
-    const onTradeTypeSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const value = trade_types.find(({ text }) => text === (e.target as HTMLButtonElement).textContent)?.value;
-        onChange({
-            target: {
-                name: 'contract_type',
-                value,
-            },
-        });
-    };
+    const onTradeTypeSelect = React.useCallback(
+        (e: React.MouseEvent<HTMLButtonElement>) => {
+            const value = trade_types.find(({ text }) => text === (e.target as HTMLButtonElement).textContent)?.value;
+            onChange({
+                target: {
+                    name: 'contract_type',
+                    value,
+                },
+            });
+        },
+        [trade_types, onChange]
+    );
 
     React.useEffect(() => {
         onMount();
@@ -63,30 +55,19 @@ const Trade = observer(() => {
         <BottomNav>
             {symbols.length && trade_types.length ? (
                 <div className='trade'>
-                    <div className='trade__trade-types'>
-                        {trade_types.map(({ text, value }) => (
-                            <Chip.Selectable
-                                key={value}
-                                onChipSelect={onTradeTypeSelect}
-                                selected={isTradeTypeSelected(value)}
-                            >
-                                <Text size='sm'>{text}</Text>
-                            </Chip.Selectable>
-                        ))}
-                    </div>
-                    <div className='trade__assets'>
-                        <Dropdown list={symbols} name='symbol' onChange={onChange} value={symbol} />
-                    </div>
-                    {isDigitTradeType(contract_type) && <CurrentSpot current_spot={tick_data?.current_spot} />}
+                    <TemporaryTradeTypes
+                        contract_type={contract_type}
+                        onTradeTypeSelect={onTradeTypeSelect}
+                        trade_types={trade_types}
+                    />
+                    <TemporaryAssets onChange={onChange} symbol={symbol} symbols={symbols} />
+                    {isDigitTradeType(contract_type) && <CurrentSpot />}
                     <div className='trade__section__wrapper'>
                         <TradeParametersContainer>
                             <TradeParametersList />
                         </TradeParametersContainer>
-                        <section className='trade__chart' style={{ height: calculated_chart_height }} ref={chart_ref}>
-                            <TradeChart
-                                has_barrier={has_barrier}
-                                is_accumulator={isAccumulatorContract(contract_type)}
-                            />
+                        <section className='trade__chart' style={{ height: dynamic_chart_height }} ref={chart_ref}>
+                            <TradeChart />
                         </section>
                     </div>
                     <TradeParametersContainer chart_ref={chart_ref} is_minimized>

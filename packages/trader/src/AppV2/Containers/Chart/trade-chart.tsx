@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActiveSymbols } from '@deriv/api-types';
 import { useDevice } from '@deriv-com/ui';
-import { ChartBarrierStore } from '@deriv/shared';
+import { ChartBarrierStore, isAccumulatorContract } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { SmartChart } from 'Modules/SmartChart';
@@ -9,14 +9,11 @@ import AccumulatorsChartElements from 'Modules/SmartChart/Components/Markers/acc
 import ToolbarWidgets from 'Modules/SmartChart/Components/toolbar-widgets';
 
 type TTradeChartProps = {
-    has_barrier?: boolean;
-    is_accumulator: boolean;
     topWidgets?: (() => JSX.Element) | null;
-    children?: React.ReactNode;
 };
 
 const TradeChart = observer((props: TTradeChartProps) => {
-    const { has_barrier, is_accumulator, topWidgets } = props;
+    const { topWidgets } = props;
     const { ui, common, contract_trade, portfolio } = useStore();
     const { isMobile } = useDevice();
     const {
@@ -38,8 +35,10 @@ const TradeChart = observer((props: TTradeChartProps) => {
         barriers_flattened: extra_barriers,
         chartStateChange,
         chart_layout,
+        contract_type,
         exportLayout,
         has_alternative_source,
+        has_barrier,
         is_trade_enabled,
         main_barrier_flattened: main_barrier,
         setChartStatus,
@@ -53,6 +52,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
         wsSubscribe,
     } = useTraderStore();
 
+    const is_accumulator = isAccumulatorContract(contract_type);
     const settings = {
         countdown: is_chart_countdown_visible,
         isHighestLowestMarkerEnabled: false, // TODO: Pending UI,

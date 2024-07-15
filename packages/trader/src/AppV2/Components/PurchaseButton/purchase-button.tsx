@@ -41,11 +41,11 @@ const PurchaseButton = observer(() => {
         trade_types,
     } = useTraderStore();
 
-    //TODO: add error handling when design will be ready. validation_errors can be taken from useTraderStore
-    //  const hasError = (info: TTradeStore['proposal_info'][string]) => {
-    //     const has_validation_error = Object.values(validation_errors).some(e => e.length);
-    //     return has_validation_error || info?.has_error
-    // };
+    /*TODO: add error handling when design will be ready. validation_errors can be taken from useTraderStore
+    const hasError = (info: TTradeStore['proposal_info'][string]) => {
+        const has_validation_error = Object.values(validation_errors).some(e => e.length);
+        return has_validation_error || info?.has_error
+    };*/
     const is_high_low = /^high_low$/.test(contract_type.toLowerCase());
     const is_proposal_empty = isEmptyObject(proposal_info);
     const purchase_button_content_props = {

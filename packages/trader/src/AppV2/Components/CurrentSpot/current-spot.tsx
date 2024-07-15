@@ -3,18 +3,33 @@ import clsx from 'clsx';
 import { Text } from '@deriv-com/quill-ui';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { observer } from 'mobx-react';
+import { Skeleton } from '@deriv/components';
 
 type TCurrentSpotProps = {
     className?: string;
 };
 
 const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
-    const { tick_data } = useTraderStore();
+    const { symbol, resetTickData, tick_data } = useTraderStore();
+    const { current_spot, pip_size } = tick_data ?? {};
+    const spot = current_spot?.toFixed(pip_size);
+    // const prev_spot = React.useRef(spot);
+
+    React.useEffect(() => {
+        // TODO: move this logic to Assets feature when it's available:
+        resetTickData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [symbol]);
+
     return (
         <div className={clsx('trade__current-spot', className)}>
-            <Text size='xl' bold>
-                {tick_data?.current_spot}
-            </Text>
+            {current_spot ? (
+                <Text size='xl' bold>
+                    {spot}
+                </Text>
+            ) : (
+                <Skeleton width={133} height={32} />
+            )}
         </div>
     );
 });

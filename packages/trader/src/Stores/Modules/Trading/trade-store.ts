@@ -176,6 +176,7 @@ type TTickData = {
     current_spot?: number;
     current_spot_time?: number;
     prev_spot_time?: number;
+    pip_size?: number;
 };
 type TBarriersData = Record<string, never> | { barrier: string; barrier_choices: string[] };
 
@@ -395,6 +396,7 @@ export default class TradeStore extends BaseStore {
             expiry_time: observable,
             expiry_type: observable,
             form_components: observable,
+            resetTickData: action.bound,
             setTickData: action.bound,
             growth_rate: observable,
             has_cancellation: observable,
@@ -1684,13 +1686,18 @@ export default class TradeStore extends BaseStore {
         }
     }
 
+    resetTickData() {
+        this.tick_data = {};
+    }
+
     setTickData(response: TTicksHistoryResponse | TicksStreamResponse) {
         if ('tick' in response) {
-            const { epoch, quote, symbol } = response.tick as TickSpotData;
+            const { epoch, pip_size, quote, symbol } = response.tick as TickSpotData;
             if (this.symbol !== symbol) return;
             this.tick_data = {
                 current_spot: quote,
                 current_spot_time: epoch,
+                pip_size,
             };
         } else if ('history' in response) {
             const { prices, times } = response.history as History;
@@ -1700,6 +1707,7 @@ export default class TradeStore extends BaseStore {
                 current_spot: prices?.[prices?.length - 1],
                 current_spot_time: times?.[times?.length - 1],
                 prev_spot_time: times?.[times?.length - 2],
+                pip_size: response.pip_size as number,
             };
         }
     }

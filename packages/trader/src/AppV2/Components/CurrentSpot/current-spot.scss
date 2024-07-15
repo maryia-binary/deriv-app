@@ -1,6 +1,8 @@
 .trade__current-spot {
-    padding: var(--core-spacing-400) var(--core-spacing-800);
-    text-align: center;
+    display: flex;
+    height: var(--core-size-2400);
+    justify-content: center;
+    align-items: center;
     border-radius: var(--core-borderRadius-400);
     background-color: var(--core-color-solid-slate-50);
 }

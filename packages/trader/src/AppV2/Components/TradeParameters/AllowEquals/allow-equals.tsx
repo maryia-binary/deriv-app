@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { TextField } from '@deriv-com/quill-ui';
-import { localize, Localize } from '@deriv/translations';
+import { localize } from '@deriv/translations';
 import { hasCallPutEqual, hasDurationForCallPutEqual } from 'Stores/Modules/Trading/Helpers/allow-equals';
 import { useTraderStore } from 'Stores/useTraderStores';
 
@@ -33,7 +33,7 @@ const AllowEquals = ({
         <TextField
             variant='fill'
             readOnly
-            label={<Localize i18n_default_text='Allow equals' />}
+            label={localize('Allow equals')}
             value={is_equal ? localize('Enabled') : '-'}
             className={clsx('trade-params__option', is_minimized && 'trade-params__option--minimized')}
         />

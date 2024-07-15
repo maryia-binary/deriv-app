@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@deriv-com/quill-ui';
-import { Localize } from '@deriv/translations';
+import { localize } from '@deriv/translations';
 import clsx from 'clsx';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { getCurrencyDisplayCode } from '@deriv/shared';
@@ -25,7 +25,7 @@ const PayoutPerPoint = ({ contract_type, currency, is_minimized, proposal_info }
         <TextField
             variant='fill'
             readOnly
-            label={<Localize i18n_default_text='Payout per point' />}
+            label={localize('Payout per point')}
             value={`${payout_per_point} ${getCurrencyDisplayCode(currency)}`}
             className={classname}
         />

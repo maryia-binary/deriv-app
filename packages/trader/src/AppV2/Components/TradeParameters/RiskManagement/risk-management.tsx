@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@deriv-com/quill-ui';
-import { Localize, localize } from '@deriv/translations';
+import { localize } from '@deriv/translations';
 import clsx from 'clsx';
 
 type TRiskManagementProps = {
@@ -12,7 +12,7 @@ const RiskManagement = ({ is_minimized }: TRiskManagementProps) => {
         <TextField
             variant='fill'
             readOnly
-            label={<Localize i18n_default_text='Risk Management' />}
+            label={localize('Risk Management')}
             value={localize('Not set')}
             className={clsx('trade-params__option', is_minimized && 'trade-params__option--minimized')}
         />

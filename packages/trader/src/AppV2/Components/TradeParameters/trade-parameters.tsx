@@ -17,11 +17,11 @@ import TradeTypeTabs from './TradeTypeTabs';
 import Strike from './Strike';
 import PayoutPerPoint from './PayoutPerPoint';
 
-type TTradeParametersList = {
+type TTradeParametersProps = {
     is_minimized?: boolean;
 };
 
-const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) => {
+const TradeParameters = observer(({ is_minimized }: TTradeParametersProps) => {
     const {
         amount,
         barrier_1,
@@ -132,4 +132,4 @@ const TradeParametersList = observer(({ is_minimized }: TTradeParametersList) =>
     );
 });
 
-export default TradeParametersList;
+export default TradeParameters;

@@ -8,12 +8,7 @@ import { SmartChart } from 'Modules/SmartChart';
 import AccumulatorsChartElements from 'Modules/SmartChart/Components/Markers/accumulators-chart-elements';
 import ToolbarWidgets from 'Modules/SmartChart/Components/toolbar-widgets';
 
-type TTradeChartProps = {
-    topWidgets?: (() => JSX.Element) | null;
-};
-
-const TradeChart = observer((props: TTradeChartProps) => {
-    const { topWidgets } = props;
+const TradeChart = observer(() => {
     const { ui, common, contract_trade, portfolio } = useStore();
     const { isMobile } = useDevice();
     const {
@@ -39,7 +34,6 @@ const TradeChart = observer((props: TTradeChartProps) => {
         exportLayout,
         has_alternative_source,
         has_barrier,
-        is_trade_enabled,
         main_barrier_flattened: main_barrier,
         setChartStatus,
         show_digits_stats,
@@ -127,7 +121,7 @@ const TradeChart = observer((props: TTradeChartProps) => {
             allowTickChartTypeOnly={show_digits_stats || is_accumulator}
             stateChangeListener={chartStateChange}
             symbol={symbol}
-            topWidgets={is_trade_enabled ? topWidgets : null}
+            topWidgets={() => <div /> /* to hide the original chart market dropdown */}
             isConnectionOpened={is_socket_opened}
             clearChart={false}
             toolbarWidget={() => {

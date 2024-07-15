@@ -6,7 +6,7 @@ import BottomNav from 'AppV2/Components/BottomNav';
 import PurchaseButton from 'AppV2/Components/PurchaseButton';
 import { HEIGHT } from 'AppV2/Utils/layout-utils';
 import { getTradeTypesList } from 'AppV2/Utils/trade-types-utils';
-import { TradeParametersContainer, TradeParametersList } from 'AppV2/Components/TradeParameters';
+import { TradeParametersContainer, TradeParameters } from 'AppV2/Components/TradeParameters';
 import CurrentSpot from 'AppV2/Components/CurrentSpot';
 import { TradeChart } from '../Chart';
 import { isDigitTradeType } from 'Modules/Trading/Helpers/digits';
@@ -64,14 +64,14 @@ const Trade = observer(() => {
                     {isDigitTradeType(contract_type) && <CurrentSpot />}
                     <div className='trade__section__wrapper'>
                         <TradeParametersContainer>
-                            <TradeParametersList />
+                            <TradeParameters />
                         </TradeParametersContainer>
                         <section className='trade__chart' style={{ height: dynamic_chart_height }} ref={chart_ref}>
                             <TradeChart />
                         </section>
                     </div>
                     <TradeParametersContainer chart_ref={chart_ref} is_minimized>
-                        <TradeParametersList is_minimized />
+                        <TradeParameters is_minimized />
                     </TradeParametersContainer>
                     <PurchaseButton />
                 </div>

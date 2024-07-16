@@ -16,6 +16,7 @@ import MultipliersInformation from './MultipliersInformation';
 import TradeTypeTabs from './TradeTypeTabs';
 import Strike from './Strike';
 import PayoutPerPoint from './PayoutPerPoint';
+import LastDigitPrediction from './LastDigitPrediction';
 
 type TTradeParametersProps = {
     is_minimized?: boolean;
@@ -35,7 +36,7 @@ const TradeParameters = observer(({ is_minimized }: TTradeParametersProps) => {
             )}
         >
             {isVisible('trade_type_tabs') && <TradeTypeTabs is_minimized={is_minimized} />}
-            {/* {isVisible('last_digit') && <LastDigitSelector />} */}
+            {isVisible('last_digit') && <LastDigitPrediction is_minimized={is_minimized} />}
             {isVisible('duration') && <Duration is_minimized={is_minimized} />}
             {isVisible('strike') && <Strike is_minimized={is_minimized} />}
             {isVisible('payout_per_point') && <PayoutPerPoint is_minimized={is_minimized} />}

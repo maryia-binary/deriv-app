@@ -1,8 +1,8 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import clsx from 'clsx';
 import { Text } from '@deriv-com/quill-ui';
 import { useTraderStore } from 'Stores/useTraderStores';
-import { observer } from 'mobx-react';
 import { Skeleton } from '@deriv/components';
 
 type TCurrentSpotProps = {
@@ -13,7 +13,8 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
     const { symbol, resetTickData, tick_data } = useTraderStore();
     const { current_spot, pip_size } = tick_data ?? {};
     const spot = current_spot?.toFixed(pip_size);
-    // const prev_spot = React.useRef(spot);
+    /* TODO: add animation with gradual transition from prev_spot to the current spot:
+    const prev_spot = React.useRef(spot); */
 
     React.useEffect(() => {
         // TODO: move this logic to Assets feature when it's available:

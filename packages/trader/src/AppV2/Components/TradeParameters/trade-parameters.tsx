@@ -22,31 +22,7 @@ type TTradeParametersProps = {
 };
 
 const TradeParameters = observer(({ is_minimized }: TTradeParametersProps) => {
-    const {
-        amount,
-        barrier_1,
-        basis,
-        contract_start_type,
-        contract_type,
-        contract_types_list,
-        commission,
-        currency,
-        duration,
-        duration_unit,
-        expiry_type,
-        growth_rate,
-        has_open_accu_contract,
-        is_equal,
-        onChange,
-        proposal_info,
-        stop_out,
-        symbol,
-        take_profit,
-        maximum_payout,
-        maximum_ticks,
-        multiplier,
-    } = useTraderStore();
-
+    const { contract_type, symbol } = useTraderStore();
     const isVisible = (component_key: string) => {
         return getTradeParams(symbol)[contract_type].includes(component_key);
     };
@@ -58,76 +34,21 @@ const TradeParameters = observer(({ is_minimized }: TTradeParametersProps) => {
                 is_minimized && 'trade-params__options__wrapper--minimized'
             )}
         >
-            {isVisible('trade_type_tabs') && (
-                <TradeTypeTabs contract_type={contract_type} is_minimized={is_minimized} onChange={onChange} />
-            )}
-            {/* {isVisible('last_digit') && <LastDigit />} */}
-            {isVisible('duration') && (
-                <Duration duration={duration} duration_unit={duration_unit} is_minimized={is_minimized} />
-            )}
-            {isVisible('strike') && <Strike barrier_1={barrier_1} is_minimized={is_minimized} />}
-            {isVisible('payout_per_point') && (
-                <PayoutPerPoint
-                    contract_type={contract_type}
-                    currency={currency}
-                    is_minimized={is_minimized}
-                    proposal_info={proposal_info}
-                />
-            )}
-            {isVisible('barrier') && <Barrier barrier_1={barrier_1} is_minimized={is_minimized} />}
-            {isVisible('growth_rate') && (
-                <GrowthRate
-                    growth_rate={growth_rate}
-                    has_open_accu_contract={has_open_accu_contract}
-                    is_minimized={is_minimized}
-                />
-            )}
-            {isVisible('multiplier') && <Multiplier is_minimized={is_minimized} multiplier={multiplier} />}
-            {isVisible('stake') && (
-                <Stake
-                    amount={amount}
-                    basis={basis}
-                    currency={currency}
-                    onChange={onChange}
-                    is_minimized={is_minimized}
-                />
-            )}
-            {isVisible('allow_equals') && (
-                <AllowEquals
-                    contract_start_type={contract_start_type}
-                    contract_types_list={contract_types_list}
-                    duration_unit={duration_unit}
-                    expiry_type={expiry_type}
-                    is_minimized={is_minimized}
-                    is_equal={is_equal}
-                />
-            )}
-            {isVisible('take_profit') && (
-                <TakeProfit
-                    currency={currency}
-                    has_open_accu_contract={has_open_accu_contract}
-                    is_minimized={is_minimized}
-                    take_profit={take_profit}
-                />
-            )}
+            {isVisible('trade_type_tabs') && <TradeTypeTabs is_minimized={is_minimized} />}
+            {/* {isVisible('last_digit') && <LastDigitSelector />} */}
+            {isVisible('duration') && <Duration is_minimized={is_minimized} />}
+            {isVisible('strike') && <Strike is_minimized={is_minimized} />}
+            {isVisible('payout_per_point') && <PayoutPerPoint is_minimized={is_minimized} />}
+            {isVisible('barrier') && <Barrier is_minimized={is_minimized} />}
+            {isVisible('growth_rate') && <GrowthRate is_minimized={is_minimized} />}
+            {isVisible('multiplier') && <Multiplier is_minimized={is_minimized} />}
+            {isVisible('stake') && <Stake is_minimized={is_minimized} />}
+            {isVisible('allow_equals') && <AllowEquals is_minimized={is_minimized} />}
+            {isVisible('take_profit') && <TakeProfit is_minimized={is_minimized} />}
             {isVisible('risk_management') && <RiskManagement is_minimized={is_minimized} />}
-            {/* {isVisible('expiration') && <Expiration />} */}
-            {isVisible('accu_info_display') && (
-                <AccumulatorsInformation
-                    currency={currency}
-                    is_minimized={is_minimized}
-                    maximum_payout={maximum_payout}
-                    maximum_ticks={maximum_ticks}
-                />
-            )}
-            {isVisible('mult_info_display') && (
-                <MultipliersInformation
-                    currency={currency}
-                    commission={commission}
-                    is_minimized={is_minimized}
-                    stop_out={stop_out}
-                />
-            )}
+            {/* {isVisible('expiration') && <MultipliersExpirationInfo />} */}
+            {isVisible('accu_info_display') && <AccumulatorsInformation is_minimized={is_minimized} />}
+            {isVisible('mult_info_display') && <MultipliersInformation is_minimized={is_minimized} />}
         </div>
     );
 });

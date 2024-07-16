@@ -52,13 +52,15 @@
     }
 
     &__option {
-        .input {
-            padding-inline-start: 0;
-        }
-
         &--minimized {
             width: 16rem;
             flex-shrink: 0;
+        }
+        &:not(.trade-params__option--minimized) {
+            height: var(--core-size-2800);
+        }
+        .input {
+            padding-inline-start: 0;
         }
     }
 }

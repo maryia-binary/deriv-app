@@ -32,7 +32,8 @@ const TradeParameters = observer(({ is_minimized }: TTradeParametersProps) => {
         <div
             className={clsx(
                 'trade-params__options__wrapper',
-                is_minimized && 'trade-params__options__wrapper--minimized'
+                is_minimized && 'trade-params__options__wrapper--minimized',
+                isVisible('last_digit') && !is_minimized && 'trade-params__options__wrapper--has-last-digit'
             )}
         >
             {isVisible('trade_type_tabs') && <TradeTypeTabs is_minimized={is_minimized} />}

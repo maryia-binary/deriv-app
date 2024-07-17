@@ -23,20 +23,28 @@ const TRADE_PARAMS = {
     PAYOUT_PER_POINT: 'PayoutPerPoint',
     LAST_DIGIT_PREDICTION: 'LastDigitPrediction',
 };
-jest.mock('../AllowEquals', () => jest.fn(() => <div>{TRADE_PARAMS.ALLOW_EQUALS}</div>));
-jest.mock('../Duration', () => jest.fn(() => <div>{TRADE_PARAMS.DURATION}</div>));
-jest.mock('../Stake', () => jest.fn(() => <div>{TRADE_PARAMS.STAKE}</div>));
-jest.mock('../Barrier', () => jest.fn(() => <div>{TRADE_PARAMS.BARRIER}</div>));
-jest.mock('../GrowthRate', () => jest.fn(() => <div>{TRADE_PARAMS.GROWTH_RATE}</div>));
-jest.mock('../TakeProfit', () => jest.fn(() => <div>{TRADE_PARAMS.TAKE_PROFIT}</div>));
-jest.mock('../AccumulatorsInformation', () => jest.fn(() => <div>{TRADE_PARAMS.ACCUMULATORS_INFORMATION}</div>));
-jest.mock('../Multiplier', () => jest.fn(() => <div>{TRADE_PARAMS.MULTIPLIER}</div>));
-jest.mock('../RiskManagement', () => jest.fn(() => <div>{TRADE_PARAMS.RISK_MANAGEMENT}</div>));
-jest.mock('../MultipliersInformation', () => jest.fn(() => <div>{TRADE_PARAMS.MULTIPLIERS_INFORMATION}</div>));
-jest.mock('../TradeTypeTabs', () => jest.fn(() => <div>{TRADE_PARAMS.TRADE_TYPE_TABS}</div>));
-jest.mock('../Strike', () => jest.fn(() => <div>{TRADE_PARAMS.STRIKE}</div>));
-jest.mock('../PayoutPerPoint', () => jest.fn(() => <div>{TRADE_PARAMS.PAYOUT_PER_POINT}</div>));
-jest.mock('../LastDigitPrediction', () => jest.fn(() => <div>{TRADE_PARAMS.LAST_DIGIT_PREDICTION}</div>));
+const data_test = 'dt_trade_param';
+
+jest.mock('../AllowEquals', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.ALLOW_EQUALS}</div>));
+jest.mock('../Duration', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.DURATION}</div>));
+jest.mock('../Stake', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.STAKE}</div>));
+jest.mock('../Barrier', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.BARRIER}</div>));
+jest.mock('../GrowthRate', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.GROWTH_RATE}</div>));
+jest.mock('../TakeProfit', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.TAKE_PROFIT}</div>));
+jest.mock('../AccumulatorsInformation', () =>
+    jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.ACCUMULATORS_INFORMATION}</div>)
+);
+jest.mock('../Multiplier', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.MULTIPLIER}</div>));
+jest.mock('../RiskManagement', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.RISK_MANAGEMENT}</div>));
+jest.mock('../MultipliersInformation', () =>
+    jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.MULTIPLIERS_INFORMATION}</div>)
+);
+jest.mock('../TradeTypeTabs', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.TRADE_TYPE_TABS}</div>));
+jest.mock('../Strike', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.STRIKE}</div>));
+jest.mock('../PayoutPerPoint', () => jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.PAYOUT_PER_POINT}</div>));
+jest.mock('../LastDigitPrediction', () =>
+    jest.fn(() => <div data-testid={data_test}>{TRADE_PARAMS.LAST_DIGIT_PREDICTION}</div>)
+);
 
 describe('TradeParameters', () => {
     let defaultMockStore: ReturnType<typeof mockStore>;
@@ -65,6 +73,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.TAKE_PROFIT)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.ACCUMULATORS_INFORMATION)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(4);
     });
 
     it('should render correct trade params for Vanillas', () => {
@@ -75,6 +84,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STRIKE)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(4);
     });
 
     it('should render correct trade params for Turbos', () => {
@@ -86,6 +96,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.PAYOUT_PER_POINT)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.TAKE_PROFIT)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(5);
     });
 
     it('should render correct trade params for Multipliers', () => {
@@ -96,6 +107,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.RISK_MANAGEMENT)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.MULTIPLIERS_INFORMATION)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(4);
     });
 
     it('should render correct trade params for Rise/Fall', () => {
@@ -105,6 +117,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.ALLOW_EQUALS)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(3);
     });
 
     it('should render correct trade params for Higher/Lower', () => {
@@ -114,6 +127,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.BARRIER)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(3);
     });
 
     it('should render correct trade params for Touch/No Touch', () => {
@@ -123,6 +137,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.BARRIER)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(3);
     });
 
     it('should render correct trade params for Matches/Differs', () => {
@@ -132,6 +147,7 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.LAST_DIGIT_PREDICTION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(3);
     });
 
     it('should render correct trade params for Even/Odd', () => {
@@ -140,6 +156,7 @@ describe('TradeParameters', () => {
 
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(2);
     });
 
     it('should render correct trade params for Over/Under', () => {
@@ -149,5 +166,6 @@ describe('TradeParameters', () => {
         expect(screen.getByText(TRADE_PARAMS.LAST_DIGIT_PREDICTION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.DURATION)).toBeInTheDocument();
         expect(screen.getByText(TRADE_PARAMS.STAKE)).toBeInTheDocument();
+        expect(screen.getAllByTestId(data_test)).toHaveLength(3);
     });
 });

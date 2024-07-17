@@ -46,14 +46,14 @@ const Trade = observer(() => {
         [trade_types, onChange]
     );
 
-    const onScroll = () => {
+    const onScroll = React.useCallback(() => {
         const current_chart_ref = chart_ref?.current;
         if (current_chart_ref) {
             const chart_bottom_Y = current_chart_ref.getBoundingClientRect().bottom;
             const container_bottom_Y = window.innerHeight - HEIGHT.BOTTOM_NAV;
             setIsMinimizedParamsVisible(chart_bottom_Y < container_bottom_Y);
         }
-    };
+    }, []);
 
     React.useEffect(() => {
         onMount();

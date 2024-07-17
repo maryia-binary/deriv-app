@@ -82,7 +82,9 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
     };
     const is_selected_winning = latest_digit.digit === getBarrier(latest_digit.digit);
     const has_contract = is_digit_contract && status && latest_digit.spot && !!contract_info.entry_tick;
+    const has_open_contract = has_contract && !is_ended;
     const has_relevant_tick_data = underlying === symbol || !underlying;
+
     /* TODO: add animation with gradual transition from prev_spot to the current spot:
     const prev_spot = React.useRef(latest_digit.spot); */
 
@@ -114,9 +116,9 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
                         <Heading.H2
                             className={clsx(
                                 'current-spot__last-digit',
-                                (is_won || (has_contract && is_selected_winning && !is_ended)) &&
+                                (is_won || (has_open_contract && is_selected_winning)) &&
                                     'current-spot__last-digit--won',
-                                (is_lost || (has_contract && !is_selected_winning && !is_ended)) &&
+                                (is_lost || (has_open_contract && !is_selected_winning)) &&
                                     'current-spot__last-digit--lost'
                             )}
                         >

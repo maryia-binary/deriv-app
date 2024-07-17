@@ -384,7 +384,7 @@ describe('PositionsContent', () => {
         expect(purchase_button).toHaveClass('purchase-button--single');
     });
 
-    it('should render sell button for accumulators contract if there is an open Accumulators contract; if user clicks on it - onClickSell should be called', () => {
+    it('should render sell button for Accumulators contract if there is an open Accumulators contract; if user clicks on it - onClickSell should be called', () => {
         defaultMockStore.modules.trade.has_open_accu_contract = true;
         defaultMockStore.modules.trade.is_accumulator = true;
         render(mockPurchaseButton());

@@ -56,7 +56,7 @@ describe('PurchaseButtonContent', () => {
         expect(screen.getByTestId(wrapper_data_test_id)).toHaveClass('purchase-button__information__wrapper--reverse');
     });
 
-    it('should render correct specific text basis and amount for multipliers', () => {
+    it('should render correct specific text basis and amount for Multipliers', () => {
         const multipliers_info = {
             has_error: false,
             has_error_details: false,
@@ -73,7 +73,7 @@ describe('PurchaseButtonContent', () => {
         expect(screen.getByText(/USD/i)).toBeInTheDocument();
     });
 
-    it('should render correct specific text basis and amount for accumulators (when there is no open contract and with it)', () => {
+    it('should render correct specific text basis and amount for Accumulators (when there is no open contract and with it)', () => {
         const accumulators_info = {
             has_error: false,
             has_error_details: false,
@@ -105,7 +105,7 @@ describe('PurchaseButtonContent', () => {
         expect(screen.getByText(/USD/i)).toBeInTheDocument();
     });
 
-    it('should render correct specific text basis and amount for turbos', () => {
+    it('should render correct specific text basis and amount for Turbos', () => {
         const turbos_info = {
             has_error: false,
             has_error_details: false,
@@ -121,7 +121,7 @@ describe('PurchaseButtonContent', () => {
         expect(screen.getByText(/USD/i)).toBeInTheDocument();
     });
 
-    it('should render correct specific text basis and amount for vanilla (not fx and fx)', () => {
+    it('should render correct specific text basis and amount for Vanilla (not fx and fx)', () => {
         const vanilla_info = {
             has_error: false,
             has_error_details: false,

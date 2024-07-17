@@ -16,7 +16,6 @@ describe('PositionsContent', () => {
                 all_positions: [
                     {
                         contract_info: {
-                            account_id: 147849428,
                             barrier_count: 1,
                             bid_price: 41.4,
                             buy_price: 10,
@@ -37,7 +36,6 @@ describe('PositionsContent', () => {
                             entry_tick_display_value: '782.35',
                             entry_tick_time: 1716877414,
                             expiry_time: 4870540799,
-                            id: '3f168dfb-c3c3-5cb2-e636-e7b6e25a7c56',
                             is_expired: 0,
                             is_forward_starting: 0,
                             is_intraday: 0,
@@ -62,9 +60,6 @@ describe('PositionsContent', () => {
                             purchase_time: 1716877413,
                             shortcode: 'MULTUP_1HZ100V_10.00_100_1716877413_4870540799_0_0.00_N1',
                             status: 'open',
-                            transaction_ids: {
-                                buy: 486015531488,
-                            },
                             underlying: '1HZ100V',
                         },
                         details:
@@ -90,7 +85,6 @@ describe('PositionsContent', () => {
                     },
                     {
                         contract_info: {
-                            account_id: 147849428,
                             barrier: '821.69',
                             barrier_count: 1,
                             bid_price: 4.4,
@@ -112,7 +106,6 @@ describe('PositionsContent', () => {
                             entry_tick_display_value: '824.24',
                             entry_tick_time: 1716891504,
                             expiry_time: 1716891900,
-                            id: '631c07ee-ff93-a6e0-3e14-7917581b8b1b',
                             is_expired: 0,
                             is_forward_starting: 0,
                             is_intraday: 1,
@@ -128,9 +121,6 @@ describe('PositionsContent', () => {
                             purchase_time: 1716891504,
                             shortcode: 'TURBOSLONG_1HZ100V_10.00_1716891504_1716891900_S-255P_3.692058_1716891504',
                             status: 'open',
-                            transaction_ids: {
-                                buy: 486048790368,
-                            },
                             underlying: '1HZ100V',
                         },
                         details:
@@ -174,7 +164,6 @@ describe('PositionsContent', () => {
                             expiry_time: 1752796799,
                             growth_rate: 0.03,
                             high_barrier: '364.149',
-                            id: 'a5d87695-cb66-5eae-6ad3-8c55a8bb6e37',
                             is_expired: 0,
                             is_forward_starting: 0,
                             is_intraday: 0,
@@ -245,9 +234,6 @@ describe('PositionsContent', () => {
                                     tick_display_value: '364.04',
                                 },
                             ],
-                            transaction_ids: {
-                                buy: 497467191088,
-                            },
                             underlying: '1HZ100V',
                         },
                         details:
@@ -324,7 +310,7 @@ describe('PositionsContent', () => {
     });
 
     const mockPurchaseButton = () => {
-        return (
+        render(
             <TraderProviders store={defaultMockStore}>
                 <ReportsStoreProvider>
                     <ModulesProvider store={defaultMockStore}>
@@ -336,7 +322,7 @@ describe('PositionsContent', () => {
     };
 
     it('should render two buttons (for Rise and for Fall) with a proper content from proposal_info', () => {
-        render(mockPurchaseButton());
+        mockPurchaseButton();
 
         expect(screen.getAllByText('Payout')).toHaveLength(2);
         expect(screen.getByText(/19.26/)).toBeInTheDocument();
@@ -346,7 +332,7 @@ describe('PositionsContent', () => {
     });
 
     it('should switch to loading state (apply a proper className and show loader instead of button name) and call onPurchase function if user clicks on purchase button', () => {
-        render(mockPurchaseButton());
+        mockPurchaseButton();
 
         const purchase_button = screen.getAllByRole('button')[0];
         expect(purchase_button).not.toHaveClass('purchase-button--loading');
@@ -362,7 +348,7 @@ describe('PositionsContent', () => {
 
     it('should disable the button if one of the prop is false (is_trade_enabled, is_proposal_empty, !info.id, is_purchase_enabled): button should have a specific attribute and if user clicks on it onPurchase will not be called', () => {
         defaultMockStore.modules.trade.is_purchase_enabled = false;
-        render(mockPurchaseButton());
+        mockPurchaseButton();
 
         const purchase_button = screen.getAllByRole('button')[0];
         expect(purchase_button).toBeDisabled();
@@ -377,7 +363,7 @@ describe('PositionsContent', () => {
         defaultMockStore.modules.trade.trade_types = {
             CALL: 'Rise',
         };
-        render(mockPurchaseButton());
+        mockPurchaseButton();
 
         const purchase_button = screen.getByRole('button');
         expect(purchase_button).toBeInTheDocument();
@@ -387,7 +373,7 @@ describe('PositionsContent', () => {
     it('should render sell button for Accumulators contract if there is an open Accumulators contract; if user clicks on it - onClickSell should be called', () => {
         defaultMockStore.modules.trade.has_open_accu_contract = true;
         defaultMockStore.modules.trade.is_accumulator = true;
-        render(mockPurchaseButton());
+        mockPurchaseButton();
 
         const sell_button = screen.getByText('Sell');
         expect(sell_button).toBeInTheDocument();

@@ -44,9 +44,11 @@ const LastDigitPrediction = observer(({ is_minimized }: TLastDigitSelectorProps)
                             <button onClick={() => handleLastDigitChange(digit)} name='last_digit'>
                                 <Text size='xl'>{digit}</Text>
                             </button>
-                            <CaptionText size='sm' className='percentage'>
-                                {display_percentage}%
-                            </CaptionText>
+                            {!!display_percentage && (
+                                <CaptionText size='sm' className='percentage'>
+                                    {display_percentage}%
+                                </CaptionText>
+                            )}
                         </div>
                     );
                 })}

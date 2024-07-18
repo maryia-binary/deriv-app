@@ -58,6 +58,9 @@
                 }
             }
         }
+        &:is(.action-sheet--content *) {
+            margin: var(--core-spacing-1600) 0;
+        }
     }
     &--stats-mode {
         border-radius: var(--core-borderRadius-400);

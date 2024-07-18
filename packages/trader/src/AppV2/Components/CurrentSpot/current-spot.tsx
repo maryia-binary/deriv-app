@@ -99,7 +99,9 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
             className={clsx(
                 'trade__current-spot',
                 className,
-                has_contract && has_relevant_tick_data && 'trade__current-spot--has-contract'
+                has_contract && has_relevant_tick_data && 'trade__current-spot--has-contract',
+                (is_won || (has_open_contract && is_selected_winning)) && 'trade__current-spot--won',
+                (is_lost || (has_open_contract && !is_selected_winning)) && 'trade__current-spot--lost'
             )}
         >
             {tick && has_relevant_tick_data ? (
@@ -113,17 +115,7 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
                         <Text size='xl' bold>
                             {latest_digit.spot?.slice(0, -1)}
                         </Text>
-                        <Heading.H2
-                            className={clsx(
-                                'current-spot__last-digit',
-                                (is_won || (has_open_contract && is_selected_winning)) &&
-                                    'current-spot__last-digit--won',
-                                (is_lost || (has_open_contract && !is_selected_winning)) &&
-                                    'current-spot__last-digit--lost'
-                            )}
-                        >
-                            {latest_digit.spot?.slice(-1)}
-                        </Heading.H2>
+                        <Heading.H2 className='current-spot__last-digit'>{latest_digit.spot?.slice(-1)}</Heading.H2>
                     </div>
                 </React.Fragment>
             ) : (

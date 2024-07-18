@@ -17,13 +17,19 @@
         p {
             color: var(--core-color-opacity-black-800);
         }
-        &__last-digit {
-            &--won {
-                color: var(--core-color-solid-green-700);
-            }
-            &--lost {
-                color: var(--core-color-solid-red-700);
-            }
+    }
+    &--won {
+        border: var(--core-borderWidth-75) solid var(--core-color-solid-green-700);
+
+        .current-spot__last-digit {
+            color: var(--core-color-solid-green-700);
+        }
+    }
+    &--lost {
+        border: var(--core-borderWidth-75) solid var(--core-color-solid-red-700);
+
+        .current-spot__last-digit {
+            color: var(--core-color-solid-red-700);
         }
     }
 }

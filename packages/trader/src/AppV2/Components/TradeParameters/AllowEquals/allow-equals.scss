@@ -1,5 +1,8 @@
 .trade-param {
     &__wrapper {
+        // var(--core-spacing-1000) - HandleBar height
+        // var(--core-spacing-3200) - Header height
+        // var(--core-spacing-4000) - Footer height
         height: calc(40vh - var(--core-spacing-1000) - var(--core-spacing-3200) - var(--core-spacing-4000));
 
         &--definition {
@@ -11,24 +14,5 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-}
-
-.carousel {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: hidden;
-
-    &__item {
-        width: 100vw;
-        min-width: 100vw;
-        transition: transform 0.5s ease-in-out;
-    }
-
-    .icon--left {
-        .quill-action-sheet--title--icon {
-            right: unset;
-            left: 0;
-        }
     }
 }

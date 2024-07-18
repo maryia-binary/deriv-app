@@ -6,6 +6,7 @@ import { LabelPairedArrowLeftMdRegularIcon, LabelPairedCircleInfoMdRegularIcon }
 import { Localize, localize } from '@deriv/translations';
 import { hasCallPutEqual, hasDurationForCallPutEqual } from 'Stores/Modules/Trading/Helpers/allow-equals';
 import { useTraderStore } from 'Stores/useTraderStores';
+import Carousel from 'AppV2/Components/Carousel';
 
 type TAllowEqualsProps = {
     is_minimized?: boolean;
@@ -17,7 +18,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
 
     const [is_open, setIsOpen] = React.useState(false);
     const [is_allow_equal_enabled, setIsAllowEqualEnabled] = React.useState(!!is_equal);
-    const [current_index, setCurrentIndex] = React.useState(0);
+    const [should_reset_carousel, setShouldResetCarousel] = React.useState(false);
 
     const has_callputequal_duration = hasDurationForCallPutEqual(
         contract_types_list,
@@ -27,17 +28,71 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
     const has_callputequal = hasCallPutEqual(contract_types_list);
     const has_allow_equals = (has_callputequal_duration || expiry_type === 'endtime') && has_callputequal;
 
-    const onInfoIconClick = () => setCurrentIndex(1);
-    const onArrowIconClick = () => setCurrentIndex(0);
     const onSaveButtonClick = () => {
         if (!!is_equal !== is_allow_equal_enabled)
             onChange({ target: { name: 'is_equal', value: Number(is_allow_equal_enabled) } });
     };
     const onActionSheetClose = () => {
         setIsOpen(false);
+        //TODO: check if we need these 2 resetting below after latest Quill Action sheet changes will be in our branch
         setIsAllowEqualEnabled(!!is_equal);
-        setCurrentIndex(0);
+        setShouldResetCarousel(true);
     };
+    //TODO: check if we need function below after latest Quill Action sheet changes will be in our branch
+    const onPageChange = (page_index: number) => {
+        if (!page_index) setShouldResetCarousel(false);
+    };
+
+    const action_sheet_content = [
+        {
+            title: 'first page',
+            component: (onNextClick: () => void) => (
+                <React.Fragment>
+                    <ActionSheet.Header
+                        title={<Localize i18n_default_text='Allow equals' />}
+                        icon={<LabelPairedCircleInfoMdRegularIcon onClick={onNextClick} />}
+                    />
+                    <ActionSheet.Content className='trade-param__wrapper'>
+                        <div className='trade-param__content'>
+                            <Text>
+                                <Localize i18n_default_text='Allow equals' />
+                            </Text>
+                            <ToggleSwitch
+                                checked={is_allow_equal_enabled}
+                                onChange={(is_enabled: boolean) => setIsAllowEqualEnabled(is_enabled)}
+                            />
+                        </div>
+                    </ActionSheet.Content>
+                    <ActionSheet.Footer
+                        alignment='vertical'
+                        primaryAction={{
+                            content: <Localize i18n_default_text='Save' />,
+                            onAction: onSaveButtonClick,
+                        }}
+                    />
+                </React.Fragment>
+            ),
+        },
+        {
+            title: 'second page',
+            component: (onPrevClick: () => void) => (
+                <React.Fragment>
+                    <ActionSheet.Header
+                        title={<Localize i18n_default_text='Allow equals' />}
+                        icon={<LabelPairedArrowLeftMdRegularIcon onClick={onPrevClick} />}
+                        className='icon--left'
+                    />
+                    <ActionSheet.Content className='trade-param__wrapper--definition'>
+                        <div className='trade-param__content'>
+                            <Text>
+                                <Localize i18n_default_text='Win payout if exit spot is also equal to entry spot.' />
+                            </Text>
+                        </div>
+                    </ActionSheet.Content>
+                </React.Fragment>
+            ),
+        },
+    ];
 
     React.useEffect(() => {
         setIsAllowEqualEnabled(!!is_equal);
@@ -57,46 +112,11 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
             />
             <ActionSheet.Root isOpen={is_open} onClose={onActionSheetClose} position='left' expandable={false}>
                 <ActionSheet.Portal shouldCloseOnDrag>
-                    <ul className='carousel'>
-                        <li className='carousel__item' style={{ transform: `translateX(-${current_index * 100}%)` }}>
-                            <ActionSheet.Header
-                                title={<Localize i18n_default_text='Allow equals' />}
-                                icon={<LabelPairedCircleInfoMdRegularIcon onClick={onInfoIconClick} />}
-                            />
-                            <ActionSheet.Content className='trade-param__wrapper'>
-                                <div className='trade-param__content'>
-                                    <Text>
-                                        <Localize i18n_default_text='Allow equals' />
-                                    </Text>
-                                    <ToggleSwitch
-                                        checked={is_allow_equal_enabled}
-                                        onChange={(is_enabled: boolean) => setIsAllowEqualEnabled(is_enabled)}
-                                    />
-                                </div>
-                            </ActionSheet.Content>
-                            <ActionSheet.Footer
-                                alignment='vertical'
-                                primaryAction={{
-                                    content: <Localize i18n_default_text='Save' />,
-                                    onAction: onSaveButtonClick,
-                                }}
-                            />
-                        </li>
-                        <li className='carousel__item' style={{ transform: `translateX(-${current_index * 100}%)` }}>
-                            <ActionSheet.Header
-                                title={<Localize i18n_default_text='Allow equals' />}
-                                icon={<LabelPairedArrowLeftMdRegularIcon onClick={onArrowIconClick} />}
-                                className='icon--left'
-                            />
-                            <ActionSheet.Content className='trade-param__wrapper--definition'>
-                                <div className='trade-param__content'>
-                                    <Text>
-                                        <Localize i18n_default_text='Win payout if exit spot is also equal to entry spot.' />
-                                    </Text>
-                                </div>
-                            </ActionSheet.Content>
-                        </li>
-                    </ul>
+                    <Carousel
+                        pages={action_sheet_content}
+                        should_reset_carousel={should_reset_carousel}
+                        onChange={onPageChange}
+                    />
                 </ActionSheet.Portal>
             </ActionSheet.Root>
         </React.Fragment>

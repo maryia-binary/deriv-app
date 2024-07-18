@@ -3,11 +3,11 @@ import React from 'react';
 type TCarousel = {
     default_page_index?: number;
     onChange?: (new_page_index: number) => void;
-    should_reset_carousel?: boolean;
     pages: { title: string; component: (onNextClick: () => void) => JSX.Element }[];
+    should_reset_carousel?: boolean;
 };
 
-const Carousel = ({ default_page_index, onChange, should_reset_carousel, pages }: TCarousel) => {
+const Carousel = ({ default_page_index, onChange, pages, should_reset_carousel }: TCarousel) => {
     const [current_index, setCurrentIndex] = React.useState(default_page_index ?? 0);
 
     const pages_length = pages.length;

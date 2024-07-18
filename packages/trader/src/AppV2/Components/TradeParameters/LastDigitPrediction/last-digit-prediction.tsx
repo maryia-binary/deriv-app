@@ -14,7 +14,7 @@ type TLastDigitSelectorProps = {
 const display_array = [...Array(10).keys()]; // digits array [0 - 9]
 
 const LastDigitPrediction = observer(({ is_minimized, is_stats_mode }: TLastDigitSelectorProps) => {
-    const { digit_stats, last_digit, onChange } = useTraderStore();
+    const { digit_stats = [], last_digit, onChange } = useTraderStore();
 
     const handleLastDigitChange = (digit: number) => {
         onChange({ target: { name: 'last_digit', value: digit } });
@@ -47,6 +47,8 @@ const LastDigitPrediction = observer(({ is_minimized, is_stats_mode }: TLastDigi
                                 digit_stats={digit_stats}
                                 is_active={!is_stats_mode && last_digit === digit}
                                 is_disabled={is_stats_mode}
+                                is_max={digit_stats[digit] === Math.max(...digit_stats)}
+                                is_min={digit_stats[digit] === Math.min(...digit_stats)}
                                 onClick={handleLastDigitChange}
                             />
                         ))}

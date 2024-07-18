@@ -49,6 +49,13 @@
             }
             .percentage {
                 color: var(--core-color-opacity-black-500);
+
+                &--max {
+                    color: var(--core-color-solid-green-800);
+                }
+                &--min {
+                    color: var(--core-color-solid-red-700);
+                }
             }
         }
     }

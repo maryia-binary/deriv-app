@@ -2,7 +2,7 @@ $HANDLEBAR_HEIGHT: var(--core-size-1000);
 $HEADER_TITLE_HEIGHT: var(--core-size-3200);
 $FOOTER_BUTTON_HEIGHT: var(--core-size-4000);
 
-.trade-param {
+.allow-equals {
     &__wrapper {
         height: calc(40vh - $HANDLEBAR_HEIGHT - $HEADER_TITLE_HEIGHT - $FOOTER_BUTTON_HEIGHT);
 

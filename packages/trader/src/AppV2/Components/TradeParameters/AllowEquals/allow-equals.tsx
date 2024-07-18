@@ -52,8 +52,8 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
                         title={<Localize i18n_default_text='Allow equals' />}
                         icon={<LabelPairedCircleInfoMdRegularIcon onClick={onNextClick} />}
                     />
-                    <ActionSheet.Content className='trade-param__wrapper'>
-                        <div className='trade-param__content'>
+                    <ActionSheet.Content className='allow-equals__wrapper'>
+                        <div className='allow-equals__content'>
                             <Text>
                                 <Localize i18n_default_text='Allow equals' />
                             </Text>
@@ -82,8 +82,8 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
                         icon={<LabelPairedArrowLeftMdRegularIcon onClick={onPrevClick} />}
                         className='icon--left'
                     />
-                    <ActionSheet.Content className='trade-param__wrapper--definition'>
-                        <div className='trade-param__content'>
+                    <ActionSheet.Content className='allow-equals__wrapper--definition'>
+                        <div className='allow-equals__content'>
                             <Text>
                                 <Localize i18n_default_text='Win payout if exit spot is also equal to entry spot.' />
                             </Text>

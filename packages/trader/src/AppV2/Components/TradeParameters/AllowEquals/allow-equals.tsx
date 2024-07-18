@@ -34,7 +34,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
     };
     const onActionSheetClose = () => {
         setIsOpen(false);
-        //TODO: check if we need these 2 resetting below after latest Quill Action sheet changes will be in our branch
+        //TODO: check if we need these 2 resets below after latest Quill Action sheet changes will be in our branch
         setIsAllowEqualEnabled(!!is_equal);
         setShouldResetCarousel(true);
     };
@@ -45,7 +45,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
 
     const action_sheet_content = [
         {
-            title: 'first page',
+            id: 'first page',
             component: (onNextClick: () => void) => (
                 <React.Fragment>
                     <ActionSheet.Header
@@ -74,7 +74,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
             ),
         },
         {
-            title: 'second page',
+            id: 'second page',
             component: (onPrevClick: () => void) => (
                 <React.Fragment>
                     <ActionSheet.Header

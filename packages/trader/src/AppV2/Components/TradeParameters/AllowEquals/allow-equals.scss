@@ -1,12 +1,13 @@
+$HANDLEBAR_HEIGHT: var(--core-size-1000);
+$HEADER_TITLE_HEIGHT: var(--core-size-3200);
+$FOOTER_BUTTON_HEIGHT: var(--core-size-4000);
+
 .trade-param {
     &__wrapper {
-        // var(--core-spacing-1000) - HandleBar height
-        // var(--core-spacing-3200) - Header height
-        // var(--core-spacing-4000) - Footer height
-        height: calc(40vh - var(--core-spacing-1000) - var(--core-spacing-3200) - var(--core-spacing-4000));
+        height: calc(40vh - $HANDLEBAR_HEIGHT - $HEADER_TITLE_HEIGHT - $FOOTER_BUTTON_HEIGHT);
 
         &--definition {
-            height: calc(40vh - var(--core-spacing-1000) - var(--core-spacing-3200));
+            height: calc(40vh - $HANDLEBAR_HEIGHT - $HEADER_TITLE_HEIGHT);
         }
     }
 

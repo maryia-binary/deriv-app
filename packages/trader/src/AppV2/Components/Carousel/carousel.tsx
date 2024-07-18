@@ -3,7 +3,7 @@ import React from 'react';
 type TCarousel = {
     default_page_index?: number;
     onChange?: (new_page_index: number) => void;
-    pages: { title: string; component: (onNextClick: () => void) => JSX.Element }[];
+    pages: { id: string; component: (onNextClick: () => void) => JSX.Element }[];
     should_reset_carousel?: boolean;
 };
 
@@ -22,11 +22,11 @@ const Carousel = ({ default_page_index, onChange, pages, should_reset_carousel }
 
     return (
         <ul className='carousel'>
-            {pages.map(({ title, component }) => (
+            {pages.map(({ component, id }) => (
                 <li
                     className='carousel__item'
                     style={{ transform: `translateX(-${current_index * 100}%)` }}
-                    key={title}
+                    key={id}
                     onClick={onPageChange}
                 >
                     {component(current_index ? onPrevClick : onNextClick)}

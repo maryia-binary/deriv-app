@@ -45,7 +45,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
 
     const action_sheet_content = [
         {
-            id: 'first page',
+            id: 1,
             component: (onNextClick: () => void) => (
                 <React.Fragment>
                     <ActionSheet.Header
@@ -74,7 +74,7 @@ const AllowEquals = observer(({ is_minimized }: TAllowEqualsProps) => {
             ),
         },
         {
-            id: 'second page',
+            id: 2,
             component: (onPrevClick: () => void) => (
                 <React.Fragment>
                     <ActionSheet.Header

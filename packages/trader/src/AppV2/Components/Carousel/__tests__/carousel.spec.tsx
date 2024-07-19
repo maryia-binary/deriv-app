@@ -3,27 +3,21 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Carousel from '../carousel';
 
-const PAGES = {
-    FIRST: 'first page',
-    SECOND: 'second page',
-};
 const data_test_id = 'dt_page';
 const mock_pages = [
     {
-        id: PAGES.FIRST,
+        id: 1,
         component: (onNextClick: () => void) => (
             <button onClick={onNextClick} data-testid={data_test_id}>
-                <span>{PAGES.FIRST}</span>
-                <span>Next</span>
+                Next
             </button>
         ),
     },
     {
-        id: PAGES.SECOND,
+        id: 2,
         component: (onPrevClick: () => void) => (
             <button onClick={onPrevClick} data-testid={data_test_id}>
-                <span>{PAGES.SECOND}</span>
-                <span>Previous</span>
+                Previous
             </button>
         ),
     },
@@ -33,8 +27,6 @@ describe('Carousel', () => {
     it('should render all passed pages', () => {
         render(<Carousel pages={mock_pages} />);
 
-        expect(screen.getByText(PAGES.FIRST)).toBeInTheDocument();
-        expect(screen.getByText(PAGES.SECOND)).toBeInTheDocument();
         expect(screen.getAllByTestId(data_test_id)).toHaveLength(mock_pages.length);
     });
 

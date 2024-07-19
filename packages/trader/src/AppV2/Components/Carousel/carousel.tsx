@@ -3,7 +3,7 @@ import React from 'react';
 type TCarousel = {
     default_page_index?: number;
     onChange?: (new_page_index: number) => void;
-    pages: { id: string; component: (onNextClick: () => void) => JSX.Element }[];
+    pages: { id: number; component: (onNextClick: () => void) => JSX.Element }[];
     should_reset_carousel?: boolean;
 };
 

@@ -712,6 +712,8 @@ const mock = (): TStores & { is_mock: boolean } => {
                 onChangeMultiple: jest.fn(),
                 onHoverPurchase: jest.fn(),
                 onPurchase: jest.fn(),
+                onMount: jest.fn(),
+                onUnmount: jest.fn(),
                 previous_symbol: '',
                 proposal_info: {},
                 purchase_info: {},

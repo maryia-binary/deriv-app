@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import clsx from 'clsx';
-import { Heading, Text } from '@deriv-com/quill-ui';
 import { useTraderStore } from 'Stores/useTraderStores';
 import { Skeleton, usePrevious } from '@deriv/components';
 import { useStore } from '@deriv/stores';
 import { isContractElapsed } from '@deriv/shared';
 import { toJS } from 'mobx';
 import { TickSpotData } from '@deriv/api-types';
-import { Localize } from '@deriv/translations';
+import CurrentSpotDisplay from './current-spot-display';
+import { isDigitContractWinning } from 'AppV2/Utils/trade-params-utils';
 
 type TCurrentSpotProps = {
     className?: string;
@@ -78,40 +78,36 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
         [is_won, is_lost, latest_tick_digit, latest_tick_quote_price, last_contract_digit]
     );
 
-    const [curr_tick, setCurrTick] = React.useState<number | null>(current_tick);
-    const [curr_spot, setCurrSpot] = React.useState<string | null>(latest_digit.spot);
+    const [displayed_tick, setDisplayedTick] = React.useState<number | null>(current_tick);
+    const [displayed_spot, setDisplayedSpot] = React.useState<string | null>(latest_digit.spot);
     const [should_enter_from_top, setShouldEnterFromTop] = React.useState(false);
 
     const barrier = !is_contract_elapsed && !!tick ? Number(contract_info.barrier) : null;
-    const getBarrier = (num: number | null): number | null => {
-        const barrier_map: {
-            [key: string]: (val: number | null) => boolean;
-        } = {
-            DIGITMATCH: (val: number | null) => val === barrier,
-            DIGITDIFF: (val: number | null) => val !== barrier,
-            DIGITOVER: (val: number | null) => !!((val || val === 0) && (barrier || barrier === 0)) && val > barrier,
-            DIGITUNDER: (val: number | null) => !!((val || val === 0) && (barrier || barrier === 0)) && val < barrier,
-            DIGITODD: (val: number | null) => !!val && Boolean(val % 2),
-            DIGITEVEN: (val: number | null) => (!!val && !(val % 2)) || val === 0,
-        };
-        if (!contract_type || !barrier_map[contract_type]) return null;
-        return barrier_map[contract_type](num) ? num : null;
-    };
-    const is_selected_winning = latest_digit.digit === getBarrier(latest_digit.digit);
+    const is_winning = isDigitContractWinning(contract_type, barrier, latest_digit.digit);
     const has_contract = is_digit_contract && status && latest_digit.spot && !!contract_info.entry_tick;
     const has_open_contract = has_contract && !is_ended;
     const has_relevant_tick_data = underlying === symbol || !underlying;
+    const should_show_tick_count = has_contract && has_relevant_tick_data;
+    const should_enter_from_left =
+        !prev_contract?.contract_info ||
+        !!(prev_contract?.contract_info?.is_sold && last_contract.contract_info?.tick_stream?.length === 1);
 
     /* TODO: add animation with gradual transition from prev_spot to the current spot:
     const prev_spot = React.useRef(latest_digit.spot); */
 
     const setNewData = React.useCallback(() => {
-        setCurrTick(current_tick);
-        setCurrSpot(latest_digit.spot);
+        setDisplayedTick(current_tick);
+        setDisplayedSpot(latest_digit.spot);
     }, [current_tick, latest_digit.spot]);
 
     React.useEffect(() => {
-        if (prev_contract_id && contract_info?.contract_id && prev_contract_id !== contract_info?.contract_id) {
+        const has_multiple_contracts =
+            prev_contract?.contract_info &&
+            !prev_contract?.contract_info?.is_sold &&
+            last_contract.contract_info?.entry_tick;
+        const is_next_contract_opened =
+            prev_contract_id && contract_info?.contract_id && prev_contract_id !== contract_info?.contract_id;
+        if (has_multiple_contracts && is_next_contract_opened) {
             setShouldEnterFromTop(true);
             contract_switching_timer.current = setTimeout(() => {
                 setShouldEnterFromTop(false);
@@ -120,7 +116,7 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
         } else if (!should_enter_from_top) {
             setNewData();
         }
-    }, [prev_contract_id, contract_info, setNewData, should_enter_from_top]);
+    }, [contract_info, last_contract, prev_contract, prev_contract_id, setNewData, should_enter_from_top]);
 
     React.useEffect(() => {
         // TODO: move this logic to Assets feature when it's available:
@@ -139,42 +135,27 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
             className={clsx(
                 'trade__current-spot',
                 className,
-                has_contract && has_relevant_tick_data && 'trade__current-spot--has-contract',
-                (is_won || (has_open_contract && is_selected_winning)) && 'trade__current-spot--won',
-                (is_lost || (has_open_contract && !is_selected_winning)) && 'trade__current-spot--lost'
+                should_show_tick_count && 'trade__current-spot--has-contract',
+                should_show_tick_count && should_enter_from_left && 'trade__current-spot--enter-from-left',
+                (is_won || (has_open_contract && is_winning)) && 'trade__current-spot--won',
+                (is_lost || (has_open_contract && !is_winning)) && 'trade__current-spot--lost'
             )}
         >
             {tick && has_relevant_tick_data ? (
-                <div className={clsx('box', should_enter_from_top && 'box--animated')}>
-                    <div className='box-top'>
-                        {has_contract && (
-                            <Text size='xl'>
-                                <Localize i18n_default_text='Tick {{current_tick}}' values={{ current_tick }} />
-                            </Text>
-                        )}
-                        <div className='current-spot'>
-                            <Text size='xl' bold>
-                                {latest_digit.spot?.slice(0, -1)}
-                            </Text>
-                            <Heading.H2 className='current-spot__last-digit'>{latest_digit.spot?.slice(-1)}</Heading.H2>
-                        </div>
-                    </div>
-                    <div className='box-main'>
-                        {has_contract && (
-                            <Text size='xl'>
-                                <Localize
-                                    i18n_default_text='Tick {{current_tick}}'
-                                    values={{ current_tick: curr_tick }}
-                                />
-                            </Text>
-                        )}
-                        <div className='current-spot'>
-                            <Text size='xl' bold>
-                                {curr_spot?.slice(0, -1)}
-                            </Text>
-                            <Heading.H2 className='current-spot__last-digit'>{curr_spot?.slice(-1)}</Heading.H2>
-                        </div>
-                    </div>
+                <div
+                    className={clsx(
+                        'current-spot__wrapper',
+                        should_enter_from_top && 'current-spot__wrapper--enter-from-top'
+                    )}
+                >
+                    {should_enter_from_top && (
+                        <CurrentSpotDisplay
+                            has_tick_count={!!has_contract}
+                            spot={latest_digit.spot}
+                            tick={current_tick}
+                        />
+                    )}
+                    <CurrentSpotDisplay has_tick_count={!!has_contract} spot={displayed_spot} tick={displayed_tick} />
                 </div>
             ) : (
                 <Skeleton width={128} height={32} />

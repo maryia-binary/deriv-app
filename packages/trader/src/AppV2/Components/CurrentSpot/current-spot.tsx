@@ -10,16 +10,12 @@ import { TickSpotData } from '@deriv/api-types';
 import CurrentSpotDisplay from './current-spot-display';
 import { isDigitContractWinning } from 'AppV2/Utils/trade-params-utils';
 
-type TCurrentSpotProps = {
-    className?: string;
-};
-
 const STATUS = {
     LOST: 'lost',
     WON: 'won',
 };
 
-const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
+const CurrentSpot = observer(() => {
     const contract_switching_timer = React.useRef<ReturnType<typeof setTimeout>>();
 
     const { contract_trade } = useStore();
@@ -33,16 +29,15 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
     } = last_contract.contract_info?.entry_tick || !prev_contract ? last_contract : prev_contract;
     const { digit_tick, symbol, setDigitTick } = useTraderStore();
     const prev_contract_id = usePrevious(contract_info.contract_id);
+    const { entry_tick, date_start, contract_type, tick_stream, underlying } = contract_info;
 
     let tick = digit_tick;
 
     const is_contract_elapsed = isContractElapsed(contract_info, tick);
     const status = !is_contract_elapsed && !!tick ? display_status : null;
-    const { date_start, contract_type, underlying } = contract_info;
 
     // tick from contract_info.tick_stream differs from a ticks_history API tick.
     if (date_start && !is_contract_elapsed) {
-        const tick_stream = contract_info.tick_stream;
         if (tick_stream?.length) {
             const t = toJS(tick_stream.slice(-1)[0]);
             tick = {
@@ -84,7 +79,7 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
 
     const barrier = !is_contract_elapsed && !!tick ? Number(contract_info.barrier) : null;
     const is_winning = isDigitContractWinning(contract_type, barrier, latest_digit.digit);
-    const has_contract = is_digit_contract && status && latest_digit.spot && !!contract_info.entry_tick;
+    const has_contract = is_digit_contract && status && latest_digit.spot && !!entry_tick;
     const has_open_contract = has_contract && !is_ended;
     const has_relevant_tick_data = underlying === symbol || !underlying;
     const should_show_tick_count = has_contract && has_relevant_tick_data;
@@ -131,7 +126,6 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
         <div
             className={clsx(
                 'trade__current-spot',
-                className,
                 should_show_tick_count && 'trade__current-spot--has-contract',
                 should_show_tick_count && should_enter_from_left && 'trade__current-spot--enter-from-left',
                 (is_won || (has_open_contract && is_winning)) && 'trade__current-spot--won',

@@ -39,13 +39,13 @@ const CurrentSpot = observer(() => {
     // tick from contract_info.tick_stream differs from a ticks_history API tick.
     if (date_start && !is_contract_elapsed) {
         if (tick_stream?.length) {
-            const t = toJS(tick_stream.slice(-1)[0]);
+            const { epoch, tick: latest_stream_tick, tick_display_value } = toJS(tick_stream.slice(-1)[0]);
             tick = {
-                ask: t.tick,
-                bid: t.tick,
-                epoch: t.epoch,
-                pip_size: t.tick_display_value?.split('.')[1].length,
-                quote: t.tick,
+                ask: latest_stream_tick,
+                bid: latest_stream_tick,
+                epoch,
+                pip_size: tick_display_value?.split('.')[1].length,
+                quote: latest_stream_tick,
                 current_tick: tick_stream.length,
             } as TickSpotData;
         }
@@ -67,9 +67,9 @@ const CurrentSpot = observer(() => {
     // latest_digit refers to digit and spot values from the latest price:
     const latest_digit = React.useMemo(
         () =>
-            !(is_won || is_lost)
-                ? { digit: latest_tick_digit, spot: latest_tick_quote_price }
-                : (last_contract_digit as { digit: number | null; spot: string | null }),
+            is_won || is_lost
+                ? (last_contract_digit as { digit: number | null; spot: string | null })
+                : { digit: latest_tick_digit, spot: latest_tick_quote_price },
         [is_won, is_lost, latest_tick_digit, latest_tick_quote_price, last_contract_digit]
     );
 

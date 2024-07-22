@@ -34,13 +34,13 @@
             height: 100%;
         }
         &__last-digit {
-            width: 16px;
-            height: 28px;
+            width: var(--core-size-800);
+            height: var(--core-size-1400);
 
             &-container {
                 overflow: hidden;
-                width: 16px;
-                height: 28px;
+                width: var(--core-size-800);
+                height: var(--core-size-1400);
                 position: relative;
             }
             &-wrapper {

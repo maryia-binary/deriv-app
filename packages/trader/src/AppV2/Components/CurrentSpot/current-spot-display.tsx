@@ -26,13 +26,13 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
     const [next_displayed_last_digit, setNextDisplayedLastDigit] = React.useState(last_digit);
     const [displayed_last_digit, setDisplayedLastDigit] = React.useState(last_digit);
 
-    const interval_timer = React.useRef<ReturnType<typeof setInterval>>();
-    const last_digit_wrapper_ref = React.useRef<HTMLDivElement>(null);
     const last_digit_ref = React.useRef(prev_last_digit);
-    const sliding_timer = React.useRef<ReturnType<typeof setTimeout>>();
+    const spin_interval_id = React.useRef<ReturnType<typeof setInterval>>();
+    const spin_timeout_id = React.useRef<ReturnType<typeof setTimeout>>();
+    const spinning_wrapper_ref = React.useRef<HTMLDivElement>(null);
 
     const spinLastDigit = (action: string, interval_ms: number, start: number, end: number) => {
-        clearInterval(interval_timer.current);
+        clearInterval(spin_interval_id.current);
         const interval_id = setInterval(() => {
             if (action === ACTIONS.INC && last_digit_ref.current < end) {
                 last_digit_ref.current = (last_digit_ref.current + 1) % 10;
@@ -47,7 +47,7 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
             }
             setNextDisplayedLastDigit(last_digit_ref.current % 10);
         }, interval_ms);
-        interval_timer.current = interval_id;
+        spin_interval_id.current = interval_id;
     };
 
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
         const timeout_speed = diff > 0 ? Math.floor(240 / diff) : 240;
         const should_increment = Number(prev_last_digit) <= last_digit;
 
-        last_digit_wrapper_ref.current?.style.setProperty('--animation-time', `${timeout_speed}ms`);
+        spinning_wrapper_ref.current?.style.setProperty('--animation-time', `${timeout_speed}ms`);
 
         if (should_increment) {
             setShouldEnterFromTop(true);
@@ -65,7 +65,7 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
             setShouldEnterFromBottom(true);
         }
 
-        sliding_timer.current = setTimeout(() => {
+        spin_timeout_id.current = setTimeout(() => {
             setShouldEnterFromTop(false);
             setShouldEnterFromBottom(false);
             setDisplayedLastDigit(last_digit_ref.current % 10);
@@ -84,8 +84,8 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
         spinLastDigit(getAction(), timeout_speed, Number(prev_last_digit), last_digit);
 
         return () => {
-            clearTimeout(sliding_timer.current);
-            clearInterval(interval_timer.current);
+            clearTimeout(spin_timeout_id.current);
+            clearInterval(spin_interval_id.current);
         };
     }, [spot, prev_last_digit, last_digit]);
 
@@ -103,7 +103,7 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
                 </Text>
                 <div className='current-spot__last-digit-container'>
                     <div
-                        ref={last_digit_wrapper_ref}
+                        ref={spinning_wrapper_ref}
                         className={clsx(
                             'current-spot__last-digit-wrapper',
                             should_enter_from_top && 'current-spot__last-digit-wrapper--enter-from-top',

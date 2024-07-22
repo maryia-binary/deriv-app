@@ -21,7 +21,6 @@ describe('LastDigitSelector', () => {
     it('should render 10 digits for each digit if digits are available', () => {
         render(<LastDigitSelector {...mock_props} digits={digits} />);
 
-        const displayed_digits = screen.getAllByText(mocked_digit);
-        expect(displayed_digits).toHaveLength(10);
+        expect(screen.getAllByText(mocked_digit)).toHaveLength(10);
     });
 });

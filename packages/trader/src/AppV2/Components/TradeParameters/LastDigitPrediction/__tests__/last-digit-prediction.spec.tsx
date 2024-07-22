@@ -52,7 +52,7 @@ describe('LastDigitPrediction', () => {
 
         const buttons = screen.getAllByRole('button');
         expect(buttons).toHaveLength(10);
-        buttons.forEach((button: HTMLButtonElement) => {
+        buttons.forEach((button: HTMLElement) => {
             expect(button).toBeEnabled();
         });
     });
@@ -62,7 +62,7 @@ describe('LastDigitPrediction', () => {
 
         const buttons = screen.getAllByRole('button');
         expect(buttons).toHaveLength(10);
-        buttons.forEach((button: HTMLButtonElement) => {
+        buttons.forEach((button: HTMLElement) => {
             expect(button).toBeDisabled();
         });
     });

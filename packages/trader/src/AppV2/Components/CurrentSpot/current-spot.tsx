@@ -92,9 +92,6 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
         !prev_contract?.contract_info ||
         !!(prev_contract?.contract_info?.is_sold && last_contract.contract_info?.tick_stream?.length === 1);
 
-    /* TODO: add animation with gradual transition from prev_spot to the current spot:
-    const prev_spot = React.useRef(latest_digit.spot); */
-
     const setNewData = React.useCallback(() => {
         setDisplayedTick(current_tick);
         setDisplayedSpot(latest_digit.spot);
@@ -141,7 +138,7 @@ const CurrentSpot = observer(({ className }: TCurrentSpotProps) => {
                 (is_lost || (has_open_contract && !is_winning)) && 'trade__current-spot--lost'
             )}
         >
-            {tick && has_relevant_tick_data ? (
+            {tick && has_relevant_tick_data && displayed_spot ? (
                 <div
                     className={clsx(
                         'current-spot__wrapper',

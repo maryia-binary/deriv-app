@@ -33,11 +33,9 @@ describe('AllowEquals', () => {
     const mockAllowEquals = () => {
         return (
             <TraderProviders store={default_mock_store}>
-                <ReportsStoreProvider>
-                    <ModulesProvider store={default_mock_store}>
-                        <AllowEquals is_minimized />
-                    </ModulesProvider>
-                </ReportsStoreProvider>
+                <ModulesProvider store={default_mock_store}>
+                    <AllowEquals is_minimized />
+                </ModulesProvider>
             </TraderProviders>
         );
     };

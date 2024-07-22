@@ -5,7 +5,6 @@ import { mockStore } from '@deriv/stores';
 import ModulesProvider from 'Stores/Providers/modules-providers';
 import { hasCallPutEqual, hasDurationForCallPutEqual } from 'Stores/Modules/Trading/Helpers/allow-equals';
 import TraderProviders from '../../../../../trader-providers';
-import { ReportsStoreProvider } from '../../../../../../../reports/src/Stores/useReportsStores';
 import AllowEquals from '../allow-equals';
 
 jest.mock('Stores/Modules/Trading/Helpers/allow-equals', () => ({

@@ -1,12 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { mockContractInfo, TContractStore } from '@deriv/shared';
+import { CONTRACT_TYPES, mockContractInfo, TContractStore } from '@deriv/shared';
 import { mockStore } from '@deriv/stores';
 import TraderProviders from '../../../../trader-providers';
 import ModulesProvider from 'Stores/Providers/modules-providers';
 import CurrentSpot from '../current-spot';
 
 const mocked_now = Math.floor(Date.now() / 1000);
+const symbol = '1HZ100V';
 
 describe('CurrentSpot', () => {
     let default_mock_store: ReturnType<typeof mockStore>;
@@ -17,12 +18,14 @@ describe('CurrentSpot', () => {
         id: 'f90a93f8-965a-28ab-a830-6253bff4cc98',
         pip_size: 2,
         quote: 405.66,
-        symbol: '1HZ100V',
+        symbol,
     };
+    const current_spot = '405.6';
+    const current_last_digit = '6';
     const ongoing_contract_info = mockContractInfo({
         barrier: '0',
         contract_id: 250136683588,
-        contract_type: 'DIGITEVEN',
+        contract_type: CONTRACT_TYPES.EVEN_ODD.EVEN,
         date_expiry: mocked_now + 1000,
         date_start: 1721636565,
         entry_tick: 389.39,
@@ -49,12 +52,12 @@ describe('CurrentSpot', () => {
                 tick_display_value: '389.40',
             },
         ],
-        underlying: '1HZ100V',
+        underlying: symbol,
     });
     const closed_contract_info = mockContractInfo({
         barrier: '0',
         contract_id: 250136653148,
-        contract_type: 'DIGITODD',
+        contract_type: CONTRACT_TYPES.EVEN_ODD.ODD,
         date_expiry: 1721636554,
         date_start: 1721636544,
         entry_tick: 389.32,
@@ -118,7 +121,7 @@ describe('CurrentSpot', () => {
                 tick_display_value: '389.38',
             },
         ],
-        underlying: '1HZ100V',
+        underlying: symbol,
     });
     const ongoing_contract = {
         digits_info: {
@@ -216,13 +219,15 @@ describe('CurrentSpot', () => {
         is_ended: true,
         contract_info: closed_contract_info,
     } as unknown as TContractStore;
+    const ongoing_contract_tick_stream = ongoing_contract.contract_info.tick_stream as { [key: string]: unknown }[];
+    const ongoing_contract_current_tick = ongoing_contract_tick_stream?.length;
 
     beforeEach(() => {
         default_mock_store = mockStore({
             modules: {
                 trade: {
                     digit_tick: null,
-                    symbol: '1HZ100V',
+                    symbol,
                     setDigitTick: jest.fn(),
                 },
             },
@@ -246,8 +251,8 @@ describe('CurrentSpot', () => {
         default_mock_store.modules.trade.digit_tick = tick_data;
         render(mockCurrentSpot());
 
-        expect(screen.getByText('405.6')).toBeInTheDocument();
-        expect(screen.getByText('6')).toBeInTheDocument();
+        expect(screen.getByText(current_spot)).toBeInTheDocument();
+        expect(screen.getByText(current_last_digit)).toBeInTheDocument();
     });
     it('should render the latest tick_stream spot from last contract info together with tick count when has last contract data', () => {
         default_mock_store.modules.trade.digit_tick = tick_data;
@@ -255,28 +260,27 @@ describe('CurrentSpot', () => {
         default_mock_store.contract_trade.prev_contract = closed_contract;
         render(mockCurrentSpot());
 
-        const spot = ongoing_contract.contract_info.tick_stream?.[2].tick_display_value as string;
-        expect(screen.getByText('Tick 3')).toBeInTheDocument();
+        const spot = ongoing_contract_tick_stream?.[2].tick_display_value as string;
+        expect(screen.getByText(`Tick ${ongoing_contract_current_tick}`)).toBeInTheDocument();
         expect(screen.getByText(spot.slice(0, -1))).toBeInTheDocument();
         expect(screen.getByText(spot.slice(-1))).toBeInTheDocument();
     });
     it('should render 2 tick counts for animation purposes when next contract is opened while previous contract is ongoing', () => {
-        const tick_stream = ongoing_contract.contract_info.tick_stream as { [key: string]: unknown }[];
-
         default_mock_store.modules.trade.digit_tick = tick_data;
         default_mock_store.contract_trade.prev_contract = {
             ...ongoing_contract,
             contract_info: {
                 ...ongoing_contract_info,
                 contract_id: 250136683587,
-                tick_stream: [...tick_stream, ...tick_stream],
+                tick_stream: [...ongoing_contract_tick_stream, ...ongoing_contract_tick_stream],
             },
         };
         default_mock_store.contract_trade.last_contract = ongoing_contract;
+
         const { rerender } = render(mockCurrentSpot());
 
-        expect(screen.getByText('Tick 3')).toBeInTheDocument();
-        const spot = tick_stream?.[2].tick_display_value as string;
+        expect(screen.getByText(`Tick ${ongoing_contract_current_tick}`)).toBeInTheDocument();
+        const spot = ongoing_contract_tick_stream?.[2].tick_display_value as string;
         expect(screen.getByText(spot.slice(0, -1))).toBeInTheDocument();
         expect(screen.getByText(spot.slice(-1))).toBeInTheDocument();
 
@@ -291,15 +295,14 @@ describe('CurrentSpot', () => {
                         contract_info: {
                             ...ongoing_contract_info,
                             contract_id: 250136683589,
-                            tick_stream: tick_stream.slice(0, 1),
+                            tick_stream: ongoing_contract_tick_stream.slice(0, 1),
                         },
                     },
                 },
             })
         );
-        expect(screen.getByText('Tick 1')).toBeInTheDocument();
-        expect(screen.getByText('Tick 3')).toBeInTheDocument();
-        const new_spot = tick_stream?.[0].tick_display_value as string;
+        expect(screen.getAllByText(/Tick/)).toHaveLength(2);
+        const new_spot = ongoing_contract_tick_stream?.[0].tick_display_value as string;
         expect(screen.getByText(new_spot.slice(0, -1))).toBeInTheDocument();
         expect(screen.getByText(new_spot.slice(-1))).toBeInTheDocument();
     });
@@ -308,8 +311,8 @@ describe('CurrentSpot', () => {
         default_mock_store.contract_trade.last_contract = closed_contract;
         render(mockCurrentSpot());
 
-        expect(screen.queryByText('Tick 10')).not.toBeInTheDocument();
-        expect(screen.getByText('405.6')).toBeInTheDocument();
-        expect(screen.getByText('6')).toBeInTheDocument();
+        expect(screen.queryByText(/Tick/)).not.toBeInTheDocument();
+        expect(screen.getByText(current_spot)).toBeInTheDocument();
+        expect(screen.getByText(current_last_digit)).toBeInTheDocument();
     });
 });

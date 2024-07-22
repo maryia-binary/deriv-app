@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import CurrentSpotDisplay from '../current-spot-display';
 
 describe('CurrentSpotDisplay', () => {
@@ -25,17 +25,21 @@ describe('CurrentSpotDisplay', () => {
 
         expect(screen.getByText('Tick 2')).toBeInTheDocument();
     });
-    it('should update last digit upon spot update', () => {
+    it('should update last digit upon spot update', async () => {
         jest.useFakeTimers();
         const { rerender } = render(<CurrentSpotDisplay {...mocked_props} />);
         expect(screen.getByText(mocked_props.spot.slice(0, -1))).toBeInTheDocument();
 
         rerender(<CurrentSpotDisplay {...mocked_props} spot='389.49' />);
-        jest.advanceTimersByTime(240); // equal to total animation time
-        expect(screen.getByText('9')).toBeInTheDocument();
+        await waitFor(() => {
+            jest.advanceTimersByTime(240); // equal to total animation time
+            expect(screen.getByText('9')).toBeInTheDocument();
+        });
 
         rerender(<CurrentSpotDisplay {...mocked_props} spot='389.51' />);
-        jest.advanceTimersByTime(240); // equal to total animation time
-        expect(screen.getByText('1')).toBeInTheDocument();
+        await waitFor(() => {
+            jest.advanceTimersByTime(240); // equal to total animation time
+            expect(screen.getByText('1')).toBeInTheDocument();
+        });
     });
 });

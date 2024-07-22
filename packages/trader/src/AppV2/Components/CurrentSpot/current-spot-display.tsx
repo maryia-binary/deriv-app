@@ -69,7 +69,7 @@ const CurrentSpotDisplay = ({ has_tick_count, spot, tick }: TCurrentSpotDisplayP
             setShouldEnterFromTop(false);
             setShouldEnterFromBottom(false);
             setDisplayedLastDigit(last_digit_ref.current % 10);
-        }, 240);
+        }, 240); // equal to total animation time
 
         const getAction = () => {
             let action: string = ACTIONS.ADD10;

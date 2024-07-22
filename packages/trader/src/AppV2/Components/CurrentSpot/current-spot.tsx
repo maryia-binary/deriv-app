@@ -28,8 +28,8 @@ const CurrentSpot = observer(() => {
         is_ended,
     } = last_contract.contract_info?.entry_tick || !prev_contract ? last_contract : prev_contract;
     const { digit_tick, symbol, setDigitTick } = useTraderStore();
-    const prev_contract_id = usePrevious(contract_info.contract_id);
-    const { entry_tick, date_start, contract_type, tick_stream, underlying } = contract_info;
+    const { contract_id, entry_tick, date_start, contract_type, tick_stream, underlying } = contract_info;
+    const prev_contract_id = usePrevious(contract_id);
 
     let tick = digit_tick;
 
@@ -97,8 +97,7 @@ const CurrentSpot = observer(() => {
             prev_contract?.contract_info &&
             !prev_contract?.contract_info?.is_sold &&
             last_contract.contract_info?.entry_tick;
-        const is_next_contract_opened =
-            prev_contract_id && contract_info?.contract_id && prev_contract_id !== contract_info?.contract_id;
+        const is_next_contract_opened = prev_contract_id && contract_id && prev_contract_id !== contract_id;
         if (has_multiple_contracts && is_next_contract_opened) {
             setShouldEnterFromTop(true);
             contract_switching_timer.current = setTimeout(() => {
@@ -108,7 +107,7 @@ const CurrentSpot = observer(() => {
         } else if (!should_enter_from_top) {
             setNewData();
         }
-    }, [contract_info, last_contract, prev_contract, prev_contract_id, setNewData, should_enter_from_top]);
+    }, [contract_id, last_contract, prev_contract, prev_contract_id, setNewData, should_enter_from_top]);
 
     React.useEffect(() => {
         // TODO: move this logic to Assets feature when it's available:
